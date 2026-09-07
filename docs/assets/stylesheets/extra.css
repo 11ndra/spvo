@@ -691,3 +691,278 @@
     transform: translateY(-50%);
   }
 }
+
+
+/* v2.5 — course homepage / learning outcomes first */
+
+.home-hero {
+  margin: 0 0 2.4rem;
+  padding: 2.7rem 2.6rem;
+  border: 1px solid var(--course-border);
+  border-radius: 1.05rem;
+  background:
+    radial-gradient(circle at 100% 0%, color-mix(in srgb, var(--md-primary-fg-color) 16%, transparent), transparent 38%),
+    var(--course-surface);
+  color: var(--course-text);
+  box-shadow: var(--course-shadow);
+}
+.home-eyebrow {
+  margin-bottom: .65rem;
+  font-size: .7rem;
+  font-weight: 850;
+  letter-spacing: .1em;
+  text-transform: uppercase;
+  color: var(--course-muted);
+}
+.home-hero h1 {
+  max-width: 900px;
+  margin: 0 0 1rem;
+  font-size: clamp(2.25rem, 5vw, 4rem);
+  line-height: 1.02;
+  letter-spacing: -.035em;
+  color: var(--course-text);
+}
+.home-hero-lead {
+  max-width: 850px;
+  margin: 0 0 1.5rem;
+  font-size: 1.08rem;
+  line-height: 1.8;
+  color: var(--course-muted);
+}
+.home-hero-question {
+  max-width: 900px;
+  padding: 1rem 1.1rem;
+  border-left: 4px solid var(--md-primary-fg-color);
+  background: var(--course-surface-soft);
+  border-radius: .45rem;
+}
+.home-hero-question span {
+  display: block;
+  margin-bottom: .3rem;
+  font-size: .68rem;
+  font-weight: 850;
+  letter-spacing: .09em;
+  text-transform: uppercase;
+  color: var(--course-muted);
+}
+.home-hero-question strong {
+  font-size: 1.03rem;
+  line-height: 1.55;
+}
+.home-actions {
+  display: flex;
+  gap: .7rem;
+  flex-wrap: wrap;
+  margin-top: 1.5rem;
+}
+.big-question-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 1rem;
+  margin: 1.2rem 0 2.5rem;
+}
+.big-question {
+  padding: 1.25rem;
+  border-top: 3px solid var(--md-primary-fg-color);
+  border-radius: .45rem .45rem .8rem .8rem;
+  background: var(--course-surface);
+  box-shadow: var(--course-shadow);
+}
+.question-number {
+  margin-bottom: .7rem;
+  font-size: .7rem;
+  font-weight: 900;
+  letter-spacing: .08em;
+  color: var(--course-muted);
+}
+.big-question h3 { margin: 0 0 .6rem; }
+.big-question p { margin: 0; color: var(--course-muted); }
+
+.engineering-path {
+  margin: 1.2rem 0 2.5rem;
+  border-top: 1px solid var(--course-border);
+}
+.engineering-step {
+  display: grid;
+  grid-template-columns: 52px minmax(0, 1fr);
+  gap: 1rem;
+  padding: 1rem 0;
+  border-bottom: 1px solid var(--course-border);
+}
+.engineering-step > span {
+  display: grid;
+  place-items: center;
+  width: 38px;
+  height: 38px;
+  margin-top: .1rem;
+  border-radius: 50%;
+  background: var(--course-surface-soft);
+  color: var(--course-text);
+  font-weight: 900;
+}
+.engineering-step p { margin: .25rem 0 0; color: var(--course-muted); }
+
+.problem-board {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 1rem;
+  margin: 1.2rem 0 2.5rem;
+}
+.problem-card {
+  padding: 1.15rem;
+  border: 1px solid var(--course-border);
+  border-radius: .75rem;
+  background: var(--course-surface);
+  transition: transform .15s ease, border-color .15s ease;
+}
+.problem-card:hover {
+  transform: translateY(-2px);
+  border-color: var(--md-primary-fg-color);
+}
+.problem-card > span {
+  display: inline-block;
+  margin-bottom: .5rem;
+  font-size: .66rem;
+  font-weight: 850;
+  letter-spacing: .08em;
+  text-transform: uppercase;
+  color: var(--course-muted);
+}
+.problem-card h3 {
+  margin: 0 0 .55rem;
+  font-size: 1rem;
+  line-height: 1.45;
+}
+.problem-card p { margin: 0; color: var(--course-muted); }
+
+.learning-duo {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 1rem;
+  margin: 1.2rem 0 1rem;
+}
+.learning-duo section {
+  padding: 1.3rem;
+  border: 1px solid var(--course-border);
+  border-radius: .8rem;
+  background: var(--course-surface);
+  box-shadow: var(--course-shadow);
+}
+.duo-label {
+  margin-bottom: .45rem;
+  font-size: .68rem;
+  font-weight: 850;
+  letter-spacing: .08em;
+  text-transform: uppercase;
+  color: var(--course-muted);
+}
+.learning-duo h3 { margin: 0 0 .55rem; }
+.learning-duo p { margin: 0; color: var(--course-muted); }
+
+.learning-bridge {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: .55rem;
+  flex-wrap: wrap;
+  padding: 1rem;
+  margin: 1rem 0 2.5rem;
+  border-radius: .65rem;
+  background: var(--course-surface-soft);
+  font-weight: 700;
+}
+.learning-bridge span { color: var(--course-muted); }
+
+.tool-strip {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: .75rem;
+  margin: 1.2rem 0 1rem;
+}
+.tool-strip > div {
+  padding: 1rem;
+  border: 1px solid var(--course-border);
+  border-radius: .65rem;
+  background: var(--course-surface);
+}
+.tool-strip strong { display: block; margin-bottom: .3rem; }
+.tool-strip span {
+  font-size: .88rem;
+  line-height: 1.5;
+  color: var(--course-muted);
+}
+
+.course-route {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: .8rem;
+  margin: 1.2rem 0 2.5rem;
+}
+.course-route a {
+  display: grid;
+  grid-template-columns: 42px minmax(0, 1fr);
+  gap: .8rem;
+  align-items: start;
+  padding: 1rem;
+  border: 1px solid var(--course-border);
+  border-radius: .7rem;
+  background: var(--course-surface);
+  color: var(--course-text) !important;
+  text-decoration: none !important;
+  transition: transform .15s ease, border-color .15s ease;
+}
+.course-route a:hover {
+  transform: translateY(-2px);
+  border-color: var(--md-primary-fg-color);
+}
+.course-route a > span {
+  display: grid;
+  place-items: center;
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
+  background: var(--course-surface-soft);
+  font-weight: 900;
+  font-size: .75rem;
+}
+.course-route strong { display: block; margin-bottom: .18rem; }
+.course-route small {
+  display: block;
+  line-height: 1.45;
+  color: var(--course-muted);
+}
+
+.home-final-cta {
+  margin: 2.5rem 0 1rem;
+  padding: 2rem;
+  border-radius: .9rem;
+  background: var(--course-surface-accent);
+  text-align: center;
+}
+.home-final-cta > span {
+  display: block;
+  margin-bottom: .35rem;
+  font-size: .7rem;
+  font-weight: 850;
+  letter-spacing: .08em;
+  text-transform: uppercase;
+  color: var(--course-muted);
+}
+.home-final-cta h2 {
+  max-width: 760px;
+  margin: .3rem auto 1.2rem;
+  font-size: clamp(1.45rem, 3vw, 2rem);
+  line-height: 1.25;
+}
+
+@media screen and (max-width: 900px) {
+  .big-question-grid,
+  .problem-board { grid-template-columns: 1fr; }
+  .tool-strip { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+}
+@media screen and (max-width: 700px) {
+  .home-hero { padding: 1.6rem 1.25rem; }
+  .learning-duo,
+  .course-route,
+  .tool-strip { grid-template-columns: 1fr; }
+}
