@@ -436,6 +436,31 @@ active (running)
 
 Он проверяет не только наличие visibility, но и **границы зоны наблюдения**.
 
+### Реальный случай: CISA Red Team и невидимое lateral movement
+
+В 2023 году CISA опубликовала результаты red-team assessment реальной организации. Команда получила устойчивый доступ и проводила действия, которые защитная инфраструктура должна была иметь возможность заметить.
+
+Среди ключевых выводов CISA указала **недостаточный host и network monitoring**. Значительная часть lateral movement, persistence и command-and-control активности не вызвала эффективной реакции со стороны IDS/IPS, endpoint protection, proxy logs и Windows event logs.
+
+В отчёте приводился, например, lateral movement с использованием SMB/Windows Admin Shares и Windows Service Creation, а также прямое соединение Domain Controller с внешним узлом.
+
+Для нашей главы важен не конкретный продукт, а архитектурный вопрос:
+
+> если критичный east-west поток или исходящее соединение от чувствительного сервера не попадает в полезную точку наблюдения, наличие NIDS «где-то в сети» не решает задачу.
+
+<div class="real-case-lesson">
+  <strong>Инженерный вывод</strong>
+  <p>Placement нужно проверять против конкретных attack paths: workstation → server, admin workstation → domain controller, critical server → Internet. Периметровая visibility не является доказательством внутренней visibility.</p>
+</div>
+
+Best practice — комбинировать network monitoring на ключевых внутренних направлениях с host telemetry, а сеть сегментировать так, чтобы lateral movement проходил через контролируемые границы. CISA отдельно рекомендует network segmentation для ограничения lateral movement и использование как сетевых, так и host-based источников для его обнаружения.
+
+<div class="real-case-source">
+<strong>Источники:</strong>
+<a href="https://www.cisa.gov/news-events/cybersecurity-advisories/aa23-059a">CISA — AA23-059A: Red Team Shares Key Findings to Improve Monitoring and Hardening of Networks</a>;
+<a href="https://www.cisa.gov/news-events/alerts/2022/01/11/understanding-and-mitigating-russian-state-sponsored-cyber-threats-us-critical-infrastructure">CISA/FBI/NSA — Protective Controls and Architecture guidance</a>
+</div>
+
 <div class="chapter-summary">
   <span>Главная мысль главы</span>
   <p>Размещение сенсора начинается не с выбора порта коммутатора, а с threat scenario и нужного сетевого следа. NIDS видит только тот трафик, который проходит через выбранную точку или доставляется туда копированием. SPAN и TAP решают задачу доставки данных, inline IPS становится частью data path, а шифрование и асимметричная маршрутизация способны существенно изменить доступный контекст.</p>
