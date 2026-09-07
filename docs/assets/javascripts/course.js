@@ -32,3 +32,115 @@ function initializeIdsIpsDemo() {
 }
 
 document.addEventListener("DOMContentLoaded", initializeIdsIpsDemo);
+
+
+
+function initializeDetectionPipeline() {
+  const stages = [
+    {
+      title: "Получение данных",
+      text: "Система должна сначала получить наблюдаемые данные. Для сетевой IDS это пакеты, поступающие с выбранного интерфейса или другого источника трафика.",
+      example: "сырые кадры и пакеты"
+    },
+    {
+      title: "Декодирование",
+      text: "Система разбирает структуру сетевых заголовков и определяет протоколы нижних уровней: например Ethernet, IP и TCP.",
+      example: "src/dst IP, TCP-порты, флаги и структура пакета"
+    },
+    {
+      title: "Состояние потока",
+      text: "Связанные пакеты объединяются в поток, а TCP-данные при необходимости восстанавливаются в правильной последовательности.",
+      example: "логическое соединение и восстановленный TCP-stream"
+    },
+    {
+      title: "Разбор протокола",
+      text: "Прикладной разборщик превращает поток в смысловые поля протокола: например HTTP method, URI, Host или DNS query.",
+      example: "HTTP URI = /download?file=../../etc/passwd"
+    },
+    {
+      title: "Логика обнаружения",
+      text: "К подготовленным данным применяется правило, модель или другой метод обнаружения. Здесь проверяется, соответствует ли наблюдение интересующему условию.",
+      example: "условие совпало с содержимым URI"
+    },
+    {
+      title: "Результат",
+      text: "Если условие выполнено, система формирует событие. В IDS это может быть alert, а в IPS к событию может добавляться блокирующее действие.",
+      example: "alert создан; дальнейшая интерпретация остаётся отдельной задачей"
+    }
+  ];
+
+  document.querySelectorAll(".detection-pipeline").forEach((pipeline) => {
+    let current = 0;
+    const stageEls = pipeline.querySelectorAll(".detect-stage");
+    const resetBtn = pipeline.querySelector(".pipeline-reset");
+    const nextBtn = pipeline.querySelector(".pipeline-next");
+    const detailStep = pipeline.querySelector(".pipeline-detail-step");
+    const detailTitle = pipeline.querySelector(".pipeline-detail h3");
+    const detailText = pipeline.querySelector(".pipeline-detail p");
+    const detailExample = pipeline.querySelector(".pipeline-example code");
+
+    function render() {
+      pipeline.dataset.step = String(current);
+
+      stageEls.forEach((el, i) => {
+        el.classList.toggle("active", i === current);
+        el.classList.toggle("passed", i < current);
+      });
+
+      const data = stages[current];
+      detailStep.textContent = `Шаг ${current + 1} из ${stages.length}`;
+      detailTitle.textContent = data.title;
+      detailText.textContent = data.text;
+      detailExample.textContent = data.example;
+      nextBtn.textContent =
+        current === stages.length - 1 ? "Вернуться к началу" : "Следующий шаг →";
+    }
+
+    nextBtn.addEventListener("click", () => {
+      current = current === stages.length - 1 ? 0 : current + 1;
+      render();
+    });
+
+    resetBtn.addEventListener("click", () => {
+      current = 0;
+      render();
+    });
+
+    stageEls.forEach((el, i) => {
+      el.addEventListener("click", () => {
+        current = i;
+        render();
+      });
+    });
+
+    render();
+  });
+}
+
+function initializeDiagnosticChain() {
+  const messages = {
+    capture: "Проверьте: проходит ли нужный трафик через точку наблюдения и действительно ли сенсор получает его на выбранном интерфейсе?",
+    decode: "Проверьте: удаётся ли системе корректно разобрать сетевые заголовки и определить нужные протоколы?",
+    flow: "Проверьте: правильно ли определено направление соединения и восстановлены ли данные потока?",
+    parser: "Проверьте: распознан ли прикладной протокол и присутствует ли нужное значение в том поле, с которым работает детектор?",
+    rule: "Проверьте: загружено ли правило, относится ли оно к этому трафику и выполняются ли все его условия?",
+    output: "Проверьте: создаётся ли событие и ищете ли вы его в правильном журнале или интерфейсе?"
+  };
+
+  document.querySelectorAll(".diagnostic-chain").forEach((chain) => {
+    const buttons = chain.querySelectorAll("button[data-diagnostic]");
+    const result = chain.querySelector(".diagnostic-result");
+
+    buttons.forEach((button) => {
+      button.addEventListener("click", () => {
+        buttons.forEach((b) => b.classList.toggle("active", b === button));
+        result.textContent = messages[button.dataset.diagnostic] || "";
+      });
+    });
+  });
+}
+
+document.addEventListener("DOMContentLoaded", () => {
+  initializeDetectionPipeline();
+  initializeDiagnosticChain();
+});
