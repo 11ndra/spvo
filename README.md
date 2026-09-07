@@ -333,3 +333,25 @@
 - влияние asymmetric routing на stateful detection;
 - инженерный алгоритм выбора точки наблюдения от threat scenario к способу подключения;
 - end-to-end методика проверки не только visibility, но и её границ.
+
+
+## v2.12 — Real Cases & Engineering Practices
+
+В теоретические Главы 1–7 добавлен системный слой реальных кейсов.
+
+Редакционный принцип:
+«механизм → реальный случай → инженерный вывод → best practice → лабораторная проверка».
+
+Использованы:
+- Log4Shell — угроза внутри разрешённого web-трафика и отдельный пример False Positive IOC;
+- Exchange/HAFNIUM — корреляция network + host telemetry;
+- Ptacek/Newsham — инженерное доказательство важности TCP/IP reassembly и evasion-resistant analysis;
+- SolarWinds/SUNBURST — ограничение detection, основанного только на статических IOC;
+- Target 2013 — segmentation, access control, IDS alerts и incident response;
+- CISA Red Team AA23-059A — недостаточная внутренняя visibility и lateral movement monitoring.
+
+Чтобы не перегружать курс:
+- искусственные «небольшие сценарии» в Главе 1, 2, 3, 4 и 6 заменены реальными разборами;
+- в Главе 5 и 7 real case встроен как h3 внутри уже существующего инженерного раздела;
+- визуальное оформление кейсов намеренно минималистично;
+- источники собраны на странице «Источники курса».

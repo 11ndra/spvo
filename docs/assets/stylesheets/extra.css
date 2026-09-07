@@ -3037,3 +3037,54 @@ body:has(.home-hero) .md-content__inner.md-typeset {
     width: max-content;
   }
 }
+
+
+
+/* =========================================================
+   v2.12 — Real cases and engineering practices
+   ========================================================= */
+
+.real-case-lesson {
+  margin: 1rem 0;
+  padding: .75rem .85rem;
+  border-left: 3px solid var(--md-primary-fg-color);
+  border-radius: .38rem;
+  background: var(--course-surface-soft);
+}
+
+.real-case-lesson strong {
+  display: block;
+  margin-bottom: .24rem;
+  font-size: .74rem;
+}
+
+.real-case-lesson p {
+  margin: 0;
+  line-height: 1.5;
+}
+
+.real-case-source {
+  margin: .85rem 0 1.2rem;
+  padding-top: .62rem;
+  border-top: 1px solid var(--course-border);
+  color: var(--course-muted);
+  font-size: .68rem;
+  line-height: 1.45;
+}
+
+.real-case-source strong {
+  color: var(--course-text);
+}
+
+.real-case-source a {
+  overflow-wrap: anywhere;
+}
+
+
+.home-method-note {
+  max-width: 850px;
+  margin: -.8rem auto 2rem;
+  color: var(--course-muted);
+  line-height: 1.52;
+  text-align: center;
+}
