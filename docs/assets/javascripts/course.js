@@ -408,56 +408,70 @@ document.addEventListener("DOMContentLoaded", () => {
 
 
 
-function initializePlacementLab() {
-  const content = {
-    perimeter: {
-      title: "После периметрового firewall",
-      text: "Сенсор хорошо видит разрешённые north-south соединения между Интернетом и DMZ, но не получает автоматически внутренние взаимодействия App ↔ Database или Host ↔ Host.",
-      blind: "east-west трафик внутри внутренних сегментов."
+
+
+
+function initializePlacementScenarioLab() {
+  const scenarios = {
+    "web-attack": {
+      title: "Внешний узел атакует публичный Web-сервис",
+      goal: "Подозрительную активность внутри разрешённого входящего трафика.",
+      route: "Internet → NGFW → Web",
+      point: "A — Internet / DMZ",
+      why: "Этот поток проходит через границу Internet / DMZ и может быть предоставлен сетевому сенсору.",
+      blind: "наличие visibility на Web → App, App → Database и другие внутренние взаимодействия."
     },
-    dmz: {
-      title: "На границе DMZ и внутренней сети",
-      text: "Эта точка даёт контекст для взаимодействий публичного Web-сервера с внутренними сервисами и полезна при сценариях дальнейшего продвижения после компрометации DMZ.",
-      blind: "часть внешнего трафика и внутренние взаимодействия, которые не проходят через эту границу."
+    "web-compromised": {
+      title: "Скомпрометированный Web пытается обратиться к внутреннему App",
+      goal: "Попытку дальнейшего продвижения из DMZ во внутренний сегмент.",
+      route: "Web → App",
+      point: "B — DMZ / Internal",
+      why: "Интересующий поток возникает уже после внешнего периметра и проходит через границу DMZ / Internal.",
+      blind: "взаимодействия между другими внутренними узлами, которые не проходят через точку B."
     },
-    eastwest: {
-      title: "Внутри критичного внутреннего сегмента",
-      text: "Сенсор получает visibility на Users ↔ App, App ↔ Database и другие внутренние взаимодействия, которые могут быть важны для lateral movement detection.",
-      blind: "трафик других сегментов, который не доставляется в эту внутреннюю точку."
-    },
-    inline: {
-      title: "Inline IPS на периметровом пути",
-      text: "Трафик проходит через IPS, поэтому система не только анализирует north-south поток, но и способна применить blocking decision к пакету или соединению.",
-      blind: "внутренний east-west трафик по-прежнему не появляется автоматически; дополнительно возникает риск влияния IPS на доступность."
+    "lateral": {
+      title: "Скомпрометированная рабочая станция выполняет lateral movement",
+      goal: "Внутренние соединения между рабочими станциями, серверами и критичными системами.",
+      route: "Users → Internal Host → Database",
+      point: "C — Internal",
+      why: "Нужный сетевой след существует внутри инфраструктуры и может вообще не пересекать внешний периметр или DMZ.",
+      blind: "трафик других внутренних сегментов, который не проходит через выбранную внутреннюю точку наблюдения."
     }
   };
 
-  document.querySelectorAll(".placement-lab").forEach((lab) => {
-    const buttons = lab.querySelectorAll(".placement-choice");
-    const title = lab.querySelector(".placement-title");
-    const text = lab.querySelector(".placement-text");
-    const blind = lab.querySelector(".placement-blind-text");
+  document.querySelectorAll(".placement-scenario-lab").forEach((lab) => {
+    const buttons = lab.querySelectorAll(".scenario-choice");
+    const title = lab.querySelector(".scenario-title");
+    const goal = lab.querySelector(".scenario-goal");
+    const route = lab.querySelector(".scenario-route");
+    const point = lab.querySelector(".scenario-point");
+    const why = lab.querySelector(".scenario-why");
+    const blind = lab.querySelector(".scenario-blind-text");
 
-    function render(mode) {
-      lab.dataset.placement = mode;
+    function render(scenario) {
+      lab.dataset.scenario = scenario;
+
       buttons.forEach((button) => {
-        button.classList.toggle("active", button.dataset.placementChoice === mode);
+        button.classList.toggle("active", button.dataset.scenarioChoice === scenario);
       });
 
-      const data = content[mode];
+      const data = scenarios[scenario];
       title.textContent = data.title;
-      text.textContent = data.text;
+      goal.textContent = data.goal;
+      route.textContent = data.route;
+      point.textContent = data.point;
+      why.textContent = data.why;
       blind.textContent = data.blind;
     }
 
     buttons.forEach((button) => {
-      button.addEventListener("click", () => render(button.dataset.placementChoice));
+      button.addEventListener("click", () => render(button.dataset.scenarioChoice));
     });
 
-    render(lab.dataset.placement || "perimeter");
+    render(lab.dataset.scenario || "web-attack");
   });
 }
 
 document.addEventListener("DOMContentLoaded", () => {
-  initializePlacementLab();
+  initializePlacementScenarioLab();
 });
