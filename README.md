@@ -1,36 +1,19 @@
-# IDPS Course — GitHub Pages starter
+# IDPS Course
 
-Стартовый каркас интерактивного курса «Системы обнаружения и предотвращения вторжений».
+Интерактивный учебный портал по дисциплине «Системы обнаружения и предотвращения вторжений».
 
-## Локальный запуск
+## GitHub Desktop workflow
 
-```bash
-python -m venv .venv
-source .venv/bin/activate
-pip install -r requirements.txt
-mkdocs serve
-```
+1. Внести изменения.
+2. Проверить **Changes**.
+3. Commit to `main`.
+4. **Push origin**.
+5. Дождаться `Deploy GitHub Pages`.
 
-Windows PowerShell:
-
-```powershell
-python -m venv .venv
-.venv\Scripts\Activate.ps1
-pip install -r requirements.txt
-mkdocs serve
-```
-
-## Публикация
-
-1. Создайте GitHub repository.
-2. Загрузите проект в ветку `main`.
-3. Откройте `Settings → Pages`.
-4. В `Build and deployment → Source` выберите `GitHub Actions`.
-5. Push в `main` запустит workflow публикации.
-
-## Следующий этап
-
-- доработать главную;
-- завершить пять базовых блоков;
-- добавить Pre-Lab Test №1;
-- начать LabBox.
+## Roadmap
+- [x] GitHub Pages
+- [x] Базовый модуль IDPS
+- [x] Pre-Lab Test №1
+- [ ] LabBox v0.1
+- [ ] ЛР №1 — Suricata
+- [ ] Scenario Engine

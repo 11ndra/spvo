@@ -1,13 +1,13 @@
-# 3. Как сетевое событие превращается в alert
+# Как работает обнаружение
 
-Упрощённая цепочка Suricata:
+<div class="page-goal"><strong>Цель:</strong> проследить путь от сетевого пакета до события безопасности.</div>
 
 ```text
 Network packet
       ↓
-Capture
+Packet capture
       ↓
-Flow / stream tracking
+Flow / Stream tracking
       ↓
 Protocol parser
       ↓
@@ -20,20 +20,13 @@ Alert
 eve.json
 ```
 
-## Пример сигнатуры
+Пример:
 
 ```text
-alert http any any -> $HOME_NET 80 (
-    msg:"LAB Test HTTP Detection";
-    flow:established,to_server;
-    http.uri;
-    content:"/lab-test";
-    sid:1000001;
-    rev:1;
-)
+alert http any any -> $HOME_NET 80 (msg:"LAB Test HTTP Detection"; flow:established,to_server; http.uri; content:"/lab-test"; sid:1000001; rev:1;)
 ```
 
-Современный NIDS анализирует не только отдельные байты, но и направление потока, состояние TCP, протокол, HTTP-поля и контекст сессии.
+`alert` — действие; `http` — протокол; `$HOME_NET` — защищаемая сеть; `http.uri` — HTTP URI buffer; `content` — искомое содержимое; `sid` — идентификатор; `rev` — версия.
 
-!!! important
-    **Signature match ≠ confirmed incident.**
+!!! warning
+    Правильный язык: «зарегистрировано событие, соответствующее условиям сигнатуры». Неправильный язык: «IDS доказала взлом».
