@@ -10,6 +10,7 @@ theme:
     - navigation.sections
     - navigation.top
     - content.code.copy
+    - content.code.annotate
     - search.suggest
     - search.highlight
   palette:
@@ -34,7 +35,16 @@ markdown_extensions:
   - md_in_html
   - tables
   - pymdownx.details
-  - pymdownx.superfences
+  - pymdownx.highlight:
+      anchor_linenums: true
+      line_spans: __span
+      pygments_lang_class: true
+  - pymdownx.inlinehilite
+  - pymdownx.superfences:
+      custom_fences:
+        - name: mermaid
+          class: mermaid
+          format: !!python/name:pymdownx.superfences.fence_code_format
   - pymdownx.tabbed:
       alternate_style: true
 
@@ -59,4 +69,5 @@ nav:
   - Материалы:
       - Источники курса: resources/sources.md
       - Глоссарий: resources/glossary.md
+      - Визуальные элементы: resources/visual-guide.md
       - Troubleshooting: resources/troubleshooting.md
