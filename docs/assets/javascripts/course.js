@@ -1,4 +1,30 @@
-function initializeQuizzes(){document.querySelectorAll(".quiz").forEach((quiz)=>{const feedback=quiz.querySelector(".quiz-feedback");const buttons=quiz.querySelectorAll("button");buttons.forEach((button)=>{button.addEventListener("click",()=>{buttons.forEach((b)=>b.classList.remove("correct","incorrect","selected"));button.classList.add("selected");const ok=button.dataset.correct==="true";quiz.dataset.answered="true";quiz.dataset.result=ok?"correct":"incorrect";button.classList.add(ok?"correct":"incorrect");feedback.textContent=ok?"Верно.":"Неверно. Проверьте соответствующий теоретический раздел.";});});});document.querySelectorAll(".calculate-score").forEach((button)=>{button.addEventListener("click",()=>{const test=button.closest(".prelab-test");const quizzes=[...test.querySelectorAll(".quiz")];const total=quizzes.length;const correct=quizzes.filter(q=>q.dataset.result==="correct").length;const answered=quizzes.filter(q=>q.dataset.answered==="true").length;const score=total?Math.round(correct/total*100):0;const pass=parseInt(test.dataset.pass||"70",10);const out=test.querySelector(".score-output");if(answered<total){out.textContent=`Ответьте на все вопросы. Сейчас заполнено: ${answered}/${total}.`;return;}out.innerHTML=score>=pass?`Результат: <strong>${score}%</strong> — зачёт. Можно переходить к лабораторной работе.`:`Результат: <strong>${score}%</strong>. Рекомендуется повторить теорию и пройти тест ещё раз.`;localStorage.setItem("idps-prelab-1-score",String(score));});});}document.addEventListener("DOMContentLoaded",initializeQuizzes);
+function initializeQuizzes() {
+  document.querySelectorAll(".quiz").forEach((quiz) => {
+    // Pre-Lab has its own assessment logic: no immediate correctness reveal.
+    if (quiz.closest(".prelab-assessment")) return;
+
+    const feedback = quiz.querySelector(".quiz-feedback");
+    const buttons = quiz.querySelectorAll("button");
+
+    buttons.forEach((button) => {
+      button.addEventListener("click", () => {
+        buttons.forEach((b) => b.classList.remove("correct", "incorrect", "selected"));
+        button.classList.add("selected");
+
+        const ok = button.dataset.correct === "true";
+        quiz.dataset.answered = "true";
+        quiz.dataset.result = ok ? "correct" : "incorrect";
+        button.classList.add(ok ? "correct" : "incorrect");
+
+        feedback.textContent = ok
+          ? "Верно."
+          : "Неверно. Проверьте соответствующий теоретический раздел.";
+      });
+    });
+  });
+}
+
+document.addEventListener("DOMContentLoaded", initializeQuizzes);
 
 
 function initializeIdsIpsDemo() {
@@ -475,3 +501,206 @@ function initializePlacementScenarioLab() {
 document.addEventListener("DOMContentLoaded", () => {
   initializePlacementScenarioLab();
 });
+
+
+
+function initializePrelabAssessment() {
+  const domainNames = {
+    architecture: "Архитектура и роль IDPS",
+    telemetry: "Телеметрия и pipeline",
+    quality: "Качество detection",
+    placement: "Placement и доставка"
+  };
+
+  document.querySelectorAll(".prelab-assessment").forEach((test) => {
+    const quizzes = [...test.querySelectorAll(".assessment-question")];
+    const answeredOutput = test.querySelector(".assessment-answered");
+    const bestOutput = test.querySelector(".assessment-best");
+    const scoreOutput = test.querySelector(".score-output");
+    const domainOutput = test.querySelector(".assessment-domain-results");
+    const reviewOutput = test.querySelector(".assessment-review-list");
+    const submitButton = test.querySelector(".submit-assessment");
+    const resetButton = test.querySelector(".reset-assessment");
+    const pass = Number(test.dataset.pass || 75);
+    const storageKey = "idps-prelab-1-best-score";
+
+    let submitted = false;
+
+    function readBest() {
+      const value = Number(localStorage.getItem(storageKey));
+      return Number.isFinite(value) && value >= 0 ? value : null;
+    }
+
+    function renderBest() {
+      const best = readBest();
+      bestOutput.textContent = best === null ? "—" : `${best}%`;
+    }
+
+    function answeredCount() {
+      return quizzes.filter((quiz) => quiz.dataset.answered === "true").length;
+    }
+
+    function updateAnswered() {
+      answeredOutput.textContent = String(answeredCount());
+    }
+
+    quizzes.forEach((quiz) => {
+      const buttons = [...quiz.querySelectorAll("button")];
+
+      buttons.forEach((button) => {
+        button.addEventListener("click", () => {
+          if (submitted) return;
+
+          buttons.forEach((item) => item.classList.remove("selected"));
+          button.classList.add("selected");
+          quiz.dataset.answered = "true";
+          quiz.dataset.selectedCorrect =
+            button.dataset.correct === "true" ? "true" : "false";
+
+          updateAnswered();
+        });
+      });
+    });
+
+    function revealQuestion(quiz) {
+      const buttons = [...quiz.querySelectorAll("button")];
+      const selected = buttons.find((button) => button.classList.contains("selected"));
+      const correct = buttons.find((button) => button.dataset.correct === "true");
+      const feedback = quiz.querySelector(".quiz-feedback");
+      const rationale = quiz.querySelector(".quiz-rationale");
+      const ok = selected?.dataset.correct === "true";
+
+      buttons.forEach((button) => {
+        button.disabled = true;
+        button.classList.remove("correct", "incorrect");
+
+        if (button === correct) {
+          button.classList.add("correct");
+        } else if (button === selected && !ok) {
+          button.classList.add("incorrect");
+        }
+      });
+
+      quiz.dataset.result = ok ? "correct" : "incorrect";
+      feedback.textContent = ok
+        ? "Верно."
+        : "Неверно. Ниже показано объяснение и раздел для повторения.";
+
+      if (rationale) rationale.hidden = false;
+    }
+
+    function renderDomainResults() {
+      const groups = {};
+
+      quizzes.forEach((quiz) => {
+        const domain = quiz.dataset.domain || "other";
+        groups[domain] ||= { total: 0, correct: 0 };
+        groups[domain].total += 1;
+        if (quiz.dataset.result === "correct") groups[domain].correct += 1;
+      });
+
+      domainOutput.innerHTML = Object.entries(groups)
+        .map(([domain, data]) => `
+          <div class="assessment-domain-result">
+            <span>${domainNames[domain] || domain}</span>
+            <strong>${data.correct} / ${data.total}</strong>
+          </div>
+        `)
+        .join("");
+    }
+
+    function renderReviewList() {
+      const wrong = quizzes.filter((quiz) => quiz.dataset.result !== "correct");
+
+      if (!wrong.length) {
+        reviewOutput.innerHTML = `
+          <div class="assessment-review-success">
+            Ошибок нет. Базовая инженерная модель сформирована достаточно уверенно для перехода к ЛР №1.
+          </div>
+        `;
+        return;
+      }
+
+      const items = wrong.map((quiz) => {
+        const meta = quiz.querySelector(".assessment-question-meta")?.textContent?.trim() || "Вопрос";
+        const link = quiz.querySelector(".quiz-review");
+        const href = link?.getAttribute("href") || "#";
+        const label = link?.textContent?.replace("→", "").trim() || "Повторить материал";
+
+        return `<li><span>${meta}</span><a href="${href}">${label} →</a></li>`;
+      }).join("");
+
+      reviewOutput.innerHTML = `
+        <strong>Что повторить перед следующей попыткой</strong>
+        <ul>${items}</ul>
+      `;
+    }
+
+    submitButton.addEventListener("click", () => {
+      if (submitted) return;
+
+      const answered = answeredCount();
+      if (answered < quizzes.length) {
+        scoreOutput.innerHTML =
+          `Ответьте на все вопросы. Сейчас заполнено: <strong>${answered}/${quizzes.length}</strong>.`;
+        return;
+      }
+
+      submitted = true;
+      quizzes.forEach(revealQuestion);
+
+      const correct = quizzes.filter((quiz) => quiz.dataset.result === "correct").length;
+      const score = Math.round((correct / quizzes.length) * 100);
+      const passed = score >= pass;
+      const best = readBest();
+
+      if (best === null || score > best) {
+        localStorage.setItem(storageKey, String(score));
+      }
+
+      renderBest();
+      renderDomainResults();
+      renderReviewList();
+
+      scoreOutput.innerHTML = passed
+        ? `Результат: <strong>${correct}/${quizzes.length} (${score}%)</strong> — зачёт. Можно переходить к ЛР №1.`
+        : `Результат: <strong>${correct}/${quizzes.length} (${score}%)</strong>. Для зачёта нужно не менее <strong>9/12 (75%)</strong>. Разберите ошибки и повторите попытку.`;
+
+      test.classList.toggle("assessment-passed", passed);
+      test.classList.toggle("assessment-failed", !passed);
+    });
+
+    resetButton.addEventListener("click", () => {
+      submitted = false;
+      test.classList.remove("assessment-passed", "assessment-failed");
+
+      quizzes.forEach((quiz) => {
+        delete quiz.dataset.answered;
+        delete quiz.dataset.result;
+        delete quiz.dataset.selectedCorrect;
+
+        quiz.querySelectorAll("button").forEach((button) => {
+          button.disabled = false;
+          button.classList.remove("selected", "correct", "incorrect");
+        });
+
+        const feedback = quiz.querySelector(".quiz-feedback");
+        const rationale = quiz.querySelector(".quiz-rationale");
+        if (feedback) feedback.textContent = "";
+        if (rationale) rationale.hidden = true;
+      });
+
+      scoreOutput.textContent = "";
+      domainOutput.innerHTML = "";
+      reviewOutput.innerHTML = "";
+      updateAnswered();
+
+      test.scrollIntoView({ behavior: "smooth", block: "start" });
+    });
+
+    renderBest();
+    updateAnswered();
+  });
+}
+
+document.addEventListener("DOMContentLoaded", initializePrelabAssessment);
