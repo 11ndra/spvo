@@ -258,3 +258,73 @@ document.addEventListener("DOMContentLoaded", () => {
   initializeChapterProgress();
   initializeHomeChapterProgress();
 });
+
+
+
+function initializeMethodDemo() {
+  const content = {
+    signature: {
+      title: "Есть ли известный признак?",
+      text: "Сигнатурный метод ищет заранее определённое условие в доступной телеметрии.",
+      outcome: "Если известного признака нет, одно это поведение может остаться без сигнатурного alert."
+    },
+    protocol: {
+      title: "Соответствует ли взаимодействие ожидаемой логике протокола?",
+      text: "Анализ состояния оценивает структуру и последовательность протокольных действий.",
+      outcome: "Необычная последовательность может стать сигналом, но сама по себе ещё не доказывает атаку."
+    },
+    behavior: {
+      title: "Похоже ли это на нормальное поведение?",
+      text: "Поведенческий метод смотрит на частоту, повторяемость, направления и другие признаки во времени.",
+      outcome: "Регулярность соединений может стать аномальным сигналом даже без известной сигнатуры."
+    }
+  };
+
+  document.querySelectorAll(".method-demo").forEach((demo) => {
+    const buttons = demo.querySelectorAll(".method-choice");
+    const title = demo.querySelector(".method-demo__title");
+    const text = demo.querySelector(".method-demo__text");
+    const outcome = demo.querySelector(".method-demo__outcome");
+
+    function render(method) {
+      demo.dataset.method = method;
+      buttons.forEach((button) => {
+        button.classList.toggle("active", button.dataset.methodChoice === method);
+      });
+
+      const data = content[method];
+      title.textContent = data.title;
+      text.textContent = data.text;
+      outcome.textContent = data.outcome;
+    }
+
+    buttons.forEach((button) => {
+      button.addEventListener("click", () => render(button.dataset.methodChoice));
+    });
+
+    render(demo.dataset.method || "signature");
+  });
+}
+
+function migrateChapterProgressKeys() {
+  const migrations = {
+    "04-firewall-vs-idps": "05-firewall-vs-idps",
+    "05-detection-quality": "06-detection-quality",
+    "06-placement": "07-placement"
+  };
+
+  Object.entries(migrations).forEach(([oldSlug, newSlug]) => {
+    const oldKey = chapterProgressKey(oldSlug);
+    const newKey = chapterProgressKey(newSlug);
+    const oldValue = localStorage.getItem(oldKey);
+
+    if (oldValue !== null && localStorage.getItem(newKey) === null) {
+      localStorage.setItem(newKey, oldValue);
+    }
+  });
+}
+
+document.addEventListener("DOMContentLoaded", () => {
+  migrateChapterProgressKeys();
+  initializeMethodDemo();
+});
