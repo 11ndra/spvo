@@ -147,54 +147,114 @@ document.addEventListener("DOMContentLoaded", () => {
 
 
 
-function initializeReadingProgress() {
-  const inner = document.querySelector(".md-content__inner");
-  const article = document.querySelector(".md-content__inner > article, .md-content__inner");
-  if (!inner || !article) return;
-  if (inner.querySelector(".reading-progress")) return;
 
-  const progress = document.createElement("div");
-  progress.className = "reading-progress";
-  progress.innerHTML = `
-    <div class="reading-progress__meta">
-      <span>Прогресс чтения</span>
-      <span class="reading-progress__value">0%</span>
+
+
+function getChapterSlug(pathname = window.location.pathname) {
+  const match = pathname.match(/\/course\/([^/]+)\/?$/);
+  return match ? match[1] : null;
+}
+
+function chapterProgressKey(slug) {
+  return `idps:chapter-progress:${slug}`;
+}
+
+function readSavedChapterProgress(slug) {
+  if (!slug) return 0;
+  const raw = Number(localStorage.getItem(chapterProgressKey(slug)) || 0);
+  return Number.isFinite(raw) ? Math.max(0, Math.min(100, raw)) : 0;
+}
+
+function saveChapterProgress(slug, percent) {
+  if (!slug) return;
+  const previous = readSavedChapterProgress(slug);
+  const next = Math.max(previous, percent >= 95 ? 100 : percent);
+  localStorage.setItem(chapterProgressKey(slug), String(next));
+}
+
+function initializeChapterProgress() {
+  const slug = getChapterSlug();
+  if (!slug) return;
+
+  const inner = document.querySelector(".md-content__inner.md-typeset");
+  const h1 = inner?.querySelector(":scope > h1");
+  if (!inner || !h1 || inner.querySelector(".chapter-progress")) return;
+
+  const headings = [...inner.querySelectorAll(":scope > h2")];
+
+  const widget = document.createElement("div");
+  widget.className = "chapter-progress";
+  widget.innerHTML = `
+    <div class="chapter-progress__meta">
+      <span class="chapter-progress__section">Начало главы</span>
+      <span class="chapter-progress__value">0%</span>
     </div>
-    <div class="reading-progress__track">
-      <div class="reading-progress__bar"></div>
+    <div class="chapter-progress__track" aria-hidden="true">
+      <div class="chapter-progress__bar"></div>
     </div>
   `;
+  h1.insertAdjacentElement("afterend", widget);
 
-  const firstChild = inner.firstElementChild;
-  if (firstChild) {
-    inner.insertBefore(progress, firstChild);
-  } else {
-    inner.appendChild(progress);
-  }
+  const bar = widget.querySelector(".chapter-progress__bar");
+  const value = widget.querySelector(".chapter-progress__value");
+  const section = widget.querySelector(".chapter-progress__section");
 
-  const bar = progress.querySelector(".reading-progress__bar");
-  const value = progress.querySelector(".reading-progress__value");
-
-  function updateProgress() {
-    const rect = article.getBoundingClientRect();
-    const pageTop = window.scrollY || window.pageYOffset;
-    const articleTop = rect.top + pageTop;
-    const articleHeight = article.scrollHeight;
-    const viewportHeight = window.innerHeight;
-    const maxScrollable = Math.max(articleHeight - viewportHeight, 1);
-    const current = Math.min(Math.max(pageTop - articleTop, 0), maxScrollable);
-    const percent = Math.max(0, Math.min(100, Math.round((current / maxScrollable) * 100)));
+  function update() {
+    const top = window.scrollY || window.pageYOffset;
+    const start = h1.getBoundingClientRect().top + top;
+    const end = inner.getBoundingClientRect().top + top + inner.scrollHeight - window.innerHeight;
+    const range = Math.max(end - start, 1);
+    const percent = Math.round(Math.max(0, Math.min(1, (top - start) / range)) * 100);
 
     bar.style.width = `${percent}%`;
-    value.textContent = `${percent}%`;
-    progress.classList.toggle("reading-progress--done", percent >= 99);
+    value.textContent = percent >= 95 ? "Прочитано" : `${percent}%`;
+    widget.classList.toggle("is-complete", percent >= 95);
+
+    let currentIndex = -1;
+    const threshold = 145;
+    headings.forEach((heading, index) => {
+      if (heading.getBoundingClientRect().top <= threshold) currentIndex = index;
+    });
+
+    if (currentIndex >= 0) {
+      const title = headings[currentIndex].textContent.trim();
+      section.textContent = `Раздел ${currentIndex + 1} из ${headings.length} · ${title}`;
+    } else if (headings.length) {
+      section.textContent = `Раздел 1 из ${headings.length}`;
+    }
+
+    saveChapterProgress(slug, percent);
   }
 
-  updateProgress();
-  window.addEventListener("scroll", updateProgress, { passive: true });
-  window.addEventListener("resize", updateProgress);
+  update();
+  window.addEventListener("scroll", update, { passive: true });
+  window.addEventListener("resize", update);
+}
+
+function initializeHomeChapterProgress() {
+  document.querySelectorAll(".course-route a[href*='course/']").forEach((link) => {
+    if (link.querySelector(".route-progress")) return;
+
+    const url = new URL(link.getAttribute("href"), window.location.href);
+    const slug = getChapterSlug(url.pathname);
+    if (!slug) return;
+
+    const percent = readSavedChapterProgress(slug);
+    const progress = document.createElement("div");
+    progress.className = "route-progress";
+    progress.innerHTML = `
+      <div class="route-progress__track">
+        <div class="route-progress__bar" style="width:${percent}%"></div>
+      </div>
+      <span class="route-progress__label">${
+        percent >= 100 ? "Прочитано" : percent > 0 ? `${percent}%` : "Не начато"
+      }</span>
+    `;
+    link.appendChild(progress);
+  });
 }
 
 document.addEventListener("DOMContentLoaded", () => {
-  initializeReadingProgress();
+  initializeChapterProgress();
+  initializeHomeChapterProgress();
 });
