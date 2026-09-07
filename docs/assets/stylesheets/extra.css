@@ -443,3 +443,251 @@
   border-radius: .6rem;
   overflow-x: auto;
 }
+
+/* v2.4 — exemplar chapter / teaching-first layout */
+
+.chapter-lead {
+  margin: 0 0 1.6rem;
+  font-size: 1.08rem;
+  line-height: 1.85;
+}
+.chapter-lead p { margin: 0 0 .9rem; }
+
+.chapter-outcomes {
+  margin: 1.4rem 0 2rem;
+  padding: 1.1rem 1.2rem;
+  border-left: 4px solid var(--md-primary-fg-color);
+  border-radius: .55rem;
+  background: var(--course-surface);
+  color: var(--course-text);
+  box-shadow: var(--course-shadow);
+}
+.chapter-outcomes p { margin: .45rem 0 0; }
+
+.concept-pair, .system-map, .role-grid {
+  display: grid;
+  gap: 1rem;
+  margin: 1.4rem 0 2rem;
+}
+.concept-pair, .system-map, .role-grid {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+.concept-card, .system-map > div, .role-grid > article {
+  padding: 1.1rem 1.15rem;
+  border: 1px solid var(--course-border);
+  border-radius: .75rem;
+  background: var(--course-surface);
+  color: var(--course-text);
+  box-shadow: var(--course-shadow);
+}
+.concept-card p, .system-map p, .role-grid p {
+  margin-bottom: 0;
+  color: var(--course-muted);
+}
+.concept-index, .role-label {
+  display: inline-block;
+  margin-bottom: .35rem;
+  font-size: .67rem;
+  font-weight: 850;
+  letter-spacing: .09em;
+  color: var(--course-muted);
+}
+
+.ids-ips-demo {
+  margin: 1.6rem 0 2rem;
+  border: 1px solid var(--course-border);
+  border-radius: .9rem;
+  background: var(--course-surface);
+  box-shadow: var(--course-shadow);
+  overflow: hidden;
+}
+.demo-toolbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  padding: .9rem 1rem;
+  border-bottom: 1px solid var(--course-border);
+}
+.demo-title { font-weight: 800; }
+.demo-switch { display: flex; gap: .4rem; }
+.demo-mode {
+  padding: .48rem .72rem;
+  border: 1px solid var(--course-border);
+  border-radius: .45rem;
+  background: var(--course-surface-soft);
+  color: var(--course-text);
+  cursor: pointer;
+  font-weight: 700;
+}
+.demo-mode.active {
+  background: var(--md-primary-fg-color);
+  color: #fff;
+  border-color: var(--md-primary-fg-color);
+}
+.demo-stage {
+  position: relative;
+  display: grid;
+  grid-template-columns: minmax(110px, 1fr) minmax(80px, 1fr) minmax(130px, 1fr) minmax(80px, 1fr) minmax(110px, 1fr);
+  align-items: center;
+  gap: .5rem;
+  min-height: 230px;
+  padding: 2.3rem 1rem 3.5rem;
+  overflow: hidden;
+}
+.demo-node {
+  position: relative;
+  z-index: 2;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: .15rem;
+  text-align: center;
+}
+.node-icon {
+  display: grid;
+  place-items: center;
+  width: 54px;
+  height: 54px;
+  margin-bottom: .3rem;
+  border: 2px solid var(--course-border);
+  border-radius: 50%;
+  background: var(--course-surface-soft);
+  font-weight: 900;
+}
+.demo-node small {
+  max-width: 130px;
+  color: var(--course-muted);
+}
+.demo-line {
+  position: relative;
+  height: 3px;
+  background: var(--course-border);
+}
+.packet {
+  position: absolute;
+  top: 50%;
+  left: -10px;
+  width: 13px;
+  height: 9px;
+  border-radius: 2px;
+  background: var(--md-primary-fg-color);
+  transform: translateY(-50%);
+  opacity: 0;
+  animation: packet-flow 3.2s linear infinite;
+}
+.p2 { animation-delay: .9s; }
+.p3 { animation-delay: 1.8s; }
+.p4 { animation-delay: .45s; }
+.p5 { animation-delay: 1.45s; }
+
+@keyframes packet-flow {
+  0% { left: -10px; opacity: 0; }
+  10% { opacity: 1; }
+  85% { opacity: 1; }
+  100% { left: calc(100% - 3px); opacity: 0; }
+}
+
+.alert-bubble {
+  position: absolute;
+  left: 50%;
+  bottom: .8rem;
+  transform: translateX(-50%);
+  display: flex;
+  gap: .55rem;
+  align-items: center;
+  padding: .55rem .75rem;
+  border: 1px solid var(--course-border);
+  border-radius: .55rem;
+  background: var(--course-surface-soft);
+  color: var(--course-text);
+}
+.alert-bubble span {
+  color: var(--course-muted);
+  font-size: .82rem;
+}
+.demo-explanation {
+  padding: .9rem 1rem;
+  border-top: 1px solid var(--course-border);
+  background: var(--course-surface-soft);
+}
+.ids-ips-demo[data-mode="ips"] .sensor-node .node-icon {
+  border-color: var(--course-danger-border);
+}
+.ids-ips-demo[data-mode="ips"] .line-b .packet {
+  animation-play-state: paused;
+  opacity: 0;
+}
+.ids-ips-demo[data-mode="ips"] .line-b::after {
+  content: "BLOCK";
+  position: absolute;
+  top: -1.6rem;
+  left: 50%;
+  transform: translateX(-50%);
+  padding: .15rem .38rem;
+  border-radius: .3rem;
+  background: var(--course-danger-bg);
+  color: var(--course-danger-border);
+  font-size: .66rem;
+  font-weight: 900;
+  letter-spacing: .06em;
+}
+.pipeline-story { margin: 1.3rem 0 2rem; }
+.pipeline-step {
+  display: grid;
+  grid-template-columns: 42px 1fr;
+  gap: .8rem;
+  align-items: start;
+  padding: .9rem 0;
+  border-bottom: 1px solid var(--course-border);
+}
+.pipeline-step > span {
+  display: grid;
+  place-items: center;
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
+  background: var(--md-primary-fg-color);
+  color: #fff;
+  font-weight: 850;
+}
+.pipeline-step p {
+  margin: .25rem 0 0;
+  color: var(--course-muted);
+}
+.chapter-summary {
+  margin: 2rem 0 1.4rem;
+  padding: 1.2rem 1.25rem;
+  border: 1px solid var(--course-border);
+  border-radius: .8rem;
+  background: var(--course-surface-accent);
+}
+.chapter-summary > span {
+  display: block;
+  margin-bottom: .35rem;
+  font-size: .68rem;
+  font-weight: 850;
+  letter-spacing: .08em;
+  color: var(--course-muted);
+  text-transform: uppercase;
+}
+.chapter-summary p { margin-bottom: 0; }
+
+@media screen and (max-width: 760px) {
+  .concept-pair, .system-map, .role-grid { grid-template-columns: 1fr; }
+  .demo-toolbar { align-items: flex-start; flex-direction: column; }
+  .demo-stage { grid-template-columns: 1fr; gap: .8rem; padding: 1.1rem; }
+  .demo-line { width: 3px; height: 36px; margin: 0 auto; }
+  .demo-line .packet { display: none; }
+  .alert-bubble {
+    position: static;
+    transform: none;
+    justify-content: center;
+    margin-top: .4rem;
+  }
+  .ids-ips-demo[data-mode="ips"] .line-b::after {
+    top: 50%;
+    left: 1rem;
+    transform: translateY(-50%);
+  }
+}
