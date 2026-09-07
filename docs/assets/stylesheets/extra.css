@@ -399,13 +399,6 @@
 
 
 /* v2.3 — pedagogical content surfaces */
-.md-typeset h2 {
-  margin-top: 2.15em;
-}
-
-.md-typeset h3 {
-  margin-top: 1.55em;
-}
 
 .page-goal {
   border-left: 4px solid var(--md-primary-fg-color);
@@ -1317,5 +1310,197 @@
 
   .detect-stage {
     min-width: 0;
+  }
+}
+
+
+
+/* =========================================================
+   v2.7.1 — typography and reading progress refinements
+   ========================================================= */
+
+/* Base readability */
+.md-typeset {
+  font-size: .78rem;
+}
+
+.md-typeset h1 {
+  margin: 0 0 1.1rem;
+  font-size: clamp(1.9rem, 3.3vw, 2.45rem);
+  line-height: 1.16;
+  font-weight: 780;
+  letter-spacing: -0.02em;
+}
+
+.md-typeset h2 {
+  margin-top: 1.75em;
+  margin-bottom: .7em;
+  font-size: clamp(1.35rem, 2.1vw, 1.7rem);
+  line-height: 1.24;
+  font-weight: 730;
+}
+
+.md-typeset h3 {
+  margin-top: 1.35em;
+  margin-bottom: .55em;
+  font-size: clamp(1.08rem, 1.5vw, 1.24rem);
+  line-height: 1.28;
+  font-weight: 700;
+}
+
+.md-typeset h4 {
+  margin-top: 1.1em;
+  margin-bottom: .45em;
+  font-size: 1rem;
+  line-height: 1.32;
+}
+
+.md-typeset p,
+.md-typeset li {
+  line-height: 1.58;
+}
+
+.md-typeset p {
+  margin: 0 0 .85em;
+}
+
+.md-typeset ul,
+.md-typeset ol {
+  margin-top: .55em;
+  margin-bottom: .85em;
+}
+
+.md-typeset li + li {
+  margin-top: .18em;
+}
+
+.md-content__inner > h1:first-child {
+  margin-top: .2rem;
+}
+
+/* Slightly denser long-form blocks */
+.chapter-lead {
+  margin: 0 0 1.35rem;
+  font-size: 1.02rem;
+  line-height: 1.68;
+}
+
+.chapter-lead p {
+  margin: 0 0 .8rem;
+}
+
+.chapter-outcomes,
+.chapter-summary,
+.page-goal,
+.callout-banner,
+.lab-header,
+.quiz,
+.next-step {
+  box-shadow: var(--course-shadow);
+}
+
+.chapter-outcomes p,
+.chapter-summary p,
+.page-goal,
+.next-step,
+.quiz p {
+  line-height: 1.56;
+}
+
+/* Homepage rhythm */
+.home-hero {
+  padding: 2.2rem 2.2rem;
+}
+
+.home-hero h1 {
+  font-size: clamp(2rem, 4.2vw, 3.2rem);
+  line-height: 1.08;
+}
+
+.home-hero-lead {
+  font-size: 1rem;
+  line-height: 1.65;
+}
+
+.home-hero-question strong {
+  line-height: 1.45;
+}
+
+.big-question h3,
+.problem-card h3,
+.learning-duo h3,
+.course-card h3 {
+  line-height: 1.34;
+}
+
+/* Slightly reduce very airy surfaces */
+.course-card,
+.visual-card,
+.problem-card,
+.learning-duo section,
+.course-route a,
+.big-question {
+  padding: 1.05rem 1.1rem;
+}
+
+/* Reading progress */
+.reading-progress {
+  position: sticky;
+  top: 0;
+  z-index: 9;
+  margin: -.2rem 0 1rem;
+  padding-top: .15rem;
+  background: transparent;
+}
+
+.reading-progress__meta {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: .38rem;
+  font-size: .68rem;
+  font-weight: 800;
+  letter-spacing: .06em;
+  text-transform: uppercase;
+  color: var(--course-muted);
+}
+
+.reading-progress__track {
+  width: 100%;
+  height: 8px;
+  border-radius: 999px;
+  overflow: hidden;
+  background: var(--course-surface-soft);
+  border: 1px solid var(--course-border);
+}
+
+.reading-progress__bar {
+  width: 0%;
+  height: 100%;
+  border-radius: inherit;
+  background: linear-gradient(90deg, var(--md-primary-fg-color), var(--md-accent-fg-color));
+  transition: width .12s ease-out;
+}
+
+.reading-progress--done .reading-progress__meta span:last-child {
+  color: var(--md-primary-fg-color);
+}
+
+/* Make content a bit more compact on narrow screens */
+@media screen and (max-width: 700px) {
+  .md-typeset {
+    font-size: .76rem;
+  }
+
+  .home-hero {
+    padding: 1.45rem 1.2rem;
+  }
+
+  .home-hero h1 {
+    line-height: 1.1;
+  }
+
+  .chapter-lead {
+    font-size: .98rem;
   }
 }
