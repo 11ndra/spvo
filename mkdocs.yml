@@ -54,7 +54,7 @@ extra_javascript:
   - assets/javascripts/course.js
 
 nav:
-  - Главная: index.md
+  - Обзор курса: index.md
   - Основы IDPS:
       - Введение: course/01-intro.md
       - Классификация IDPS: course/02-classification.md

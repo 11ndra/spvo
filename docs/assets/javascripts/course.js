@@ -144,3 +144,57 @@ document.addEventListener("DOMContentLoaded", () => {
   initializeDetectionPipeline();
   initializeDiagnosticChain();
 });
+
+
+
+function initializeReadingProgress() {
+  const inner = document.querySelector(".md-content__inner");
+  const article = document.querySelector(".md-content__inner > article, .md-content__inner");
+  if (!inner || !article) return;
+  if (inner.querySelector(".reading-progress")) return;
+
+  const progress = document.createElement("div");
+  progress.className = "reading-progress";
+  progress.innerHTML = `
+    <div class="reading-progress__meta">
+      <span>Прогресс чтения</span>
+      <span class="reading-progress__value">0%</span>
+    </div>
+    <div class="reading-progress__track">
+      <div class="reading-progress__bar"></div>
+    </div>
+  `;
+
+  const firstChild = inner.firstElementChild;
+  if (firstChild) {
+    inner.insertBefore(progress, firstChild);
+  } else {
+    inner.appendChild(progress);
+  }
+
+  const bar = progress.querySelector(".reading-progress__bar");
+  const value = progress.querySelector(".reading-progress__value");
+
+  function updateProgress() {
+    const rect = article.getBoundingClientRect();
+    const pageTop = window.scrollY || window.pageYOffset;
+    const articleTop = rect.top + pageTop;
+    const articleHeight = article.scrollHeight;
+    const viewportHeight = window.innerHeight;
+    const maxScrollable = Math.max(articleHeight - viewportHeight, 1);
+    const current = Math.min(Math.max(pageTop - articleTop, 0), maxScrollable);
+    const percent = Math.max(0, Math.min(100, Math.round((current / maxScrollable) * 100)));
+
+    bar.style.width = `${percent}%`;
+    value.textContent = `${percent}%`;
+    progress.classList.toggle("reading-progress--done", percent >= 99);
+  }
+
+  updateProgress();
+  window.addEventListener("scroll", updateProgress, { passive: true });
+  window.addEventListener("resize", updateProgress);
+}
+
+document.addEventListener("DOMContentLoaded", () => {
+  initializeReadingProgress();
+});
