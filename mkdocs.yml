@@ -70,7 +70,7 @@ nav:
   - Проверка знаний:
       - Pre-Lab Test №1: prelab/index.md
   - Лабораторные работы:
-      - ЛР №1 — Основы Suricata: labs/lab01/index.md
+      - ЛР №1 — NIDS и первый detection: labs/lab01/index.md
   - Материалы:
       - Источники курса: resources/sources.md
       - Глоссарий: resources/glossary.md

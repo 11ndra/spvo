@@ -42,3 +42,15 @@
 - **Lateral movement: monitoring and segmentation guidance (Глава 7)** — CISA/FBI/NSA: https://www.cisa.gov/news-events/alerts/2022/01/11/understanding-and-mitigating-russian-state-sponsored-cyber-threats-us-critical-infrastructure
 
 Принцип использования кейсов: реальный инцидент или инженерное исследование включается в главу только тогда, когда он демонстрирует конкретный механизм курса. Кейсы не используются как отдельные «истории ради истории».
+
+
+## Suricata — ЛР №1
+
+Для команд и формата первой лабораторной используются официальные материалы OISF:
+
+- Suricata User Guide — Quickstart: https://docs.suricata.io/en/latest/quickstart.html
+- Adding Your Own Rules: https://docs.suricata.io/en/latest/rule-management/adding-your-own-rules.html
+- EVE JSON Output: https://docs.suricata.io/en/latest/output/eve/eve-json-output.html
+- EVE JSON Format: https://docs.suricata.io/en/latest/output/eve/eve-json-format.html
+
+В лабораторной версия Suricata не зашита в текст как постоянное число: студент фиксирует реально установленную версию через `suricata --build-info` в evidence.

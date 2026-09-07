@@ -3390,3 +3390,118 @@ body:has(.home-hero) .md-content__inner.md-typeset {
     top: 2.7rem;
   }
 }
+
+
+
+/* =========================================================
+   v2.15 — Lab №1 / LabBox
+   ========================================================= */
+
+.labbox-topology {
+  display: grid;
+  grid-template-columns: 1fr auto 1.25fr auto 1fr;
+  gap: .55rem;
+  align-items: center;
+  margin: 1.15rem 0 1.4rem;
+  padding: .85rem;
+  border: 1px solid var(--course-border);
+  border-radius: .7rem;
+  background: var(--course-surface-soft);
+}
+
+.labbox-endpoint,
+.labbox-middle {
+  padding: .72rem .7rem;
+  border: 1px solid var(--course-border);
+  border-radius: .52rem;
+  background: var(--course-surface);
+  text-align: center;
+}
+
+.labbox-endpoint span,
+.labbox-endpoint strong,
+.labbox-endpoint small,
+.labbox-middle strong,
+.labbox-middle small {
+  display: block;
+}
+
+.labbox-endpoint span {
+  margin-bottom: .12rem;
+  color: var(--course-muted);
+  font-size: .6rem;
+  font-weight: 850;
+  letter-spacing: .05em;
+  text-transform: uppercase;
+}
+
+.labbox-endpoint small,
+.labbox-middle small {
+  margin-top: .14rem;
+  color: var(--course-muted);
+}
+
+.labbox-link {
+  display: grid;
+  justify-items: center;
+  color: var(--course-muted);
+  font-size: .61rem;
+}
+
+.labbox-link b {
+  margin: .12rem 0;
+  color: var(--md-primary-fg-color);
+  font-size: .9rem;
+}
+
+.labbox-observation {
+  margin-top: .6rem;
+  padding: .52rem .58rem;
+  border: 1px solid var(--md-primary-fg-color);
+  border-radius: .44rem;
+  background: var(--course-surface-accent);
+}
+
+.labbox-observation span,
+.labbox-observation strong,
+.labbox-observation small {
+  display: block;
+}
+
+.labbox-observation span {
+  margin-bottom: .1rem;
+  font-size: .59rem;
+  font-weight: 850;
+  text-transform: uppercase;
+  letter-spacing: .05em;
+  color: var(--course-muted);
+}
+
+.lab-evidence {
+  margin: .9rem 0 1.1rem;
+  padding: .68rem .78rem;
+  border-left: 3px solid var(--md-primary-fg-color);
+  border-radius: .4rem;
+  background: var(--course-surface-soft);
+}
+
+.lab-evidence strong {
+  display: block;
+  margin-bottom: .22rem;
+  font-size: .7rem;
+}
+
+.lab-evidence p {
+  margin: 0;
+  line-height: 1.5;
+}
+
+@media screen and (max-width: 820px) {
+  .labbox-topology {
+    grid-template-columns: 1fr;
+  }
+
+  .labbox-link b {
+    transform: rotate(90deg);
+  }
+}

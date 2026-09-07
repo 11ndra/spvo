@@ -429,3 +429,42 @@ Chapter quizzes сохранили прежний режим мгновенно�
 - варианты внутри одного вопроса приведены к сопоставимой длине и грамматической форме;
 - правильные ответы равномерно распределены по позициям A/B/C/D: по три на каждую букву;
 - вопросы, scoring, delayed feedback и проходной порог 75% не менялись.
+
+
+## v2.15 — Lab №1 + LabBox v0.1
+
+ЛР №1 полностью переработана из вводной заглушки в воспроизводимую практическую работу.
+
+Основная цель:
+«доказать всю цепочку traffic → visibility → rule → alert → evidence → interpretation».
+
+Добавлен LabBox v0.1:
+- одна Ubuntu VM;
+- `idps-client` 10.13.37.10;
+- `idps-web` 10.13.37.20:8080;
+- Linux bridge `br-idps`;
+- host-side interfaces `lab-client0` и `lab-web0`;
+- observation interface — `lab-client0`;
+- безопасный Python HTTP server;
+- `lab-init.sh`, `lab-status.sh`, `lab-topology.sh`, `lab-reset.sh`, `lab-check.sh`;
+- автоматический экспорт технического evidence в `lab01-evidence.zip`.
+
+LabBox намеренно:
+- не устанавливает Suricata;
+- не изменяет Suricata config;
+- не создаёт rules;
+- не запускает IDS.
+
+В ЛР №1 студент:
+- сначала доказывает visibility через tcpdump;
+- устанавливает Suricata;
+- выполняет `suricata -T`;
+- создаёт SID 1000001 для `/lab-test`;
+- выполняет negative и positive validation;
+- разбирает `eve.json`;
+- добавляет безопасный attack-like path traversal detection SID 1000002;
+- наблюдает первый False Positive на `/docs/../index.html`;
+- воспроизводит troubleshooting-ситуацию запуском Suricata на неправильном интерфейсе;
+- сдаёт `lab01-report.md` + `lab01-evidence.zip`.
+
+Страница курса содержит прямую загрузку `docs/assets/downloads/idps-labbox-v0.1.zip`.
