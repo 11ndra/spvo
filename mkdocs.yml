@@ -1,0 +1,60 @@
+site_name: IDPS Course
+site_description: "Системы обнаружения и предотвращения вторжений — интерактивный курс"
+site_author: "Кафедра информационной безопасности"
+
+theme:
+  name: material
+  language: ru
+  features:
+    - navigation.tabs
+    - navigation.sections
+    - navigation.top
+    - content.code.copy
+    - content.tabs.link
+    - search.suggest
+    - search.highlight
+  palette:
+    - media: "(prefers-color-scheme: light)"
+      scheme: default
+      primary: indigo
+      accent: blue
+      toggle:
+        icon: material/weather-night
+        name: Тёмная тема
+    - media: "(prefers-color-scheme: dark)"
+      scheme: slate
+      primary: indigo
+      accent: blue
+      toggle:
+        icon: material/weather-sunny
+        name: Светлая тема
+
+markdown_extensions:
+  - admonition
+  - attr_list
+  - md_in_html
+  - tables
+  - pymdownx.details
+  - pymdownx.superfences
+  - pymdownx.tabbed:
+      alternate_style: true
+
+extra_css:
+  - assets/stylesheets/extra.css
+
+extra_javascript:
+  - assets/javascripts/progress.js
+
+nav:
+  - Главная: index.md
+  - Основы IDPS:
+      - 1. Что такое IDS/IPS: course/01-intro.md
+      - 2. Классификация IDPS: course/02-classification.md
+      - 3. Как работает обнаружение: course/03-detection.md
+      - 4. Firewall и IDPS: course/04-firewall-vs-idps.md
+      - 5. Качество детектирования: course/05-detection-quality.md
+  - Лабораторные работы:
+      - ЛР №1 — Основы Suricata: labs/lab01/index.md
+  - Материалы:
+      - Источники курса: resources/sources.md
+      - Troubleshooting: resources/troubleshooting.md
