@@ -2551,3 +2551,237 @@ body:has(.home-hero) .md-content__inner.md-typeset {
     grid-template-columns: 1fr;
   }
 }
+
+
+
+/* =========================================================
+   v2.10.2 — Chapter 5 layout correction
+   Prevent diagram overflow into the right TOC.
+   ========================================================= */
+
+/* Any complex grid inside the article must be allowed to shrink. */
+.ngfw-architecture *,
+.architecture-compare *,
+.strong-architecture-flow *,
+.weak-architecture-flow * {
+  min-width: 0;
+  box-sizing: border-box;
+}
+
+.ngfw-architecture,
+.architecture-compare,
+.strong-architecture-flow,
+.weak-architecture-flow {
+  max-width: 100%;
+}
+
+/* ---------------------------------------------------------
+   NGFW diagram
+   --------------------------------------------------------- */
+
+/*
+   The previous 5-column layout was too wide once MkDocs' right TOC
+   reduced the real article width. Use a three-stage vertical layout:
+   sources -> NGFW -> outcomes.
+*/
+.ngfw-architecture {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: .8rem;
+  align-items: stretch;
+}
+
+.ngfw-inputs,
+.ngfw-outcomes {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: .6rem;
+}
+
+.ngfw-group-title {
+  grid-column: 1 / -1;
+}
+
+.ngfw-flow-arrow {
+  display: grid;
+  place-items: center;
+  height: 24px;
+  transform: rotate(90deg);
+  font-size: 1.1rem;
+}
+
+.ngfw-core {
+  width: 100%;
+}
+
+.ngfw-layer {
+  grid-template-columns: 30px minmax(0, 1fr);
+}
+
+.ngfw-source,
+.ngfw-outcome,
+.ngfw-layer,
+.ngfw-layer small,
+.ngfw-source small,
+.ngfw-outcome small {
+  overflow-wrap: anywhere;
+}
+
+/* ---------------------------------------------------------
+   Architecture scenario
+   --------------------------------------------------------- */
+
+/*
+   Comparing two fairly rich architectures side by side is not useful
+   at textbook width. Stack them vertically so every scheme uses the
+   full article width.
+*/
+.architecture-compare {
+  grid-template-columns: 1fr;
+  gap: 1rem;
+}
+
+.architecture-panel {
+  width: 100%;
+  overflow: hidden;
+}
+
+/* Weak architecture: source left, exposed services right */
+.weak-architecture-flow {
+  grid-template-columns: minmax(120px, .75fr) minmax(0, 1.7fr);
+  gap: .85rem;
+}
+
+.weak-links > div {
+  grid-template-columns: 58px 20px minmax(0, 1fr);
+}
+
+/*
+   Strong architecture:
+   Five security/application nodes occupy one row.
+   Connection labels live above the arrows but don't reserve huge width.
+*/
+.strong-architecture-flow {
+  display: grid;
+  grid-template-columns:
+    minmax(82px, 1fr)
+    52px
+    minmax(100px, 1.1fr)
+    52px
+    minmax(82px, 1fr)
+    58px
+    minmax(82px, 1fr)
+    62px
+    minmax(92px, 1fr);
+  gap: .3rem;
+  align-items: stretch;
+}
+
+.strong-architecture-flow .arch-node {
+  display: flex;
+  min-height: 92px;
+  flex-direction: column;
+  justify-content: center;
+  padding: .58rem .45rem;
+}
+
+.strong-architecture-flow .arch-node strong {
+  font-size: .76rem;
+  line-height: 1.25;
+  overflow-wrap: normal;
+  word-break: normal;
+}
+
+.strong-architecture-flow .arch-node small {
+  font-size: .64rem;
+  line-height: 1.28;
+  overflow-wrap: normal;
+  word-break: normal;
+}
+
+.arch-arrow {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-width: 0;
+}
+
+.arch-arrow span {
+  max-width: 64px;
+  min-height: 30px;
+  font-size: .56rem;
+  line-height: 1.18;
+  overflow-wrap: normal;
+  word-break: normal;
+  text-align: center;
+}
+
+.arch-arrow b {
+  margin-top: .12rem;
+}
+
+/* DENY and telemetry rows should remain inside the panel. */
+.blocked-paths,
+.visibility-layers {
+  width: 100%;
+}
+
+.blocked-paths > div {
+  flex: 1 1 220px;
+}
+
+.visibility-layers {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+/* ---------------------------------------------------------
+   Breakpoints
+   --------------------------------------------------------- */
+
+@media screen and (max-width: 1100px) {
+  .strong-architecture-flow {
+    /*
+      At narrower article widths use a vertical pipeline rather than
+      compressing labels until words become unreadable.
+    */
+    grid-template-columns: 1fr;
+    gap: .35rem;
+  }
+
+  .strong-architecture-flow .arch-node {
+    min-height: 0;
+  }
+
+  .strong-architecture-flow .arch-arrow {
+    min-height: 34px;
+  }
+
+  .strong-architecture-flow .arch-arrow span {
+    max-width: none;
+    min-height: 0;
+  }
+
+  .strong-architecture-flow .arch-arrow b {
+    transform: rotate(90deg);
+  }
+}
+
+@media screen and (max-width: 760px) {
+  .ngfw-inputs,
+  .ngfw-outcomes {
+    grid-template-columns: 1fr;
+  }
+
+  .weak-architecture-flow {
+    grid-template-columns: 1fr;
+  }
+
+  .weak-links > div {
+    grid-template-columns: 58px 20px minmax(0, 1fr);
+  }
+
+  .visibility-layers {
+    grid-template-columns: 1fr;
+  }
+}
