@@ -328,3 +328,80 @@ document.addEventListener("DOMContentLoaded", () => {
   migrateChapterProgressKeys();
   initializeMethodDemo();
 });
+
+
+
+function initializeBaseRateLab() {
+  document.querySelectorAll(".base-rate-lab").forEach((lab) => {
+    const totalInput = lab.querySelector("[data-base-total]");
+    const prevalenceInput = lab.querySelector("[data-base-prevalence]");
+    const tprInput = lab.querySelector("[data-base-tpr]");
+    const fprInput = lab.querySelector("[data-base-fpr]");
+
+    const prevalenceValue = lab.querySelector("[data-base-prevalence-value]");
+    const tprValue = lab.querySelector("[data-base-tpr-value]");
+    const fprValue = lab.querySelector("[data-base-fpr-value]");
+
+    const tpEl = lab.querySelector("[data-base-tp]");
+    const fnEl = lab.querySelector("[data-base-fn]");
+    const fpEl = lab.querySelector("[data-base-fp]");
+    const tnEl = lab.querySelector("[data-base-tn]");
+    const precisionEl = lab.querySelector("[data-base-precision]");
+    const explanationEl = lab.querySelector("[data-base-explanation]");
+
+    const formatInt = (value) => Math.round(value).toLocaleString("ru-RU");
+
+    function render() {
+      const total = Math.max(1, Number(totalInput.value) || 100000);
+      const prevalence = Number(prevalenceInput.value) / 100;
+      const tpr = Number(tprInput.value) / 100;
+      const fpr = Number(fprInput.value) / 100;
+
+      const positives = total * prevalence;
+      const negatives = Math.max(0, total - positives);
+
+      const tp = positives * tpr;
+      const fn = positives - tp;
+      const fp = negatives * fpr;
+      const tn = negatives - fp;
+      const precision = tp + fp > 0 ? tp / (tp + fp) : 0;
+
+      prevalenceValue.textContent = `${Number(prevalenceInput.value).toFixed(2)}%`;
+      tprValue.textContent = `${Number(tprInput.value).toFixed(1)}%`;
+      fprValue.textContent = `${Number(fprInput.value).toFixed(1)}%`;
+
+      tpEl.textContent = formatInt(tp);
+      fnEl.textContent = formatInt(fn);
+      fpEl.textContent = formatInt(fp);
+      tnEl.textContent = formatInt(tn);
+      precisionEl.textContent = `${(precision * 100).toFixed(1)}%`;
+
+      const ratio = tp > 0 ? fp / tp : Infinity;
+
+      if (!Number.isFinite(ratio)) {
+        explanationEl.textContent =
+          "Детектор не формирует истинных положительных срабатываний при выбранных параметрах.";
+      } else if (ratio > 5) {
+        explanationEl.textContent =
+          `На каждый полезный alert приходится примерно ${ratio.toFixed(1)} ложных. Низкая базовая частота атак делает даже небольшой FPR очень дорогим для SOC.`;
+      } else if (ratio > 1) {
+        explanationEl.textContent =
+          `Ложных alert всё ещё больше, чем истинных: примерно ${ratio.toFixed(1)} FP на один TP.`;
+      } else {
+        explanationEl.textContent =
+          "При выбранных параметрах большинство положительных срабатываний являются истинными, но отдельно всё равно нужно оценивать пропущенные атаки.";
+      }
+    }
+
+    [totalInput, prevalenceInput, tprInput, fprInput].forEach((input) => {
+      input.addEventListener("input", render);
+      input.addEventListener("change", render);
+    });
+
+    render();
+  });
+}
+
+document.addEventListener("DOMContentLoaded", () => {
+  initializeBaseRateLab();
+});

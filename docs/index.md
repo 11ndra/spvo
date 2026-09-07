@@ -299,8 +299,8 @@
   <a href="course/06-detection-quality/">
     <span>06</span>
     <div>
-      <strong>Как оценить качество обнаружения</strong>
-      <small>Ложные срабатывания, пропуски и настройка</small>
+      <strong>Как измерять качество обнаружения</strong>
+      <small>TP/FP/FN, Base-Rate Fallacy и tuning</small>
     </div>
   </a>
 
