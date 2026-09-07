@@ -966,3 +966,161 @@
   .course-route,
   .tool-strip { grid-template-columns: 1fr; }
 }
+
+
+
+/* =========================================================
+   v2.6 — Chapter 2 visibility demo
+   ========================================================= */
+
+.visibility-demo {
+  margin: 1.6rem 0 2rem;
+  border: 1px solid var(--course-border);
+  border-radius: .9rem;
+  background: var(--course-surface);
+  box-shadow: var(--course-shadow);
+  overflow: hidden;
+}
+
+.visibility-toolbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  padding: .9rem 1rem;
+  border-bottom: 1px solid var(--course-border);
+}
+
+.visibility-switch {
+  display: flex;
+  flex-wrap: wrap;
+  gap: .35rem;
+}
+
+.visibility-mode {
+  padding: .45rem .68rem;
+  border: 1px solid var(--course-border);
+  border-radius: .42rem;
+  background: var(--course-surface-soft);
+  color: var(--course-text);
+  cursor: pointer;
+  font-weight: 700;
+}
+
+.visibility-mode.active {
+  background: var(--md-primary-fg-color);
+  border-color: var(--md-primary-fg-color);
+  color: #fff;
+}
+
+.incident-scene {
+  position: relative;
+  display: grid;
+  grid-template-columns: 1fr auto 1fr auto 1fr;
+  gap: .7rem;
+  align-items: center;
+  min-height: 260px;
+  padding: 2.3rem 1.2rem 5.5rem;
+}
+
+.incident-node {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: .22rem;
+  padding: 1rem .7rem;
+  border: 1px solid var(--course-border);
+  border-radius: .7rem;
+  background: var(--course-surface-soft);
+  text-align: center;
+  opacity: .34;
+  filter: grayscale(.7);
+  transition: opacity .18s ease, filter .18s ease, transform .18s ease, border-color .18s ease;
+}
+
+.incident-node.visible-source {
+  opacity: 1;
+  filter: none;
+  transform: translateY(-2px);
+  border-color: var(--md-primary-fg-color);
+}
+
+.incident-icon {
+  display: grid;
+  place-items: center;
+  min-width: 48px;
+  height: 48px;
+  padding: 0 .4rem;
+  margin-bottom: .2rem;
+  border-radius: 50%;
+  background: var(--course-surface);
+  font-size: .72rem;
+  font-weight: 900;
+}
+
+.incident-node small {
+  color: var(--course-muted);
+}
+
+.incident-arrow {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  color: var(--course-muted);
+}
+
+.incident-arrow span {
+  font-size: 1.5rem;
+}
+
+.incident-arrow small {
+  font-size: .7rem;
+}
+
+.rogue-ap {
+  position: absolute;
+  left: 12%;
+  bottom: 1rem;
+  width: 180px;
+}
+
+.visibility-details {
+  padding: 1rem 1.1rem;
+  border-top: 1px solid var(--course-border);
+  background: var(--course-surface-soft);
+}
+
+.visibility-label {
+  display: block;
+  margin-bottom: .2rem;
+  font-size: .65rem;
+  font-weight: 850;
+  letter-spacing: .08em;
+  text-transform: uppercase;
+  color: var(--course-muted);
+}
+
+.visibility-details p {
+  margin: .55rem 0 0;
+}
+
+@media screen and (max-width: 800px) {
+  .visibility-toolbar {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .incident-scene {
+    grid-template-columns: 1fr;
+    padding: 1rem;
+  }
+
+  .incident-arrow {
+    transform: rotate(90deg);
+  }
+
+  .rogue-ap {
+    position: static;
+    width: auto;
+  }
+}
