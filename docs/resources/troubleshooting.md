@@ -1,6 +1,6 @@
 # Troubleshooting
 
-## Локальный запуск сайта
+## Локальный запуск
 
 ```bash
 python -m venv .venv
@@ -9,19 +9,19 @@ pip install -r requirements.txt
 mkdocs serve
 ```
 
-## Проверка сборки
+Windows PowerShell:
 
-```bash
-mkdocs build --strict
+```powershell
+python -m venv .venv
+.venv\Scripts\Activate.ps1
+pip install -r requirements.txt
+mkdocs serve
 ```
 
-## GitHub Pages не публикуется
+## GitHub Desktop
 
-1. Откройте `Settings → Pages`.
-2. В `Build and deployment → Source` выберите **GitHub Actions**.
-3. Проверьте последний workflow во вкладке `Actions`.
-4. Посмотрите лог шага `mkdocs build --strict`.
+```text
+Changes → Commit to main → Push origin
+```
 
-## LabBox
-
-Раздел будет дополнен после фиксации первой версии виртуальной лаборатории.
+После push дождитесь успешного workflow `Deploy GitHub Pages`.

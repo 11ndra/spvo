@@ -1,61 +1,49 @@
-# 1. Что такое IDS и IPS
+# Что такое IDS и IPS
 
-## Почему одного межсетевого экрана недостаточно
+<div class="page-goal"><strong>Цель раздела:</strong> понять, зачем IDS/IPS нужны в сети и почему межсетевой экран не решает все задачи обнаружения атак.</div>
 
-Межсетевой экран прежде всего принимает решение, разрешён ли сетевой обмен согласно политике доступа.
+## 1. Проблема
 
-Например:
-
-```text
-Internet → TCP/443 → Web Server
-```
-
-Порт `443/tcp` может быть разрешён, потому что веб-сервис должен быть доступен пользователям.
-
-Однако внутри разрешённого соединения может находиться подозрительный запрос.
+Организация публикует веб-сервис:
 
 ```text
-Разрешённый TCP/443
-        ↓
-HTTP request
-        ↓
-потенциально вредоносное действие
+Internet → Firewall → Web Server
+              TCP/443
 ```
 
-## IDS
+Порт `443/tcp` разрешён, потому что сервис должен быть доступен пользователям. Однако разрешённое соединение ещё не означает безопасное соединение.
 
-**Intrusion Detection System** — система обнаружения вторжений.
+## 2. IDS
+
+**Intrusion Detection System (IDS)** — система обнаружения вторжений.
 
 ```text
-Traffic
-   ↓
-  IDS
-   ├── normal → observe
-   └── suspicious → alert
+Traffic → IDS → normal: observe / suspicious: alert
 ```
 
-## IPS
+!!! important
+    Alert не означает автоматически, что атака была успешной.
 
-**Intrusion Prevention System** — система предотвращения вторжений.
+## 3. IPS
+
+**Intrusion Prevention System (IPS)** — система предотвращения вторжений.
 
 ```text
-Traffic
-   ↓
-  IPS
-   ├── allowed → forward
-   └── prohibited → block/reject
+Traffic → IPS → allowed: forward / prohibited: drop or reject
 ```
 
-!!! warning "Важно"
-    Наличие alert означает совпадение наблюдаемого события с логикой обнаружения. Alert сам по себе не доказывает успешную атаку или компрометацию.
+Чтобы предотвращать передачу, IPS должна располагаться в позиции, где способна влиять на прохождение трафика.
 
-## Мини-тест
+## 4. Detection и Prevention
 
-<div class="quiz" data-question-id="intro-1">
-  <p><strong>Suricata работает как пассивная IDS и сформировала alert. Что можно утверждать наверняка?</strong></p>
-  <button data-choice="a">A. Атака была успешно заблокирована</button>
-  <button data-choice="b" data-correct="true">B. Наблюдаемое событие совпало с условием детектирования</button>
-  <button data-choice="c">C. Сервер был скомпрометирован</button>
-  <button data-choice="d">D. Источник автоматически занесён в firewall blacklist</button>
-  <div class="quiz-feedback"></div>
-</div>
+| Свойство | IDS | IPS |
+|---|:---:|:---:|
+| Анализирует события | ✓ | ✓ |
+| Формирует alert | ✓ | ✓ |
+| Обязательно находится inline | Нет | Обычно да |
+| Может блокировать трафик | Обычно нет | Да |
+| Ошибка правила может нарушить доступность | Низкий риск | Высокий риск |
+
+## Самопроверка
+
+<div class="quiz" data-question-id="intro-1"><p><strong>Suricata работает как пассивная IDS и сформировала alert. Что можно утверждать наверняка?</strong></p><button>A. Атака успешно заблокирована</button><button data-correct="true">B. Наблюдаемое событие совпало с условием детектирования</button><button>C. Сервер скомпрометирован</button><button>D. Источник автоматически заблокирован firewall</button><div class="quiz-feedback"></div></div>

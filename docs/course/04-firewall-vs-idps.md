@@ -1,31 +1,20 @@
-# 4. Firewall и IDPS
+# Firewall и IDPS
 
-Firewall и IDPS решают пересекающиеся, но не идентичные задачи.
+<div class="page-goal"><strong>Цель:</strong> понять, какие задачи решает контроль доступа, а какие — обнаружение и предотвращение вторжений.</div>
 
-## Упрощённая модель firewall
-
-```text
-Source
-Destination
-Protocol
-Port
-State
-Policy
-      ↓
-Allow / Deny
-```
-
-## Упрощённая модель NIDS/NIPS
+## Firewall
 
 ```text
-Network traffic
-      ↓
-Protocol semantics
-Content / metadata
-Flow state
-Signatures / behavior
-      ↓
-Detect / Alert / Block
+Source + Destination + Protocol + Port + State + Policy → Allow / Deny
 ```
 
-Современный NGFW может включать IPS-функции, поэтому в реальной инфраструктуре это не обязательно два отдельных физических устройства.
+Пример: `Internet → Web → TCP/443 → ALLOW`, `Internet → Web → TCP/22 → DENY`.
+
+## IDPS
+
+IDPS дополнительно анализирует protocol semantics, content/metadata, flow state, signatures и behavior.
+
+Современный NGFW часто включает IPS-функциональность, поэтому это не обязательно два разных физических устройства.
+
+!!! info
+    Правильный архитектурный вопрос: какие механизмы контроля доступа и обнаружения реализованы и где находятся точки enforcement?
