@@ -63,9 +63,10 @@ nav:
           - "01 — Зачем нужны IDS/IPS": course/01-intro.md
           - "02 — Что система может видеть": course/02-classification.md
           - "03 — Как из данных получается обнаружение": course/03-detection.md
-          - "04 — Firewall и IDPS": course/04-firewall-vs-idps.md
-          - "05 — Качество детектирования": course/05-detection-quality.md
-          - "06 — Размещение сенсоров": course/06-placement.md
+          - "04 — Как система определяет угрозу": course/04-detection-methods.md
+          - "05 — Firewall и IDPS": course/05-firewall-vs-idps.md
+          - "06 — Качество детектирования": course/06-detection-quality.md
+          - "07 — Размещение сенсоров": course/07-placement.md
   - Проверка знаний:
       - Pre-Lab Test №1: prelab/index.md
   - Лабораторные работы:

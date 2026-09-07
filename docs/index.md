@@ -280,24 +280,32 @@
     </div>
   </a>
 
-  <a href="course/04-firewall-vs-idps/">
+  <a href="course/04-detection-methods/">
     <span>04</span>
+    <div>
+      <strong>Как система определяет угрозу</strong>
+      <small>Сигнатуры, состояние протокола и поведение</small>
+    </div>
+  </a>
+
+  <a href="course/05-firewall-vs-idps/">
+    <span>05</span>
     <div>
       <strong>Как IDPS встраивается в защиту</strong>
       <small>Контроль доступа и эшелонированная защита</small>
     </div>
   </a>
 
-  <a href="course/05-detection-quality/">
-    <span>05</span>
+  <a href="course/06-detection-quality/">
+    <span>06</span>
     <div>
       <strong>Как оценить качество обнаружения</strong>
       <small>Ложные срабатывания, пропуски и настройка</small>
     </div>
   </a>
 
-  <a href="course/06-placement/">
-    <span>06</span>
+  <a href="course/07-placement/">
+    <span>07</span>
     <div>
       <strong>Где размещать точки наблюдения</strong>
       <small>Топология, видимость и архитектурные ограничения</small>

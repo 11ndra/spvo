@@ -1735,3 +1735,89 @@ label:focus-visible {
     max-width: 72%;
   }
 }
+
+
+
+/* =========================================================
+   v2.8 — Chapter 4 detection-method comparison
+   ========================================================= */
+
+.method-demo {
+  margin: 1.2rem 0 1.65rem;
+  border: 1px solid var(--course-border);
+  border-radius: .75rem;
+  overflow: hidden;
+  background: var(--course-surface);
+}
+
+.method-demo__controls {
+  display: flex;
+  gap: .35rem;
+  flex-wrap: wrap;
+  padding: .7rem .8rem;
+  border-bottom: 1px solid var(--course-border);
+  background: var(--course-surface-soft);
+}
+
+.method-choice {
+  padding: .42rem .65rem;
+  border: 1px solid var(--course-border);
+  border-radius: .42rem;
+  background: var(--course-surface);
+  color: var(--course-text);
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.method-choice.active {
+  border-color: var(--md-primary-fg-color);
+  background: var(--md-primary-fg-color);
+  color: #fff;
+}
+
+.method-demo__scene {
+  display: grid;
+  grid-template-columns: 1fr 1.15fr 1fr;
+  gap: .8rem;
+  padding: .9rem;
+}
+
+.method-demo__event,
+.method-demo__question,
+.method-demo__result {
+  padding: .85rem .9rem;
+  border: 1px solid var(--course-border);
+  border-radius: .6rem;
+  background: var(--course-surface-soft);
+}
+
+.method-demo__event span,
+.method-demo__label {
+  display: block;
+  margin-bottom: .32rem;
+  font-size: .65rem;
+  font-weight: 850;
+  letter-spacing: .06em;
+  text-transform: uppercase;
+  color: var(--course-muted);
+}
+
+.method-demo__event strong,
+.method-demo__result strong {
+  line-height: 1.42;
+}
+
+.method-demo__question h3 {
+  margin: 0 0 .35rem;
+  font-size: 1rem;
+}
+
+.method-demo__question p {
+  margin: 0;
+}
+
+@media screen and (max-width: 760px) {
+  .method-demo__scene {
+    grid-template-columns: 1fr;
+  }
+}
