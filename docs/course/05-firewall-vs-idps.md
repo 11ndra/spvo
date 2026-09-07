@@ -190,19 +190,116 @@ policy = allow
 
 ## 6. А что меняется с NGFW?
 
-**Межсетевой экран следующего поколения (Next-Generation Firewall, NGFW)** обычно объединяет несколько механизмов в одном продукте.
+**Межсетевой экран следующего поколения (Next-Generation Firewall, NGFW)** обычно объединяет несколько механизмов контроля в одной платформе.
 
-В зависимости от реализации это могут быть:
+Это удобно, но создаёт важную методическую ловушку: студент видит одну «коробку» и начинает воспринимать все решения внутри неё как одну функцию.
 
-```text
-stateful firewall
-application identification
-URL filtering
-TLS inspection
-IPS
-malware detection
-identity-aware policies
-```
+На практике полезнее разложить NGFW на отдельные логические этапы.
+
+<div class="ngfw-architecture">
+
+  <div class="ngfw-inputs">
+    <span class="ngfw-group-title">Источники трафика</span>
+
+    <div class="ngfw-source">
+      <strong>Интернет</strong>
+      <small>внешние пользователи и сервисы</small>
+    </div>
+
+    <div class="ngfw-source">
+      <strong>Удалённые пользователи</strong>
+      <small>VPN и удалённый доступ</small>
+    </div>
+
+    <div class="ngfw-source">
+      <strong>Внутренний сегмент</strong>
+      <small>рабочие станции и серверы</small>
+    </div>
+  </div>
+
+  <div class="ngfw-flow-arrow">→</div>
+
+  <div class="ngfw-core">
+    <div class="ngfw-core-title">
+      <span>NGFW</span>
+      <small>один продукт — несколько логических функций</small>
+    </div>
+
+    <div class="ngfw-layer">
+      <span>1</span>
+      <div>
+        <strong>Политика доступа</strong>
+        <small>IP, порт, направление, зона</small>
+      </div>
+    </div>
+
+    <div class="ngfw-layer">
+      <span>2</span>
+      <div>
+        <strong>Контроль приложений</strong>
+        <small>идентификация приложения и L7-контекст</small>
+      </div>
+    </div>
+
+    <div class="ngfw-layer emphasis">
+      <span>3</span>
+      <div>
+        <strong>IPS / IDS-инспекция</strong>
+        <small>сигнатуры, протокольный анализ, поведенческие признаки</small>
+      </div>
+    </div>
+
+    <div class="ngfw-layer">
+      <span>4</span>
+      <div>
+        <strong>TLS-инспекция</strong>
+        <small>доступ к содержимому шифрованного трафика — если политика и архитектура это допускают</small>
+      </div>
+    </div>
+
+    <div class="ngfw-layer">
+      <span>5</span>
+      <div>
+        <strong>URL / content filtering</strong>
+        <small>категории, политики и ограничения</small>
+      </div>
+    </div>
+
+    <div class="ngfw-layer">
+      <span>6</span>
+      <div>
+        <strong>Логи и телеметрия</strong>
+        <small>события для SOC / SIEM и расследования</small>
+      </div>
+    </div>
+  </div>
+
+  <div class="ngfw-flow-arrow">→</div>
+
+  <div class="ngfw-outcomes">
+    <span class="ngfw-group-title">Результаты</span>
+
+    <div class="ngfw-outcome allow">
+      <strong>Разрешить</strong>
+      <small>трафик соответствует политике</small>
+    </div>
+
+    <div class="ngfw-outcome block">
+      <strong>Заблокировать</strong>
+      <small>политика или механизм prevention запрещает действие</small>
+    </div>
+
+    <div class="ngfw-outcome log">
+      <strong>Создать событие</strong>
+      <small>alert, журнал или телеметрия для дальнейшего анализа</small>
+    </div>
+  </div>
+
+</div>
+
+<div class="ngfw-takeaway">
+<strong>Важно:</strong> NGFW может физически быть одним устройством, но внутри него принимаются разные решения. Контроль доступа отвечает на вопрос «можно ли этому взаимодействию существовать?», а IPS-инспекция — «есть ли в разрешённом взаимодействии признаки угрозы?».
+</div>
 
 Поэтому схема:
 
@@ -212,30 +309,20 @@ Firewall → отдельный IPS
 
 не является обязательной физической архитектурой.
 
-Иногда функции выглядят так:
+Иногда обе функции находятся в одной платформе. Но для диагностики и проектирования инженер всё равно должен понимать, **какая логическая функция приняла конкретное решение**.
+
+Если пользователь жалуется, что соединение не проходит, причина может находиться в:
 
 ```text
-           ┌─────────────────────────┐
-Traffic →  │          NGFW           │  → Application
-           │                         │
-           │ access policy           │
-           │ application control     │
-           │ IPS inspection          │
-           │ TLS inspection          │
-           └─────────────────────────┘
+access policy
+application control
+IPS rule
+TLS inspection
+URL filtering
 ```
 
-Но для инженера всё равно полезно мысленно разделять происходящие внутри решения.
+Физически продукт один. Логически — это разные этапы обработки.
 
-Если пользователь жалуется, что соединение не проходит, причина может находиться:
-
-- в сетевой политике;
-- в application control;
-- в IPS-правиле;
-- в TLS inspection;
-- в другом механизме.
-
-Физически «коробка» одна, но диагностика требует понимать отдельные функции.
 
 ---
 
@@ -347,42 +434,160 @@ Traffic →  │          NGFW           │  → Application
 
 ## 10. Небольшой архитектурный сценарий
 
-Есть трёхуровневое приложение:
+Рассмотрим трёхуровневое приложение:
 
 ```text
-Internet
-   ↓
-Web
-   ↓
-Application
-   ↓
-Database
+Web → Application → Database
 ```
 
-Слабая схема:
+Проблема не в самом наличии этих компонентов, а в том, **какие сетевые пути между ними разрешены**.
+
+<div class="architecture-compare">
+
+  <section class="architecture-panel weak">
+    <div class="architecture-panel-head">
+      <span>Слабая схема</span>
+      <strong>Избыточный доступ</strong>
+    </div>
+
+    <div class="weak-architecture-flow">
+      <div class="arch-node internet">
+        <strong>Internet</strong>
+        <small>любой внешний источник</small>
+      </div>
+
+      <div class="weak-links">
+        <div>
+          <span>ALLOW</span>
+          <b>→</b>
+          <div class="arch-node">
+            <strong>Web</strong>
+            <small>443</small>
+          </div>
+        </div>
+
+        <div>
+          <span>ALLOW</span>
+          <b>→</b>
+          <div class="arch-node">
+            <strong>App</strong>
+            <small>application service</small>
+          </div>
+        </div>
+
+        <div>
+          <span>ALLOW</span>
+          <b>→</b>
+          <div class="arch-node">
+            <strong>Database</strong>
+            <small>5432 / DB service</small>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="architecture-note danger">
+      <strong>Проблема</strong>
+      <p>Злоумышленник получает прямой сетевой путь сразу к нескольким уровням приложения. IDS вынуждена контролировать избыточную поверхность атаки вместо того, чтобы архитектура сначала сократила её.</p>
+    </div>
+  </section>
+
+  <section class="architecture-panel strong">
+    <div class="architecture-panel-head">
+      <span>Улучшенная архитектура</span>
+      <strong>Минимально необходимые пути</strong>
+    </div>
+
+    <div class="strong-architecture-flow">
+      <div class="arch-node internet">
+        <strong>Internet</strong>
+      </div>
+
+      <div class="arch-arrow allowed">
+        <span>HTTPS 443</span>
+        <b>→</b>
+      </div>
+
+      <div class="arch-node security">
+        <strong>NGFW / Firewall</strong>
+        <small>access policy</small>
+      </div>
+
+      <div class="arch-arrow allowed">
+        <span>разрешённый поток</span>
+        <b>→</b>
+      </div>
+
+      <div class="arch-node">
+        <strong>Web</strong>
+        <small>публичный уровень</small>
+      </div>
+
+      <div class="arch-arrow allowed">
+        <span>только нужный сервис</span>
+        <b>→</b>
+      </div>
+
+      <div class="arch-node">
+        <strong>App</strong>
+        <small>внутренний уровень</small>
+      </div>
+
+      <div class="arch-arrow allowed">
+        <span>только DB connection</span>
+        <b>→</b>
+      </div>
+
+      <div class="arch-node">
+        <strong>Database</strong>
+        <small>чувствительные данные</small>
+      </div>
+    </div>
+
+    <div class="blocked-paths">
+      <div>
+        <span>Internet → App</span>
+        <strong>DENY</strong>
+      </div>
+      <div>
+        <span>Internet → Database</span>
+        <strong>DENY</strong>
+      </div>
+    </div>
+
+    <div class="visibility-layers">
+      <div>
+        <strong>IDS / IPS</strong>
+        <small>анализирует разрешённый сетевой трафик</small>
+      </div>
+      <div>
+        <strong>Host telemetry / HIDS</strong>
+        <small>даёт контекст внутри Web, App и Database</small>
+      </div>
+    </div>
+
+    <div class="architecture-note success">
+      <strong>Результат</strong>
+      <p>Сначала убраны ненужные пути доступа. Затем detection усиливает защиту только там, где взаимодействие действительно необходимо оставить разрешённым.</p>
+    </div>
+  </section>
+
+</div>
+
+Ключевой смысл этого сценария не в количестве устройств.
+
+Он в последовательности инженерных решений:
 
 ```text
-Internet → Web        ALLOW
-Internet → App        ALLOW
-Internet → Database   ALLOW
+1. Определить нужные бизнесу взаимодействия
+2. Запретить всё лишнее
+3. Оставить только необходимые сетевые пути
+4. Добавить detection на разрешённые рискованные взаимодействия
+5. Добавить хостовый контекст там, где сетевой телеметрии недостаточно
 ```
 
-и попытка компенсировать всё множеством IDS-правил.
+В этом случае даже если один детектор что-то пропустил, сегментация и политика доступа продолжают ограничивать возможное движение атакующего.
 
-Более сильный подход начинается с ограничения путей:
-
-```text
-Internet → Web         ALLOW 443
-Internet → App         DENY
-Internet → Database    DENY
-
-Web → App              ALLOW only required service
-App → Database         ALLOW only required DB connection
-```
-
-А уже на разрешённых путях добавляется необходимая видимость и detection.
-
-В этом случае даже если один детектор что-то пропустил, сетевое разделение продолжает ограничивать возможное движение атакующего.
 
 <div class="chapter-summary">
   <span>Главная мысль главы</span>
