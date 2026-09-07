@@ -3187,3 +3187,206 @@ body:has(.home-hero) .md-content__inner.md-typeset {
   line-height: 1.52;
   text-align: center;
 }
+
+
+
+/* =========================================================
+   v2.14 — Pre-Lab engineering readiness assessment
+   ========================================================= */
+
+.prelab-overview {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: .65rem;
+  margin: 1rem 0 1.25rem;
+}
+
+.prelab-overview > div {
+  padding: .72rem .78rem;
+  border: 1px solid var(--course-border);
+  border-radius: .55rem;
+  background: var(--course-surface-soft);
+}
+
+.prelab-overview span,
+.prelab-overview strong {
+  display: block;
+}
+
+.prelab-overview span {
+  margin-bottom: .08rem;
+  font-size: 1.05rem;
+  font-weight: 850;
+}
+
+.prelab-overview strong {
+  color: var(--course-muted);
+  font-size: .67rem;
+  line-height: 1.3;
+}
+
+.assessment-instruction {
+  margin: 1rem 0 1.4rem;
+  padding: .75rem .85rem;
+  border-left: 3px solid var(--md-primary-fg-color);
+  border-radius: .4rem;
+  background: var(--course-surface-soft);
+  line-height: 1.5;
+}
+
+.assessment-status {
+  position: sticky;
+  top: 3rem;
+  z-index: 4;
+  display: flex;
+  justify-content: space-between;
+  gap: 1rem;
+  margin: 0 0 1.1rem;
+  padding: .58rem .72rem;
+  border: 1px solid var(--course-border);
+  border-radius: .5rem;
+  background: color-mix(in srgb, var(--course-surface) 94%, transparent);
+  backdrop-filter: blur(8px);
+  color: var(--course-muted);
+  font-size: .68rem;
+}
+
+.assessment-status strong {
+  color: var(--course-text);
+}
+
+.assessment-question {
+  box-shadow: none;
+}
+
+.assessment-question-meta {
+  margin-bottom: .55rem;
+  font-size: .62rem;
+  font-weight: 850;
+  letter-spacing: .06em;
+  text-transform: uppercase;
+  color: var(--course-muted);
+}
+
+.assessment-scenario {
+  margin-bottom: .72rem;
+  padding: .65rem .72rem;
+  border-left: 3px solid var(--course-border);
+  background: var(--course-surface-soft);
+  line-height: 1.48;
+}
+
+.prelab-assessment .quiz button.selected:not(.correct):not(.incorrect) {
+  border-color: var(--md-primary-fg-color);
+  background: var(--course-surface-accent);
+  box-shadow: 0 0 0 1px var(--md-primary-fg-color) inset;
+}
+
+.prelab-assessment .quiz button:disabled {
+  cursor: default;
+  opacity: 1;
+}
+
+.quiz-rationale {
+  margin-top: .72rem;
+  padding: .66rem .72rem;
+  border-top: 1px solid var(--course-border);
+  color: var(--course-muted);
+  line-height: 1.48;
+}
+
+.quiz-rationale[hidden] {
+  display: none !important;
+}
+
+.quiz-review {
+  display: block;
+  width: fit-content;
+  margin-top: .45rem;
+  font-weight: 750;
+}
+
+.assessment-actions {
+  display: flex;
+  gap: .55rem;
+  flex-wrap: wrap;
+}
+
+.assessment-domain-results {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: .55rem;
+  margin-top: .85rem;
+}
+
+.assessment-domain-result {
+  padding: .6rem .65rem;
+  border: 1px solid var(--course-border);
+  border-radius: .45rem;
+  background: var(--course-surface-soft);
+}
+
+.assessment-domain-result span,
+.assessment-domain-result strong {
+  display: block;
+}
+
+.assessment-domain-result span {
+  min-height: 2.1em;
+  color: var(--course-muted);
+  font-size: .62rem;
+  line-height: 1.28;
+}
+
+.assessment-domain-result strong {
+  margin-top: .2rem;
+  font-size: .9rem;
+}
+
+.assessment-review-list {
+  margin-top: .85rem;
+}
+
+.assessment-review-list > strong {
+  display: block;
+  margin-bottom: .45rem;
+}
+
+.assessment-review-list ul {
+  margin-top: .3rem;
+}
+
+.assessment-review-list li {
+  margin-bottom: .35rem;
+}
+
+.assessment-review-list li span {
+  margin-right: .35rem;
+  color: var(--course-muted);
+}
+
+.assessment-review-success {
+  padding: .65rem .72rem;
+  border-left: 3px solid var(--course-success-border);
+  border-radius: .4rem;
+  background: var(--course-success-bg);
+}
+
+.assessment-passed .score-output {
+  color: var(--course-success-border);
+}
+
+.assessment-failed .score-output {
+  color: var(--course-danger-border);
+}
+
+@media screen and (max-width: 760px) {
+  .prelab-overview,
+  .assessment-domain-results {
+    grid-template-columns: 1fr;
+  }
+
+  .assessment-status {
+    top: 2.7rem;
+  }
+}
