@@ -2785,3 +2785,255 @@ body:has(.home-hero) .md-content__inner.md-typeset {
     grid-template-columns: 1fr;
   }
 }
+
+
+
+/* =========================================================
+   v2.11 — Chapter 7 reference topology and placement lab
+   ========================================================= */
+
+.placement-lab {
+  margin: 1.2rem 0 1.6rem;
+  border: 1px solid var(--course-border);
+  border-radius: .75rem;
+  overflow: hidden;
+  background: var(--course-surface);
+}
+
+.placement-controls {
+  display: flex;
+  gap: .38rem;
+  flex-wrap: wrap;
+  padding: .72rem .8rem;
+  border-bottom: 1px solid var(--course-border);
+  background: var(--course-surface-soft);
+}
+
+.placement-choice {
+  padding: .44rem .66rem;
+  border: 1px solid var(--course-border);
+  border-radius: .42rem;
+  background: var(--course-surface);
+  color: var(--course-text);
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.placement-choice.active {
+  border-color: var(--md-primary-fg-color);
+  background: var(--md-primary-fg-color);
+  color: #fff;
+}
+
+.reference-topology {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: .35rem;
+  padding: .85rem;
+}
+
+.topology-zone {
+  position: relative;
+  padding: .75rem;
+  border: 1px solid var(--course-border);
+  border-radius: .62rem;
+  background: var(--course-surface-soft);
+}
+
+.zone-label {
+  display: block;
+  margin-bottom: .55rem;
+  font-size: .64rem;
+  font-weight: 850;
+  letter-spacing: .07em;
+  text-transform: uppercase;
+  color: var(--course-muted);
+}
+
+.topology-node {
+  padding: .62rem .7rem;
+  border: 1px solid var(--course-border);
+  border-radius: .5rem;
+  background: var(--course-surface);
+  text-align: center;
+}
+
+.topology-node strong,
+.topology-node small {
+  display: block;
+}
+
+.topology-node small {
+  margin-top: .15rem;
+  color: var(--course-muted);
+  line-height: 1.3;
+}
+
+.topology-node.security {
+  border-color: color-mix(in srgb, var(--md-primary-fg-color) 42%, var(--course-border));
+  background: var(--course-surface-accent);
+}
+
+.topology-zone.external,
+.topology-zone.perimeter-zone,
+.topology-zone.dmz-zone {
+  display: grid;
+  grid-template-columns: minmax(120px, 240px);
+  justify-content: center;
+}
+
+.topology-flow {
+  display: grid;
+  justify-items: center;
+  color: var(--course-muted);
+  opacity: .34;
+  transition: opacity .16s ease, color .16s ease;
+}
+
+.topology-flow span {
+  font-size: .63rem;
+}
+
+.topology-flow b {
+  font-size: .9rem;
+}
+
+.internal-nodes {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: .65rem;
+}
+
+.internal-flows {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: .5rem;
+  margin-top: .55rem;
+}
+
+.internal-flows > div {
+  padding: .42rem .5rem;
+  border: 1px dashed var(--course-border);
+  border-radius: .42rem;
+  background: var(--course-surface);
+  text-align: center;
+  color: var(--course-muted);
+  opacity: .34;
+  transition: opacity .16s ease, border-color .16s ease, color .16s ease;
+}
+
+.internal-flows span {
+  font-size: .65rem;
+  font-weight: 700;
+}
+
+.sensor-marker {
+  display: none;
+  position: absolute;
+  right: .65rem;
+  top: .65rem;
+  padding: .42rem .55rem;
+  border: 1px solid var(--md-primary-fg-color);
+  border-radius: .45rem;
+  background: var(--course-surface);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, .08);
+}
+
+.sensor-marker strong,
+.sensor-marker small {
+  display: block;
+}
+
+.sensor-marker strong {
+  color: var(--md-primary-fg-color);
+  font-size: .72rem;
+}
+
+.sensor-marker small {
+  margin-top: .08rem;
+  color: var(--course-muted);
+  font-size: .58rem;
+}
+
+.placement-lab[data-placement="perimeter"] .sensor-perimeter,
+.placement-lab[data-placement="dmz"] .sensor-dmz,
+.placement-lab[data-placement="eastwest"] .sensor-eastwest,
+.placement-lab[data-placement="inline"] .sensor-perimeter {
+  display: block;
+}
+
+/* Highlight flows visible from the selected placement. */
+.placement-lab[data-placement="perimeter"] [data-flow="internet-web"],
+.placement-lab[data-placement="inline"] [data-flow="internet-web"],
+.placement-lab[data-placement="dmz"] [data-flow="web-app"],
+.placement-lab[data-placement="eastwest"] [data-flow="users-app"],
+.placement-lab[data-placement="eastwest"] [data-flow="app-db"],
+.placement-lab[data-placement="eastwest"] [data-flow="east-west"] {
+  opacity: 1;
+  color: var(--md-primary-fg-color);
+}
+
+.placement-lab[data-placement="eastwest"] .internal-flows [data-flow] {
+  border-color: color-mix(in srgb, var(--md-primary-fg-color) 50%, var(--course-border));
+}
+
+.placement-lab[data-placement="inline"] .sensor-perimeter {
+  border-color: var(--course-danger-border);
+}
+
+.placement-lab[data-placement="inline"] .sensor-perimeter strong {
+  color: var(--course-danger-border);
+}
+
+.placement-explanation {
+  padding: .9rem 1rem;
+  border-top: 1px solid var(--course-border);
+  background: var(--course-surface-soft);
+}
+
+.placement-explanation > div:first-child span,
+.placement-explanation > div:first-child strong {
+  display: block;
+}
+
+.placement-explanation > div:first-child span {
+  margin-bottom: .15rem;
+  font-size: .64rem;
+  font-weight: 850;
+  letter-spacing: .06em;
+  text-transform: uppercase;
+  color: var(--course-muted);
+}
+
+.placement-explanation > div:first-child strong {
+  font-size: .94rem;
+}
+
+.placement-explanation p {
+  margin: .48rem 0 .65rem;
+}
+
+.placement-blind {
+  padding: .58rem .65rem;
+  border-left: 3px solid var(--course-danger-border);
+  border-radius: .4rem;
+  background: var(--course-danger-bg);
+}
+
+.placement-blind strong,
+.placement-blind span {
+  font-size: .72rem;
+}
+
+@media screen and (max-width: 720px) {
+  .internal-nodes,
+  .internal-flows {
+    grid-template-columns: 1fr;
+  }
+
+  .sensor-marker {
+    position: static;
+    margin-top: .55rem;
+    width: max-content;
+  }
+}

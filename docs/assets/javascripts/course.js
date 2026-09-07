@@ -405,3 +405,59 @@ function initializeBaseRateLab() {
 document.addEventListener("DOMContentLoaded", () => {
   initializeBaseRateLab();
 });
+
+
+
+function initializePlacementLab() {
+  const content = {
+    perimeter: {
+      title: "После периметрового firewall",
+      text: "Сенсор хорошо видит разрешённые north-south соединения между Интернетом и DMZ, но не получает автоматически внутренние взаимодействия App ↔ Database или Host ↔ Host.",
+      blind: "east-west трафик внутри внутренних сегментов."
+    },
+    dmz: {
+      title: "На границе DMZ и внутренней сети",
+      text: "Эта точка даёт контекст для взаимодействий публичного Web-сервера с внутренними сервисами и полезна при сценариях дальнейшего продвижения после компрометации DMZ.",
+      blind: "часть внешнего трафика и внутренние взаимодействия, которые не проходят через эту границу."
+    },
+    eastwest: {
+      title: "Внутри критичного внутреннего сегмента",
+      text: "Сенсор получает visibility на Users ↔ App, App ↔ Database и другие внутренние взаимодействия, которые могут быть важны для lateral movement detection.",
+      blind: "трафик других сегментов, который не доставляется в эту внутреннюю точку."
+    },
+    inline: {
+      title: "Inline IPS на периметровом пути",
+      text: "Трафик проходит через IPS, поэтому система не только анализирует north-south поток, но и способна применить blocking decision к пакету или соединению.",
+      blind: "внутренний east-west трафик по-прежнему не появляется автоматически; дополнительно возникает риск влияния IPS на доступность."
+    }
+  };
+
+  document.querySelectorAll(".placement-lab").forEach((lab) => {
+    const buttons = lab.querySelectorAll(".placement-choice");
+    const title = lab.querySelector(".placement-title");
+    const text = lab.querySelector(".placement-text");
+    const blind = lab.querySelector(".placement-blind-text");
+
+    function render(mode) {
+      lab.dataset.placement = mode;
+      buttons.forEach((button) => {
+        button.classList.toggle("active", button.dataset.placementChoice === mode);
+      });
+
+      const data = content[mode];
+      title.textContent = data.title;
+      text.textContent = data.text;
+      blind.textContent = data.blind;
+    }
+
+    buttons.forEach((button) => {
+      button.addEventListener("click", () => render(button.dataset.placementChoice));
+    });
+
+    render(lab.dataset.placement || "perimeter");
+  });
+}
+
+document.addEventListener("DOMContentLoaded", () => {
+  initializePlacementLab();
+});
