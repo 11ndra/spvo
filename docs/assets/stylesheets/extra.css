@@ -366,3 +366,80 @@
     padding: 0.85rem;
   }
 }
+
+
+/* v2.2 — diagrams and richer documentation elements */
+.mermaid {
+  margin: 1.4rem auto 1.8rem;
+  text-align: center;
+}
+
+.mermaid svg {
+  max-width: 100% !important;
+  height: auto !important;
+}
+
+.tabbed-set {
+  margin: 1.2rem 0;
+}
+
+.md-typeset .tabbed-labels > label {
+  font-weight: 700;
+}
+
+.md-typeset .annotate {
+  color: inherit;
+}
+
+@media screen and (min-width: 1220px) {
+  .md-grid {
+    max-width: 1440px;
+  }
+}
+
+
+/* v2.3 — pedagogical content surfaces */
+.md-typeset h2 {
+  margin-top: 2.15em;
+}
+
+.md-typeset h3 {
+  margin-top: 1.55em;
+}
+
+.page-goal {
+  border-left: 4px solid var(--md-primary-fg-color);
+  line-height: 1.65;
+}
+
+.profession-box,
+.underhood-box,
+.case-box {
+  margin: 1.2rem 0;
+  padding: 1rem 1.05rem;
+  border: 1px solid var(--course-border);
+  border-radius: .7rem;
+  background: var(--course-surface);
+  color: var(--course-text);
+  box-shadow: var(--course-shadow);
+}
+
+.profession-box::before {
+  content: "ПРОФЕССИОНАЛЬНЫЙ КОНТЕКСТ";
+  display: block;
+  margin-bottom: .45rem;
+  font-size: .68rem;
+  font-weight: 850;
+  letter-spacing: .08em;
+  color: var(--course-muted);
+}
+
+.md-typeset blockquote {
+  border-left-width: .2rem;
+}
+
+.md-typeset .mermaid {
+  padding: .8rem .35rem;
+  border-radius: .6rem;
+  overflow-x: auto;
+}

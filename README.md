@@ -27,3 +27,35 @@
 - добавлены hover/focus состояния;
 - подготовлены CSS-классы для изображений, схем и подписей;
 - создана структура `docs/assets/images/` для визуального контента.
+
+
+## v2.2 — Visual & Interactive Documentation
+
+- Mermaid diagrams enabled through Material for MkDocs native integration.
+- Code annotations enabled.
+- Pygments code highlighting explicitly configured.
+- Visual diagrams added to:
+  - IDS vs IPS
+  - IDPS classification
+  - Detection pipeline
+  - Firewall / Defense-in-Depth
+  - Sensor placement
+  - LabBox topology
+- Role-based content tabs added to Lab №1.
+- Visual authoring guide added.
+
+
+## v2.3 — Teaching-first rewrite
+
+Переписаны все опубликованные базовые темы по единому педагогическому шаблону:
+
+- проблема / реальная ситуация;
+- зачем технология нужна;
+- как работает под капотом;
+- что реально настраивается;
+- сильные и слабые стороны;
+- профессиональный контекст;
+- интерактивная самопроверка;
+- связь со следующей темой и LabBox.
+
+Цель v2.3 — уйти от формата «справочник терминов» к объяснению причинно-следственных связей.
