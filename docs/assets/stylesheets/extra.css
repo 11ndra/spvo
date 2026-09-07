@@ -1987,3 +1987,188 @@ body:has(.home-hero) .md-content__inner.md-typeset {
     transform: rotate(90deg);
   }
 }
+
+
+
+/* =========================================================
+   v2.10 — Chapter 6 detection-quality lab
+   ========================================================= */
+
+.base-rate-lab {
+  margin: 1.2rem 0 1.65rem;
+  border: 1px solid var(--course-border);
+  border-radius: .75rem;
+  overflow: hidden;
+  background: var(--course-surface);
+}
+
+.base-rate-controls {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: .8rem 1rem;
+  padding: .9rem 1rem;
+  border-bottom: 1px solid var(--course-border);
+  background: var(--course-surface-soft);
+}
+
+.base-rate-controls label {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: .35rem .6rem;
+  align-items: center;
+}
+
+.base-rate-controls label > span {
+  font-size: .7rem;
+  font-weight: 750;
+  color: var(--course-muted);
+}
+
+.base-rate-controls input[type="number"] {
+  grid-column: 1 / -1;
+  width: 100%;
+  padding: .45rem .55rem;
+  border: 1px solid var(--course-border);
+  border-radius: .4rem;
+  background: var(--course-surface);
+  color: var(--course-text);
+}
+
+.base-rate-controls input[type="range"] {
+  grid-column: 1 / 2;
+  width: 100%;
+}
+
+.base-rate-controls label > strong {
+  font-size: .72rem;
+}
+
+.confusion-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: .7rem;
+  padding: .9rem 1rem;
+}
+
+.confusion-cell {
+  padding: .8rem .9rem;
+  border: 1px solid var(--course-border);
+  border-radius: .55rem;
+  background: var(--course-surface-soft);
+}
+
+.confusion-cell > span,
+.confusion-cell > strong,
+.confusion-cell > small {
+  display: block;
+}
+
+.confusion-cell > span {
+  font-size: .66rem;
+  font-weight: 850;
+  letter-spacing: .05em;
+  text-transform: uppercase;
+  color: var(--course-muted);
+}
+
+.confusion-cell > strong {
+  margin: .2rem 0;
+  font-size: 1.35rem;
+}
+
+.confusion-cell > small {
+  color: var(--course-muted);
+}
+
+.base-rate-result {
+  display: grid;
+  grid-template-columns: 150px 1fr;
+  gap: 1rem;
+  align-items: center;
+  padding: .9rem 1rem;
+  border-top: 1px solid var(--course-border);
+  background: var(--course-surface-soft);
+}
+
+.base-rate-result > div span,
+.base-rate-result > div strong {
+  display: block;
+}
+
+.base-rate-result > div span {
+  font-size: .68rem;
+  color: var(--course-muted);
+}
+
+.base-rate-result > div strong {
+  font-size: 1.45rem;
+}
+
+.base-rate-result p {
+  margin: 0;
+}
+
+.threshold-scale {
+  display: grid;
+  grid-template-columns: 1fr minmax(120px, 1.3fr) 1fr;
+  gap: .8rem;
+  align-items: center;
+  margin: 1rem 0 1.4rem;
+  padding: .9rem 1rem;
+  border: 1px solid var(--course-border);
+  border-radius: .65rem;
+  background: var(--course-surface-soft);
+}
+
+.threshold-side {
+  display: flex;
+  flex-direction: column;
+  gap: .18rem;
+}
+
+.threshold-side.right {
+  text-align: right;
+}
+
+.threshold-side span {
+  color: var(--course-muted);
+  font-size: .72rem;
+}
+
+.threshold-line {
+  position: relative;
+  height: 5px;
+  border-radius: 999px;
+  background: linear-gradient(90deg, var(--md-primary-fg-color), var(--course-border));
+}
+
+.threshold-line span {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  transform: translate(-50%, -50%);
+  background: var(--course-surface);
+  border: 2px solid var(--md-primary-fg-color);
+}
+
+@media screen and (max-width: 720px) {
+  .base-rate-controls,
+  .confusion-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .base-rate-result {
+    grid-template-columns: 1fr;
+  }
+
+  .threshold-scale {
+    grid-template-columns: 1fr;
+  }
+
+  .threshold-side.right {
+    text-align: left;
+  }
+}
