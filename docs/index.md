@@ -307,8 +307,8 @@
   <a href="course/07-placement/">
     <span>07</span>
     <div>
-      <strong>Где размещать точки наблюдения</strong>
-      <small>Топология, видимость и архитектурные ограничения</small>
+      <strong>Где размещать сенсоры</strong>
+      <small>Топология, visibility, SPAN/TAP и inline IPS</small>
     </div>
   </a>
 </div>

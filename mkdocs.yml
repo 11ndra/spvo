@@ -66,7 +66,7 @@ nav:
           - "04 — Как система определяет угрозу": course/04-detection-methods.md
           - "05 — Как IDS/IPS встраивается в защиту": course/05-firewall-vs-idps.md
           - "06 — Как измерять качество обнаружения": course/06-detection-quality.md
-          - "07 — Размещение сенсоров": course/07-placement.md
+          - "07 — Где размещать сенсоры": course/07-placement.md
   - Проверка знаний:
       - Pre-Lab Test №1: prelab/index.md
   - Лабораторные работы:
