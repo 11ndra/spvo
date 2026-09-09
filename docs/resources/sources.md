@@ -54,3 +54,19 @@
 - EVE JSON Format: https://docs.suricata.io/en/latest/output/eve/eve-json-format.html
 
 В лабораторной версия Suricata не зашита в текст как постоянное число: студент фиксирует реально установленную версию через `suricata --build-info` в evidence.
+
+
+## Detection Engineering — Глава 8 и ЛР №2
+
+Основные технические reference:
+
+- Suricata Rules Format — https://docs.suricata.io/en/latest/rules/intro.html
+- Suricata Flow Keywords — https://docs.suricata.io/en/latest/rules/flow-keywords.html
+- Suricata HTTP Keywords — https://docs.suricata.io/en/latest/rules/http-keywords.html
+- Suricata Payload Keywords / PCRE — https://docs.suricata.io/en/latest/rules/payload-keywords.html
+- Suricata Fast Pattern — https://docs.suricata.io/en/latest/rules/fast-pattern-explained.html
+- Suricata Thresholding Keywords — https://docs.suricata.io/en/latest/rules/thresholding.html
+- OISF suricata-verify — https://github.com/OISF/suricata-verify
+- suricata-update Quick Start / Emerging Threats Open — https://github.com/OISF/suricata-update/blob/master/doc/quickstart.rst
+
+Методика ЛР №2 использует идею воспроизводимого detection test: входной traffic corpus + rule + ожидаемый EVE result. Мы не копируем suricata-verify целиком, а переносим его инженерный принцип в более прозрачную учебную форму.

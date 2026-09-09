@@ -67,10 +67,13 @@ nav:
           - "05 — Как IDS/IPS встраивается в защиту": course/05-firewall-vs-idps.md
           - "06 — Как измерять качество обнаружения": course/06-detection-quality.md
           - "07 — Где размещать сенсоры": course/07-placement.md
+      - Detection Engineering:
+          - "08 — Как проектировать сетевое обнаружение": course/08-detection-engineering.md
   - Проверка знаний:
       - Pre-Lab Test №1: prelab/index.md
   - Лабораторные работы:
       - ЛР №1 — NIDS и первый detection: labs/lab01/index.md
+      - ЛР №2 — Network Detection Engineering: labs/lab02/index.md
   - Материалы:
       - Источники курса: resources/sources.md
       - Глоссарий: resources/glossary.md

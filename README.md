@@ -468,3 +468,32 @@ LabBox намеренно:
 - сдаёт `lab01-report.md` + `lab01-evidence.zip`.
 
 Страница курса содержит прямую загрузку `docs/assets/downloads/idps-labbox-v0.1.zip`.
+
+
+## v2.16 — Chapter 8 + Lab №2 multi-mode
+
+Добавлена Глава 8:
+«Как проектировать сетевое обнаружение, а не просто писать сигнатуры».
+
+Ключевая модель:
+Threat/behavior → observable → network representation → detection condition → context → tests → tuning → operational rule.
+
+Добавлена ЛР №2 — Network Detection Engineering.
+
+Три режима:
+- Mode A: Live LabBox;
+- Mode B: Offline PCAP;
+- Mode C: Browser / Accessibility.
+
+Единый corpus:
+T1 normal root;
+T2 attack-like `../../etc/passwd`;
+T3 benign-like `/docs/../index.html`;
+T4 marker `../` только в POST body;
+T5 variant `../../var/log/auth.log`.
+
+Добавлен downloadable `idps-labpack-02-v0.1.zip` с синтетическими PCAP, starter rule, SHA256SUMS, EVE summarizer и report template.
+
+Встроен Detection Workbench с переключением Rule A/B/C, расчётом TP/FP/TN/FN и экспортом `lab02-browser-evidence.txt`.
+
+Навигация, homepage, sources и glossary обновлены.
