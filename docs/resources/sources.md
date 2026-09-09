@@ -1,5 +1,8 @@
 # Источники курса
 
+!!! info "Source policy после аудита 09.09.2026"
+    Курс использует принцип **primary sources first**. Технический факт по возможности опирается на стандарт, официальную документацию проекта, первичный/близкий к первичному incident report или исследовательскую публикацию. Наши архитектурные выводы маркируются как инженерные рекомендации, а созданные нами топологии, PCAP и сценарии — как synthetic teaching material. Подробная трассировка находится в [Реестре источников и проверок](evidence-register.md).
+
 Курс строится по принципу **primary sources first**.
 
 ## Фундамент
@@ -53,7 +56,7 @@
 - EVE JSON Output: https://docs.suricata.io/en/latest/output/eve/eve-json-output.html
 - EVE JSON Format: https://docs.suricata.io/en/latest/output/eve/eve-json-format.html
 
-В лабораторной версия Suricata не зашита в текст как постоянное число: студент фиксирует реально установленную версию через `suricata --build-info` в evidence.
+На дату аудита 09.09.2026 официальный stable release — **Suricata 8.0.6 (07.07.2026)**; ветка Suricata 7 объявлена EOL. В лаборатории студент всё равно фиксирует фактически установленную версию через `suricata --build-info`, поскольку учебные среды могут обновляться.
 
 
 ## Detection Engineering — Глава 8 и ЛР №2

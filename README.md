@@ -497,3 +497,29 @@ T5 variant `../../var/log/auth.log`.
 Встроен Detection Workbench с переключением Rule A/B/C, расчётом TP/FP/TN/FN и экспортом `lab02-browser-evidence.txt`.
 
 Навигация, homepage, sources и glossary обновлены.
+
+
+## v2.16.1-source-audit — full source/accuracy corrective pass
+
+Выполнен полный source/accuracy audit Глав 1–8, Pre-Lab Test №1, ЛР №1 и ЛР №2.
+
+Добавлены:
+- `docs/resources/evidence-register.md` — claim/source/status register;
+- `docs/resources/audit-report.md` — итог corrective pass;
+- source policy в странице источников;
+- отдельные статусы `VERIFIED`, `NEEDS QUALIFICATION`, `ENGINEERING`, `SYNTHETIC`, `RUNTIME QA REQUIRED`, `OUTDATED`, `UNSUPPORTED`.
+
+Ключевые исправления:
+- NDR/NTA/NBA taxonomy квалифицирована;
+- NIST SP 800-94 помечен как исторический фундаментальный источник 2007 года;
+- NGFW diagram больше не подразумевает universal processing order;
+- Target 2013 case переписан с учётом ограничений Senate staff report/public evidence;
+- unsourced `Best practice` заменены authoritative recommendations или engineering conclusions;
+- base-rate threshold trade-off уточнён;
+- TLS 1.3 reference обновлён до RFC 9846;
+- Detection Engineering workflow помечен как course methodology informed by suricata-verify;
+- thresholding semantics уточнены;
+- current stable Suricata зафиксирована на дату аудита как 8.0.6, Suricata 7 — EOL;
+- Lab №1 переведена на offline-first preparation path;
+- Lab №1/Lab №2 получили честный runtime QA status;
+- Lab Pack 02 явно обозначен как synthetic teaching corpus.
