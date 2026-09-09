@@ -315,6 +315,14 @@
       <small>Топология, visibility, SPAN/TAP и inline IPS</small>
     </div>
   </a>
+
+  <a href="course/08-detection-engineering/">
+    <span>08</span>
+    <div>
+      <strong>Как проектировать сетевое обнаружение</strong>
+      <small>Observable, protocol buffers, tests, FP/FN и tuning</small>
+    </div>
+  </a>
 </div>
 
 <div class="home-final-cta">

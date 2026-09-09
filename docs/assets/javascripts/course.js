@@ -704,3 +704,155 @@ function initializePrelabAssessment() {
 }
 
 document.addEventListener("DOMContentLoaded", initializePrelabAssessment);
+
+
+function initializeDetectionWorkbench() {
+  const rules = {
+    payload: {
+      code: 'payload contains "../"',
+      note: 'Упрощённая модель Rule A: marker ищется во всём клиентском HTTP request payload.',
+      match: (c) => c.raw.includes("../")
+    },
+    uri: {
+      code: 'HTTP URI contains "../"',
+      note: 'Упрощённая модель Rule B: marker должен находиться именно в URI запроса.',
+      match: (c) => c.uri.includes("../")
+    },
+    passwd: {
+      code: 'HTTP URI contains "../" AND "etc/passwd"',
+      note: 'Упрощённая модель Rule C: detection дополнительно привязан к одному конкретному target.',
+      match: (c) => c.uri.includes("../") && c.uri.includes("etc/passwd")
+    }
+  };
+
+  const cases = {
+    normal: {
+      id: "T1",
+      label: "GET /",
+      malicious: false,
+      uri: "/",
+      raw: "GET / HTTP/1.1\\r\\nHost: lab.local\\r\\n\\r\\n"
+    },
+    passwd: {
+      id: "T2",
+      label: "GET /download?file=../../etc/passwd",
+      malicious: true,
+      uri: "/download?file=../../etc/passwd",
+      raw: "GET /download?file=../../etc/passwd HTTP/1.1\\r\\nHost: lab.local\\r\\n\\r\\n"
+    },
+    benign: {
+      id: "T3",
+      label: "GET /docs/../index.html",
+      malicious: false,
+      uri: "/docs/../index.html",
+      raw: "GET /docs/../index.html HTTP/1.1\\r\\nHost: lab.local\\r\\n\\r\\n"
+    },
+    body: {
+      id: "T4",
+      label: "POST /submit + marker in body",
+      malicious: false,
+      uri: "/submit",
+      raw: "POST /submit HTTP/1.1\\r\\nHost: lab.local\\r\\n\\r\\ncomment=example../../text"
+    },
+    variant: {
+      id: "T5",
+      label: "GET /download?file=../../var/log/auth.log",
+      malicious: true,
+      uri: "/download?file=../../var/log/auth.log",
+      raw: "GET /download?file=../../var/log/auth.log HTTP/1.1\\r\\nHost: lab.local\\r\\n\\r\\n"
+    }
+  };
+
+  document.querySelectorAll(".detection-workbench").forEach((box) => {
+    const buttons = [...box.querySelectorAll(".workbench-rule")];
+    const code = box.querySelector(".workbench-rule-code");
+    const note = box.querySelector(".workbench-rule-note");
+    const summary = box.querySelector(".workbench-summary");
+    const exportButton = box.querySelector(".workbench-export");
+
+    function render(ruleId) {
+      const rule = rules[ruleId];
+      box.dataset.rule = ruleId;
+
+      buttons.forEach((button) => {
+        button.classList.toggle("active", button.dataset.workbenchRule === ruleId);
+      });
+
+      if (code) code.textContent = rule.code;
+      if (note) note.textContent = rule.note;
+
+      const stats = { TP: 0, FP: 0, TN: 0, FN: 0 };
+      const evidence = [
+        "IDPS Course — Lab 02 Browser Evidence",
+        `Rule: ${ruleId}`,
+        `Logic: ${rule.code}`,
+        ""
+      ];
+
+      box.querySelectorAll(".workbench-case").forEach((row) => {
+        const c = cases[row.dataset.case];
+        const matched = rule.match(c);
+        const quality = c.malicious
+          ? (matched ? "TP" : "FN")
+          : (matched ? "FP" : "TN");
+
+        stats[quality] += 1;
+
+        const matchNode = row.querySelector(".workbench-match");
+        const qualityNode = row.querySelector(".workbench-quality");
+
+        if (matchNode) {
+          matchNode.textContent = matched ? "MATCH" : "NO MATCH";
+          matchNode.className = `workbench-match ${matched ? "is-match" : "is-no-match"}`;
+        }
+
+        if (qualityNode) {
+          qualityNode.textContent = quality;
+          qualityNode.className = `workbench-quality quality-${quality.toLowerCase()}`;
+        }
+
+        evidence.push(`${c.id}: ${matched ? "MATCH" : "NO MATCH"} -> ${quality} | ${c.label}`);
+      });
+
+      if (summary) {
+        summary.innerHTML = `
+          <strong>Regression result</strong>
+          <span>TP ${stats.TP}</span>
+          <span>FP ${stats.FP}</span>
+          <span>TN ${stats.TN}</span>
+          <span>FN ${stats.FN}</span>
+        `;
+      }
+
+      box.dataset.evidence = evidence.join("\n");
+    }
+
+    buttons.forEach((button) => {
+      button.addEventListener("click", () => render(button.dataset.workbenchRule));
+    });
+
+    exportButton?.addEventListener("click", () => {
+      const content = [
+        box.dataset.evidence || "",
+        "",
+        "Limitation:",
+        "This browser workbench is a simplified logical simulator.",
+        "It is not evidence of actual Suricata engine execution."
+      ].join("\n");
+
+      const blob = new Blob([content], { type: "text/plain;charset=utf-8" });
+      const url = URL.createObjectURL(blob);
+      const link = document.createElement("a");
+      link.href = url;
+      link.download = "lab02-browser-evidence.txt";
+      document.body.appendChild(link);
+      link.click();
+      link.remove();
+      URL.revokeObjectURL(url);
+    });
+
+    render(box.dataset.rule || "payload");
+  });
+}
+
+document.addEventListener("DOMContentLoaded", initializeDetectionWorkbench);
