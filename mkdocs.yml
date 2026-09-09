@@ -76,6 +76,8 @@ nav:
       - ЛР №2 — Network Detection Engineering: labs/lab02/index.md
   - Материалы:
       - Источники курса: resources/sources.md
+      - Реестр источников и проверок: resources/evidence-register.md
+      - Source/Accuracy Audit: resources/audit-report.md
       - Глоссарий: resources/glossary.md
       - Визуальные элементы: resources/visual-guide.md
       - Troubleshooting: resources/troubleshooting.md
