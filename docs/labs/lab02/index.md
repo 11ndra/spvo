@@ -11,6 +11,10 @@
 <div class="chapter-lead">
 <p>Один HTTP-запрос создаст два независимых следа: сетевое оповещение Suricata и хостовую запись Linux Audit. Задача — не просто получить два вывода, а объяснить, <strong>какие факты доступны каждому источнику</strong>.</p>
 </div>
+!!! info "Статус проверки лабораторной"
+    - `DESIGN VERIFIED` — один контролируемый HTTP-эпизод намеренно создаёт разные сетевые и хостовые следы; выводы каждого источника ограничены наблюдаемыми им фактами.
+    - `STATIC QA PASSED` — проверены пути, актуальный bundle `v0.4`, shell syntax, Linux Audit/Suricata prerequisites и структура артефактов.
+    - `RUNTIME QA REQUIRED` — component-level checks не заменяют полный end-to-end прогон на эталонных Ubuntu Desktop/Server 24.04.x.
 
 ## Что необходимо до начала работы
 

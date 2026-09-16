@@ -44,8 +44,8 @@ flowchart LR
 
 Если на физическом компьютере мало памяти, сначала уменьшайте RAM виртуальных машин, а не число сетевых адаптеров и не отключайте учебную сеть.
 
-[Скачать пакет подготовки среды v1.1 (tar.gz)](../../assets/downloads/idps-environment-setup-v1.1.tar.gz){ .md-button .md-button--primary }
-[ZIP-версия](../../assets/downloads/idps-environment-setup-v1.1.zip){ .md-button }
+[Скачать пакет подготовки среды v1.0 (tar.gz)](../../assets/downloads/idps-environment-setup-v1.0.tar.gz){ .md-button .md-button--primary }
+[ZIP-версия](../../assets/downloads/idps-environment-setup-v1.0.zip){ .md-button }
 
 Пакет содержит:
 
@@ -123,7 +123,7 @@ Cable Connected: да
 ```bash
 sudo apt update
 sudo apt install -y wget ca-certificates
-wget https://11ndra.github.io/spvo/assets/downloads/idps-environment-setup-v1.1.tar.gz
+wget https://11ndra.github.io/spvo/assets/downloads/idps-environment-setup-v1.0.tar.gz
 ```
 
 ### Ubuntu Desktop
@@ -131,7 +131,7 @@ wget https://11ndra.github.io/spvo/assets/downloads/idps-environment-setup-v1.1.
 ```bash
 cd ~
 mkdir -p idps-environment-setup
-tar -xzf idps-environment-setup-v1.1.tar.gz -C idps-environment-setup
+tar -xzf idps-environment-setup-v1.0.tar.gz -C idps-environment-setup
 cd idps-environment-setup
 sudo bash bootstrap-client.sh
 ```
@@ -143,7 +143,7 @@ sudo bash bootstrap-client.sh
 ```bash
 cd ~
 mkdir -p idps-environment-setup
-tar -xzf idps-environment-setup-v1.1.tar.gz -C idps-environment-setup
+tar -xzf idps-environment-setup-v1.0.tar.gz -C idps-environment-setup
 cd idps-environment-setup
 sudo bash bootstrap-server.sh
 ```
@@ -159,7 +159,6 @@ curl
 Python 3
 ethtool
 OpenSSH Server
-nano
 ```
 
 Системный сервис Suricata после установки останавливается намеренно: в лабораторных студент будет запускать Suricata вручную на конкретном учебном интерфейсе.

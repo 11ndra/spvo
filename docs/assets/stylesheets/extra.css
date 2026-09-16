@@ -4056,37 +4056,3 @@ body:has(.home-hero) .md-content__inner.md-typeset {
 }
 .principle-box strong { display:block; margin-bottom:.35rem; letter-spacing:.02em; }
 .principle-box p { margin:0; color:var(--course-muted); }
-
-/* =========================================================
-   v2.27 — Chapter 6 rule anatomy
-   ========================================================= */
-.rule-parts-grid {
-  display: grid;
-  grid-template-columns: repeat(5, minmax(0, 1fr));
-  gap: .75rem;
-  margin: 1.2rem 0 1.7rem;
-}
-.rule-parts-grid article {
-  padding: .9rem;
-  border: 1px solid var(--course-border);
-  border-top: 3px solid var(--md-primary-fg-color);
-  border-radius: .7rem;
-  background: var(--course-surface);
-  box-shadow: var(--course-shadow);
-}
-.rule-parts-grid span {
-  display: block;
-  margin-bottom: .35rem;
-  color: var(--course-muted);
-  font-size: .66rem;
-  font-weight: 900;
-  letter-spacing: .08em;
-}
-.rule-parts-grid strong { display:block; margin-bottom:.35rem; }
-.rule-parts-grid p { margin:0; color:var(--course-muted); font-size:.86rem; }
-@media screen and (max-width: 980px) {
-  .rule-parts-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
-}
-@media screen and (max-width: 620px) {
-  .rule-parts-grid { grid-template-columns: 1fr; }
-}
