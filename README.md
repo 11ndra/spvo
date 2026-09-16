@@ -549,3 +549,18 @@ T5 variant `../../var/log/auth.log`.
 
 Статус LabBox остаётся `RUNTIME QA REQUIRED` до полного execution pass на учебной Ubuntu/Suricata.
 
+
+
+## v2.19 — Logic, terminology and visual-information corrective pass
+
+- закрыты 15 ранее зафиксированных логических дефектов;
+- Глава 1 переведена на русскоязычную терминологию с английскими терминами только при первом вводе/в синтаксисе;
+- Глава 2 полностью русифицирована и получила информативные схемы по source domains;
+- формулы-акценты теперь русскоязычные;
+- схемы Глав 1–2 показывают семантику стрелок, точки наблюдения и границы выводов;
+- в Главе 3 удалена идея универсального линейного detection pipeline;
+- behavioral и anomaly detection разведены;
+- метрики Главы 6 получили Evaluation Contract;
+- visibility boundary больше не доказывается одним отсутствием события;
+- Path Traversal example получил фиксированный Detection Objective и representation-variant tests;
+- добавлен единый стандарт языка курса в глоссарий.

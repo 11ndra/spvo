@@ -4010,3 +4010,34 @@ body:has(.home-hero) .md-content__inner.md-typeset {
   .policy-decision { grid-template-columns: 1fr auto; }
   .policy-decision span { grid-column: 1 / -1; }
 }
+
+
+/* =========================================================
+   v2.19 — Chapter 2 source-domain visuals
+   ========================================================= */
+.source-type-grid,
+.source-choice-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: .9rem;
+  margin: 1.2rem 0 1.8rem;
+}
+.source-choice-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+.source-type-grid article,
+.source-choice-grid article {
+  padding: 1rem 1.05rem;
+  border: 1px solid var(--course-border);
+  border-top: 3px solid var(--md-primary-fg-color);
+  border-radius: .75rem;
+  background: var(--course-surface);
+  box-shadow: var(--course-shadow);
+}
+.source-type-grid strong,
+.source-choice-grid strong { display:block; margin-bottom:.25rem; }
+.source-type-grid span,
+.source-choice-grid span { display:block; color:var(--course-muted); font-size:.72rem; font-weight:800; margin-bottom:.35rem; }
+.source-type-grid p,
+.source-choice-grid p { margin:0; color:var(--course-muted); }
+@media screen and (max-width: 760px) {
+  .source-type-grid, .source-choice-grid { grid-template-columns: 1fr; }
+}
