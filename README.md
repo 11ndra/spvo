@@ -523,3 +523,19 @@ T5 variant `../../var/log/auth.log`.
 - Lab №1 переведена на offline-first preparation path;
 - Lab №1/Lab №2 получили честный runtime QA status;
 - Lab Pack 02 явно обозначен как synthetic teaching corpus.
+
+## v2.17 — Lecture + Practice + Lab migration
+
+Начат переход курса на новую дидактическую структуру «теория → практика → лабораторная».
+
+Изменено:
+- полностью переписана Глава 1: базовые понятия IDS/IPS, Firewall, WAF, Detection/Prevention, Alert;
+- полностью переписана Глава 2: NIDS/NIPS, HIDS/HIPS, WIDS/WIPS и место NBA без смешения source domain и detection method;
+- добавлена Практическая работа №1 по разграничению защитных функций;
+- ЛР №1 упрощена до первого воспроизводимого NIDS-эксперимента: traffic → visibility → rule → alert → interpretation;
+- Path Traversal, FP/FN и troubleshooting перенесены из первой лабораторной в более поздние блоки;
+- добавлен downloadable starter pack ЛР №1 с готовым rule и шаблоном отчёта;
+- материалы v2.16, которые ещё не мигрированы, явно помечены в навигации как предыдущая редакция.
+
+Статус LabBox остаётся `RUNTIME QA REQUIRED` до полного execution pass на учебной Ubuntu/Suricata.
+

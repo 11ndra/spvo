@@ -1,115 +1,61 @@
 # Лабораторная работа №1
 
-## Развёртывание NIDS и проверка первого detection
+## Первый NIDS: visibility → alert → interpretation
 
 <div class="lab-header">
-  <div><strong>Уровень:</strong> базовый</div>
-  <div><strong>Инструменты:</strong> Suricata, tcpdump, jq</div>
+  <div><strong>Уровень:</strong> вводный</div>
+  <div><strong>Инструменты:</strong> Suricata, tcpdump, curl, jq</div>
   <div><strong>Среда:</strong> IDPS LabBox v0.1</div>
 </div>
 
 <div class="chapter-lead">
-<p>Цель этой работы — не просто установить Suricata. Нужно пройти всю цепочку проверки: <strong>трафик существует → проходит через выбранную точку → попадает в NIDS → правило анализирует нужный observable → alert появляется → результат можно доказать по журналам</strong>.</p>
+<p>Первая лабораторная не про написание сложных сигнатур. Нужно экспериментально доказать минимальную цепочку: <strong>трафик существует → выбранная точка его наблюдает → Suricata получает данные → detector срабатывает → alert корректно интерпретируется</strong>.</p>
 </div>
 
 <div class="chapter-outcomes">
 <strong>После выполнения работы студент должен уметь:</strong>
-<p>развернуть минимальный сетевой стенд; определить observation interface; доказать наличие трафика до запуска IDS; подготовить и проверить Suricata; создать простую HTTP-сигнатуру; получить контролируемый alert; найти его в EVE JSON; объяснить разницу между совпадением правила и подтверждённой компрометацией; показать первый пример False Positive.</p>
+<p>проверить сетевой путь до запуска IDS; доказать visibility на конкретном interface; запустить Suricata с готовым правилом; выполнить negative/positive test; найти alert в EVE JSON; объяснить, что alert подтверждает и чего он не доказывает.</p>
 </div>
 
-!!! warning "Статус QA лаборатории"
-    Команды Suricata в этой работе сверены с официальной документацией OISF для Suricata 8 (`--build-info`, `-T`, `-S`, `-i`, `-l`, EVE JSON). Скрипты LabBox прошли статическую проверку shell-синтаксиса. **Полный runtime QA LabBox на чистой Ubuntu 24.04 VM ещё не закрыт**, поэтому курс не помечает эту лабораторию как полностью runtime-validated до отдельного прогона.
+!!! warning "Статус QA"
+    Команды Suricata сверены с официальными интерфейсами Suricata 8. Сам LabBox имеет статус **RUNTIME QA REQUIRED** до полного прогона на той Ubuntu/версии Suricata, которая используется в аудитории. Перед занятием преподавателю следует выполнить контрольный прогон всей работы один раз.
 
 ---
 
-## 1. Что мы строим
+## 1. Топология
 
-Лаборатория выполняется в одной Ubuntu 24.04 VM.
-
-LabBox создаёт две отдельные сетевые среды с помощью Linux network namespaces.
-
-<div class="labbox-topology">
-
-  <div class="labbox-endpoint">
-    <span>namespace</span>
-    <strong>idps-client</strong>
-    <small>10.13.37.10/24</small>
-  </div>
-
-  <div class="labbox-link">
-    <span>eth0</span>
-    <b>↕</b>
-    <span>lab-client0</span>
-  </div>
-
-  <div class="labbox-middle">
-    <strong>br-idps</strong>
-    <small>Linux bridge</small>
-    <div class="labbox-observation">
-      <span>Observation point</span>
-      <strong>lab-client0</strong>
-      <small>здесь passive NIDS получает трафик</small>
-    </div>
-  </div>
-
-  <div class="labbox-link">
-    <span>lab-web0</span>
-    <b>↕</b>
-    <span>eth0</span>
-  </div>
-
-  <div class="labbox-endpoint">
-    <span>namespace</span>
-    <strong>idps-web</strong>
-    <small>10.13.37.20:8080</small>
-  </div>
-
-</div>
-
-Рабочий поток:
+Работа выполняется в одной Ubuntu VM. LabBox создаёт два network namespace:
 
 ```text
-10.13.37.10:any → 10.13.37.20:8080/TCP
+idps-client                    idps-web
+10.13.37.10                    10.13.37.20:8080
+     │                               │
+     └──────── br-idps ──────────────┘
+              │
+              └─ observation interface: lab-client0
 ```
 
-В этой лабораторной Suricata работает как **пассивный NIDS** и наблюдает интерфейс:
-
-```text
-lab-client0
-```
+Suricata работает как **пассивный NIDS** и наблюдает `lab-client0`.
 
 !!! important
-    LabBox создаёт только сеть и безопасный HTTP-сервис. Он не устанавливает Suricata, не пишет правила и не запускает IDS за студента.
+    LabBox создаёт сеть и безопасный HTTP-сервис. Он не устанавливает Suricata, не создаёт правило и не запускает IDS за студента.
 
 [Скачать IDPS LabBox v0.1](../../assets/downloads/idps-labbox-v0.1.zip){ .md-button }
+[Скачать starter pack ЛР №1](../../assets/downloads/lab01-starter-v0.1.zip){ .md-button }
 
 ---
 
-## 2. Подготовка LabBox
-
-Распакуйте архив внутри Ubuntu VM и перейдите в каталог LabBox.
+## 2. Подготовьте стенд
 
 ```bash
 unzip idps-labbox-v0.1.zip
 cd idps-labbox-v0.1
-```
-
-Создайте стенд:
-
-```bash
 sudo bash scripts/lab-init.sh
-```
-
-Проверьте его:
-
-```bash
 sudo bash scripts/lab-status.sh
 bash scripts/lab-topology.sh
 ```
 
-Но не ограничивайтесь зелёными `[ OK ]`.
-
-Самостоятельно проверьте созданные объекты:
+Дополнительно проверьте созданные объекты:
 
 ```bash
 ip netns list
@@ -120,267 +66,153 @@ sudo ip -n idps-web -br addr
 
 <div class="lab-evidence">
 <strong>Контрольная точка 1</strong>
-<p>Вы должны уметь показать, где находятся Client и Web, какой у них IP и почему <code>lab-client0</code> является подходящей observation point для потока Client ↔ Web.</p>
+<p>Покажите, где находятся Client и Web, какие у них IP-адреса и какой interface используется как observation point.</p>
 </div>
 
 ---
 
 ## 3. Сначала докажите, что трафик существует
 
-До установки или запуска Suricata проверьте сам сетевой путь.
-
-В первом терминале:
+Первый терминал:
 
 ```bash
 sudo tcpdump -nn -i lab-client0 'tcp port 8080'
 ```
 
-Во втором:
+Второй терминал:
 
 ```bash
 sudo ip netns exec idps-client \
   curl http://10.13.37.20:8080/
 ```
 
-HTTP-сервис должен ответить страницей LabBox, а `tcpdump` — показать двусторонний TCP-поток между:
-
-```text
-10.13.37.10
-10.13.37.20:8080
-```
+`tcpdump` должен показать взаимодействие между `10.13.37.10` и `10.13.37.20:8080`.
 
 Почему этот шаг выполняется **до** Suricata?
 
-Потому что отсутствие alert может быть вызвано не правилом. IDS может просто не получать интересующий поток.
+Потому что отсутствие alert может означать не ошибку правила, а отсутствие нужной visibility.
 
 <div class="lab-evidence">
 <strong>Контрольная точка 2</strong>
-<p>Зафиксируйте, какими наблюдениями вы доказали, что нужный flow проходит через <code>lab-client0</code>.</p>
+<p>Зафиксируйте, какими наблюдениями вы доказали, что нужный трафик доступен на <code>lab-client0</code>.</p>
 </div>
 
 ---
 
-## 4. Подготовка Suricata
+## 4. Подготовьте Suricata
 
-Если преподаватель выдал **LabBox Core с уже установленной Suricata**, не переустанавливайте пакет и не тратьте интернет-трафик: сразу зафиксируйте версию. Это основной offline-first вариант курса.
-
-Если работа выполняется на чистой Ubuntu и Suricata отсутствует, официальный OISF Quickstart поддерживает установку через stable PPA:
-
-```bash
-sudo apt update
-sudo apt install -y software-properties-common
-sudo add-apt-repository ppa:oisf/suricata-stable
-sudo apt update
-sudo apt install -y suricata jq curl tcpdump
-```
-
-На дату аудита актуальная стабильная версия OISF — Suricata **8.0.6**; фактически установленную версию всё равно необходимо проверить, а не предполагать.
-
-Проверьте, какая версия реально установлена:
+Если Suricata уже установлена преподавателем, не переустанавливайте её. Зафиксируйте фактическую версию:
 
 ```bash
 sudo suricata --build-info
 ```
 
-Версию не нужно угадывать по методичке. Она войдёт в evidence.
-
-Пакет может автоматически запустить системный сервис. В этой лабораторной мы используем отдельный контролируемый запуск, поэтому остановите сервис:
+Если системный сервис запущен, для лаборатории остановите его, потому что далее используется отдельный контролируемый процесс:
 
 ```bash
 sudo systemctl stop suricata
 ```
 
-!!! note
-    `systemctl status suricata` показывает состояние процесса, но сам по себе не доказывает ни visibility, ни корректность правил, ни наличие detection.
+Проверьте базовую конфигурацию:
+
+```bash
+sudo suricata -T -c /etc/suricata/suricata.yaml
+```
+
+Если Suricata отсутствует, используйте подготовленный преподавателем offline image или согласованный способ установки. Не тратьте время лабораторной на случайные версии пакетов.
 
 ---
 
-## 5. Проверка конфигурации до запуска
+## 5. Получите готовое правило
 
-Посмотрите основные пути:
+В этой работе **не требуется проектировать rule syntax**. Это будет отдельной темой курса.
 
-```bash
-ls -la /etc/suricata/
-ls -la /var/log/suricata/
-```
-
-Затем выполните configuration test:
-
-```bash
-sudo suricata -T \
-  -c /etc/suricata/suricata.yaml
-```
-
-Нас интересует принцип:
+Starter pack содержит `lab01.rules`:
 
 ```text
-процесс может запускаться
-≠
-конфигурация и правила гарантированно корректны
+alert http 10.13.37.10 any -> 10.13.37.20 8080 (msg:"LAB1 HTTP marker observed"; flow:established,to_server; http.uri; content:"ATTACK-LAB"; sid:1000001; rev:1;)
 ```
 
-Перед каждым изменением собственного правила в этой работе полезно повторять `-T`.
+Смысл правила:
 
----
+> если Suricata обнаруживает `ATTACK-LAB` в анализируемом HTTP URI для заданного направления, создать alert SID 1000001.
 
-## 6. Первое контролируемое правило
+Скопируйте файл в рабочий каталог или используйте его напрямую.
 
-Создайте отдельный файл:
-
-```bash
-sudo mkdir -p /etc/suricata/rules
-sudo nano /etc/suricata/rules/local.rules
-```
-
-Первое правило ищет специально созданный лабораторный URI:
-
-```text
-/lab-test
-```
-
-Добавьте:
-
-```text
-alert http 10.13.37.10 any -> 10.13.37.20 8080 (
-    msg:"LAB1 controlled HTTP detection";
-    flow:to_server,established;
-    http.uri;
-    content:"/lab-test";
-    sid:1000001;
-    rev:1;
-)
-```
-
-В реальном `local.rules` правило должно находиться в одной строке. Здесь оно разбито только для чтения.
-
-### Разберите правило до запуска
-
-| Элемент | Что он определяет |
-|---|---|
-| `alert` | действие при совпадении |
-| `http` | прикладной протокол |
-| `10.13.37.10 → 10.13.37.20:8080` | направление интересующего потока |
-| `flow:to_server,established` | контекст установленного соединения к серверу |
-| `http.uri` | HTTP URI как анализируемый sticky buffer |
-| `content:"/lab-test"` | наблюдаемый признак |
-| `sid:1000001` | идентификатор локальной сигнатуры |
-
-То есть правило не ищет абстрактную «атаку».
-
-Оно утверждает:
-
-> если в HTTP-запросе на этом направлении URI содержит `/lab-test`, создать alert.
-
----
-
-## 7. Проверьте именно это правило
-
-Для лабораторного запуска удобно загрузить только наш файл правил.
-
-Создайте отдельный каталог логов:
-
-```bash
-sudo mkdir -p /var/log/suricata-lab
-sudo rm -f /var/log/suricata-lab/*
-```
-
-Проверьте configuration + rule:
+Проверьте конфигурацию вместе с rule:
 
 ```bash
 sudo suricata -T \
   -c /etc/suricata/suricata.yaml \
-  -S /etc/suricata/rules/local.rules
+  -S ./lab01.rules
 ```
 
-`-S` здесь намеренно загружает только указанный файл правил, чтобы первая лабораторная не зависела от большого внешнего ruleset.
+`-T` доказывает, что конфигурация и rule могут быть разобраны Suricata. Он **не** доказывает, что нужный traffic виден и alert обязательно появится.
+
+---
+
+## 6. Запустите NIDS
+
+Создайте отдельный каталог логов:
+
+```bash
+mkdir -p ~/lab01-output
+rm -f ~/lab01-output/*
+```
 
 Запустите Suricata в отдельном терминале:
 
 ```bash
 sudo suricata \
   -c /etc/suricata/suricata.yaml \
+  -S ./lab01.rules \
   -i lab-client0 \
-  -S /etc/suricata/rules/local.rules \
-  -l /var/log/suricata-lab
+  -l "$HOME/lab01-output"
 ```
 
-Оставьте этот терминал открытым.
+Оставьте процесс работающим.
 
 ---
 
-## 8. Negative test: нормальный запрос
+## 7. Negative test
 
-Сначала выполните запрос, который **не должен** соответствовать правилу:
+Отправьте запрос **без** marker:
 
 ```bash
 sudo ip netns exec idps-client \
-  curl http://10.13.37.20:8080/
+  curl http://10.13.37.20:8080/normal
 ```
 
-Проверьте alerts:
+Проверьте наш SID:
 
 ```bash
-sudo jq \
-  'select(.event_type=="alert" and .alert.signature_id==1000001)' \
-  /var/log/suricata-lab/eve.json
+jq 'select(.event_type=="alert" and .alert.signature_id==1000001)' \
+  ~/lab01-output/eve.json
 ```
 
-Ожидаемый результат:
+Для выбранного negative case наш alert появиться не должен.
 
-```text
-нет событий SID 1000001
-```
+Это означает только:
 
-Это важная часть validation.
+> detector SID 1000001 не сработал на данном тестовом запросе.
 
-Мы проверяем не только:
-
-> «правило умеет срабатывать»,
-
-но и:
-
-> **«правило не срабатывает на выбранный normal case».**
+Это **не** доказательство отсутствия любой атаки.
 
 ---
 
-## 9. Positive test: `/lab-test`
+## 8. Positive test
 
-Теперь:
+Теперь отправьте запрос с marker:
 
 ```bash
 sudo ip netns exec idps-client \
-  curl http://10.13.37.20:8080/lab-test
+  curl 'http://10.13.37.20:8080/ATTACK-LAB'
 ```
 
-Web-сервер может вернуть `404`. Это нормально.
-
-Нас интересует не существование файла, а наблюдаемый URI.
-
-Снова:
+Снова найдите SID 1000001:
 
 ```bash
-sudo jq \
-  'select(.event_type=="alert" and .alert.signature_id==1000001)' \
-  /var/log/suricata-lab/eve.json
-```
-
-Найдите как минимум:
-
-```text
-timestamp
-src_ip
-src_port
-dest_ip
-dest_port
-proto
-alert.signature
-alert.signature_id
-```
-
-Удобная сокращённая выборка:
-
-```bash
-sudo jq '
+jq '
   select(.event_type=="alert" and .alert.signature_id==1000001)
   | {
       timestamp,
@@ -392,274 +224,98 @@ sudo jq '
       signature: .alert.signature,
       sid: .alert.signature_id
     }
-' /var/log/suricata-lab/eve.json
+' ~/lab01-output/eve.json
 ```
 
 <div class="lab-evidence">
 <strong>Контрольная точка 3</strong>
-<p>Объясните, какие поля EVE позволяют связать alert именно с вашим тестовым HTTP-запросом.</p>
+<p>Покажите alert и объясните, какие поля связывают его именно с вашим лабораторным traffic.</p>
 </div>
 
 ---
 
-## 10. Alert не равен подтверждённой компрометации
+## 9. Интерпретируйте результат
 
-Теперь добавим более похожий на security detection пример.
+После появления alert ответьте на два вопроса.
 
-В `local.rules` добавьте вторую сигнатуру:
+### Что эксперимент подтвердил?
 
-```text
-alert http 10.13.37.10 any -> 10.13.37.20 8080 (
-    msg:"LAB1 possible path traversal";
-    flow:to_server,established;
-    http.uri.raw;
-    content:"../";
-    sid:1000002;
-    rev:1;
-)
-```
+Корректная формулировка:
 
-Снова выполните `suricata -T`.
+> Suricata получила достаточные данные HTTP-запроса на выбранном observation interface и обнаружила в анализируемом URI признак `ATTACK-LAB`, соответствующий условию SID 1000001.
 
-После изменения rules перезапустите лабораторный процесс Suricata.
+### Что эксперимент не подтвердил?
 
-Затем отправьте безопасный attack-like запрос:
-
-```bash
-sudo ip netns exec idps-client \
-  curl --path-as-is \
-  http://10.13.37.20:8080/../../etc/passwd
-```
-
-LabBox **не содержит уязвимого path traversal приложения**. Python HTTP server ограничивает обслуживание своим webroot, поэтому этот сценарий используется только для наблюдаемого сетевого паттерна.
-
-Если правило создало alert, что мы доказали?
+Он не доказывает, что:
 
 ```text
-Доказано:
-в HTTP URI присутствовал наблюдаемый признак "../",
-и правило SID 1000002 совпало с потоком.
-
-НЕ доказано:
-что /etc/passwd был прочитан;
-что код был выполнен;
-что сервер скомпрометирован.
+запрос является реальной атакой;
+Web Server имеет уязвимость;
+уязвимость была успешно использована;
+сервер скомпрометирован;
+данные были похищены.
 ```
 
-Это первая практическая демонстрация принципа:
+Связь с Главой 1:
 
-> **alert ≠ incident confirmation**
+```text
+ALERT ≠ COMPROMISE
+```
 
 ---
 
-## 11. Первый False Positive
+## 10. Что сдаёт студент
 
-Теперь используйте:
+Скачайте `lab01-report.md` из starter pack и заполните его.
 
-```bash
-sudo ip netns exec idps-client \
-  curl --path-as-is \
-  http://10.13.37.20:8080/docs/../index.html
-```
+Минимальный комплект evidence:
 
-Такой URI всё ещё содержит:
+1. версия Suricata;
+2. подтверждение topology/addresses;
+3. небольшой `tcpdump` fragment, показывающий visibility;
+4. результат `suricata -T`;
+5. результат negative test;
+6. JSON-фрагмент positive alert;
+7. собственная интерпретация alert.
 
-```text
-../
-```
-
-Примитивная сигнатура SID `1000002` может снова создать alert.
-
-Однако запрос используется как benign-like navigation внутри учебного webroot.
-
-Получаем:
-
-```text
-attack-like request  → ALERT
-benign-like request  → ALERT
-```
-
-Это не означает, что Suricata «работает плохо».
-
-Проблема находится в нашей detection logic:
-
-```text
-content:"../"
-```
-
-слишком широка для уверенного утверждения об атаке.
-
-<div class="lab-evidence">
-<strong>Контрольная точка 4</strong>
-<p>Опишите, почему второе правило имеет риск False Positive и какой дополнительный контекст вы захотели бы учитывать. Исправлять правило до production-качества в ЛР №1 не требуется — это задача следующего блока курса.</p>
-</div>
+Не требуется делать десятки скриншотов. Команды и текстовые evidence предпочтительнее.
 
 ---
 
-## 12. Минимальный troubleshooting
-
-Теперь воспроизведите типичную ситуацию.
-
-Остановите текущий лабораторный Suricata и запустите тот же rule-file на неправильном интерфейсе:
-
-```bash
-sudo suricata \
-  -c /etc/suricata/suricata.yaml \
-  -i lo \
-  -S /etc/suricata/rules/local.rules \
-  -l /var/log/suricata-lab
-```
-
-В другом терминале:
-
-```bash
-sudo ip netns exec idps-client \
-  curl http://10.13.37.20:8080/lab-test
-```
-
-HTTP работает.
-
-Rule syntactically valid.
-
-Но новый flow не проходит через `lo`.
-
-Пройдите диагностическую цепочку:
-
-```text
-Запрос работает?
-        ↓
-Видит ли его tcpdump на lab-client0?
-        ↓
-Какой interface использует Suricata?
-        ↓
-Загрузилось ли правило?
-        ↓
-Появился ли alert в EVE?
-```
-
-После диагностики верните Suricata на:
-
-```text
-lab-client0
-```
-
-Это важнее, чем просто запомнить правильную команду запуска.
-
----
-
-## 13. Evidence вместо коллекции скриншотов
-
-После завершения основных тестов запустите Suricata на правильном интерфейсе и выполните:
-
-```bash
-sudo bash scripts/lab-check.sh --export
-```
-
-LabBox создаст:
-
-```text
-evidence/
-└── lab01-evidence.zip
-```
-
-Внутри:
-
-```text
-lab01/
-├── topology.txt
-├── interfaces.txt
-├── suricata-build-info.txt
-├── config-test.txt
-├── local.rules
-├── normal-request.txt
-├── detection-request.txt
-├── packet-sample.txt
-├── alerts.json
-├── runtime.txt
-└── sha256sums.txt
-```
-
-Evidence не заменяет объяснение.
-
-Он нужен для доказательства технических фактов.
-
----
-
-## 14. Что сдаёт студент
-
-Два файла:
-
-```text
-lab01-report.md
-lab01-evidence.zip
-```
-
-В `lab01-report.md` ответьте на вопросы:
-
-1. Почему `active (running)` не доказывает работоспособность IDS?
-2. Как вы доказали, что `lab-client0` получает нужный flow?
-3. Какой observable использует SID `1000001`?
-4. Какие поля `eve.json` связывают alert с вашим запросом?
-5. Что именно доказал alert SID `1000002` и чего он не доказал?
-6. Почему `/docs/../index.html` демонстрирует риск False Positive?
-7. Почему запуск Suricata на `lo` не исправляется изменением самой сигнатуры?
-8. Какой следующий шаг вы сделали бы, чтобы улучшить правило path traversal?
-
-Не отвечайте одним предложением «потому что так настроено». Каждый вывод должен ссылаться на конкретное наблюдение из лаборатории.
-
----
-
-## 15. Критерии оценки
+## 11. Критерии оценки
 
 | Критерий | Баллы |
 |---|---:|
-| LabBox развёрнут, топология понята | 10 |
-| Suricata доступна в среде, configuration test пройден | 15 |
-| Visibility на `lab-client0` доказана | 15 |
-| Controlled detection SID `1000001` воспроизведён | 20 |
-| EVE JSON разобран и интерпретирован | 15 |
-| Attack-like и False Positive сценарии объяснены корректно | 15 |
-| Troubleshooting и evidence оформлены | 10 |
+| Топология понята и объяснена | 15 |
+| Visibility на `lab-client0` доказана | 20 |
+| Configuration/rule test выполнен | 10 |
+| Negative test выполнен корректно | 15 |
+| Positive alert SID 1000001 воспроизведён | 20 |
+| Alert интерпретирован без чрезмерных выводов | 15 |
+| Отчёт и evidence оформлены | 5 |
 | **Итого** | **100** |
 
 !!! warning "Критическое условие"
-    Если студент не может доказать, что нужный поток действительно проходит через observation interface, один показанный alert не считается достаточным доказательством корректной работы NIDS.
+    Если студент не может доказать, что интересующий traffic доступен на observation interface, один показанный alert не считается достаточным объяснением работы NIDS.
 
 ---
 
-## 16. Что мы пока намеренно не делаем
+## 12. Что мы намеренно не делаем в ЛР №1
 
-В этой работе мы **не** пытаемся:
-
-```text
-создать production-ready signature
-настроить большой ET Open ruleset
-включить inline blocking
-проводить реальную эксплуатацию уязвимости
-строить SIEM correlation
-оценивать throughput под нагрузкой
-```
-
-Это не упрощение ради упрощения.
-
-ЛР №1 должна сначала закрепить фундаментальную цепочку:
+В этой работе мы **не**:
 
 ```text
-traffic
-  ↓
-visibility
-  ↓
-parsing
-  ↓
-rule
-  ↓
-alert
-  ↓
-evidence
-  ↓
-interpretation
+проектируем сложные signatures;
+изучаем path traversal;
+считаем TP/FP/FN;
+исследуем evasion и normalization;
+настраиваем inline blocking;
+проводим эксплуатацию уязвимостей;
+строим SIEM correlation.
 ```
+
+Эти темы появятся тогда, когда студент уже понимает базовую механику IDS/IPS.
 
 <div class="next-step">
-<strong>Следующий практический уровень:</strong> мы уже умеем заставить detection сработать. Дальше нужно научиться делать его качественным: уточнять контекст, уменьшать False Positive и проверять варианты обхода правила. Это станет основой ЛР №2 по Detection Engineering.
+<strong>После ЛР №1:</strong> переходите к <a href="../../course/02-classification/">Главе 2</a> и разбирайте, почему network, host и wireless systems получают разные виды evidence.
 </div>

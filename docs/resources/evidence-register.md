@@ -100,3 +100,15 @@ NIST SP 800-94 требует отдельной оговорки: это фин
 ## Что аудит НЕ подтверждает
 
 Source audit подтверждает корректность **источников и формулировок**, но не заменяет runtime QA. До отдельного execution pass нельзя утверждать, что LabBox v0.1 и синтетические PCAP ЛР №2 полностью воспроизводят ожидаемый output на каждой поддерживаемой ОС/версии Suricata. Эти пункты намеренно оставлены со статусом `RUNTIME QA REQUIRED`.
+
+## v2.17 — Lecture + Practice + Lab migration
+
+| ID | Раздел | Claim / изменение | Тип | Статус | Примечание |
+|---|---|---|---|---|---|
+| V217-01 | Гл.1 | Firewall и IDS/IPS различаются по защитной функции, а не по жёсткой границе L3/L4 vs L7 | STANDARD/ENGINEERING | VERIFIED / QUALIFIED | NIST SP 800-41 Rev.1 + SP 800-94; modern product overlap оговорён |
+| V217-02 | Гл.1 | IDS = detection, IPS = detection + возможность prevention | STANDARD | VERIFIED | NIST SP 800-94 foundational definition |
+| V217-03 | Гл.1 | Учебный `ATTACK-LAB` scenario | SYNTHETIC | VERIFIED AS COURSE DESIGN | Не real exploit; используется только для controlled detection |
+| V217-04 | Гл.2 | Классические четыре типа: Network-Based, Wireless, NBA, Host-Based | STANDARD/HISTORICAL | VERIFIED / QUALIFIED | NIST SP 800-94; не выдаётся за идеальную современную ontology |
+| V217-05 | Гл.2 | Data source/domain отделён от detection method | COURSE SYNTHESIS | ENGINEERING | Исправляет прежнее смешение `Network/Host/Wireless/Behavior` |
+| V217-06 | ЛР1 | Starter rule SID 1000001 ищет `ATTACK-LAB` в `http.uri` | SYNTHETIC | RUNTIME QA REQUIRED | Rule syntax подготовлен под Suricata 8; требуется execution pass на учебном image |
+| V217-07 | ЛР1 | LabBox `lab-client0` end-to-end visibility и ожидаемый EVE output | SYNTHETIC | RUNTIME QA REQUIRED | До classroom release выполнить контрольный прогон |
