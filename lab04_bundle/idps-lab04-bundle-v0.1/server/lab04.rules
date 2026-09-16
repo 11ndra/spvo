@@ -1,2 +1,0 @@
-alert http 10.13.37.10 any -> 10.13.37.20 8080 (msg:"LAB4 signature marker observed"; flow:established,to_server; http.uri; content:"LAB4-SIGNATURE"; sid:1000005; rev:1;)
-alert http 10.13.37.10 any -> 10.13.37.20 8080 (msg:"LAB4 repeated request behavior"; flow:established,to_server; http.uri; content:"/lab4-fail-login"; startswith; detection_filter:track by_src,count 5,seconds 10; sid:1000006; rev:1;)
