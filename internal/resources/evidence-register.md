@@ -48,7 +48,7 @@ NIST SP 800-94 требует отдельной оговорки: это фин
 | C5-02 | Гл.5 | Anomaly-based detection сравнивает наблюдаемую активность с профилем, который считается нормальным | FOUNDATION | VERIFIED / HISTORICAL | NIST SP 800-94 §2.3.2; необычность не приравнивается к maliciousness |
 | C5-03 | Гл.5 | Stateful protocol analysis использует состояние и ожидаемую логику протокола | FOUNDATION | VERIFIED / HISTORICAL | NIST SP 800-94 §2.3.3; лабораторная state-machine отдельно помечена synthetic |
 | C5-04 | Гл.5 | Один продукт/детектор может комбинировать несколько методологий обнаружения | FOUNDATION | VERIFIED / HISTORICAL | NIST SP 800-94 §2.3 отмечает использование методов отдельно или совместно |
-| C5-05 | Гл.5 | Behavioral detection не тождествен anomaly detection: фиксированное условие над серией событий может не иметь baseline | COURSE SYNTHESIS | VERIFIED AS COURSE MODEL | Разделены объект анализа (структура поведения) и принцип сравнения с ожидаемой моделью; это разграничение экспериментально закреплено ЛР №4 |
+| C5-05 | Гл.5 | Фиксированное условие над серией событий не тождественно аномальному обнаружению: первое может не использовать базовую модель | COURSE SYNTHESIS | VERIFIED AS COURSE MODEL | Разделены заранее заданное условие над серией и сравнение с ожидаемой моделью; разграничение экспериментально закреплено ЛР №4 |
 | C5-06 | Гл.5 | Rule syntax не является методом обнаружения: rule engine может выражать признаки содержимого, flow/state и app-layer context | OFFICIAL/COURSE SYNTHESIS | VERIFIED / QUALIFIED | Suricata 8.0.7 rule docs (`flow`, `flowbits`, app-layer, HTTP); возможности конкретного engine не обобщаются на все IDPS |
 | C6-01 | Гл.6 | Base-rate способен приводить к большому числу FP даже при низком FPR | RESEARCH | VERIFIED | Stefan Axelsson, ACM TISSEC; добавлена прямая research reference |
 | C6-02 | Гл.6 | Любое «ужесточение правила» обязательно повышает FN | ENGINEERING | NEEDS QUALIFICATION | Исправлено: trade-off показан корректно для движения decision threshold; произвольная правка rule не обязана быть монотонной |
@@ -121,7 +121,7 @@ Source audit подтверждает корректность **источни�
 | V217-02 | Гл.1 | IDS = detection, IPS = detection + возможность prevention | STANDARD | VERIFIED | NIST SP 800-94 foundational definition |
 | V217-03 | Гл.1 | Учебный `ATTACK-LAB` scenario | SYNTHETIC | VERIFIED AS COURSE DESIGN | Не real exploit; используется только для controlled detection |
 | V217-04 | Гл.2 | Классические четыре типа: Network-Based, Wireless, NBA, Host-Based | STANDARD/HISTORICAL | VERIFIED / QUALIFIED | NIST SP 800-94; не выдаётся за идеальную современную ontology |
-| V217-05 | Гл.2 | Data source/domain отделён от detection method | COURSE SYNTHESIS | ENGINEERING | Исправляет прежнее смешение `Network/Host/Wireless/Behavior` |
+| V217-05 | Гл.2 | Data source/domain отделён от detection method | COURSE SYNTHESIS | ENGINEERING | Исправляет прежнее смешение категорий источника данных с неоднозначным термином `behavioral` |
 | V217-06 | ЛР1 | Starter rule SID 1000001 ищет `ATTACK-LAB` в `http.uri` | SYNTHETIC | RUNTIME QA REQUIRED | Rule syntax подготовлен под Suricata 8; требуется execution pass на учебном image |
 | V217-07 | ЛР1 | LabBox `lab-client0` end-to-end visibility и ожидаемый EVE output | SYNTHETIC | RUNTIME QA REQUIRED | До classroom release выполнить контрольный прогон |
 
@@ -153,4 +153,4 @@ Source audit подтверждает корректность **источни�
 
 Перед выпуском ЛР №4 создан внутренний alignment contract `design/lab04-alignment.md`. Он фиксирует для каждого метода действие студента, наблюдаемый артефакт, допустимый вывод и отдельно то, чего артефакт не доказывает.
 
-Статическая проверка v2.27: `bash -n` для всех shell-скриптов bundle, `python3 -m py_compile` для server/analyser, `node --check` для course JavaScript. Дополнительно analyser прогнан на детерминированном журнале из 19 событий: `SIGNATURE=DETECTED`, `PROTOCOL=DETECTED`, `BEHAVIOR=DETECTED`, `ANOMALY=DETECTED`. Это component/static verification, а не замена end-to-end runtime QA на двух Ubuntu VM.
+Статическая проверка v2.27: `bash -n` для всех shell-скриптов bundle, `python3 -m py_compile` для server/analyser, `node --check` для course JavaScript. Дополнительно analyser прогнан на детерминированном журнале из 19 событий: `SIGNATURE=DETECTED`, `PROTOCOL=DETECTED`, `THRESHOLD=DETECTED`, `ANOMALY=DETECTED`. Это component/static verification, а не замена end-to-end runtime QA на двух Ubuntu VM.
