@@ -31,7 +31,7 @@ SERVER ENVIRONMENT READY
 !!! important
     ЛР №1 не предназначена для исправления базовой конфигурации VirtualBox или установки Suricata. Если среда не получила статус `READY`, вернитесь к странице подготовки и устраните причину.
 
-[Скачать пакет ЛР №1 v0.3](../../assets/downloads/idps-lab01-bundle-v0.3.zip){ .md-button }
+[Скачать пакет ЛР №1 v0.4](../../assets/downloads/idps-lab01-bundle-v0.4.zip){ .md-button }
 
 ---
 
@@ -41,8 +41,8 @@ SERVER ENVIRONMENT READY
 
 ```bash
 cd ~
-unzip idps-lab01-bundle-v0.3.zip
-cd idps-lab01-bundle-v0.3
+unzip idps-lab01-bundle-v0.4.zip
+cd idps-lab01-bundle-v0.4
 ```
 
 Запустите подготовку web-сервиса:
@@ -77,8 +77,8 @@ SERVER PRE-FLIGHT PASSED.
 
 ```bash
 cd ~
-unzip idps-lab01-bundle-v0.3.zip
-cd idps-lab01-bundle-v0.3
+unzip idps-lab01-bundle-v0.4.zip
+cd idps-lab01-bundle-v0.4
 bash client/check-client.sh
 ```
 
@@ -171,7 +171,7 @@ rm -f "$HOME/lab01-output"/*
 sudo suricata \
   -k none \
   -c /etc/suricata/suricata.yaml \
-  -S "$HOME/idps-lab01-bundle-v0.3/server/lab01.rules" \
+  -S "$HOME/idps-lab01-bundle-v0.4/server/lab01.rules" \
   -i "$LAB_IFACE" \
   -l "$HOME/lab01-output"
 ```

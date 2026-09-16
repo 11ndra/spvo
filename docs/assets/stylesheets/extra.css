@@ -4041,3 +4041,18 @@ body:has(.home-hero) .md-content__inner.md-typeset {
 @media screen and (max-width: 760px) {
   .source-type-grid, .source-choice-grid { grid-template-columns: 1fr; }
 }
+
+
+/* v2.24 — placement chapter emphasis */
+.principle-box {
+  margin: 1.35rem 0 1.7rem;
+  padding: 1rem 1.1rem;
+  border: 1px solid color-mix(in srgb, var(--md-primary-fg-color) 45%, var(--course-border));
+  border-left: 4px solid var(--md-primary-fg-color);
+  border-radius: .72rem;
+  background: var(--course-surface-accent);
+  color: var(--course-text);
+  box-shadow: var(--course-shadow);
+}
+.principle-box strong { display:block; margin-bottom:.35rem; letter-spacing:.02em; }
+.principle-box p { margin:0; color:var(--course-muted); }

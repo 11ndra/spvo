@@ -25,7 +25,7 @@ idps-server   10.13.37.20   Ubuntu Server 24.04.x
 
 ЛР №1 должна быть либо выполнена, либо сервер должен быть заново подготовлен скриптом из пакета ЛР №2.
 
-[Скачать пакет ЛР №2 v0.3](../../assets/downloads/idps-lab02-bundle-v0.3.zip){ .md-button }
+[Скачать пакет ЛР №2 v0.4](../../assets/downloads/idps-lab02-bundle-v0.4.zip){ .md-button }
 
 ---
 
@@ -35,8 +35,8 @@ idps-server   10.13.37.20   Ubuntu Server 24.04.x
 
 ```bash
 cd ~
-unzip idps-lab02-bundle-v0.3.zip
-cd idps-lab02-bundle-v0.3
+unzip idps-lab02-bundle-v0.4.zip
+cd idps-lab02-bundle-v0.4
 sudo bash server/setup-server.sh
 sudo bash server/preflight-server.sh
 ```
@@ -51,8 +51,8 @@ SERVER PRE-FLIGHT PASSED.
 
 ```bash
 cd ~
-unzip idps-lab02-bundle-v0.3.zip
-cd idps-lab02-bundle-v0.3
+unzip idps-lab02-bundle-v0.4.zip
+cd idps-lab02-bundle-v0.4
 bash client/check-client.sh
 ```
 
@@ -144,7 +144,7 @@ rm -f "$HOME/lab02-output"/*
 sudo suricata \
   -k none \
   -c /etc/suricata/suricata.yaml \
-  -S "$HOME/idps-lab02-bundle-v0.3/server/lab02.rules" \
+  -S "$HOME/idps-lab02-bundle-v0.4/server/lab02.rules" \
   -i "$LAB_IFACE" \
   -l "$HOME/lab02-output"
 ```

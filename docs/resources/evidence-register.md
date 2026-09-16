@@ -39,11 +39,11 @@ NIST SP 800-94 требует отдельной оговорки: это фин
 | C2-05 | Гл.2 | HAFNIUM/Exchange оставлял одновременно network и host artifacts | CASE | VERIFIED | Microsoft Security incident analyses; сохранено |
 | C3-01 | Гл.3 | capture→decode→flow/stream→protocol→detection→result | ENGINEERING | NEEDS QUALIFICATION | Это учебная абстракция, не universal internal pipeline; добавлена явная оговорка |
 | C3-02 | Гл.3 | reassembly/interpretation mismatch способен влиять на NIDS detection | RESEARCH | VERIFIED / HISTORICAL | Ptacek & Newsham, CERIAS; усилена историческая оговорка, не переносим конкретные flaws на современную Suricata |
-| C4-01 | Гл.4 | Signature detection хорошо покрывает известные признаки и может пропускать variants/evasion | STANDARD | VERIFIED / HISTORICAL | NIST SP 800-94 2.3.1; фундаментальный принцип |
-| C4-02 | Гл.4 | Anomaly detection может выявлять ранее неизвестную активность, но anomaly ≠ attack | STANDARD | VERIFIED / HISTORICAL | NIST SP 800-94 2.3.2; в курсе нет обещания «zero-day guarantee» |
-| C4-03 | Гл.4 | Stateful protocol analysis использует ожидаемую protocol behavior/state | STANDARD | VERIFIED / HISTORICAL | NIST SP 800-94 2.3.3 |
-| C4-04 | Гл.4 | «Зрелая IDPS обязана сочетать все методы» | ENGINEERING | NEEDS QUALIFICATION | Переписано: система/архитектура *может* сочетать методы; выбор зависит от telemetry/cost/tests |
-| C4-05 | Гл.4 | SolarWinds Beacon instances имели уникальные C2/UA/URI/watermark/sleep/jitter | CASE | VERIFIED | Microsoft Solorigate deep dive; кейс сохранён |
+| C4-01 | Гл.4 | Выбор размещения network-based IDPS включает место сенсора, passive/inline режим и способ подключения пассивного сенсора | STANDARD | VERIFIED / HISTORICAL | NIST SP 800-94: architecture design explicitly includes sensor placement, inline/passive choice, network tap and switch spanning port |
+| C4-02 | Гл.4 | Пассивный сенсор получает копию трафика; основной поток не обязан проходить через него | STANDARD/TEXTBOOK | VERIFIED | NIST SP 800-94 + Stallings; используется как топологическое различие, не как определение функции detection/prevention |
+| C4-03 | Гл.4 | Точка до и после межсетевого экрана может предоставлять разные множества наблюдаемых попыток/разрешённых взаимодействий | ENGINEERING | VERIFIED AS TOPOLOGY CONSEQUENCE | Вывод следует из пути и применяемой firewall policy; ни одна точка не объявляется универсально лучшей |
+| C4-04 | Гл.4 | Отсутствие записи у сенсора само по себе не доказывает отсутствие события или границу видимости | ENGINEERING | VERIFIED AS COURSE INFERENCE | Валидация требует независимого ground truth и контролируемого маршрута; формулировка ограничена конкретным экспериментом |
+| C4-05 | Гл.4 | SPAN и TAP — способы предоставить копию в выбранной точке, а не методы обнаружения | STANDARD | VERIFIED / HISTORICAL | NIST SP 800-94 приводит оба как connection methods for passive sensors |
 | C5-01 | Гл.5 | Firewall policy должна ограничивать ненужный трафик | STANDARD | VERIFIED | NIST SP 800-41 Rev.1: deny by default / permit only necessary traffic |
 | C5-02 | Гл.5 | NGFW имеет универсальный фиксированный processing order | INDUSTRY TERM | NEEDS QUALIFICATION | Исправлено: диаграмма — logical decomposition; vendor/version/config определяют реальный order |
 | C5-03 | Гл.5 | Target breach однозначно доказал «недостаточную сегментацию» как установленную root cause | CASE | NEEDS QUALIFICATION | Senate staff analysis опирался на публичные сообщения; Target заявлял о существующей segmentation. Кейс переписан как пример вопросов third-party access/segmentation/detection/response, а не definitive forensic conclusion |
@@ -66,18 +66,23 @@ NIST SP 800-94 требует отдельной оговорки: это фин
 | C8-05 | Гл.8 | positive/negative/variant matrix — официальный обязательный workflow OISF | ENGINEERING | NEEDS QUALIFICATION | Добавлено: это методика курса, вдохновлённая reproducible verification model OISF suricata-verify |
 | C8-06 | Гл.8 | suricata-verify использует PCAP/rules/test.yaml и checks по output | OFFICIAL | VERIFIED | OISF suricata-verify README |
 | C8-07 | Гл.8 | suricata-update по умолчанию получает ET Open и тестирует результирующий ruleset | OFFICIAL | VERIFIED | OISF suricata-update Quickstart |
-| C8-08 | Гл.8 | Текущая стабильная Suricata = 8.0.6 | OFFICIAL | VERIFIED | OISF download/release, 07.07.2026; Suricata 7 EOL |
+| C8-08 | Гл.8 | Актуальная поддерживаемая ветка курса — Suricata 8; на 16.09.2026 выпущена 8.0.7 | OFFICIAL | VERIFIED | OISF release 15.09.2026; Suricata 7 EOL |
 | P1-01 | Pre-Lab | Вопросы проверяют course reasoning, а не внешнюю сертификацию | SYNTHETIC | VERIFIED AS COURSE DESIGN | Не выдаётся за vendor/NIST exam; ссылка на ЛР №1 актуализирована |
 | L1-01 | ЛР1 | `suricata --build-info`, `-T`, `-S`, `-i`, `-l`, EVE JSON — реальные интерфейсы/вывод | OFFICIAL | VERIFIED | OISF Suricata 8 docs |
 | L1-02 | ЛР1 | Ubuntu stable PPA — поддерживаемый OISF installation path | OFFICIAL | VERIFIED | OISF Quickstart/PPA; сделан optional для offline-first среды |
-| L1-03 | ЛР1 | Двухмашинный стенд `10.13.37.10 → 10.13.37.20:8080`, Suricata на сетевом интерфейсе сервера и SID 1000001 работают end-to-end как описано | SYNTHETIC | RUNTIME QA REQUIRED | Требуется прогон на эталонных Ubuntu Desktop/Server 24.04, которые будут выданы студентам |
-| L1-04 | ЛР1 | `lab01-preflight.sh` проверяет команды, namespaces, HTTP path и `suricata -T` | SYNTHETIC/TOOLING | STATICALLY VERIFIED | Shell syntax проверен; фактический результат зависит от VM |
+| L1-03 | ЛР1 | Двухмашинный стенд `10.13.37.10 → 10.13.37.20:8080`, Suricata на сетевом интерфейсе сервера и SID 1000001 работают end-to-end как описано | SYNTHETIC | RUNTIME QA REQUIRED | Требуется прогон на эталонных Ubuntu Desktop/Server 24.04.x, собранных по текущей инструкции подготовки среды |
+| L1-04 | ЛР1 | Предварительная проверка подтверждает команды, адреса, HTTP-сервис и `suricata -T` до эксперимента | SYNTHETIC/TOOLING | STATICALLY VERIFIED | Shell syntax проверен; фактический результат зависит от VM |
 | L1-05 | ЛР1 | `-k none` допустим как CLI-параметр Suricata для отключения checksum validation | OFFICIAL | VERIFIED | Suricata command-line docs; в курсе явно ограничено виртуальным учебным стендом |
-| L2-01 | ЛР2 | Один `/lab2-trigger/LAB2-NET` создаёт сетевой alert и локальный файл через учебный server.py | SYNTHETIC | COMPONENT VERIFIED / FULL RUNTIME QA REQUIRED | HTTP endpoint unit-tested; сетевой namespace + Suricata + Linux Audit требуют прогона на эталонной VM |
+| L2-01 | ЛР2 | Один `/lab2-trigger/LAB2-NET` создаёт сетевой след для Suricata и локальный файловый след для Linux Audit на двухмашинном стенде | SYNTHETIC | COMPONENT VERIFIED / FULL RUNTIME QA REQUIRED | HTTP endpoint проверен отдельно; полный Suricata + Linux Audit сценарий требует прогона на эталонных Ubuntu VM |
 | L2-02 | ЛР2 | Linux Audit filesystem rule `-a always,exit -F arch=b64 -F dir=... -F perm=wa` корректен | OS TOOLING | DOCUMENTATION VERIFIED | auditctl/audit.rules manual; deprecated `-w` больше не используется |
 | L2-03 | ЛР2 | `ausearch -k idps_lab_host -ts recent -i` извлекает недавние записи по учебному ключу | OS TOOLING | DOCUMENTATION VERIFIED | ausearch manual; `recent` = последние 10 минут |
 | L2-04 | ЛР2 | Suricata и Linux Audit запускаются на одной Ubuntu Server VM, но используют разные источники данных: сетевой интерфейс и хостовые audit events | OS MODEL | VERIFIED AS LAB DESIGN | В тексте явно разведены место исполнения средства и источник наблюдения |
-| L2-05 | ЛР2 | `lab02-instructor-check.sh` способен подтвердить весь network+host эксперимент | SYNTHETIC/TOOLING | RUNTIME QA REQUIRED | Скрипт проверен синтаксически; требуется execution pass на classroom image |
+| L2-05 | ЛР2 | Предварительная проверка уменьшает число инфраструктурных ошибок, но не заменяет полный end-to-end прогон | COURSE TOOLING | VERIFIED AS DESIGN | Runtime QA выполняется отдельным контрольным прохождением всей инструкции на эталонных VM |
+| L3-01 | ЛР3 | Внутренний HTTP `10.13.37.10 → 10.13.37.20:8080` и исходящий ICMP к default gateway должны проходить через разные интерфейсы при двухсетевой конфигурации | SYNTHETIC/TOPOLOGY | RUNTIME QA REQUIRED | Маршруты и скрипты проверены статически; нужен end-to-end прогон на classroom VM |
+| L3-02 | ЛР3 | Web-сервис привязан строго к `10.13.37.20:8080` и журналирует `src_ip:src_port → dst_ip:dst_port`, method и URI | SYNTHETIC | COMPONENT VERIFIED | Исключает неоднозначность `0.0.0.0`; application log подтверждает только L7-обработку HTTP |
+| L3-03 | ЛР3 | Отдельные каталоги `lab03-nat-run` и `lab03-lab-run` предотвращают смешение старых и новых EVE-событий | COURSE DESIGN | VERIFIED AS DESIGN | Каждый запуск Suricata начинает с чистого каталога |
+| L3-04 | ЛР3 | `-k none` отключает checksum checks для конкретного запуска Suricata; offloading дополнительно контролируется `ethtool` | OFFICIAL/ENGINEERING | VERIFIED / RUNTIME QA REQUIRED | Suricata CLI и capture guidance; конкретный VirtualBox driver нужно проверить на VM |
+| L3-05 | ЛР3 | Сводная матрица различает application log, packet capture и IDS alert как разные виды свидетельств | COURSE DESIGN | VERIFIED AS DESIGN | Не использует отсутствие одного источника как универсальное доказательство отсутствия события |
 
 ## Authoritative sources used in this audit
 
@@ -92,7 +97,7 @@ NIST SP 800-94 требует отдельной оговорки: это фин
 - Stefan Axelsson, Base-Rate Fallacy — https://doi.org/10.1145/357830.357849
 - RFC 9846 (TLS 1.3, July 2026) — https://www.rfc-editor.org/rfc/rfc9846.html
 - Suricata stable downloads — https://suricata.io/download/
-- Suricata 8 documentation — https://docs.suricata.io/en/suricata-8.0.6/
+- Suricata 8 documentation — https://docs.suricata.io/en/suricata-8.0.7/
 - OISF suricata-verify — https://github.com/OISF/suricata-verify
 - OISF suricata-update — https://github.com/OISF/suricata-update
 - Wazuh FIM docs — https://documentation.wazuh.com/current/user-manual/capabilities/file-integrity/
@@ -100,7 +105,7 @@ NIST SP 800-94 требует отдельной оговорки: это фин
 
 ## Что аудит НЕ подтверждает
 
-Source audit подтверждает корректность **источников и формулировок**, но не заменяет runtime QA. Для ЛР №1 и ЛР №2 полный runtime-статус подтверждается только успешным запуском соответствующего `lab0X-instructor-check.sh` на том же Ubuntu-образе, который выдаётся студентам. До этого обе работы сохраняют статус `RUNTIME QA REQUIRED`.
+Source audit подтверждает корректность **источников и формулировок**, но не заменяет runtime QA. Для исполняемых лабораторных полный runtime-статус подтверждается только ручным end-to-end прохождением всей студенческой инструкции на эталонных Ubuntu-образах. Предварительные проверки подтверждают готовность зависимостей, но не заменяют этот прогон.
 
 ## v2.17 — Lecture + Practice + Lab migration
 

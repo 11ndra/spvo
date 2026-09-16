@@ -50,7 +50,7 @@
 - EVE JSON Output: https://docs.suricata.io/en/latest/output/eve/eve-json-output.html
 - EVE JSON Format: https://docs.suricata.io/en/latest/output/eve/eve-json-format.html
 
-На дату аудита 09.09.2026 официальный stable release — **Suricata 8.0.6 (07.07.2026)**; ветка Suricata 7 объявлена EOL. В лаборатории студент всё равно фиксирует фактически установленную версию через `suricata --build-info`, поскольку учебные среды могут обновляться.
+На дату обновления 16.09.2026 актуальный release ветки Suricata 8 — **8.0.7 (15.09.2026)**; ветка Suricata 7 объявлена EOL. В лаборатории студент всё равно фиксирует фактически установленную версию через `suricata --build-info`, поскольку учебные среды могут обновляться.
 
 
 ## Проектирование обнаружения — материал будущей переработанной Главы 8
@@ -79,3 +79,26 @@
 - Linux Audit userspace (`auditctl`, `ausearch`) — системный источник хостовых событий для учебного эксперимента.
 
 Linux Audit в ЛР №2 используется только для демонстрации различий телеметрии. Лабораторная не утверждает, что Linux Audit сам по себе является полноценной HIDS-платформой.
+
+## Глава 4 — размещение и точки наблюдения
+
+Основные основания новой Главы 4:
+
+- NIST SP 800-94 — исторический фундаментальный источник по network-based IDPS architecture: выбор места сенсоров, passive/inline deployment, network tap и switch spanning port как варианты подключения пассивных сенсоров.
+- William Stallings, *Computer Security: Principles and Practice* — учебное описание passive NIDS, inline NIDS/IPS и типовых мест размещения.
+
+В главе сознательно не делается универсального вывода «до firewall лучше, чем после» или наоборот. Полезность точки определяется тем, какой набор сетевых событий требуется наблюдать для конкретной задачи.
+
+## ЛР №3 — точка наблюдения
+
+ЛР №3 использует синтетический двухмашинный стенд курса:
+
+- `idps-client` — `10.13.37.10/24`;
+- `idps-server` — `10.13.37.20/24`;
+- отдельный NAT-интерфейс;
+- отдельный интерфейс учебной сети `IDPS-LAB`.
+
+Одинаковое правило Suricata запускается поочерёдно на двух интерфейсах. Журнал учебного web-сервиса используется как независимое подтверждение существования контролируемого запроса. Ожидаемый end-to-end результат имеет статус `RUNTIME QA REQUIRED` до прогона на эталонных Ubuntu 24.04.x VM.
+
+- OISF: Suricata 8.0.7 release — https://suricata.io/2026/09/15/suricata-8-0-7-released/
+- OISF: Suricata 8.0.7 configuration / checksum validation — https://docs.suricata.io/en/suricata-8.0.7/configuration/suricata-yaml.html
