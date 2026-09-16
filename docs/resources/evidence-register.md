@@ -44,10 +44,10 @@ NIST SP 800-94 требует отдельной оговорки: это фин
 | C4-03 | Гл.4 | Точка до и после межсетевого экрана может предоставлять разные множества наблюдаемых попыток/разрешённых взаимодействий | ENGINEERING | VERIFIED AS TOPOLOGY CONSEQUENCE | Вывод следует из пути и применяемой firewall policy; ни одна точка не объявляется универсально лучшей |
 | C4-04 | Гл.4 | Отсутствие записи у сенсора само по себе не доказывает отсутствие события или границу видимости | ENGINEERING | VERIFIED AS COURSE INFERENCE | Валидация требует независимого ground truth и контролируемого маршрута; формулировка ограничена конкретным экспериментом |
 | C4-05 | Гл.4 | SPAN и TAP — способы предоставить копию в выбранной точке, а не методы обнаружения | STANDARD | VERIFIED / HISTORICAL | NIST SP 800-94 приводит оба как connection methods for passive sensors |
-| C5-01 | Гл.5 | Firewall policy должна ограничивать ненужный трафик | STANDARD | VERIFIED | NIST SP 800-41 Rev.1: deny by default / permit only necessary traffic |
-| C5-02 | Гл.5 | NGFW имеет универсальный фиксированный processing order | INDUSTRY TERM | NEEDS QUALIFICATION | Исправлено: диаграмма — logical decomposition; vendor/version/config определяют реальный order |
-| C5-03 | Гл.5 | Target breach однозначно доказал «недостаточную сегментацию» как установленную root cause | CASE | NEEDS QUALIFICATION | Senate staff analysis опирался на публичные сообщения; Target заявлял о существующей segmentation. Кейс переписан как пример вопросов third-party access/segmentation/detection/response, а не definitive forensic conclusion |
-| C5-04 | Гл.5 | Third-party access + segmentation + detection нужно рассматривать совместно | STANDARD/ENGINEERING | VERIFIED | NIST SP 800-41 + CISA segmentation/hardening; сформулировано как инженерный вывод |
+| C5-01 | Гл.5 | Сигнатурное обнаружение сопоставляет наблюдаемую активность с заранее описанными признаками | STANDARD | VERIFIED / HISTORICAL | NIST SP 800-94 §2.3.1; в курсе не сводится только к raw string matching |
+| C5-02 | Гл.5 | Anomaly-based detection требует определения нормального профиля и сравнения наблюдения с ним | STANDARD | VERIFIED / HISTORICAL | NIST SP 800-94 §2.3.2 |
+| C5-03 | Гл.5 | Stateful protocol analysis использует состояние и модель протокола; реальный продукт может сочетать его с сигнатурами | STANDARD | VERIFIED / HISTORICAL | NIST SP 800-94 §2.3.3 и описание interwoven techniques |
+| C5-04 | Гл.5 | Поведенческая логика не обязана быть anomaly-based | COURSE SYNTHESIS | VERIFIED AS COURSE MODEL | В курсе behavioral = условие над последовательностью/частотой/связью событий; baseline требуется только когда решение определяется отклонением от нормы |
 | C6-01 | Гл.6 | Base-rate способен приводить к большому числу FP даже при низком FPR | RESEARCH | VERIFIED | Stefan Axelsson, ACM TISSEC; добавлена прямая research reference |
 | C6-02 | Гл.6 | Любое «ужесточение правила» обязательно повышает FN | ENGINEERING | NEEDS QUALIFICATION | Исправлено: trade-off показан корректно для движения decision threshold; произвольная правка rule не обязана быть монотонной |
 | C6-03 | Гл.6 | Log4Shell scan-source IP давали высокий FP; CISA советовала искать successful exploitation | CASE | VERIFIED | CISA AA21-356A, прямое утверждение advisory |
@@ -142,3 +142,13 @@ Source audit подтверждает корректность **источни�
 | ENV-03 | Среда | `check-client-environment.sh` подтверждает IP клиента, наличие инструментов и связь с сервером | TOOLING | STATICALLY VERIFIED / RUNTIME REQUIRED | Логика скрипта проверена; фактический результат зависит от VM/VirtualBox |
 | ENV-04 | Среда | `check-server-environment.sh` подтверждает IP сервера, Suricata config, auditd/Linux Audit и связь с клиентом | TOOLING | STATICALLY VERIFIED / RUNTIME REQUIRED | Полная проверка требует Ubuntu Server 24.04.x с kernel audit subsystem |
 | ENV-05 | Среда | Статус `READY` является prerequisite для ЛР №1, но не доказательством работоспособности самой ЛР | COURSE DESIGN | VERIFIED AS DESIGN | Разделены environment readiness и lab end-to-end runtime QA |
+
+## Дополнение v2.26 — Глава 5 и ЛР №4
+
+| ID | Раздел | Утверждение / объект проверки | Тип | Статус | Основание |
+|---|---|---|---|---|---|
+| L4-01 | ЛР4 | Все три учебных детектора читают один формат событий `lab4-access.jsonl` | SYNTHETIC | STATICALLY VERIFIED | Общий loader `detectors.py`; лабораторная меняет условие анализа, а не формат входных записей |
+| L4-02 | ЛР4 | Сигнатурный режим выделяет запись по наличию заданного маркера в `uri` | SYNTHETIC | STATICALLY VERIFIED | Логика `detectors.py`; автономный тест на контролируемом JSONL |
+| L4-03 | ЛР4 | Поведенческий режим проверяет не менее 5 событий одного пути от одного источника в окне 10 с | SYNTHETIC | STATICALLY VERIFIED | Детерминированный sliding-window в `detectors.py`; не выдаётся за официальный отдельный метод NIST |
+| L4-04 | ЛР4 | Аномалийный режим использует учебную базовую линию `value_length`, среднее, σ и порог | SYNTHETIC | STATICALLY VERIFIED / NOT PRODUCTION | Модель предназначена только для демонстрации зависимости «базовая линия → мера отклонения → порог» |
+| L4-05 | ЛР4 | Полная работа на двух VirtualBox VM воспроизводится end-to-end | SYNTHETIC | RUNTIME QA REQUIRED | HTTP-сервис и анализатор проверяются автономно; полный classroom path требует эталонных VM |

@@ -1,7 +1,7 @@
 # Pre-Lab Test №1
 
 !!! warning "Статус материала"
-    Эта страница относится к предыдущей структуре курса v2.16.1 и сохранена для совместимости. Главы 1–2 и ЛР №1 уже переведены на новую дидактическую структуру; этот материал будет переработан следующим проходом.
+    Эта страница относится к предыдущей структуре курса v2.16.1 и сохранена для совместимости. Главы 1–5 и ЛР №1–4 уже переведены на новую дидактическую структуру; этот материал будет переработан следующим проходом.
 
 
 <div class="chapter-lead">
@@ -42,7 +42,7 @@
 ## Архитектура и роль IDPS
 
 <div class="quiz assessment-question" data-question-id="pre-1" data-domain="architecture">
-  <div class="assessment-question-meta">Сценарий 1 · Главы 1 и 5</div>
+  <div class="assessment-question-meta">Сценарий 1 · Глава 1</div>
   <div class="assessment-scenario">
     Публичный Web-сервер должен принимать HTTPS. Firewall разрешает <code>Internet → Web:443</code>. Внутри разрешённого HTTPS-запроса находится попытка эксплуатации приложения.
   </div>
@@ -59,7 +59,7 @@
 </div>
 
 <div class="quiz assessment-question" data-question-id="pre-2" data-domain="architecture">
-  <div class="assessment-question-meta">Сценарий 2 · Глава 5</div>
+  <div class="assessment-question-meta">Сценарий 2 · Глава 1</div>
   <div class="assessment-scenario">
     SSH к внутреннему серверу не требуется из Интернета, но сейчас порт открыт. SOC получает множество alert о попытках brute-force.
   </div>
@@ -71,12 +71,12 @@
   <div class="quiz-feedback"></div>
   <div class="quiz-rationale" hidden>
     Если сетевой путь не нужен бизнесу, сильнее устранить саму возможность взаимодействия, чем пытаться компенсировать избыточную поверхность атаки detection-механизмом.
-    <a class="quiz-review" href="../course/05-firewall-vs-idps/">Повторить Главу 5 →</a>
+    <a class="quiz-review" href="../course/01-intro/">Повторить Главу 1 →</a>
   </div>
 </div>
 
 <div class="quiz assessment-question" data-question-id="pre-3" data-domain="architecture">
-  <div class="assessment-question-meta">Сценарий 3 · Глава 5</div>
+  <div class="assessment-question-meta">Сценарий 3 · Глава 1</div>
   <div class="assessment-scenario">
     Один NGFW применяет access policy, application control и встроенную IPS-инспекцию. Соединение разрешено сетевой политикой, но затем блокируется IPS-правилом.
   </div>
@@ -88,7 +88,7 @@
   <div class="quiz-feedback"></div>
   <div class="quiz-rationale" hidden>
     Физически функции могут быть объединены, но инженеру всё равно нужно различать решение о доступе и решение о наличии угрозы.
-    <a class="quiz-review" href="../course/05-firewall-vs-idps/">Повторить раздел про NGFW →</a>
+    <a class="quiz-review" href="../course/01-intro/">Повторить Главу 1 →</a>
   </div>
 </div>
 
