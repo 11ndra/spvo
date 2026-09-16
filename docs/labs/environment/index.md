@@ -44,8 +44,8 @@ flowchart LR
 
 Если на физическом компьютере мало памяти, сначала уменьшайте RAM виртуальных машин, а не число сетевых адаптеров и не отключайте учебную сеть.
 
-[Скачать пакет подготовки среды v1.0 (tar.gz)](../../assets/downloads/idps-environment-setup-v1.0.tar.gz){ .md-button .md-button--primary }
-[ZIP-версия](../../assets/downloads/idps-environment-setup-v1.0.zip){ .md-button }
+[Скачать пакет подготовки среды v1.1 (tar.gz)](../../assets/downloads/idps-environment-setup-v1.1.tar.gz){ .md-button .md-button--primary }
+[ZIP-версия](../../assets/downloads/idps-environment-setup-v1.1.zip){ .md-button }
 
 Пакет содержит:
 
@@ -123,7 +123,7 @@ Cable Connected: да
 ```bash
 sudo apt update
 sudo apt install -y wget ca-certificates
-wget https://11ndra.github.io/spvo/assets/downloads/idps-environment-setup-v1.0.tar.gz
+wget https://11ndra.github.io/spvo/assets/downloads/idps-environment-setup-v1.1.tar.gz
 ```
 
 ### Ubuntu Desktop
@@ -131,7 +131,7 @@ wget https://11ndra.github.io/spvo/assets/downloads/idps-environment-setup-v1.0.
 ```bash
 cd ~
 mkdir -p idps-environment-setup
-tar -xzf idps-environment-setup-v1.0.tar.gz -C idps-environment-setup
+tar -xzf idps-environment-setup-v1.1.tar.gz -C idps-environment-setup
 cd idps-environment-setup
 sudo bash bootstrap-client.sh
 ```
@@ -143,7 +143,7 @@ sudo bash bootstrap-client.sh
 ```bash
 cd ~
 mkdir -p idps-environment-setup
-tar -xzf idps-environment-setup-v1.0.tar.gz -C idps-environment-setup
+tar -xzf idps-environment-setup-v1.1.tar.gz -C idps-environment-setup
 cd idps-environment-setup
 sudo bash bootstrap-server.sh
 ```
@@ -361,7 +361,7 @@ sudo bash check-server-environment.sh | tee ~/idps-server-environment-check.txt
 SERVER ENVIRONMENT READY
 ```
 
-Проверяются не только IP-адреса, но и наличие инструментов, связь между виртуальными машинами, состояние Linux Audit и базовая конфигурация Suricata.
+Проверяются не только IP-адреса, но и наличие инструментов, связь между виртуальными машинами, состояние Linux Audit, базовая конфигурация Suricata и соответствие поддерживаемой ветке Suricata 8.x.
 
 <div class="lab-evidence">
 <strong>Граница готовности</strong>
@@ -397,7 +397,7 @@ SERVER ENVIRONMENT READY
 
 ## Результат
 
-Перед переходом к [ЛР №1](../lab01/) инфраструктура должна соответствовать схеме:
+Перед переходом к [Практикуму 0 — знакомству с рабочей IDPS](../orientation/) инфраструктура должна соответствовать схеме:
 
 ```text
                     Интернет
@@ -414,4 +414,4 @@ SERVER ENVIRONMENT READY
                10.13.37.0/24
 ```
 
-Следующий шаг — не установка ещё одного инструмента, а первый эксперимент: **доказать сетевую видимость и получить первое оповещение NIDS**.
+Следующий шаг — не новый эксперимент, а короткое знакомство с уже установленной системой: где находится конфигурация, как определяется интерфейс получения данных и куда Suricata записывает результаты.

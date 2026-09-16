@@ -36,6 +36,16 @@ for cmd in python3 curl jq tcpdump suricata auditctl ausearch ethtool unzip ip p
   if command -v "$cmd" >/dev/null 2>&1; then ok "Команда $cmd доступна"; else err "Команда $cmd не найдена"; fi
 done
 
+if command -v suricata >/dev/null 2>&1; then
+  SURICATA_VERSION=$(suricata -V 2>/dev/null | grep -oE '[0-9]+\.[0-9]+(\.[0-9]+)?' | head -n1 || true)
+  SURICATA_MAJOR=${SURICATA_VERSION%%.*}
+  if [[ "$SURICATA_MAJOR" == "8" ]]; then
+    ok "Suricata ${SURICATA_VERSION} соответствует поддерживаемой ветке 8.x"
+  else
+    err "Требуется Suricata 8.x; обнаружена версия ${SURICATA_VERSION:-не определена}"
+  fi
+fi
+
 if ping -c 2 -W 2 "$PEER_IP" >/dev/null 2>&1; then
   ok "Клиент ${PEER_IP} доступен по учебной сети"
 else

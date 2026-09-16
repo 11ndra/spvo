@@ -2,146 +2,177 @@
   <div class="home-eyebrow">4 курс · Системы информационной безопасности</div>
   <h1>Системы обнаружения и предотвращения вторжений</h1>
   <p class="home-hero-lead">
-    Университетский курс об IDS/IPS как классе систем защиты: зачем они нужны, какие данные наблюдают,
-    как принимают решения, где размещаются, почему ошибаются и как проверять их эффективность.
+    Университетский курс об IDS/IPS как классе систем защиты: какие данные они получают, как обнаруживают подозрительную активность,
+    где размещаются, почему ошибаются и как обосновывать эффективность.
   </p>
 
   <div class="home-hero-question">
-    <span>Текущий учебный маршрут</span>
-    <strong>Лекция → встроенная самопроверка → воспроизводимый лабораторный эксперимент → защита подтверждающих материалов.</strong>
+    <span>Принцип курса</span>
+    <strong>Теория → понятный пример → схема → проверяемый вывод → лабораторное закрепление.</strong>
   </div>
 
   <div class="home-actions">
-    <a class="course-btn primary" href="labs/environment/">Шаг 0 — подготовить среду</a>
-    <a class="course-btn" href="course/01-intro/">Глава 1</a>
-    <a class="course-btn" href="labs/lab01/">ЛР №1</a>
-    <a class="course-btn" href="course/02-classification/">Глава 2</a>
-    <a class="course-btn" href="course/04-detection-methods/">Глава 4</a>
-    <a class="course-btn" href="course/05-firewall-vs-idps/">Глава 5</a>
-    <a class="course-btn" href="labs/lab04/">ЛР №4</a>
+    <a class="course-btn primary" href="course/01-intro/">Начать с Главы 1</a>
+    <a class="course-btn" href="labs/environment/">Подготовить лабораторный стенд</a>
+    <a class="course-btn" href="labs/orientation/">Знакомство с рабочей IDPS</a>
   </div>
 </div>
 
 ## С чего начинается курс
 
-Первый модуль намеренно начинается с элементарных вопросов. До правил Suricata, reassembly, FP/FN и Detection Engineering студент должен понимать:
+Сначала студент должен понимать, **что такое IDS/IPS и зачем система вообще нужна**. Установка инструмента не является первым учебным результатом.
+
+До правил Suricata, сложных метрик качества и Detection Engineering нужно последовательно ответить на базовые вопросы:
 
 ```text
-Что такое IDS и IPS?
-Почему одного межсетевого экрана недостаточно?
-Чем обнаружение отличается от предотвращения?
-Что означает оповещение?
-Какие виды IDS/IPS существуют?
-Какие данные доступны каждому типу?
+Что произошло?
+      ↓
+Какой след осталось?
+      ↓
+Где этот след можно наблюдать?
+      ↓
+Какие данные получила система?
+      ↓
+Почему сформирован конкретный результат?
+      ↓
+Что из него можно и нельзя заключить?
 ```
 
 <div class="big-question-grid">
   <article class="big-question">
     <div class="question-number">01</div>
     <h3>Понять систему</h3>
-    <p>IDS/IPS, межсетевой экран, WAF, оповещение, обнаружение и предотвращение — без преждевременного погружения в синтаксис конкретного продукта.</p>
+    <p>IDS/IPS, обнаружение, предотвращение и оповещение — без преждевременного погружения в синтаксис конкретного продукта.</p>
   </article>
 
   <article class="big-question">
     <div class="question-number">02</div>
-    <h3>Увидеть разные источники</h3>
-    <p>Сетевые, хостовые и беспроводные источники дают разные свидетельства. Один сенсор не обладает полной наблюдаемостью всей информационной системы.</p>
+    <h3>Понять данные</h3>
+    <p>Сетевые, хостовые и другие источники дают разные сведения. Один сенсор не обладает полной наблюдаемостью всей системы.</p>
   </article>
 
   <article class="big-question">
     <div class="question-number">03</div>
-    <h3>Проверить руками</h3>
-    <p>Базовые идеи закрепляются интерактивной самопроверкой и лабораторией: сначала наблюдение и подтверждающие материалы, затем вывод.</p>
+    <h3>Проверить экспериментом</h3>
+    <p>В лаборатории сначала подтверждается сам факт события и наблюдаемость, затем результат детектора и только после этого формулируется вывод.</p>
   </article>
 </div>
 
 ---
 
-## Шаг 0 — собственная лабораторная среда
+## Перед первой лабораторной
 
-Перед первой лабораторной студент самостоятельно разворачивает две Ubuntu VM, создаёт изолированную сеть `IDPS-LAB`, устанавливает базовые инструменты и получает два независимых статуса готовности:
+После Главы 1 подготовьте две виртуальные машины и пройдите короткий вводный практикум. Он нужен, чтобы ЛР №1 не начиналась с незнакомых параметров Suricata.
 
-```text
-CLIENT ENVIRONMENT READY
-SERVER ENVIRONMENT READY
-```
+<div class="course-grid">
+  <article class="course-card">
+    <div class="card-step">ШАГ 00</div>
+    <h3>Подготовка среды</h3>
+    <p>Две Ubuntu VM, NAT для установки пакетов и отдельная сеть IDPS-LAB для экспериментов.</p>
+    <a href="labs/environment/">Открыть подготовку →</a>
+  </article>
 
-[Подготовить лабораторную среду](labs/environment/){ .md-button .md-button--primary }
+  <article class="course-card">
+    <div class="card-step">ПРАКТИКУМ 0</div>
+    <h3>Знакомство с рабочей IDPS</h3>
+    <p>Процесс Suricata, конфигурация, интерфейс получения данных, подготовленное условие обнаружения и EVE JSON.</p>
+    <a href="labs/orientation/">Открыть практикум →</a>
+  </article>
+</div>
 
-Это не отдельная оценочная работа. Цель шага — понимать, из каких минимальных компонентов состоит собственный стенд и уметь отличить проблему инфраструктуры от проблемы IDS.
-
----
-
-## Первый учебный цикл
-
-### 1. Теория
-
-[Глава 1 — Что такое IDS/IPS и зачем они нужны](course/01-intro/){ .md-button .md-button--primary }
-
-Четыре опорных отношения главы вынесены в отдельные визуальные блоки, а сетевые схемы показывают физический путь трафика и отдельную точку наблюдения NIDS.
-
-### 2. Самопроверка
-
-В конце Главы 1 находится короткий сценарный тест. Он нужен для мгновенной обратной связи и **не используется как отдельная оценочная практическая работа**.
-
-### 3. Лаборатория и защита
-
-[ЛР №1 — Первый NIDS: видимость → оповещение → интерпретация](labs/lab01/){ .md-button }
-
-Оценочная часть строится вокруг воспроизводимой цепочки:
-
-```text
-трафик существует
-      ↓
-видимость подтверждена
-      ↓
-Suricata получает данные
-      ↓
-отрицательный / положительный тест
-      ↓
-оповещение найдено в EVE JSON
-      ↓
-студент защищает интерпретацию результата
-```
-
-Студент сдаёт собственные подтверждающие материалы и на защите объясняет, что именно подтверждает его эксперимент и какие выводы из оповещения делать нельзя.
+Практикум 0 не оценивается. Его задача — дать студенту операционную карту системы до первого сетевого эксперимента.
 
 ---
 
-## Текущий маршрут
+## Текущий учебный маршрут
 
-[Глава 2 — Какие виды IDS/IPS существуют и что они могут наблюдать](course/02-classification/){ .md-button .md-button--primary }
-[ЛР №2 — Один эпизод, два источника данных](labs/lab02/){ .md-button }
-[Глава 3 — Из чего состоит IDS/IPS и как она работает](course/03-detection/){ .md-button }
-[Глава 4 — Где и как размещают IDS/IPS](course/04-detection-methods/){ .md-button .md-button--primary }
-[ЛР №3 — Точка наблюдения](labs/lab03/){ .md-button }
-[Глава 5 — Как IDS/IPS обнаруживает подозрительную активность](course/05-firewall-vs-idps/){ .md-button .md-button--primary }
-[ЛР №4 — Один набор событий, четыре метода обнаружения](labs/lab04/){ .md-button }
+<div class="course-route" aria-label="Текущий учебный маршрут">
+  <a class="course-route__item course-route__item--theory" href="course/01-intro/">
+    <span class="course-route__type">Теория</span>
+    <strong>Глава 1 — Что такое IDS/IPS и зачем они нужны</strong>
+  </a>
+  <div class="course-route__connector" aria-hidden="true">↓</div>
 
-После ЛР №2 студент сопоставляет сетевой и хостовый след одного эпизода. Глава 3 раскрывает функциональное устройство IDS/IPS, а Глава 4 переносит эту модель в реальную топологию: где должен существовать сетевой след и через какую точку его можно получить. ЛР №3 проверяет точку наблюдения. Глава 5 затем фиксирует источник и наблюдаемость и меняет уже другой фактор — принцип принятия решения детектором. В ЛР №4 один и тот же JSONL-набор событий анализируется сигнатурным, stateful/protocol, поведенческим и аномальным способом.
+  <a class="course-route__item course-route__item--setup" href="labs/environment/">
+    <span class="course-route__type">Подготовка</span>
+    <strong>Шаг 00 — Лабораторная среда</strong>
+  </a>
+  <div class="course-route__connector" aria-hidden="true">↓</div>
 
-!!! warning "Переходная версия курса"
-    Главы 1–5 и ЛР №1–4 уже переведены на новую структуру. Главы 6–8 и предварительная проверка знаний пока сохраняются как материалы предыдущей редакции и будут заменяться последовательно.
+  <a class="course-route__item course-route__item--practice" href="labs/orientation/">
+    <span class="course-route__type">Вводная практика</span>
+    <strong>Практикум 0 — Знакомство с рабочей IDPS</strong>
+  </a>
+  <div class="course-route__connector" aria-hidden="true">↓</div>
+
+  <a class="course-route__item course-route__item--theory" href="course/02-classification/">
+    <span class="course-route__type">Теория</span>
+    <strong>Глава 2 — Какие виды IDS/IPS существуют</strong>
+  </a>
+  <div class="course-route__connector" aria-hidden="true">↓</div>
+
+  <a class="course-route__item course-route__item--lab" href="labs/lab01/">
+    <span class="course-route__type">Лаборатория</span>
+    <strong>ЛР №1 — Первое сетевое обнаружение</strong>
+  </a>
+  <div class="course-route__connector" aria-hidden="true">↓</div>
+
+  <a class="course-route__item course-route__item--lab" href="labs/lab02/">
+    <span class="course-route__type">Лаборатория</span>
+    <strong>ЛР №2 — Один эпизод, два источника данных</strong>
+  </a>
+  <div class="course-route__connector" aria-hidden="true">↓</div>
+
+  <a class="course-route__item course-route__item--theory" href="course/03-detection/">
+    <span class="course-route__type">Теория</span>
+    <strong>Глава 3 — Из чего состоит IDS/IPS и как она работает</strong>
+  </a>
+  <div class="course-route__connector" aria-hidden="true">↓</div>
+
+  <a class="course-route__item course-route__item--theory" href="course/04-detection-methods/">
+    <span class="course-route__type">Теория</span>
+    <strong>Глава 4 — Где и как размещают IDS/IPS</strong>
+  </a>
+  <div class="course-route__connector" aria-hidden="true">↓</div>
+
+  <a class="course-route__item course-route__item--lab" href="labs/lab03/">
+    <span class="course-route__type">Лаборатория</span>
+    <strong>ЛР №3 — Точка наблюдения</strong>
+  </a>
+  <div class="course-route__connector" aria-hidden="true">↓</div>
+
+  <a class="course-route__item course-route__item--theory" href="course/05-firewall-vs-idps/">
+    <span class="course-route__type">Теория</span>
+    <strong>Глава 5 — Как IDS/IPS обнаруживает подозрительную активность</strong>
+  </a>
+  <div class="course-route__connector" aria-hidden="true">↓</div>
+
+  <a class="course-route__item course-route__item--lab" href="labs/lab04/">
+    <span class="course-route__type">Лаборатория</span>
+    <strong>ЛР №4 — Методы обнаружения</strong>
+  </a>
+</div>
+
+Маршрут читается сверху вниз. Каждая лабораторная закрепляет уже введённое понятие; служебные статусы разработки в студенческом маршруте не показываются.
 
 ---
 
 ## Инструменты курса
 
-| Инструмент | Роль |
+| Инструмент | Роль в курсе |
 |---|---|
-| **Suricata** | основной экспериментальный NIDS/NIPS для сетевых лабораторий |
-| **tcpdump / Wireshark** | независимая проверка факта и представления сетевого трафика |
-| **Wazuh** | хостовая телеметрия и контроль целостности файлов (FIM) в последующих работах |
-| **Zeek** | структурированные сетевые события и анализ сетевого поведения |
+| **Suricata** | основная практическая реализация сетевой IDS/IPS |
+| **tcpdump / Wireshark** | независимое подтверждение наличия и представления сетевого трафика |
+| **Linux Audit** | источник хостовой телеметрии в контролируемых экспериментах |
+| **Zeek / Wazuh** | дополнительные реализации общих принципов в последующих материалах |
 
-Инструмент не является предметом курса сам по себе. Сначала формулируется задача и изучается механизм, затем используется подходящая реализация.
+Инструмент не является предметом курса сам по себе. Сначала формулируется инженерный вопрос, затем выбирается реализация, которая позволяет его проверить.
 
 <div class="home-final-cta">
-  <span>Начать сейчас</span>
-  <h2>Последовательно пройдите Главы 1–5 и закрепите ключевые идеи четырьмя лабораторными экспериментами.</h2>
+  <span>Первый шаг</span>
+  <h2>Начните с Главы 1. Лабораторный стенд понадобится после того, как сформирована базовая модель IDS/IPS.</h2>
   <div class="home-actions">
-    <a class="course-btn primary" href="labs/environment/">Подготовить среду</a>
-    <a class="course-btn" href="course/01-intro/">Глава 1</a>
-    <a class="course-btn" href="labs/lab01/">ЛР №1</a>
+    <a class="course-btn primary" href="course/01-intro/">Глава 1</a>
+    <a class="course-btn" href="labs/environment/">Подготовка среды</a>
   </div>
 </div>

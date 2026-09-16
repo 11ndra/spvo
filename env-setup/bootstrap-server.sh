@@ -17,15 +17,29 @@ apt-get install -y \
   auditd audispd-plugins ethtool unzip openssh-server \
   iproute2 iputils-ping net-tools
 
-echo "[3/5] Установка Suricata..."
-if ! command -v suricata >/dev/null 2>&1; then
+echo "[3/5] Установка поддерживаемой ветки Suricata 8.x..."
+get_suricata_major() {
+  command -v suricata >/dev/null 2>&1 || return 1
+  suricata -V 2>/dev/null | grep -oE '[0-9]+\.[0-9]+(\.[0-9]+)?' | head -n1 | cut -d. -f1
+}
+
+SURICATA_MAJOR="$(get_suricata_major || true)"
+if [[ "$SURICATA_MAJOR" != "8" ]]; then
+  echo "[ INFO ] Требуется Suricata 8.x; текущая major-версия: ${SURICATA_MAJOR:-не установлена}."
   if add-apt-repository -y ppa:oisf/suricata-stable; then
     apt-get update
     apt-get install -y suricata
   else
-    echo "[ WARN ] PPA OISF недоступен. Используется пакет из репозитория Ubuntu." >&2
-    apt-get install -y suricata
+    echo "[ ERROR ] Не удалось подключить официальный stable PPA OISF для установки Suricata 8.x." >&2
+    echo "[ ERROR ] Не продолжайте лаборатории на неподдерживаемой ветке: подготовьте пакет/образ с Suricata 8.x." >&2
+    exit 1
   fi
+fi
+
+SURICATA_MAJOR="$(get_suricata_major || true)"
+if [[ "$SURICATA_MAJOR" != "8" ]]; then
+  echo "[ ERROR ] После установки обнаружена неподдерживаемая major-версия Suricata: ${SURICATA_MAJOR:-не определена}." >&2
+  exit 1
 fi
 
 echo "[4/5] Включение необходимых служб..."

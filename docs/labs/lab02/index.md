@@ -11,11 +11,6 @@
 <div class="chapter-lead">
 <p>Один HTTP-запрос создаст два независимых следа: сетевое оповещение Suricata и хостовую запись Linux Audit. Задача — не просто получить два вывода, а объяснить, <strong>какие факты доступны каждому источнику</strong>.</p>
 </div>
-!!! info "Статус проверки лабораторной"
-    - `DESIGN VERIFIED` — один контролируемый HTTP-эпизод намеренно создаёт разные сетевые и хостовые следы; выводы каждого источника ограничены наблюдаемыми им фактами.
-    - `STATIC QA PASSED` — проверены пути, актуальный bundle `v0.4`, shell syntax, Linux Audit/Suricata prerequisites и структура артефактов.
-    - `RUNTIME QA REQUIRED` — component-level checks не заменяют полный end-to-end прогон на эталонных Ubuntu Desktop/Server 24.04.x.
-
 ## Что необходимо до начала работы
 
 Используется та же базовая среда, которую студент подготовил перед ЛР №1:
@@ -29,7 +24,7 @@ idps-server   10.13.37.20   Ubuntu Server 24.04.x
 
 ЛР №1 должна быть либо выполнена, либо сервер должен быть заново подготовлен скриптом из пакета ЛР №2.
 
-[Скачать пакет ЛР №2 v0.4](../../assets/downloads/idps-lab02-bundle-v0.4.zip){ .md-button }
+[Скачать пакет ЛР №2 v0.5](../../assets/downloads/idps-lab02-bundle-v0.5.zip){ .md-button }
 
 ---
 
@@ -39,8 +34,8 @@ idps-server   10.13.37.20   Ubuntu Server 24.04.x
 
 ```bash
 cd ~
-unzip idps-lab02-bundle-v0.4.zip
-cd idps-lab02-bundle-v0.4
+unzip idps-lab02-bundle-v0.5.zip
+cd idps-lab02-bundle-v0.5
 sudo bash server/setup-server.sh
 sudo bash server/preflight-server.sh
 ```
@@ -55,8 +50,8 @@ SERVER PRE-FLIGHT PASSED.
 
 ```bash
 cd ~
-unzip idps-lab02-bundle-v0.4.zip
-cd idps-lab02-bundle-v0.4
+unzip idps-lab02-bundle-v0.5.zip
+cd idps-lab02-bundle-v0.5
 bash client/check-client.sh
 ```
 
@@ -148,7 +143,7 @@ rm -f "$HOME/lab02-output"/*
 sudo suricata \
   -k none \
   -c /etc/suricata/suricata.yaml \
-  -S "$HOME/idps-lab02-bundle-v0.4/server/lab02.rules" \
+  -S "$HOME/idps-lab02-bundle-v0.5/server/lab02.rules" \
   -i "$LAB_IFACE" \
   -l "$HOME/lab02-output"
 ```
