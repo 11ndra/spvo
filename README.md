@@ -42,6 +42,15 @@
 
 
 
+## v2.28-rc4 — Mermaid rendering + teacher/student separation
+
+- исправлены Mermaid-схемы, которые давали raw `flowchart`/syntax error на GitHub Pages: схема WIDS/NIDS и схема «один эпизод — разные доказательства» в Главе 2, схема ЛР №2 и схема подготовки среды;
+- для проблемных Mermaid-блоков использован более строгий синтаксис: quoted labels, явные edge labels и `<br/>` вместо `\n`;
+- вопросы устной защиты удалены со student-facing страниц ЛР №1–4;
+- добавлен корневой `TEACHER_LAB_CHEATSHEET.md` с вопросами и границами доказательной силы для преподавателя;
+- «Минимальная операционная карта» Практикума 0 оставлена студенту как список умений, но больше не выглядит как набор экзаменационных вопросов;
+- опубликованные bundles повторно прошли archive integrity, LF/CRLF, shell/Python syntax checks; полный runtime на Ubuntu/VirtualBox всё ещё требуется отдельно.
+
 ## v2.28-rc3 — Classroom readiness + repository/route cleanup
 
 - введён обязательный `QA_RELEASE_GATE.md`: consistency, дидактика, student UX, static QA, GitHub Pages build QA и runtime QA больше не считаются одной проверкой;

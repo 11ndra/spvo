@@ -2,7 +2,7 @@
 
 Последнее обновление: 2026-09-17  
 Текущий стабильный релиз: `v2.27.1`  
-Текущий release candidate с актуализированным handoff: `v2.28-rc3`
+Текущий release candidate с актуализированным handoff: `v2.28-rc4`
 
 Этот файл предназначен для продолжения разработки проекта в новом диалоге. Он не должен добавляться в навигацию MkDocs/GitHub Pages.
 
@@ -117,6 +117,15 @@ legacy/course/08-detection-engineering.md
 - исправлена ошибка `tools/check_site_links.py`, остановившая deploy rc2: checker теперь учитывает project base path `/spvo/` из `site_url` и корректно отображает `/spvo/...` на содержимое `site/`; чужие root-relative пути остаются ошибкой.
 
 Восьмиглавая теоретическая последовательность не изменена.
+
+### Focused classroom correction v2.28-rc4
+
+Поверх успешно задеплоенного `v2.28-rc3` внесён минимальный classroom patch без изменения структуры курса и CI:
+
+- исправлены Mermaid-схемы, которые на GitHub Pages отображались как raw `flowchart` или `Syntax error in text`;
+- вопросы устной защиты ЛР №1–4 вынесены из student-facing страниц в `TEACHER_LAB_CHEATSHEET.md`;
+- Практикум 0 сохраняет только понятные студенту операционные learning outcomes;
+- актуальные classroom bundles повторно проверены на целостность архивов, LF/CRLF и shell/Python syntax; эти проверки не заменяют end-to-end runtime на Ubuntu/VirtualBox.
 
 ### Следующий теоретический шаг
 
@@ -559,7 +568,7 @@ internal/resources/audit-report.md
 
 Если какой-либо применимый gate не выполнялся, это должно быть указано явно; запрещено заменять его более узкой проверкой.
 
-Статус `v2.28-rc3`:
+Статус `v2.28-rc4`:
 
 - Gates 1–4: пройдены (`STATIC QA PASSED`);
 - Gate 5 GitHub Pages: `QA REQUIRED` — локальная среда не имеет сетевого доступа для установки pinned MkDocs; workflow настроен выполнять build + generated-link check при push;
@@ -571,7 +580,7 @@ internal/resources/audit-report.md
 
 Статическая корректность скриптов и документации не означает runtime verification.
 
-На момент v2.28-rc3:
+На момент v2.28-rc4:
 
 - ЛР №1 — `DESIGN VERIFIED`, `STATIC QA PASSED`, полный сценарий `RUNTIME QA REQUIRED`;
 - ЛР №2 — `DESIGN VERIFIED`, `STATIC QA PASSED`; component-level checks выполнены, полный сценарий `RUNTIME QA REQUIRED`;
