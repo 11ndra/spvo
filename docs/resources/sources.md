@@ -30,22 +30,16 @@
 - СТ РК ISO/IEC 27001-2023.
 
 
-## Реальные случаи, разобранные в главах
+## Реальные случаи и исследования
 
-- **Log4Shell (Главы 1 и 6)** — CISA/FBI/NSA и международные партнёры, AA21-356A: https://www.cisa.gov/news-events/cybersecurity-advisories/aa21-356a
-- **Microsoft Exchange / HAFNIUM (Глава 2)** — Microsoft Security:
-  - https://www.microsoft.com/en-us/security/blog/2021/03/02/hafnium-targeting-exchange-servers/
-  - https://www.microsoft.com/en-us/security/blog/2021/03/25/analyzing-attacks-taking-advantage-of-the-exchange-server-vulnerabilities/
-- **Insertion/Evasion и TCP reassembly (Глава 3)** — Ptacek & Newsham, CERIAS/Purdue: https://www.cerias.purdue.edu/apps/reports_and_papers/view/1397
-- **SolarWinds / SUNBURST (Глава 4)** — Microsoft Security и CISA:
-  - https://www.microsoft.com/en-us/security/blog/2021/01/20/deep-dive-into-the-solorigate-second-stage-activation-from-sunburst-to-teardrop-and-raindrop/
-  - https://www.cisa.gov/news-events/alerts/2020/12/13/active-exploitation-solarwinds-software
-- **Target 2013 (Глава 5)** — U.S. Senate Committee on Commerce: https://www.govinfo.gov/content/pkg/CHRG-113shrg92594/pdf/CHRG-113shrg92594.pdf
-- **CISA Red Team Assessment (Глава 7)** — CISA AA23-059A: https://www.cisa.gov/news-events/cybersecurity-advisories/aa23-059a
-- **Lateral movement: monitoring and segmentation guidance (Глава 7)** — CISA/FBI/NSA: https://www.cisa.gov/news-events/alerts/2022/01/11/understanding-and-mitigating-russian-state-sponsored-cyber-threats-us-critical-infrastructure
+После пересборки первых глав старые привязки кейсов к номерам глав больше не используются. Реальные инциденты и исследования будут повторно привязаны к темам только после обновления соответствующей главы.
 
-Принцип использования кейсов: реальный инцидент или инженерное исследование включается в главу только тогда, когда он демонстрирует конкретный механизм курса. Кейсы не используются как отдельные «истории ради истории».
+Сохраняем в пуле источников:
 
+- Ptacek & Newsham — insertion/evasion и различия интерпретации сенсора и конечной системы;
+- Stefan Axelsson — base-rate fallacy;
+- CISA / Microsoft incident reports — для последующих глав, где они демонстрируют конкретный механизм;
+- Cisco CSIRT case study — для архитектуры и эксплуатации IPS.
 
 ## Suricata — ЛР №1
 
@@ -59,7 +53,7 @@
 На дату аудита 09.09.2026 официальный stable release — **Suricata 8.0.6 (07.07.2026)**; ветка Suricata 7 объявлена EOL. В лаборатории студент всё равно фиксирует фактически установленную версию через `suricata --build-info`, поскольку учебные среды могут обновляться.
 
 
-## Detection Engineering — Глава 8 и ЛР №2
+## Проектирование обнаружения — материал будущей переработанной Главы 8
 
 Основные технические reference:
 
@@ -72,4 +66,16 @@
 - OISF suricata-verify — https://github.com/OISF/suricata-verify
 - suricata-update Quick Start / Emerging Threats Open — https://github.com/OISF/suricata-update/blob/master/doc/quickstart.rst
 
-Методика ЛР №2 использует идею воспроизводимого detection test: входной traffic corpus + rule + ожидаемый EVE result. Мы не копируем suricata-verify целиком, а переносим его инженерный принцип в более прозрачную учебную форму.
+Старый материал по воспроизводимой проверке правил сохранён как основа для будущей Главы 8, но больше не относится к ЛР №2. Новая ЛР №2 посвящена сравнению сетевого и хостового источников данных.
+
+## Глава 3 — компоненты и функциональная архитектура
+
+- NIST SP 800-94 — исторический фундаментальный источник по типичным компонентам IDPS: sensor/agent, management server, database server, console.
+- Suricata User Guide — конкретная реализация сетевого сбора, анализа и структурированного вывода EVE JSON; не используется как универсальное определение архитектуры всех IDS/IPS.
+
+## ЛР №2 — сетевой и хостовый источники
+
+- Suricata User Guide — запуск NIDS и EVE JSON.
+- Linux Audit userspace (`auditctl`, `ausearch`) — системный источник хостовых событий для учебного эксперимента.
+
+Linux Audit в ЛР №2 используется только для демонстрации различий телеметрии. Лабораторная не утверждает, что Linux Audit сам по себе является полноценной HIDS-платформой.

@@ -70,13 +70,14 @@ NIST SP 800-94 требует отдельной оговорки: это фин
 | P1-01 | Pre-Lab | Вопросы проверяют course reasoning, а не внешнюю сертификацию | SYNTHETIC | VERIFIED AS COURSE DESIGN | Не выдаётся за vendor/NIST exam; ссылка на ЛР №1 актуализирована |
 | L1-01 | ЛР1 | `suricata --build-info`, `-T`, `-S`, `-i`, `-l`, EVE JSON — реальные интерфейсы/вывод | OFFICIAL | VERIFIED | OISF Suricata 8 docs |
 | L1-02 | ЛР1 | Ubuntu stable PPA — поддерживаемый OISF installation path | OFFICIAL | VERIFIED | OISF Quickstart/PPA; сделан optional для offline-first среды |
-| L1-03 | ЛР1 | LabBox v0.1 topology на `lab-client0` работает end-to-end именно как описано | SYNTHETIC | RUNTIME QA REQUIRED | shell syntax проверен, но нужен прогон на чистой Ubuntu 24.04 + Suricata 8.0.6 |
-| L1-04 | ЛР1 | `/lab-test` и path-traversal examples | SYNTHETIC | SYNTHETIC | Учебные observables; не real incident/exploit |
-| L2-01 | ЛР2 | T1–T5 PCAP — реальные incident captures | SYNTHETIC | SYNTHETIC | Явно исправлено: corpus создан для курса; Ethernet/IP/TCP checksums проверены |
-| L2-02 | ЛР2 | `suricata -r` offline PCAP mode и `-S` explicit rules | OFFICIAL | VERIFIED | Suricata CLI docs |
-| L2-03 | ЛР2 | Rule A/B/C дадут ровно ожидаемую матрицу на Suricata 8.0.6 | SYNTHETIC | RUNTIME QA REQUIRED | До runtime test не выдаём prediction за engine fact; студент должен сверять EVE output |
-| L2-04 | ЛР2 | Browser Workbench моделирует реальную Suricata semantics | SYNTHETIC | NEEDS QUALIFICATION | Уже явно обозначен simplified logical simulator; не evidence of engine execution |
-| L2-05 | ЛР2 | Multi-mode delivery даёт полностью идентичный practical evidence | ENGINEERING | NEEDS QUALIFICATION | Learning goal общий, но доказательная сила modes различается; Mode C обязан фиксировать limitation |
+| L1-03 | ЛР1 | Двухмашинный стенд `10.13.37.10 → 10.13.37.20:8080`, Suricata на сетевом интерфейсе сервера и SID 1000001 работают end-to-end как описано | SYNTHETIC | RUNTIME QA REQUIRED | Требуется прогон на эталонных Ubuntu Desktop/Server 24.04, которые будут выданы студентам |
+| L1-04 | ЛР1 | `lab01-preflight.sh` проверяет команды, namespaces, HTTP path и `suricata -T` | SYNTHETIC/TOOLING | STATICALLY VERIFIED | Shell syntax проверен; фактический результат зависит от VM |
+| L1-05 | ЛР1 | `-k none` допустим как CLI-параметр Suricata для отключения checksum validation | OFFICIAL | VERIFIED | Suricata command-line docs; в курсе явно ограничено виртуальным учебным стендом |
+| L2-01 | ЛР2 | Один `/lab2-trigger/LAB2-NET` создаёт сетевой alert и локальный файл через учебный server.py | SYNTHETIC | COMPONENT VERIFIED / FULL RUNTIME QA REQUIRED | HTTP endpoint unit-tested; сетевой namespace + Suricata + Linux Audit требуют прогона на эталонной VM |
+| L2-02 | ЛР2 | Linux Audit filesystem rule `-a always,exit -F arch=b64 -F dir=... -F perm=wa` корректен | OS TOOLING | DOCUMENTATION VERIFIED | auditctl/audit.rules manual; deprecated `-w` больше не используется |
+| L2-03 | ЛР2 | `ausearch -k idps_lab_host -ts recent -i` извлекает недавние записи по учебному ключу | OS TOOLING | DOCUMENTATION VERIFIED | ausearch manual; `recent` = последние 10 минут |
+| L2-04 | ЛР2 | Suricata и Linux Audit запускаются на одной Ubuntu Server VM, но используют разные источники данных: сетевой интерфейс и хостовые audit events | OS MODEL | VERIFIED AS LAB DESIGN | В тексте явно разведены место исполнения средства и источник наблюдения |
+| L2-05 | ЛР2 | `lab02-instructor-check.sh` способен подтвердить весь network+host эксперимент | SYNTHETIC/TOOLING | RUNTIME QA REQUIRED | Скрипт проверен синтаксически; требуется execution pass на classroom image |
 
 ## Authoritative sources used in this audit
 
@@ -99,7 +100,7 @@ NIST SP 800-94 требует отдельной оговорки: это фин
 
 ## Что аудит НЕ подтверждает
 
-Source audit подтверждает корректность **источников и формулировок**, но не заменяет runtime QA. До отдельного execution pass нельзя утверждать, что LabBox v0.1 и синтетические PCAP ЛР №2 полностью воспроизводят ожидаемый output на каждой поддерживаемой ОС/версии Suricata. Эти пункты намеренно оставлены со статусом `RUNTIME QA REQUIRED`.
+Source audit подтверждает корректность **источников и формулировок**, но не заменяет runtime QA. Для ЛР №1 и ЛР №2 полный runtime-статус подтверждается только успешным запуском соответствующего `lab0X-instructor-check.sh` на том же Ubuntu-образе, который выдаётся студентам. До этого обе работы сохраняют статус `RUNTIME QA REQUIRED`.
 
 ## v2.17 — Lecture + Practice + Lab migration
 
@@ -112,3 +113,27 @@ Source audit подтверждает корректность **источни�
 | V217-05 | Гл.2 | Data source/domain отделён от detection method | COURSE SYNTHESIS | ENGINEERING | Исправляет прежнее смешение `Network/Host/Wireless/Behavior` |
 | V217-06 | ЛР1 | Starter rule SID 1000001 ищет `ATTACK-LAB` в `http.uri` | SYNTHETIC | RUNTIME QA REQUIRED | Rule syntax подготовлен под Suricata 8; требуется execution pass на учебном image |
 | V217-07 | ЛР1 | LabBox `lab-client0` end-to-end visibility и ожидаемый EVE output | SYNTHETIC | RUNTIME QA REQUIRED | До classroom release выполнить контрольный прогон |
+
+## Дополнение v2.20 — новая Глава 3 и ЛР №2
+
+| ID | Раздел | Утверждение / объект проверки | Тип | Статус | Основание |
+|---|---|---|---|---|---|
+| C3N-01 | Гл.3 | Типичные компоненты IDPS включают sensor/agent, management server, database server, console | FOUNDATION | VERIFIED | NIST SP 800-94, Components and Architecture |
+| C3N-02 | Гл.3 | Sensor и agent — функционально различаемые термины для сетевого/хостового наблюдения в классической модели | FOUNDATION | VERIFIED | NIST SP 800-94 |
+| C3N-03 | Гл.3 | Функциональная схема главы не является универсальным физическим pipeline продукта | COURSE SYNTHESIS | VERIFIED AS COURSE DESIGN | Коррекция LMA: избегаем linear pipeline bias |
+| C3N-04 | Гл.3 | Детектор может работать на разных представлениях; app parsing не является обязательной границей начала detection | OFFICIAL/ENGINEERING | VERIFIED / QUALIFIED | Suricata rule types + architecture; область применения зависит от детектора |
+| C3N-05 | Гл.3 | EVE JSON используется как канал структурированного вывода результатов Suricata | OFFICIAL | VERIFIED | Suricata EVE JSON documentation |
+| L2N-01 | ЛР2 | `auditctl -w ... -p wa -k ...` и `ausearch -k ...` используются как механизм временного Linux Audit наблюдения | OS TOOLING | DOCUMENTATION VERIFIED | Linux Audit userspace/manpages; runtime зависит от VM |
+| L2N-02 | ЛР2 | Suricata SID 1000002 формирует ожидаемое оповещение на URI `/LAB2-NET` в LabBox | SYNTHETIC | RUNTIME QA REQUIRED | Требуется end-to-end прогон LabBox + Suricata |
+| L2N-03 | ЛР2 | Linux Audit фиксирует запись `/var/tmp/idps-lab/lab2-evidence.txt`, созданную учебным web-процессом, с доступным процессным контекстом | SYNTHETIC | RUNTIME QA REQUIRED | Требуется прогон auditd на эталонной Ubuntu Server VM |
+| L2N-04 | ЛР2 | Linux Audit в работе является источником host telemetry, а не полноценной HIDS-платформой | COURSE DESIGN | VERIFIED AS COURSE DESIGN | Явно указано в тексте лабораторной |
+
+## Дополнение v2.23 — самостоятельная подготовка лабораторной среды
+
+| ID | Раздел | Утверждение / объект проверки | Тип | Статус | Основание |
+|---|---|---|---|---|---|
+| ENV-01 | Среда | Две VM используют NAT для внешнего доступа и отдельную Internal Network `IDPS-LAB` для экспериментов | COURSE DESIGN | VERIFIED AS DESIGN | Изоляция учебного трафика от внешней сети; exact VirtualBox runtime зависит от host OS |
+| ENV-02 | Среда | Bootstrap scripts устанавливают набор команд, необходимый ЛР №1–2 | TOOLING | STATICALLY VERIFIED | `bash -n`, проверка command list; package availability требует `apt` runtime |
+| ENV-03 | Среда | `check-client-environment.sh` подтверждает IP клиента, наличие инструментов и связь с сервером | TOOLING | STATICALLY VERIFIED / RUNTIME REQUIRED | Логика скрипта проверена; фактический результат зависит от VM/VirtualBox |
+| ENV-04 | Среда | `check-server-environment.sh` подтверждает IP сервера, Suricata config, auditd/Linux Audit и связь с клиентом | TOOLING | STATICALLY VERIFIED / RUNTIME REQUIRED | Полная проверка требует Ubuntu Server 24.04.x с kernel audit subsystem |
+| ENV-05 | Среда | Статус `READY` является prerequisite для ЛР №1, но не доказательством работоспособности самой ЛР | COURSE DESIGN | VERIFIED AS DESIGN | Разделены environment readiness и lab end-to-end runtime QA |

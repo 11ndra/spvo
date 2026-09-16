@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 cat <<'EOF'
-IDPS LabBox v0.1
+IDPS LabBox v0.2
 
         idps-client                           idps-web
         10.13.37.10                          10.13.37.20

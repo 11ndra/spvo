@@ -81,9 +81,19 @@ ip -n "$WEB_NS" link set eth0 up
 
 WEBROOT="${LABBOX_ROOT}/webroot"
 WEB_LOG="${STATE_DIR}/web.log"
+LAB_SERVER="${LABBOX_ROOT}/server.py"
+
+# Virtual interfaces can expose GRO/GSO/TSO artefacts that are undesirable in a
+# packet-inspection lab. Disable them on a best-effort basis when ethtool exists.
+# RX/TX checksum offload is intentionally left unchanged for AF_PACKET.
+if have ethtool; then
+  for dev in "$CLIENT_HOST_IF" "$WEB_HOST_IF"; do
+    ethtool -K "$dev" gro off gso off tso off lro off 2>/dev/null || true
+  done
+fi
 
 ip netns exec "$WEB_NS" bash -c \
-  "nohup python3 -m http.server ${WEB_PORT} --bind ${WEB_IP} --directory '${WEBROOT}' > '${WEB_LOG}' 2>&1 & echo \$! > '${STATE_DIR}/web.pid'"
+  "nohup python3 '${LAB_SERVER}' --bind '${WEB_IP}' --port '${WEB_PORT}' --directory '${WEBROOT}' > '${WEB_LOG}' 2>&1 & echo \$! > '${STATE_DIR}/web.pid'"
 
 # Wait for the service from the client namespace without requiring curl.
 READY=0
@@ -104,7 +114,7 @@ if [[ "$READY" -ne 1 ]]; then
 fi
 
 cat <<EOF
-LabBox v0.1 is ready.
+LabBox v0.2 is ready.
 
 Client namespace : ${CLIENT_NS} (${CLIENT_IP}/${PREFIX})
 Web namespace    : ${WEB_NS} (${WEB_IP}/${PREFIX})

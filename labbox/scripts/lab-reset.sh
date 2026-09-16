@@ -43,6 +43,7 @@ ip link del "$WEB_HOST_IF" 2>/dev/null || true
 ip link del "$BRIDGE" 2>/dev/null || true
 
 rm -rf "$STATE_DIR"
+rm -f /var/tmp/idps-lab/lab2-evidence.txt 2>/dev/null || true
 
 echo "LabBox network objects removed."
 echo "Suricata installation/configuration was not changed."
