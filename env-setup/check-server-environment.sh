@@ -32,7 +32,7 @@ else
   wrn "Нет маршрута по умолчанию; Интернет для установки пакетов может быть недоступен"
 fi
 
-for cmd in python3 curl jq tcpdump suricata auditctl ausearch ethtool unzip ip ping; do
+for cmd in python3 curl jq tcpdump suricata auditctl ausearch ethtool unzip ip ping nano; do
   if command -v "$cmd" >/dev/null 2>&1; then ok "Команда $cmd доступна"; else err "Команда $cmd не найдена"; fi
 done
 

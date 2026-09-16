@@ -48,10 +48,16 @@ NIST SP 800-94 требует отдельной оговорки: это фин
 | C5-02 | Гл.5 | Anomaly-based detection требует определения нормального профиля и сравнения наблюдения с ним | STANDARD | VERIFIED / HISTORICAL | NIST SP 800-94 §2.3.2 |
 | C5-03 | Гл.5 | Stateful protocol analysis использует состояние и модель протокола; реальный продукт может сочетать его с сигнатурами | STANDARD | VERIFIED / HISTORICAL | NIST SP 800-94 §2.3.3 и описание interwoven techniques |
 | C5-04 | Гл.5 | Поведенческая логика не обязана быть anomaly-based | COURSE SYNTHESIS | VERIFIED AS COURSE MODEL | В курсе behavioral = условие над последовательностью/частотой/связью событий; baseline требуется только когда решение определяется отклонением от нормы |
-| C6-01 | Гл.6 | Base-rate способен приводить к большому числу FP даже при низком FPR | RESEARCH | VERIFIED | Stefan Axelsson, ACM TISSEC; добавлена прямая research reference |
-| C6-02 | Гл.6 | Любое «ужесточение правила» обязательно повышает FN | ENGINEERING | NEEDS QUALIFICATION | Исправлено: trade-off показан корректно для движения decision threshold; произвольная правка rule не обязана быть монотонной |
-| C6-03 | Гл.6 | Log4Shell scan-source IP давали высокий FP; CISA советовала искать successful exploitation | CASE | VERIFIED | CISA AA21-356A, прямое утверждение advisory |
-| C6-04 | Гл.6 | Разделять recon/attempt/success и не блокировать по low-confidence indicator | ENGINEERING | VERIFIED AS INFERENCE | Теперь явно названо инженерным расширением CISA guidance, не «best practice» без источника |
+| LEGACY-C6-01 | Гл.6 предыдущей редакции | Base-rate способен приводить к большому числу FP даже при низком FPR | RESEARCH | VERIFIED | Stefan Axelsson, ACM TISSEC; добавлена прямая research reference |
+| LEGACY-C6-02 | Гл.6 предыдущей редакции | Любое «ужесточение правила» обязательно повышает FN | ENGINEERING | NEEDS QUALIFICATION | Исправлено: trade-off показан корректно для движения decision threshold; произвольная правка rule не обязана быть монотонной |
+| LEGACY-C6-03 | Гл.6 предыдущей редакции | Log4Shell scan-source IP давали высокий FP; CISA советовала искать successful exploitation | CASE | VERIFIED | CISA AA21-356A, прямое утверждение advisory |
+| LEGACY-C6-04 | Гл.6 предыдущей редакции | Разделять recon/attempt/success и не блокировать по low-confidence indicator | ENGINEERING | VERIFIED AS INFERENCE | Теперь явно названо инженерным расширением CISA guidance, не «best practice» без источника |
+| C6-01 | Гл.6 | Правило Suricata состоит из действия, заголовка и параметров | OFFICIAL | VERIFIED | OISF Suricata Rules Format; в курсе используется как синтаксическая декомпозиция, не как internal processing pipeline |
+| C6-02 | Гл.6 | `flow:established,to_server` ограничивает правило установленным потоком в направлении к серверу | OFFICIAL | VERIFIED | Suricata 8 Flow Keywords |
+| C6-03 | Гл.6 | `http.uri` выбирает нормализованное URI-представление, `http.uri.raw` — ненормализованное | OFFICIAL | VERIFIED | Suricata 8.0.7 HTTP Keywords |
+| C6-04 | Гл.6 | `msg`, `sid`, `rev` используются для описания/идентификации и версии правила, а не как доказательство вредоносности | OFFICIAL/ENGINEERING | VERIFIED | Suricata meta keywords + course interpretation |
+| C6-05 | Гл.6 | Успешный `suricata -T` не доказывает корректность detection logic | ENGINEERING | VERIFIED AS COURSE INFERENCE | `-T` проверяет загрузку конфигурации/правил; поведение проверяется отдельным traffic test |
+| C6-06 | Гл.6 | `drop` в правиле не означает автоматическое блокирование при пассивном IDS-размещении | OFFICIAL/ENGINEERING | VERIFIED | Suricata actions + ранее зафиксированное разграничение inline topology и prevention function |
 | C7-01 | Гл.7 | Passive sensor получает копию трафика; SPAN и TAP — варианты подачи | STANDARD | VERIFIED / HISTORICAL | NIST SP 800-94 network architecture |
 | C7-02 | Гл.7 | TAP «всегда лучше» SPAN | ENGINEERING | UNSUPPORTED AS ABSOLUTE | Абсолют не использовался; формулировка уточнена: разные решения, выбор зависит от требований |
 | C7-03 | Гл.7 | Inline sensor находится в data path и может prevention/blocking | STANDARD | VERIFIED / HISTORICAL | NIST SP 800-94; сохранено |
@@ -68,6 +74,10 @@ NIST SP 800-94 требует отдельной оговорки: это фин
 | C8-07 | Гл.8 | suricata-update по умолчанию получает ET Open и тестирует результирующий ruleset | OFFICIAL | VERIFIED | OISF suricata-update Quickstart |
 | C8-08 | Гл.8 | Актуальная поддерживаемая ветка курса — Suricata 8; на 16.09.2026 выпущена 8.0.7 | OFFICIAL | VERIFIED | OISF release 15.09.2026; Suricata 7 EOL |
 | P1-01 | Pre-Lab | Вопросы проверяют course reasoning, а не внешнюю сертификацию | SYNTHETIC | VERIFIED AS COURSE DESIGN | Не выдаётся за vendor/NIST exam; ссылка на ЛР №1 актуализирована |
+| L5-01 | ЛР5 | `-S` загружает указанный файл правил независимо от ruleset в YAML | OFFICIAL | VERIFIED | Suricata Command Line Options |
+| L5-02 | ЛР5 | Базовые конструкции `alert http`, `flow`, `http.method`, `http.uri`, `content`, `sid`, `rev` соответствуют документированному синтаксису Suricata 8 | OFFICIAL | VERIFIED | Suricata 8 rule docs |
+| L5-03 | ЛР5 | Отдельные каталоги EVE для трёх этапов исключают смешение событий предыдущего запуска | ENGINEERING | VERIFIED AS COURSE DESIGN | Каждый запуск использует собственный `-l` каталог, который предварительно пересоздаётся |
+| L5-04 | ЛР5 | Полная последовательность Server/Client/Suricata даёт ожидаемую матрицу SID 1000501/1000502/1000503 | SYNTHETIC | RUNTIME QA REQUIRED | Shell/Python/static structure проверяются отдельно; нужен сквозной прогон на эталонных VM |
 | L1-01 | ЛР1 | `suricata --build-info`, `-T`, `-S`, `-i`, `-l`, EVE JSON — реальные интерфейсы/вывод | OFFICIAL | VERIFIED | OISF Suricata 8 docs |
 | L1-02 | ЛР1 | Ubuntu stable PPA — поддерживаемый OISF installation path | OFFICIAL | VERIFIED | OISF Quickstart/PPA; сделан optional для offline-first среды |
 | L1-03 | ЛР1 | Двухмашинный стенд `10.13.37.10 → 10.13.37.20:8080`, Suricata на сетевом интерфейсе сервера и SID 1000001 работают end-to-end как описано | SYNTHETIC | RUNTIME QA REQUIRED | Требуется прогон на эталонных Ubuntu Desktop/Server 24.04.x, собранных по текущей инструкции подготовки среды |

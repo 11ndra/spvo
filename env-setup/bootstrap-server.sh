@@ -14,7 +14,7 @@ apt-get update
 echo "[2/5] Установка базовых инструментов серверной VM..."
 apt-get install -y \
   ca-certificates software-properties-common python3 curl jq tcpdump \
-  auditd audispd-plugins ethtool unzip openssh-server \
+  auditd audispd-plugins ethtool unzip openssh-server nano \
   iproute2 iputils-ping net-tools
 
 echo "[3/5] Установка Suricata..."
@@ -39,7 +39,7 @@ if systemctl is-active --quiet suricata 2>/dev/null; then
 fi
 
 echo "[5/5] Проверка установленных команд..."
-for cmd in python3 curl jq tcpdump suricata auditctl ausearch ethtool unzip ssh ip ping; do
+for cmd in python3 curl jq tcpdump suricata auditctl ausearch ethtool unzip ssh ip ping nano; do
   command -v "$cmd" >/dev/null || { echo "[ ERROR ] Не найдена команда: $cmd" >&2; exit 1; }
 done
 
