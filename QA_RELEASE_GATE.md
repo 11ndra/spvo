@@ -85,7 +85,7 @@
 
 1. `mkdocs build --strict`;
 2. структуру `site/`;
-3. каждый внутренний `href/src` относительно `site_url`/project path;
+3. каждый внутренний `href/src` относительно `site_url`/project path; generated-link checker обязан учитывать project base path из `site_url` (например, `/spvo/`) и не трактовать такие корректные root-relative ссылки как корень домена;
 4. доступность JS/CSS/images/downloads;
 5. отсутствие ссылок на непубликуемые internal/legacy материалы;
 6. работу на desktop и narrow viewport;

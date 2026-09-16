@@ -42,7 +42,7 @@
 
 
 
-## v2.28-rc2 — Classroom readiness + repository/route cleanup
+## v2.28-rc3 — Classroom readiness + repository/route cleanup
 
 - введён обязательный `QA_RELEASE_GATE.md`: consistency, дидактика, student UX, static QA, GitHub Pages build QA и runtime QA больше не считаются одной проверкой;
 - добавлен `TEACHER_CLASSROOM_CHECKLIST.md` — быстрый go/no-go для проверки стенда перед занятием;
@@ -57,6 +57,7 @@
 - environment setup обновлён до v1.1 и теперь проверяет поддерживаемую ветку Suricata 8.x;
 - Lab01/Lab02 обновлены до v0.5: учебный HTTP-сервис слушает только `10.13.37.20:8080`, а не все интерфейсы;
 - GitHub Pages build закреплён на Python 3.13, MkDocs 1.6.1 и Material 9.7.7; после `mkdocs build --strict` CI проверяет ссылки в сгенерированном `site/`;
+- исправлен generated-site link checker: root-relative ссылки, которые MkDocs Material корректно генерирует внутри project base path `/spvo/`, сопоставляются с корнем `site/`; ссылки за пределами project base path по-прежнему отклоняются;
 - исправлен сценарий обновления через GitHub Desktop: добавлен `tools/migrate_v228.py`, который обнаруживает/удаляет stale public files после overlay-распаковки; consistency checker теперь выводит явную подсказку для этого случая;
 - candidate повышается до v2.28 только после зелёного GitHub Pages workflow и runtime smoke-test актуальной classroom-цепочки; следующий содержательный шаг после этого — Глава 6.
 

@@ -2,7 +2,7 @@
 
 Последнее обновление: 2026-09-17  
 Текущий стабильный релиз: `v2.27.1`  
-Текущий release candidate с актуализированным handoff: `v2.28-rc2`
+Текущий release candidate с актуализированным handoff: `v2.28-rc3`
 
 Этот файл предназначен для продолжения разработки проекта в новом диалоге. Он не должен добавляться в навигацию MkDocs/GitHub Pages.
 
@@ -93,7 +93,7 @@ legacy/course/08-detection-engineering.md
 
 Перед переходом к Главе 6 закрыт consistency debt v2.27: исправлены две относительные ссылки Главы 5, переход в конце Главы 3, статус legacy Pre-Lab в Roadmap, единая модель QA-статусов ЛР №1–4 и фиктивные ссылки на отсутствующие SVG в визуальных служебных материалах. Содержательная последовательность курса не изменена.
 
-### Classroom readiness candidate v2.28-rc2
+### Classroom readiness candidate v2.28-rc3
 
 Перед сегодняшними лабораторными устранён student-facing и практический долг:
 
@@ -114,6 +114,7 @@ legacy/course/08-detection-engineering.md
 - удалён конфликт двух поколений CSS для `.course-route`: маршрут имеет один однозначный вертикальный layout на desktop и mobile;
 - зафиксирована причина неудачного deploy `v2.28-rc1`: release ZIP был наложен на более старую Git working tree, поэтому удалённые из RC файлы физически остались под `docs/`; consistency checker корректно остановил публикацию;
 - добавлен `tools/migrate_v228.py` и upgrade-процедура для GitHub Desktop, чтобы stale public files и устаревшие bundles удалялись до commit/push.
+- исправлена ошибка `tools/check_site_links.py`, остановившая deploy rc2: checker теперь учитывает project base path `/spvo/` из `site_url` и корректно отображает `/spvo/...` на содержимое `site/`; чужие root-relative пути остаются ошибкой.
 
 Восьмиглавая теоретическая последовательность не изменена.
 
@@ -558,7 +559,7 @@ internal/resources/audit-report.md
 
 Если какой-либо применимый gate не выполнялся, это должно быть указано явно; запрещено заменять его более узкой проверкой.
 
-Статус `v2.28-rc2`:
+Статус `v2.28-rc3`:
 
 - Gates 1–4: пройдены (`STATIC QA PASSED`);
 - Gate 5 GitHub Pages: `QA REQUIRED` — локальная среда не имеет сетевого доступа для установки pinned MkDocs; workflow настроен выполнять build + generated-link check при push;
@@ -570,7 +571,7 @@ internal/resources/audit-report.md
 
 Статическая корректность скриптов и документации не означает runtime verification.
 
-На момент v2.28-rc2:
+На момент v2.28-rc3:
 
 - ЛР №1 — `DESIGN VERIFIED`, `STATIC QA PASSED`, полный сценарий `RUNTIME QA REQUIRED`;
 - ЛР №2 — `DESIGN VERIFIED`, `STATIC QA PASSED`; component-level checks выполнены, полный сценарий `RUNTIME QA REQUIRED`;
