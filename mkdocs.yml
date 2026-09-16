@@ -69,8 +69,6 @@ nav:
           - "07 — Где размещать сенсоры (редакция v2.16)": course/07-placement.md
       - Detection Engineering:
           - "08 — Как проектировать сетевое обнаружение (редакция v2.16)": course/08-detection-engineering.md
-  - Практические занятия:
-      - Практика №1 — Защитные функции: practice/practice01/index.md
   - Лабораторные работы:
       - ЛР №1 — Первый NIDS: labs/lab01/index.md
       - ЛР №2 — Network Detection Engineering (предыдущая редакция): labs/lab02/index.md
