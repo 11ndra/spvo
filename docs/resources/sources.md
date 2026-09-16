@@ -20,6 +20,8 @@
 - Zeek Documentation — https://docs.zeek.org/en/current/
 - Wazuh Documentation — https://documentation.wazuh.com/current/
 - Wireshark Documentation — https://www.wireshark.org/docs/
+- Wireshark User’s Guide: checksum offloading — https://www.wireshark.org/docs/wsug_html_chunked/ChAdvChecksums.html
+- OWASP, Web Application Firewall — https://community.owasp.org/Web_Application_Firewall
 - RFC 9846 — TLS 1.3 — https://www.rfc-editor.org/rfc/rfc9846.html
 
 ## Архитектура и стандарты
@@ -77,6 +79,8 @@
 
 - Suricata User Guide — запуск NIDS и EVE JSON.
 - Linux Audit userspace (`auditctl`, `ausearch`) — системный источник хостовых событий для учебного эксперимента.
+- `auditctl(8)` — https://man7.org/linux/man-pages/man8/auditctl.8.html
+- `ausearch(8)` — https://man7.org/linux/man-pages/man8/ausearch.8.html
 
 Linux Audit в ЛР №2 используется только для демонстрации различий телеметрии. Лабораторная не утверждает, что Linux Audit сам по себе является полноценной HIDS-платформой.
 
@@ -86,6 +90,7 @@ Linux Audit в ЛР №2 используется только для демон
 
 - NIST SP 800-94 — исторический фундаментальный источник по network-based IDPS architecture: выбор места сенсоров, passive/inline deployment, network tap и switch spanning port как варианты подключения пассивных сенсоров.
 - William Stallings, *Computer Security: Principles and Practice* — учебное описание passive NIDS, inline NIDS/IPS и типовых мест размещения.
+- Wireshark User’s Guide, *Checksum Offloading* — техническая основа для оговорок о checksum offloading при локальном захвате.
 
 В главе сознательно не делается универсального вывода «до firewall лучше, чем после» или наоборот. Полезность точки определяется тем, какой набор сетевых событий требуется наблюдать для конкретной задачи.
 
@@ -108,23 +113,23 @@ Linux Audit в ЛР №2 используется только для демон
 Основные основания новой Главы 5:
 
 - NIST SP 800-94, §2.3 — исторический фундаментальный источник для signature-based detection, anomaly-based detection и stateful protocol analysis, а также для тезиса о совместном использовании нескольких методологий. Публикация 2007 года не используется как исчерпывающая современная продуктовая taxonomy.
-- Suricata 8.0.7 Rule Guide — официальный implementation cross-check: `flow`, `flowbits`, app-layer events и HTTP keywords показывают, что язык rule engine способен выражать условия над состоянием потока и разобранными полями протокола. Это не превращает синтаксис правила в отдельный метод обнаружения.
+- Suricata 8.0.7 Rule Guide — официальная проверка на конкретной реализации: `flow`, `flowbits`, события прикладного уровня и HTTP-ключевые слова показывают, что язык движка правил способен выражать условия над состоянием потока и разобранными полями протокола. Это не превращает синтаксис правила в отдельный метод обнаружения.
 
-Разграничение **Behavioral ≠ Anomaly** является аналитической моделью курса. В ней поведенческий detector может применять заранее заданное условие над серией событий без baseline; anomaly detector должен иметь модель, профиль или ожидаемый диапазон, относительно которого определяется отклонение.
+Курс не вводит `behavioral` как отдельную четвёртую универсальную методологию. Для случая без базовой модели используется точное описание **фиксированное условие над серией событий**. Аномальное обнаружение отдельно требует модели, профиля или ожидаемого диапазона, относительно которого определяется отклонение.
 
 - NIST SP 800-94 — https://csrc.nist.gov/pubs/sp/800/94/final
 - Suricata 8.0.7 flow keywords — https://docs.suricata.io/en/suricata-8.0.7/rules/flow-keywords.html
 - Suricata 8.0.7 generic app-layer keywords — https://docs.suricata.io/en/suricata-8.0.7/rules/app-layer.html
-- Suricata 8.0.7 HTTP keywords — https://docs.suricata.io/en/suricata-8.0.7/rules/http-keywords.html
+- Suricata 8.0.7 HTTP-ключевые слова — https://docs.suricata.io/en/suricata-8.0.7/rules/http-keywords.html
 
-## ЛР №4 — один набор событий, четыре метода
+## ЛР №4 — один набор событий, четыре основания решения
 
-ЛР №4 является **SYNTHETIC ENGINEERING / CONTROLLED EXPERIMENT**. Один контролируемый HTTP-сценарий формирует один JSONL-журнал, после чего четыре предоставленных детектора анализируют неизменный набор событий по разным основаниям:
+ЛР №4 является **SYNTHETIC ENGINEERING / CONTROLLED EXPERIMENT**. Один контролируемый HTTP-сценарий формирует один JSONL-журнал, после чего четыре предоставленных режима анализируют неизменный набор событий по разным основаниям:
 
 - exact marker — сигнатурное условие;
 - синтетическая `IDLE → OPEN → IDLE` state-machine — анализ состояния;
-- `>= 5 /catalog` за `2 s` — фиксированное поведенческое условие без baseline;
-- отношение медианных интервалов baseline/burst — аномальное сравнение с baseline.
+- `>= 5 /catalog` за `2 s` — фиксированное условие над серией событий без базового профиля;
+- отношение медианных интервалов базового профиля и всплеска — аномальное сравнение с базовой моделью.
 
-`START → DATA → END` не является стандартом HTTP, а поле `phase` — служебная метка контролируемого эксперимента, не индикатор атаки. Этот сценарий используется только как синтетическая модель для разделения методов обнаружения.
+`START → DATA → END` не является стандартом HTTP, а поле `phase` — служебная метка контролируемого эксперимента, не индикатор атаки. Этот сценарий используется только как синтетическая модель для разделения оснований принятия решения.
 

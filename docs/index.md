@@ -111,6 +111,12 @@
   </a>
   <div class="course-route__connector" aria-hidden="true">↓</div>
 
+  <a class="course-route__item course-route__item--theory" href="course/03-detection/">
+    <span class="course-route__type">Теория</span>
+    <strong>Глава 3 — Из чего состоит IDS/IPS и как она работает</strong>
+  </a>
+  <div class="course-route__connector" aria-hidden="true">↓</div>
+
   <a class="course-route__item course-route__item--lab" href="labs/lab01/">
     <span class="course-route__type">Лаборатория</span>
     <strong>ЛР №1 — Первое сетевое обнаружение</strong>
@@ -120,12 +126,6 @@
   <a class="course-route__item course-route__item--lab" href="labs/lab02/">
     <span class="course-route__type">Лаборатория</span>
     <strong>ЛР №2 — Один эпизод, два источника данных</strong>
-  </a>
-  <div class="course-route__connector" aria-hidden="true">↓</div>
-
-  <a class="course-route__item course-route__item--theory" href="course/03-detection/">
-    <span class="course-route__type">Теория</span>
-    <strong>Глава 3 — Из чего состоит IDS/IPS и как она работает</strong>
   </a>
   <div class="course-route__connector" aria-hidden="true">↓</div>
 
@@ -149,7 +149,7 @@
 
   <a class="course-route__item course-route__item--lab" href="labs/lab04/">
     <span class="course-route__type">Лаборатория</span>
-    <strong>ЛР №4 — Методы обнаружения</strong>
+    <strong>ЛР №4 — Четыре основания решения</strong>
   </a>
 </div>
 

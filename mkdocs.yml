@@ -73,7 +73,7 @@ nav:
       - "ЛР №1 — Первое сетевое обнаружение": labs/lab01/index.md
       - "ЛР №2 — Один эпизод, два источника данных": labs/lab02/index.md
       - "ЛР №3 — Точка наблюдения": labs/lab03/index.md
-      - "ЛР №4 — Методы обнаружения": labs/lab04/index.md
+      - "ЛР №4 — Четыре основания решения": labs/lab04/index.md
   - Материалы:
       - Источники курса: resources/sources.md
       - Глоссарий: resources/glossary.md
