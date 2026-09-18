@@ -117,20 +117,18 @@ OPEN --DATA--> OPEN
 OPEN --END--> IDLE
 ```
 
-<div class="idps-figure" markdown="1">
-<div class="idps-figure__label">СХЕМА · СОСТОЯНИЕ МЕНЯЕТ СМЫСЛ ОДНОГО И ТОГО ЖЕ СООБЩЕНИЯ</div>
-
-```mermaid
-stateDiagram-v2
-    [*] --> IDLE
-    IDLE --> OPEN: START
-    OPEN --> OPEN: DATA
-    OPEN --> IDLE: END
-    IDLE --> VIOLATION: DATA
-    IDLE --> VIOLATION: END
-```
-
-<div class="idps-figure__caption">Сообщение DATA допустимо в состоянии OPEN, но нарушает учебную модель в состоянии IDLE. Это синтетическая модель для объяснения принципа, а не модель стандарта HTTP.</div>
+<div class="idps-figure">
+<div class="idps-figure__label">СХЕМА · ОДНО СООБЩЕНИЕ, РАЗНЫЙ СМЫСЛ В РАЗНЫХ СОСТОЯНИЯХ</div>
+<div class="idps-state-table" role="table" aria-label="Переходы состояний учебного протокола">
+  <div class="idps-state-table__row idps-state-table__head" role="row">
+    <span>Текущее состояние</span><span>Сообщение</span><span>Следующее состояние</span><span>Смысл</span>
+  </div>
+  <div class="idps-state-table__row" role="row"><strong>IDLE</strong><code>START</code><strong>OPEN</strong><span class="idps-state-table__ok">допустимый переход</span></div>
+  <div class="idps-state-table__row" role="row"><strong>OPEN</strong><code>DATA</code><strong>OPEN</strong><span class="idps-state-table__ok">данные допустимы</span></div>
+  <div class="idps-state-table__row" role="row"><strong>OPEN</strong><code>END</code><strong>IDLE</strong><span class="idps-state-table__ok">сеанс завершён</span></div>
+  <div class="idps-state-table__row idps-state-table__row--violation" role="row"><strong>IDLE</strong><code>DATA / END</code><strong>VIOLATION</strong><span>сообщение не соответствует ожидаемому состоянию</span></div>
+</div>
+<div class="idps-figure__caption">Ключевой принцип: значение сообщения определяется не только его содержимым, но и предыдущим состоянием. Это синтетическая учебная модель, а не модель стандарта HTTP.</div>
 </div>
 
 В реальной системе анализ состояния может учитывать:
@@ -165,7 +163,7 @@ NIST SP 800-94 исторически выделяет **анализ состо
 ```
 
 <div class="idps-figure">
-<div class="idps-figure__label">ВИЗУАЛЬНАЯ МОДЕЛЬ · ФИКСИРОВАННОЕ ВРЕМЕННОЕ ОКНО</div>
+<div class="idps-figure__label">СХЕМА · ПОРОГ В ФИКСИРОВАННОМ ВРЕМЕННОМ ОКНЕ</div>
 <div class="idps-event-window" aria-label="Пять событий попадают в двухсекундное временное окно">
   <div class="idps-event-window__axis"><span>0 с</span><span>0.4</span><span>0.8</span><span>1.2</span><span>1.6</span><span>2.0 с</span></div>
   <div class="idps-event-window__track">
@@ -199,36 +197,23 @@ NIST SP 800-94 исторически выделяет **анализ состо
 В ЛР №4 базовая линия и всплеск строятся на одном и том же пути `/catalog`, но имеют разную временную структуру.
 
 <div class="idps-figure">
-<div class="idps-figure__label">ВИЗУАЛЬНАЯ МОДЕЛЬ · БАЗОВЫЙ ПРОФИЛЬ И ВСПЛЕСК</div>
-<div class="idps-activity-plot">
-  <div class="idps-activity-plot__group">
-    <strong>Базовый профиль</strong>
-    <small>6 запросов с интервалом около 0.8 с</small>
-    <div class="idps-activity-plot__bars" aria-label="Умеренная стабильная активность">
-      <span class="idps-activity-plot__bar" style="--idps-level: 38%"></span>
-      <span class="idps-activity-plot__bar" style="--idps-level: 41%"></span>
-      <span class="idps-activity-plot__bar" style="--idps-level: 39%"></span>
-      <span class="idps-activity-plot__bar" style="--idps-level: 42%"></span>
-      <span class="idps-activity-plot__bar" style="--idps-level: 40%"></span>
-      <span class="idps-activity-plot__bar" style="--idps-level: 39%"></span>
+<div class="idps-figure__label">СХЕМА · БАЗОВЫЙ ТЕМП И ВСПЛЕСК НА ОДНОЙ ШКАЛЕ ВРЕМЕНИ</div>
+<div class="idps-tempo-compare" aria-label="Сравнение базового темпа запросов и всплеска">
+  <div class="idps-tempo-compare__lane">
+    <div><strong>Базовый профиль</strong><small>6 запросов распределены примерно по 4 секундам</small></div>
+    <div class="idps-tempo-compare__track">
+      <span style="--idps-pos: 3%">1</span><span style="--idps-pos: 21%">2</span><span style="--idps-pos: 39%">3</span><span style="--idps-pos: 57%">4</span><span style="--idps-pos: 75%">5</span><span style="--idps-pos: 93%">6</span>
     </div>
   </div>
-  <div class="idps-activity-plot__group idps-activity-plot__group--change">
-    <strong>Текущий всплеск</strong>
-    <small>8 запросов без искусственной задержки</small>
-    <div class="idps-activity-plot__bars" aria-label="Резко более интенсивная активность">
-      <span class="idps-activity-plot__bar" style="--idps-level: 78%"></span>
-      <span class="idps-activity-plot__bar" style="--idps-level: 88%"></span>
-      <span class="idps-activity-plot__bar" style="--idps-level: 94%"></span>
-      <span class="idps-activity-plot__bar" style="--idps-level: 91%"></span>
-      <span class="idps-activity-plot__bar" style="--idps-level: 96%"></span>
-      <span class="idps-activity-plot__bar" style="--idps-level: 89%"></span>
-      <span class="idps-activity-plot__bar" style="--idps-level: 93%"></span>
-      <span class="idps-activity-plot__bar" style="--idps-level: 90%"></span>
+  <div class="idps-tempo-compare__lane idps-tempo-compare__lane--burst">
+    <div><strong>Текущий всплеск</strong><small>8 запросов сгруппированы в коротком интервале</small></div>
+    <div class="idps-tempo-compare__track">
+      <span style="--idps-pos: 3%">1</span><span style="--idps-pos: 7%">2</span><span style="--idps-pos: 11%">3</span><span style="--idps-pos: 15%">4</span><span style="--idps-pos: 19%">5</span><span style="--idps-pos: 23%">6</span><span style="--idps-pos: 27%">7</span><span style="--idps-pos: 31%">8</span>
     </div>
   </div>
+  <div class="idps-tempo-compare__scale"><span>0 с</span><span>единая условная шкала времени</span><span>4 с</span></div>
 </div>
-<div class="idps-figure__caption">В лаборатории сравнивается медианный интервал между запросами. Иллюстрация показывает сам принцип: вывод об аномалии требует точки сравнения.</div>
+<div class="idps-figure__caption">Здесь сравнивается не «высота» запроса, а расстояние между событиями во времени. Аномальность появляется только относительно выбранного базового профиля и конкретного признака сравнения.</div>
 </div>
 
 Базовая модель может быть простой:
@@ -278,7 +263,7 @@ NIST SP 800-94 исторически выделяет **анализ состо
 
 ## 7. Вредоносное ПО — объект наблюдения, а не отдельный метод обнаружения
 
-В официальном силлабусе аномальная активность рассматривается рядом с вредоносным ПО. Для IDPS важно не смешать два разных вопроса:
+При анализе вредоносного ПО важно не смешивать два разных вопроса:
 
 ```text
 что делает потенциально вредоносная программа?
@@ -562,7 +547,6 @@ DATA в состоянии IDLE           → нарушение модели с
 
 - NIST SP 800-94, раздел 2.3 — исторический фундаментальный источник для трёх выделенных в документе методологий: signature-based detection, anomaly-based detection и stateful protocol analysis. Публикация 2007 года используется как основа принципов, а не как исчерпывающая современная классификация продуктов.
 - Документация Suricata 8.0.7 — подтверждает, что движок правил может использовать состояние потока, разобранные поля прикладного протокола и сохраняемое состояние (`flowbits`), поэтому синтаксис правила нельзя считать отдельным методом обнаружения.
-- Официальный силлабус дисциплины использован как академический каркас для темы «Аномальная активность и вредоносное ПО». В этой главе вредоносное ПО рассматривается как источник наблюдаемых следов, а не как отдельная методология обнаружения.
 - Термин `behavioral` в литературе и продуктах употребляется неодинаково. Поэтому курс не вводит его как отдельную четвёртую универсальную методологию: для сценария без базовой модели используется точное описание **фиксированное условие над серией событий**.
 - Учебная модель состояний `START → DATA → END` является **синтетической учебной моделью** и создана для ЛР №4. Она демонстрирует принцип анализа состояния, но не является моделью стандарта HTTP.
 

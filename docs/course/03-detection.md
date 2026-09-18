@@ -146,43 +146,39 @@ flowchart LR
 
 Один и тот же HTTP-запрос может быть представлен разными артефактами в зависимости от точки наблюдения и включённых источников данных. При этом результат обнаружения, запись приложения и событие аудита — не одно и то же: каждый артефакт имеет собственную доказательную силу и должен интерпретироваться в контексте своей точки наблюдения.
 
-<div class="idps-figure" markdown="1">
-<div class="idps-figure__label">СХЕМА 2 · ОДИН HTTP-ЗАПРОС — РАЗНЫЕ ТОЧКИ НАБЛЮДЕНИЯ</div>
-
-```mermaid
-flowchart LR
-    C[Клиент<br/>Отправляет HTTP-запрос] -->|HTTP-запрос| O((Точка<br/>наблюдения))
-    O --> S[Сервер / веб-приложение<br/>Получает запрос]
-
-    O -. Копия наблюдаемого трафика .-> N[Suricata<br/>в роли NIDS]
-    N --> A[Результат обнаружения:<br/>при совпадении условия<br/>правило может сформировать alert]
-
-    S --> L[Лог приложения<br/>Может подтвердить получение или обработку запроса,<br/>если соответствующее событие журналируется]
-    S --> U[Linux Audit<br/>Может подтвердить действие процесса или изменение объекта,<br/>если соответствующее событие аудитируется]
-
-    A --> K{Интерпретация и проверка:<br/>что можно обоснованно заключить?}
-    L --> K
-    U --> K
-
-    K --> K1[Каждый артефакт подтверждает только тот факт,<br/>который действительно зафиксирован]
-    K --> K2[Alert ≠ Incident]
-    K --> K3[Нет alert ≠ нет трафика]
-    K --> K4[Причинная связь между событиями<br/>требует отдельного обоснования]
-
-    classDef endpoint fill:#f6f8fa,stroke:#475569,stroke-width:1.5px,color:#0f172a;
-    classDef observation fill:#fff7ed,stroke:#ea580c,stroke-width:1.5px,color:#0f172a;
-    classDef sensor fill:#eef6ff,stroke:#2563eb,stroke-width:1.5px,color:#0f172a;
-    classDef source fill:#f0fdf4,stroke:#16a34a,stroke-width:1.5px,color:#0f172a;
-    classDef conclusion fill:#faf5ff,stroke:#9333ea,stroke-width:1.5px,color:#0f172a;
-
-    class C,S endpoint;
-    class O observation;
-    class N,A sensor;
-    class L,U source;
-    class K,K1,K2,K3,K4 conclusion;
-```
-
-<p class="idps-figure__caption">Точка наблюдения обозначает логическое место на пути трафика, а не конкретный способ получения копии. Suricata формирует результат обнаружения из доступного сетевого представления; лог приложения и Linux Audit являются отдельными источниками хостовых и прикладных свидетельств. Совместная интерпретация этих артефактов не создаёт причинную связь автоматически.</p>
+<div class="idps-figure">
+  <div class="idps-figure__label">СХЕМА · ОДИН HTTP-ЗАПРОС — ТРИ НЕЗАВИСИМЫХ СВИДЕТЕЛЬСТВА</div>
+  <div class="idps-observation-story">
+    <div class="idps-observation-story__path">
+      <div class="idps-route-node idps-route-node--endpoint">Клиент<br><small>отправляет HTTP-запрос</small></div>
+      <div class="idps-route-arrow">→</div>
+      <div class="idps-route-node idps-route-node--observation">Точка наблюдения<br><small>видит сетевой путь</small></div>
+      <div class="idps-route-arrow">→</div>
+      <div class="idps-route-node idps-route-node--endpoint">Сервер / приложение<br><small>получает запрос</small></div>
+    </div>
+    <div class="idps-observation-story__evidence">
+      <article class="idps-card idps-card--sensor">
+        <span class="idps-card__eyebrow">СЕТЕВОЕ СВИДЕТЕЛЬСТВО</span>
+        <strong class="idps-card__title">Копия трафика → NIDS</strong>
+        <p>При совпадении условия система может сформировать alert. Alert подтверждает результат детектора, а не инцидент сам по себе.</p>
+      </article>
+      <article class="idps-card idps-card--source">
+        <span class="idps-card__eyebrow">ПРИКЛАДНОЕ СВИДЕТЕЛЬСТВО</span>
+        <strong class="idps-card__title">Лог приложения</strong>
+        <p>Может подтвердить получение или обработку запроса, если соответствующее событие действительно журналируется.</p>
+      </article>
+      <article class="idps-card idps-card--source">
+        <span class="idps-card__eyebrow">ХОСТОВОЕ СВИДЕТЕЛЬСТВО</span>
+        <strong class="idps-card__title">Linux Audit</strong>
+        <p>Может подтвердить действие процесса или изменение объекта, если это действие входит в настроенную область аудита.</p>
+      </article>
+    </div>
+    <div class="idps-observation-story__boundary">
+      <strong>Интерпретация:</strong>
+      <span>каждый артефакт подтверждает только зафиксированный им факт; alert ≠ incident; отсутствие alert ≠ отсутствие трафика; причинную связь между артефактами нужно обосновывать отдельно.</span>
+    </div>
+  </div>
+  <div class="idps-figure__caption">Точка наблюдения — логическое место на пути трафика. NIDS, журнал приложения и Linux Audit дают разные виды свидетельств и не заменяют друг друга.</div>
 </div>
 
 ---

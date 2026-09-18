@@ -56,7 +56,7 @@ flowchart LR
 Для инженерного описания фразы «IDS стоит в сети» недостаточно. Нужно описать точку так, чтобы другой специалист понимал, **какой именно поток и где мы ожидаем увидеть**.
 
 <div class="idps-figure">
-  <div class="idps-figure__label">ВИЗУАЛИЗАЦИЯ 2 · ПАСПОРТ ТОЧКИ НАБЛЮДЕНИЯ</div>
+  <div class="idps-figure__label">СХЕМА · ПАСПОРТ ТОЧКИ НАБЛЮДЕНИЯ</div>
   <div class="idps-placement-spec">
     <div><span>01</span><strong>Сегмент / интерфейс</strong><small>Где физически или логически получаются данные?</small></div>
     <div><span>02</span><strong>Направление</strong><small>Какой обмен нас интересует: A → B, B → A или оба направления?</small></div>
@@ -93,7 +93,7 @@ NIDS на сервере
 Рассмотрим три взаимодействия в одной инфраструктуре. Переключайте поток: подсветка показывает, какие элементы относятся именно к выбранному пути. Это **не карта «где обязательно ставить IDS»**, а способ увидеть, что у разных взаимодействий разные маршруты.
 
 <div class="idps-focus-map idps-figure" data-idps-focus-map>
-  <div class="idps-figure__label">ВИЗУАЛИЗАЦИЯ 3 · ОДНА ИНФРАСТРУКТУРА — ТРИ РАЗНЫХ ПУТИ</div>
+  <div class="idps-figure__label">СХЕМА · ТРИ СЕТЕВЫХ ПУТИ — ТРИ ТОЧКИ НАБЛЮДЕНИЯ</div>
   <div class="idps-focus-map__controls" aria-label="Выбор сетевого пути">
     <button class="idps-focus-map__button" type="button" data-idps-focus="all" aria-pressed="true">Все пути</button>
     <button class="idps-focus-map__button" type="button" data-idps-focus="external" aria-pressed="false">Internet → Web</button>
@@ -145,7 +145,7 @@ NIDS на сервере
 Даже на одном узле разные взаимодействия могут идти через разные интерфейсы. В нашем стенде сервер принимает внутренний HTTP через учебный интерфейс и использует другой интерфейс для маршрута по умолчанию.
 
 <div class="idps-figure">
-  <div class="idps-figure__label">ВИЗУАЛИЗАЦИЯ 4 · ОДИН СЕРВЕР — ДВА СЕТЕВЫХ ПУТИ</div>
+  <div class="idps-figure__label">СХЕМА · ОДИН СЕРВЕР — ДВА СЕТЕВЫХ ПУТИ</div>
   <div class="idps-dual-path">
     <div class="idps-dual-path__lane idps-dual-path__lane--lab">
       <span>ВНУТРЕННИЙ HTTP</span>
@@ -181,7 +181,7 @@ NIDS на сервере
 
 <div class="idps-switcher" data-idps-switcher>
   <div class="idps-switcher__header">
-    <strong>ВИЗУАЛИЗАЦИЯ 5 · ДО И ПОСЛЕ ПРИМЕНЕНИЯ ПОЛИТИКИ</strong>
+    <strong>СХЕМА · ДО И ПОСЛЕ ПРИМЕНЕНИЯ ПОЛИТИКИ</strong>
     <p>Переключите точку и сравните набор доступных наблюдений.</p>
   </div>
   <div class="idps-switcher__controls">
@@ -229,9 +229,9 @@ NIDS на сервере
 
 После выбора точки нужно решить, **как предоставить данные сенсору**. Для пассивного сетевого сенсора распространены способы, при которых он получает копию трафика. NIST SP 800-94 рассматривает, среди прочего, зеркалирование порта коммутатора и сетевой ответвитель как варианты подключения пассивного сенсора.
 
-<div class="idps-grid idps-grid--2">
+<div class="idps-grid idps-grid--2 idps-grid--diagram-pair">
   <div class="idps-figure idps-figure--flush">
-    <div class="idps-figure__label">ВИЗУАЛИЗАЦИЯ 6A · SPAN</div>
+    <div class="idps-figure__label">СХЕМА · SPAN</div>
     <div class="idps-copy-diagram">
       <div class="idps-copy-diagram__main">
         <div class="idps-route-node idps-route-node--endpoint">Узел A</div><div class="idps-route-arrow">→</div>
@@ -243,7 +243,7 @@ NIDS на сервере
     <div class="idps-figure__caption">Копию формирует коммутатор согласно конфигурации зеркалирования.</div>
   </div>
   <div class="idps-figure idps-figure--flush">
-    <div class="idps-figure__label">ВИЗУАЛИЗАЦИЯ 6B · TAP</div>
+    <div class="idps-figure__label">СХЕМА · NETWORK TAP</div>
     <div class="idps-copy-diagram">
       <div class="idps-copy-diagram__main">
         <div class="idps-route-node idps-route-node--endpoint">Узел A</div><div class="idps-route-arrow">→</div>
@@ -269,9 +269,9 @@ NIDS на сервере
 
 В Главе 1 мы уже разделили обнаружение и предотвращение. Теперь закрепим это на уровне топологии.
 
-<div class="idps-grid idps-grid--2">
+<div class="idps-grid idps-grid--2 idps-grid--diagram-pair">
   <div class="idps-figure idps-figure--flush">
-    <div class="idps-figure__label">ВИЗУАЛИЗАЦИЯ 7A · ПАССИВНОЕ ПОДКЛЮЧЕНИЕ</div>
+    <div class="idps-figure__label">СХЕМА · ПАССИВНОЕ ПОДКЛЮЧЕНИЕ</div>
     <div class="idps-copy-diagram">
       <div class="idps-copy-diagram__main">
         <div class="idps-route-node idps-route-node--endpoint">Клиент</div><div class="idps-route-arrow">→</div>
@@ -283,7 +283,7 @@ NIDS на сервере
     <div class="idps-figure__caption">Основной поток не обязан проходить через сенсор.</div>
   </div>
   <div class="idps-figure idps-figure--flush">
-    <div class="idps-figure__label">ВИЗУАЛИЗАЦИЯ 7B · ПОДКЛЮЧЕНИЕ В РАЗРЫВ</div>
+    <div class="idps-figure__label">СХЕМА · ПОДКЛЮЧЕНИЕ В РАЗРЫВ</div>
     <div class="idps-inline-path">
       <div class="idps-route-node idps-route-node--endpoint">Клиент</div><div class="idps-route-arrow">→</div>
       <div class="idps-route-node idps-route-node--sensor">Inline IDS/IPS</div><div class="idps-route-arrow">→</div>
@@ -309,7 +309,7 @@ NIDS на сервере
 В виртуальной машине между приложением и средством захвата находится сетевой стек гостевой ОС. Он может использовать механизмы разгрузки: объединять сегменты, откладывать вычисление контрольных сумм или выполнять часть обработки не в том месте, где её ожидает средство анализа.
 
 <div class="idps-figure">
-  <div class="idps-figure__label">ВИЗУАЛИЗАЦИЯ 8 · ГДЕ МОЖЕТ ИЗМЕНИТЬСЯ ПРЕДСТАВЛЕНИЕ ПАКЕТА</div>
+  <div class="idps-figure__label">СХЕМА · ГДЕ МОЖЕТ ИЗМЕНИТЬСЯ ПРЕДСТАВЛЕНИЕ ПАКЕТА</div>
   <div class="idps-layer-chain">
     <div class="idps-layer-chain__item"><span>1</span><strong>Приложение</strong><small>создаёт данные</small></div>
     <div class="idps-route-arrow">→</div>
@@ -384,7 +384,7 @@ NIDS на сервере
 ```
 
 <div class="idps-figure">
-  <div class="idps-figure__label">ВИЗУАЛИЗАЦИЯ 9 · ДОКАЗАТЕЛЬСТВО С ОГРАНИЧЕННОЙ ОБЛАСТЬЮ ВЫВОДА</div>
+  <div class="idps-figure__label">СХЕМА · КАК СОБРАТЬ ОГРАНИЧЕННОЕ ДОКАЗАТЕЛЬСТВО</div>
   <div class="idps-proof-map">
     <div class="idps-proof-map__fact idps-proof-map__fact--source"><strong>Application log</strong><span>подтверждает прикладную доставку конкретного HTTP-запроса</span></div>
     <div class="idps-proof-map__operator">+</div>

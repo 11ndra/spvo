@@ -71,6 +71,7 @@ nav:
           - "05 — Как IDS/IPS обнаруживает подозрительную активность": course/05-firewall-vs-idps.md
           - "06 — Что такое правила и как они устроены": course/06-rules.md
           - "07 — Почему IDS/IPS ошибается и чего она не видит": course/07-limitations.md
+          - "08 — Как проверить и обосновать эффективность IDS/IPS": course/08-effectiveness.md
   - Лабораторные работы:
       - "00 — Подготовка лабораторной среды": labs/environment/index.md
       - "Практикум 0 — Знакомство с рабочей IDPS": labs/orientation/index.md
