@@ -157,6 +157,12 @@
     <span class="course-route__type">Теория</span>
     <strong>Глава 6 — Что такое правила и как они устроены</strong>
   </a>
+  <div class="course-route__connector" aria-hidden="true">↓</div>
+
+  <a class="course-route__item course-route__item--lab" href="labs/lab05/">
+    <span class="course-route__type">Лаборатория</span>
+    <strong>ЛР №5 — Изменяем условие правила</strong>
+  </a>
 </div>
 
 Маршрут читается сверху вниз. Каждая лабораторная закрепляет уже введённое понятие; служебные статусы разработки в студенческом маршруте не показываются.

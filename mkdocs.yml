@@ -77,6 +77,7 @@ nav:
       - "ЛР №2 — Один эпизод, два источника данных": labs/lab02/index.md
       - "ЛР №3 — Точка наблюдения": labs/lab03/index.md
       - "ЛР №4 — Четыре основания решения": labs/lab04/index.md
+      - "ЛР №5 — Изменяем условие правила": labs/lab05/index.md
   - Материалы:
       - Источники курса: resources/sources.md
       - Глоссарий: resources/glossary.md
