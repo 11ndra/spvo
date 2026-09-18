@@ -70,8 +70,6 @@ nav:
           - "04 — Где и как размещают IDS/IPS": course/04-detection-methods.md
           - "05 — Как IDS/IPS обнаруживает подозрительную активность": course/05-firewall-vs-idps.md
           - "06 — Что такое правила и как они устроены": course/06-rules.md
-          - "07 — Почему IDS/IPS ошибается и чего она не видит": course/07-limitations.md
-          - "08 — Как проверить и обосновать эффективность IDS/IPS": course/08-effectiveness.md
   - Лабораторные работы:
       - "00 — Подготовка лабораторной среды": labs/environment/index.md
       - "Практикум 0 — Знакомство с рабочей IDPS": labs/orientation/index.md
@@ -79,7 +77,6 @@ nav:
       - "ЛР №2 — Один эпизод, два источника данных": labs/lab02/index.md
       - "ЛР №3 — Точка наблюдения": labs/lab03/index.md
       - "ЛР №4 — Четыре основания решения": labs/lab04/index.md
-      - "ЛР №5 — Изменяем условие правила": labs/lab05/index.md
   - Материалы:
       - Источники курса: resources/sources.md
       - Глоссарий: resources/glossary.md

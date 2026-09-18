@@ -34,15 +34,18 @@ HTTP-запрос к учебному серверу
 
 Это и есть задача правила.
 
-<div class="teaching-figure">
-<div class="figure-label">ВИЗУАЛЬНАЯ МОДЕЛЬ 1 · ОТ ПРИНЦИПА К ИСПОЛНИМОЙ ПРОВЕРКЕ</div>
-<div class="idps-gates idps-gates--four">
-  <div class="idps-gate"><span>01 · ОСНОВАНИЕ</span><strong>Принцип обнаружения</strong><small>Почему выбранный признак вообще считается значимым?</small></div>
-  <div class="idps-gate"><span>02 · ДАННЫЕ</span><strong>Доступное представление</strong><small>Какие поля, буферы и контекст реально доступны движку?</small></div>
-  <div class="idps-gate"><span>03 · ФОРМАЛИЗАЦИЯ</span><strong>Правило</strong><small>Какая точная машинно-исполняемая проверка выполняется?</small></div>
-  <div class="idps-gate"><span>04 · РЕЗУЛЬТАТ</span><strong>Совпало / не совпало</strong><small>Какой ограниченный факт поддерживает полученный результат?</small></div>
-</div>
-<div class="figure-caption">Это логическая учебная цепочка. Она не описывает обязательный внутренний pipeline любого IDPS.</div>
+<div class="teaching-figure" markdown="1">
+<div class="figure-label">СХЕМА 1 · ОТ ПРИНЦИПА ОБНАРУЖЕНИЯ К ПРАВИЛУ</div>
+
+```mermaid
+flowchart LR
+    M["Принцип обнаружения"] --> Q["Что именно нужно проверить?"]
+    D["Доступные данные и контекст"] --> Q
+    Q --> R["Машинно-исполняемое правило"]
+    R --> E["Совпадение или отсутствие совпадения"]
+```
+
+<div class="figure-caption">Правило не создаёт новый метод обнаружения. Оно формализует конкретную проверку над теми данными и контекстом, которые движок реально способен использовать.</div>
 </div>
 
 Поэтому:
@@ -58,14 +61,26 @@ HTTP-запрос к учебному серверу
 
 Разные продукты используют разные языки. Поэтому нельзя объявлять синтаксис Suricata универсальной структурой всех IDS/IPS.
 
-Для курса полезна более общая модель. Читайте правило не как длинную строку, а как несколько независимых вопросов.
+Для курса полезна более общая модель:
 
-<div class="idps-rule-model">
-  <article><span>ГДЕ?</span><strong>Область применения</strong><p>К какому классу наблюдений относится проверка.</p></article>
-  <article><span>ЧТО?</span><strong>Проверяемое условие</strong><p>Какой конкретный признак должен удовлетворять условию.</p></article>
-  <article><span>В КАКОМ КОНТЕКСТЕ?</span><strong>Состояние и представление</strong><p>Направление, состояние потока, разобранное поле, временное окно и другие доступные свойства.</p></article>
-  <article><span>ЧТО ПОЛУЧИТЬ?</span><strong>Идентификация и действие</strong><p>Как обозначить результат и какое действие запросить при совпадении.</p></article>
-</div>
+```text
+ОБЛАСТЬ ПРИМЕНЕНИЯ
+        +
+ПРОВЕРЯЕМЫЕ УСЛОВИЯ
+        +
+КОНТЕКСТ / СОСТОЯНИЕ, ЕСЛИ НУЖНО
+        +
+ИДЕНТИФИКАЦИЯ И РЕЗУЛЬТАТ
+```
+
+Здесь четыре разных вопроса:
+
+| Вопрос | Что он означает |
+|---|---|
+| Где применять? | К какому классу наблюдений относится правило |
+| Что проверить? | Какие признаки должны удовлетворять условию |
+| Какой контекст учитывать? | Направление, состояние потока, прикладное представление и другие доступные свойства |
+| Что получить при совпадении? | Идентифицируемый результат и, если настроено, действие движка |
 
 Это **учебная логическая декомпозиция**, а не утверждение о внутреннем порядке обработки любого продукта.
 
@@ -88,31 +103,29 @@ alert http 10.13.37.10 any -> 10.13.37.20 8080 (
 
 Тогда вам не требовалось понимать его синтаксис. Теперь разберём его по частям.
 
-Официальная документация Suricata описывает правило как сочетание **action + header + rule options**. Но внутри options находятся конструкции с разной ролью. Поэтому учебно полезно разобрать одну строку на смысловые части.
+Официальная документация Suricata описывает обычное правило как сочетание:
 
-<div class="idps-focus-map" data-idps-focus-map>
-  <div class="idps-focus-map__header"><strong>АНАТОМИЯ SID 1000001</strong><small>Нажмите на роль, чтобы подсветить соответствующую часть. Без JavaScript все части остаются видимыми.</small></div>
-  <div class="idps-focus-map__controls">
-    <button class="idps-focus-map__button" type="button" data-idps-focus="all" aria-pressed="true">Всё правило</button>
-    <button class="idps-focus-map__button" type="button" data-idps-focus="action" aria-pressed="false">Действие</button>
-    <button class="idps-focus-map__button" type="button" data-idps-focus="scope" aria-pressed="false">Область</button>
-    <button class="idps-focus-map__button" type="button" data-idps-focus="context" aria-pressed="false">Контекст</button>
-    <button class="idps-focus-map__button" type="button" data-idps-focus="representation" aria-pressed="false">Представление</button>
-    <button class="idps-focus-map__button" type="button" data-idps-focus="condition" aria-pressed="false">Условие</button>
-    <button class="idps-focus-map__button" type="button" data-idps-focus="metadata" aria-pressed="false">Метаданные</button>
-  </div>
-  <div class="idps-rule-anatomy" aria-label="Разбор правила Suricata">
-    <span class="idps-rule-token idps-rule-token--action" data-idps-focus-target="action"><code>alert</code><small>action</small></span>
-    <span class="idps-rule-token idps-rule-token--scope" data-idps-focus-target="scope"><code>http 10.13.37.10 any → 10.13.37.20 8080</code><small>header / область</small></span>
-    <span class="idps-rule-token" data-idps-focus-target="metadata"><code>msg:"LAB1 HTTP marker observed";</code><small>описание</small></span>
-    <span class="idps-rule-token" data-idps-focus-target="context"><code>flow:established,to_server;</code><small>контекст потока</small></span>
-    <span class="idps-rule-token" data-idps-focus-target="representation"><code>http.uri;</code><small>sticky buffer</small></span>
-    <span class="idps-rule-token idps-rule-token--condition" data-idps-focus-target="condition"><code>content:"ATTACK-LAB";</code><small>проверяемый признак</small></span>
-    <span class="idps-rule-token" data-idps-focus-target="metadata"><code>sid:1000001; rev:3;</code><small>идентификация / версия</small></span>
-  </div>
-</div>
+```text
+действие + заголовок + параметры правила
+```
 
-Важно: **action/header/options — формат языка Suricata**, а не универсальная грамматика всех IDPS. И даже внутри `options` ключевые слова выполняют разные функции.
+Для нашего примера:
+
+```text
+alert
+│
+├─ действие
+│
+http 10.13.37.10 any -> 10.13.37.20 8080
+│
+├─ заголовок: протокол, адреса, порты, направление
+│
+(msg:...; flow:...; http.uri; content:...; sid:...; rev:...;)
+│
+└─ параметры правила
+```
+
+Важно: эта структура описывает **язык правил Suricata**, а не универсальную грамматику всех IDPS.
 
 ---
 
@@ -187,29 +200,7 @@ any              → любой порт источника;
 
 ---
 
-## 6. Модель OSI помогает назвать поля, но не задаёт «уровень IDS»
-
-В силлабусе отдельно есть эталонная модель OSI. В этой главе она нужна как **язык для различения представлений данных**, а не как классификация вида «IDS работает на L7».
-
-<div class="teaching-figure">
-<div class="figure-label">ВИЗУАЛЬНАЯ МОДЕЛЬ 2 · ОДНО ПРАВИЛО МОЖЕТ ИСПОЛЬЗОВАТЬ ПРИЗНАКИ ИЗ РАЗНЫХ ПРЕДСТАВЛЕНИЙ</div>
-<div class="idps-protocol-stack">
-  <div><span>ПРИКЛАДНОЕ ПРЕДСТАВЛЕНИЕ</span><strong>HTTP URI / method / headers</strong><small>Например, <code>http.uri</code> после распознавания HTTP.</small></div>
-  <div><span>ТРАНСПОРТНЫЙ КОНТЕКСТ</span><strong>TCP/UDP, порт, состояние потока</strong><small>Направление, established-контекст и другие свойства потока.</small></div>
-  <div><span>СЕТЕВЫЕ ПОЛЯ</span><strong>IP-адреса, TTL и другие поля</strong><small>Заголовок правила и IP-keywords могут ограничивать проверку.</small></div>
-  <div><span>КАНАЛЬНЫЕ ПОЛЯ</span><strong>Ethernet-представление, если оно доступно</strong><small>Наличие такой возможности не означает, что каждое правило использует её.</small></div>
-</div>
-<div class="figure-caption">OSI помогает локализовать смысл поля. Реальная доступность представления определяется точкой наблюдения, декодированием, распознанным протоколом и возможностями конкретного движка.</div>
-</div>
-
-<div class="principle-box">
-<strong>ПОЛЕ ПРОТОКОЛА ≠ «УРОВЕНЬ, НА КОТОРОМ РАБОТАЕТ IDS»</strong>
-<p>Одно правило может одновременно ограничивать IP-адреса и порты, учитывать состояние потока и проверять разобранное прикладное поле. Поэтому сведение IDS к одному уровню OSI искажает реальную модель.</p>
-</div>
-
----
-
-## 7. Правило проверяет не «весь пакет», а доступное представление данных
+## 6. Правило проверяет не «весь пакет», а доступное представление данных
 
 Одна из самых важных частей правила из ЛР №1:
 
@@ -230,17 +221,18 @@ content:"ATTACK-LAB";
 
 В Suricata `http.uri` является нормализованным представлением URI; для ненормализованного URI существует отдельный `http.uri.raw`.
 
-<div class="teaching-figure">
-<div class="figure-label">ВИЗУАЛЬНАЯ МОДЕЛЬ 3 · RAW И НОРМАЛИЗОВАННОЕ ПРЕДСТАВЛЕНИЕ — НЕ ОДНО И ТО ЖЕ</div>
-<div class="idps-uri-compare">
-  <div class="idps-uri-compare__request"><span>НАБЛЮДАЕМЫЙ ЗАПРОС</span><code>GET //ATTACK-LAB HTTP/1.1</code><small>Один и тот же запрос может иметь несколько представлений внутри движка.</small></div>
-  <div class="idps-uri-compare__arrow" aria-hidden="true">↙︎ &nbsp; ↘︎</div>
-  <div class="idps-uri-compare__views">
-    <article><span>NORMALIZED</span><strong><code>http.uri</code></strong><code>/ATTACK-LAB</code><small>Нормализация может изменить строковое представление URI.</small></article>
-    <article><span>RAW</span><strong><code>http.uri.raw</code></strong><code>//ATTACK-LAB</code><small>Ненормализованный URI сохраняет отличия, которые normalizer может убрать.</small></article>
-  </div>
-</div>
-<div class="figure-caption">Выбор sticky buffer определяет, к какому представлению применяется последующее <code>content</code>. Это часть семантики правила, а не декоративная запись.</div>
+<div class="teaching-figure" markdown="1">
+<div class="figure-label">СХЕМА 2 · УСЛОВИЕ ПРИМЕНЯЕТСЯ К КОНКРЕТНОМУ ПРЕДСТАВЛЕНИЮ</div>
+
+```mermaid
+flowchart LR
+    O["Наблюдаемый HTTP-запрос"] --> P["Разобранные поля HTTP"]
+    P --> U["http.uri"]
+    U --> C["content: ATTACK-LAB"]
+    C --> R{"Условие выполнено?"}
+```
+
+<div class="figure-caption">Схема показывает логику конкретного условия правила, а не обязательный внутренний pipeline Suricata или любой другой IDS.</div>
 </div>
 
 Отсюда следует важная инженерная мысль:
@@ -253,7 +245,7 @@ content:"ATTACK-LAB";
 
 ---
 
-## 8. Контекст потока уточняет, когда условие имеет смысл
+## 7. Контекст потока уточняет, когда условие имеет смысл
 
 В том же правиле есть:
 
@@ -285,7 +277,7 @@ Suricata также поддерживает `flowbits`: они позволяю
 
 ---
 
-## 9. `msg`, `sid`, `rev` описывают результат, но не создают совпадение
+## 8. `msg`, `sid`, `rev` описывают результат, но не создают совпадение
 
 Рассмотрим оставшиеся части учебного правила:
 
@@ -329,7 +321,7 @@ MSG = доказательство инцидента
 
 ---
 
-## 10. Когда можно сказать, что правило совпало
+## 9. Когда можно сказать, что правило совпало
 
 Удобно читать учебное правило как логическое утверждение:
 
@@ -358,7 +350,7 @@ MSG = доказательство инцидента
 
 ---
 
-## 11. Совпадение правила, оповещение и инцидент — три разных уровня
+## 10. Совпадение правила, оповещение и инцидент — три разных уровня
 
 Вернёмся к стенду ЛР №1. Там правило с `SID 1000001` загружено в Suricata, а вывод alert-событий в EVE JSON настроен заранее. Если после контролируемого запроса мы действительно находим соответствующий alert в `eve.json`, то наблюдаем:
 
@@ -379,19 +371,18 @@ MSG = доказательство инцидента
 что событие является инцидентом ИБ.
 ```
 
-<div class="teaching-figure">
-<div class="figure-label">ВИЗУАЛЬНАЯ МОДЕЛЬ 4 · ГРАНИЦА ДОКАЗАТЕЛЬСТВА</div>
-<div class="idps-proof-map">
-  <div class="idps-proof-map__fact"><strong>Условия удовлетворены</strong><span>Логика конкретного правила получила совпадение.</span></div>
-  <div class="idps-proof-map__operator" aria-hidden="true">+</div>
-  <div class="idps-proof-map__fact idps-proof-map__fact--source"><strong>EVE содержит SID 1000001</strong><span>Настроенный output зафиксировал идентифицируемый alert.</span></div>
-  <div class="idps-proof-map__operator" aria-hidden="true">⇒</div>
-  <div class="idps-proof-map__conclusion"><strong>Обоснованный вывод</strong><span>Наблюдение удовлетворило логике правила и для него был сформирован alert.</span></div>
-</div>
-<div class="evidence-boundary">
-  <article class="evidence-supported"><span>ПОДДЕРЖИВАЕТ</span><strong>Совпадение конкретного правила</strong><p>при известной конфигурации и доступных данных.</p></article>
-  <article class="evidence-not-proven"><span>НЕ ДОКАЗЫВАЕТ</span><strong>Инцидент или компрометацию</strong><p>без дополнительных независимых свидетельств.</p></article>
-</div>
+<div class="teaching-figure" markdown="1">
+<div class="figure-label">СХЕМА 3 · ОТ УСЛОВИЯ К РЕЗУЛЬТАТУ БЕЗ ЛОЖНОГО СКАЧКА К ИНЦИДЕНТУ</div>
+
+```mermaid
+flowchart LR
+    C["Условия правила выполнены"] --> M["Совпадение правила"]
+    M --> A["Действие alert"]
+    A --> E["Запись в настроенный EVE output"]
+    E --> I["Дальнейшая интерпретация с дополнительными данными"]
+```
+
+<div class="figure-caption">Оповещение является наблюдаемым результатом правила. Переход от оповещения к выводу об инциденте требует дополнительных оснований.</div>
 </div>
 
 Так сохраняется уже знакомая граница:
@@ -403,7 +394,7 @@ MSG = доказательство инцидента
 
 ---
 
-## 12. Порог и подавление не исправляют содержание условия
+## 11. Порог и подавление не исправляют содержание условия
 
 Предположим, правило слишком часто формирует одинаковые оповещения.
 
@@ -437,29 +428,26 @@ MSG = доказательство инцидента
   <p>Управление частотой результатов и корректность проверяемой логики — разные задачи.</p>
 </div>
 
-<div class="idps-rule-two-layer">
-  <article><span>СЛОЙ 1 · ЛОГИКА СОВПАДЕНИЯ</span><strong>Какие наблюдения считаются совпадением?</strong><p>Например: URI содержит заданный маркер.</p><small>Если условие слишком широкое, проблема находится здесь.</small></article>
-  <div class="idps-rule-two-layer__arrow" aria-hidden="true">↓</div>
-  <article><span>СЛОЙ 2 · ВЫВОД / ЧАСТОТА</span><strong>Когда и сколько результатов выводить?</strong><p><code>threshold</code>, <code>detection_filter</code>, <code>suppress</code> и другие механизмы управления результатами.</p><small>Изменение этого слоя не делает исходный признак более специфичным.</small></article>
-</div>
-
 Есть и дополнительная тонкость: официальная документация Suricata предупреждает, что для `drop`/`reject` в IPS-режиме thresholding оповещений не означает, что предотвращающее действие применяется только к тем пакетам, для которых выведено оповещение. Поэтому нельзя считать число alert прямым эквивалентом числа воздействий IPS.
 
 ---
 
-## 13. Как читать правило инженерно
+## 12. Как читать правило инженерно
 
 Вместо чтения слева направо как непонятной строки используйте пять вопросов.
 
-<div class="teaching-figure">
-<div class="figure-label">ВИЗУАЛЬНАЯ МОДЕЛЬ 5 · ПЯТЬ ВОПРОСОВ К ЛЮБОМУ УЧЕБНОМУ ПРАВИЛУ</div>
-<div class="idps-gates">
-  <div class="idps-gate"><span>1 · ОБЛАСТЬ</span><strong>К чему применяется?</strong><small>Протокол, адреса, порты, направление и другие ограничения.</small></div>
-  <div class="idps-gate"><span>2 · ДАННЫЕ</span><strong>Что доступно?</strong><small>Сырые поля, sticky buffer, состояние, счётчики или иное представление.</small></div>
-  <div class="idps-gate"><span>3 · ЛОГИКА</span><strong>Что должно выполниться?</strong><small>Конкретные условия и необходимый контекст.</small></div>
-  <div class="idps-gate"><span>4 · ИДЕНТИЧНОСТЬ</span><strong>Как узнать результат?</strong><small><code>sid</code>, <code>rev</code>, <code>msg</code> и другие метаданные.</small></div>
-  <div class="idps-gate"><span>5 · ДЕЙСТВИЕ</span><strong>Что запросить?</strong><small><code>alert</code>, <code>drop</code>, <code>pass</code> и семантика конкретного режима.</small></div>
-</div>
+<div class="teaching-figure" markdown="1">
+<div class="figure-label">СХЕМА 4 · ПЯТЬ ВОПРОСОВ К ЛЮБОМУ УЧЕБНОМУ ПРАВИЛУ</div>
+
+```mermaid
+flowchart TB
+    Q1["1. К каким наблюдениям применяется?"] --> Q2["2. Какие данные или представления использует?"]
+    Q2 --> Q3["3. Какие условия и контекст должны выполниться?"]
+    Q3 --> Q4["4. Как идентифицируется результат?"]
+    Q4 --> Q5["5. Какое действие запрошено при совпадении?"]
+```
+
+<div class="figure-caption">Такое чтение отделяет область применения, данные, проверяемую логику, идентификацию результата и действие движка.</div>
 </div>
 
 Применим вопросы к `SID 1000001`:
@@ -476,7 +464,7 @@ MSG = доказательство инцидента
 
 ---
 
-## 14. Что хорошее правило должно позволять проверить
+## 13. Что хорошее правило должно позволять проверить
 
 На этом этапе курса нам ещё не нужны полный lifecycle Detection Engineering, большие ruleset, PCRE-оптимизация или сложные техники обхода.
 
@@ -486,16 +474,17 @@ MSG = доказательство инцидента
 
 Например для `SID 1000001`:
 
-<div class="idps-test-matrix">
-  <article class="idps-test-matrix__positive"><span>POSITIVE TEST</span><strong><code>GET /ATTACK-LAB</code></strong><p>Условие <code>content</code> должно выполниться.</p><small>Ищем alert с ожидаемым SID.</small></article>
-  <article class="idps-test-matrix__negative"><span>NEGATIVE TEST</span><strong><code>GET /NORMAL</code></strong><p>Конкретное <code>content</code>-условие выполняться не должно.</p><small>Но сам запрос подтверждаем независимым артефактом.</small></article>
-</div>
+```text
+Положительный случай:
+GET /ATTACK-LAB
+→ условие content должно выполниться
+
+Отрицательный случай:
+GET /NORMAL
+→ конкретное условие content не должно выполниться
+```
 
 При этом отсутствие alert в отрицательном случае нельзя интерпретировать как «запроса не было». Существование запроса подтверждается отдельно — например ответом учебного приложения или сетевым захватом.
-
-Именно это станет предметом следующего контролируемого эксперимента: вы измените **одно содержательное условие** правила, выполните positive/negative tests до и после изменения и сопоставите результат с EVE JSON.
-
-[**Перейти к ЛР №5 — «Изменяем условие правила и доказываем результат»**](../../labs/lab05/){ .md-button .md-button--primary }
 
 Это связывает Главу 6 со всеми предыдущими главами:
 
@@ -511,20 +500,20 @@ MSG = доказательство инцидента
 
 ---
 
-## 15. Что нужно запомнить
+## 14. Что нужно запомнить
 
 <div class="axiom-grid">
   <div class="axiom-card"><span>01</span><strong>Правило формализует проверку</strong><p>Оно выражает конкретное условие над доступными данными и контекстом; само наличие rule syntax не определяет метод обнаружения.</p></div>
   <div class="axiom-card"><span>02</span><strong>Заголовок ≠ совпадение</strong><p>Область применения определяет кандидатов для проверки, но не доказывает выполнение содержательных условий.</p></div>
-  <div class="axiom-card"><span>03</span><strong>Представление данных имеет значение</strong><p>Условие над нормализованным <code>http.uri</code> — не то же самое, что поиск по произвольным сырым байтам.</p></div>
-  <div class="axiom-card"><span>04</span><strong>Метаданные ≠ логика совпадения</strong><p><code>msg</code>, <code>sid</code>, <code>rev</code>, классификация и приоритет описывают и идентифицируют результат, но не заменяют проверяемое условие.</p></div>
+  <div class="axiom-card"><span>03</span><strong>Представление данных имеет значение</strong><p>Условие над нормализованным `http.uri` — не то же самое, что поиск по произвольным сырым байтам.</p></div>
+  <div class="axiom-card"><span>04</span><strong>Метаданные ≠ логика совпадения</strong><p>`msg`, `sid`, `rev`, классификация и приоритет описывают и идентифицируют результат, но не заменяют проверяемое условие.</p></div>
   <div class="axiom-card"><span>05</span><strong>Alert ≠ incident</strong><p>Срабатывание правила подтверждает выполнение конкретной логики в доступных данных; более сильный вывод требует дополнительных подтверждений.</p></div>
   <div class="axiom-card"><span>06</span><strong>Threshold ≠ исправление правила</strong><p>Управление частотой оповещений и качество самого условия обнаружения необходимо оценивать отдельно.</p></div>
 </div>
 
 ---
 
-## 16. Проверка понимания
+## 15. Проверка понимания
 
 <div class="quiz" data-question-id="chapter6-v1-q1">
   <p><strong>Что лучше всего описывает роль заголовка правила Suricata?</strong></p>
@@ -583,7 +572,5 @@ MSG = доказательство инцидента
 - Suricata configuration / action order — различие действий `alert`, `pass`, `drop`, `reject` и зависимость `drop` от IPS/inline-режима.
 
 Suricata в этой главе используется как **конкретная реализация обнаружения на основе правил**. Синтаксис Suricata не выдаётся за универсальный язык всех IDS/IPS.
-
-Связь с силлабусом: тема OSI используется для объяснения **области правила и представлений данных**, а темы безопасности приложений и веб-сервисов — как контекст для HTTP/API-примеров. Курс не делает из этого вывод `IDS = L7` и не превращает главу в web-pentest.
 
 Актуальные ссылки собраны в разделе [«Источники курса»](../../resources/sources/).

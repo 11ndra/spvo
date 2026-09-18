@@ -108,73 +108,9 @@
     activate(buttons.find((button) => button.getAttribute("aria-pressed") === "true")?.dataset.idpsFocus || "all");
   }
 
-  function initializeBaseRate(root) {
-    if (!root || root.dataset.idpsBaseRateReady === "true") return;
-
-    const totalInput = root.querySelector("[data-idps-br-total]");
-    const prevalenceInput = root.querySelector("[data-idps-br-prevalence]");
-    const tprInput = root.querySelector("[data-idps-br-tpr]");
-    const fprInput = root.querySelector("[data-idps-br-fpr]");
-    if (!totalInput || !prevalenceInput || !tprInput || !fprInput) return;
-
-    const out = {
-      prevalence: root.querySelector("[data-idps-br-prevalence-value]"),
-      tpr: root.querySelector("[data-idps-br-tpr-value]"),
-      fpr: root.querySelector("[data-idps-br-fpr-value]"),
-      tp: root.querySelector("[data-idps-br-tp]"),
-      fn: root.querySelector("[data-idps-br-fn]"),
-      fp: root.querySelector("[data-idps-br-fp]"),
-      tn: root.querySelector("[data-idps-br-tn]"),
-      precision: root.querySelector("[data-idps-br-precision]"),
-      explanation: root.querySelector("[data-idps-br-explanation]")
-    };
-
-    if (Object.values(out).some((node) => !node)) return;
-    root.dataset.idpsBaseRateReady = "true";
-
-    const clamp = (value, min, max) => Math.max(min, Math.min(max, value));
-    const formatCount = (value) => Math.round(value).toLocaleString("ru-RU");
-
-    function render() {
-      const total = Math.max(1, Number(totalInput.value) || 1);
-      const prevalence = clamp(Number(prevalenceInput.value) || 0, 0, 100) / 100;
-      const tpr = clamp(Number(tprInput.value) || 0, 0, 100) / 100;
-      const fpr = clamp(Number(fprInput.value) || 0, 0, 100) / 100;
-
-      const positive = total * prevalence;
-      const negative = total - positive;
-      const tp = positive * tpr;
-      const fn = positive - tp;
-      const fp = negative * fpr;
-      const tn = negative - fp;
-      const precision = tp + fp > 0 ? tp / (tp + fp) : 0;
-
-      out.prevalence.textContent = `${(prevalence * 100).toFixed(2)}%`;
-      out.tpr.textContent = `${(tpr * 100).toFixed(1)}%`;
-      out.fpr.textContent = `${(fpr * 100).toFixed(1)}%`;
-      out.tp.textContent = formatCount(tp);
-      out.fn.textContent = formatCount(fn);
-      out.fp.textContent = formatCount(fp);
-      out.tn.textContent = formatCount(tn);
-      out.precision.textContent = `${(precision * 100).toFixed(1)}%`;
-      out.explanation.textContent =
-        fp > tp
-          ? "Ложных positive больше, чем подтверждённых positive: низкая базовая частота усиливает операционный шум."
-          : "Подтверждённые positive составляют значимую долю положительных решений, но вывод всё равно относится только к заданной выборке.";
-    }
-
-    [totalInput, prevalenceInput, tprInput, fprInput].forEach((input) => {
-      input.addEventListener("input", render);
-      input.addEventListener("change", render);
-    });
-
-    render();
-  }
-
   function initializeIdpsUI(context = document) {
     context.querySelectorAll("[data-idps-switcher]").forEach(initializeSwitcher);
     context.querySelectorAll("[data-idps-focus-map]").forEach(initializeFocusMap);
-    context.querySelectorAll("[data-idps-base-rate]").forEach(initializeBaseRate);
   }
 
   function boot() {
