@@ -140,16 +140,20 @@ flowchart LR
 **Хостовая IDS/IPS (Host-Based IDS/IPS, HIDS/HIPS)** работает с событиями и характеристиками конкретного вычислительного узла.
 
 <div class="idps-figure">
-  <div class="idps-figure__label">СХЕМА 3 · ХОСТОВЫЙ ВЗГЛЯД</div>
-  <div class="idps-grid idps-grid--3 idps-grid--compact">
-    <article class="idps-card idps-card--source"><span class="idps-card__eyebrow">ИСТОЧНИК</span><strong class="idps-card__title">Процессы</strong><p>Запуск, завершение и доступный контекст процесса.</p></article>
-    <article class="idps-card idps-card--source"><span class="idps-card__eyebrow">ИСТОЧНИК</span><strong class="idps-card__title">Пользователи</strong><p>Учётные записи и доступные события аутентификации/действий.</p></article>
-    <article class="idps-card idps-card--source"><span class="idps-card__eyebrow">ИСТОЧНИК</span><strong class="idps-card__title">Файлы и конфигурация</strong><p>Изменения объектов, если они контролируются.</p></article>
-    <article class="idps-card idps-card--source"><span class="idps-card__eyebrow">ИСТОЧНИК</span><strong class="idps-card__title">Журналы и аудит</strong><p>Системные и прикладные события, которые реально журналируются.</p></article>
-    <article class="idps-card idps-card--source"><span class="idps-card__eyebrow">ИСТОЧНИК</span><strong class="idps-card__title">Локальные соединения</strong><p>Сетевой контекст, доступный на самом узле.</p></article>
-    <article class="idps-card idps-card--sensor"><span class="idps-card__eyebrow">СБОР / АНАЛИЗ</span><strong class="idps-card__title">Агент HIDS</strong><p>Получает только те данные, к которым имеет доступ и которые настроены для сбора.</p></article>
+  <div class="idps-figure__label">СХЕМА 3 · ХОСТОВЫЕ ИСТОЧНИКИ СХОДЯТСЯ К АГЕНТУ, НО НЕ ПОЯВЛЯЮТСЯ АВТОМАТИЧЕСКИ</div>
+  <div class="idps-source-hub">
+    <div class="idps-source-hub__sources">
+      <div class="idps-source-hub__source"><strong>Процессы</strong><small>Запуск, завершение и доступный контекст процесса.</small></div>
+      <div class="idps-source-hub__source"><strong>Пользователи</strong><small>Аутентификация и действия, если соответствующие события формируются.</small></div>
+      <div class="idps-source-hub__source"><strong>Файлы и конфигурация</strong><small>Изменения объектов, которые включены в контроль.</small></div>
+      <div class="idps-source-hub__source"><strong>Журналы и аудит</strong><small>Системные и прикладные события, которые реально журналируются.</small></div>
+      <div class="idps-source-hub__source"><strong>Локальные соединения</strong><small>Сетевой контекст, доступный на самом наблюдаемом узле.</small></div>
+    </div>
+    <div class="idps-source-hub__arrow" aria-hidden="true">→</div>
+    <div class="idps-source-hub__core"><strong>Агент HIDS/HIPS</strong><small>Получает только доступную и настроенную телеметрию. Конкретный продукт может собирать не все перечисленные источники.</small></div>
+    <div class="idps-source-hub__boundary"><strong>Граница наблюдаемости</strong><small>Установленный агент ≠ полная видимость узла. Реальный набор данных определяется ОС, правами, аудитом, конфигурацией и возможностями реализации.</small></div>
   </div>
-  <div class="idps-figure__caption">Наличие агента не означает автоматической доступности любой телеметрии. Реальный набор данных зависит от продукта, ОС, настроек аудита, прав и конфигурации.</div>
+  <div class="idps-figure__caption">Схема показывает отношение «источники → агент», а не обязательную внутреннюю архитектуру продукта. Каждый показанный источник должен существовать и быть доступен отдельно.</div>
 </div>
 
 ### Один эпизод глазами NIDS и HIDS
@@ -191,9 +195,25 @@ WIDS/WIPS может использоваться для выявления не
 
 **Анализ сетевого поведения (Network Behavior Analysis, NBA)** рассматривает сетевой трафик или статистику сетевой активности, делая акцент на необычных потоках и изменениях поведения.
 
-<div class="idps-grid idps-grid--2">
-  <article class="idps-card idps-card--source"><span class="idps-card__eyebrow">БАЗОВЫЙ ПРОФИЛЬ</span><strong class="idps-card__title">20 внешних соединений в час</strong><p>Наблюдаемая активность соответствует ожидаемому профилю для данного узла и периода.</p></article>
-  <article class="idps-card idps-card--warning"><span class="idps-card__eyebrow">НАБЛЮДАЕМОЕ ИЗМЕНЕНИЕ</span><strong class="idps-card__title">12 000 соединений за несколько минут</strong><p>Изменение масштаба или структуры сетевого поведения становится признаком, который требует анализа.</p></article>
+<div class="idps-figure">
+  <div class="idps-figure__label">ВИЗУАЛЬНЫЙ ПРИМЕР · ПРОФИЛЬ И РЕЗКОЕ ИЗМЕНЕНИЕ СЕТЕВОЙ АКТИВНОСТИ</div>
+  <div class="idps-activity-plot" aria-label="Слева показан стабильный низкий профиль активности, справа — резкий всплеск. Высота столбцов условная и иллюстрирует изменение, а не измерительную шкалу.">
+    <div class="idps-activity-plot__group">
+      <strong>Базовый профиль · около 20 внешних соединений в час</strong>
+      <small>Условно стабильная активность в нескольких последовательных интервалах.</small>
+      <div class="idps-activity-plot__bars" aria-hidden="true">
+        <span class="idps-activity-plot__bar" style="--idps-level:18%"></span><span class="idps-activity-plot__bar" style="--idps-level:22%"></span><span class="idps-activity-plot__bar" style="--idps-level:17%"></span><span class="idps-activity-plot__bar" style="--idps-level:24%"></span><span class="idps-activity-plot__bar" style="--idps-level:20%"></span><span class="idps-activity-plot__bar" style="--idps-level:21%"></span><span class="idps-activity-plot__bar" style="--idps-level:19%"></span><span class="idps-activity-plot__bar" style="--idps-level:23%"></span>
+      </div>
+    </div>
+    <div class="idps-activity-plot__group idps-activity-plot__group--change">
+      <strong>Наблюдаемое изменение · 12 000 соединений за несколько минут</strong>
+      <small>Масштаб и структура активности резко отличаются от выбранного базового профиля.</small>
+      <div class="idps-activity-plot__bars" aria-hidden="true">
+        <span class="idps-activity-plot__bar" style="--idps-level:20%"></span><span class="idps-activity-plot__bar" style="--idps-level:24%"></span><span class="idps-activity-plot__bar" style="--idps-level:38%"></span><span class="idps-activity-plot__bar" style="--idps-level:58%"></span><span class="idps-activity-plot__bar" style="--idps-level:82%"></span><span class="idps-activity-plot__bar" style="--idps-level:96%"></span><span class="idps-activity-plot__bar" style="--idps-level:90%"></span><span class="idps-activity-plot__bar" style="--idps-level:86%"></span>
+      </div>
+    </div>
+  </div>
+  <div class="idps-figure__caption">Столбцы — учебная визуализация, а не реальный график измерений. NBA фиксирует изменение наблюдаемого поведения относительно выбранной модели; причина изменения требует дополнительного контекста.</div>
 </div>
 
 <div class="idps-evidence-grid idps-evidence-grid--compact">
@@ -218,20 +238,20 @@ NIDS и NBA оба используют сетевые данные, поэто�
 ## 8. Тип системы и метод обнаружения — не одно и то же
 
 <div class="idps-figure">
-  <div class="idps-figure__label">СХЕМА 5 · ДВЕ НЕЗАВИСИМЫЕ ОСИ</div>
-  <div class="idps-grid idps-grid--2 idps-grid--compact">
-    <article class="idps-card idps-card--source">
-      <span class="idps-card__eyebrow">ОСЬ 1 · ОТКУДА ПОЛУЧЕНЫ ДАННЫЕ?</span>
-      <strong class="idps-card__title">Источник / область наблюдения</strong>
-      <p>Сеть · хост · беспроводная среда · приложение.</p>
-    </article>
-    <article class="idps-card idps-card--sensor">
-      <span class="idps-card__eyebrow">ОСЬ 2 · КАК ДАННЫЕ АНАЛИЗИРУЮТСЯ?</span>
-      <strong class="idps-card__title">Метод / условие обнаружения</strong>
-      <p>Например: заранее известный признак, анализ состояния и семантики, сравнение с ожидаемой моделью.</p>
-    </article>
+  <div class="idps-figure__label">СХЕМА 5 · ИСТОЧНИК ДАННЫХ И СПОСОБ АНАЛИЗА — ДВЕ РАЗНЫЕ ОСИ</div>
+  <div class="idps-axis-table-wrap">
+    <table class="idps-axis-table">
+      <thead>
+        <tr><th>Источник / область наблюдения ↓</th><th>Известный признак</th><th>Состояние / семантика</th><th>Отклонение от ожидаемой модели</th></tr>
+      </thead>
+      <tbody>
+        <tr><th>Сетевые данные</th><td><span class="idps-axis-table__possible">Возможна комбинация</span><div class="idps-axis-table__note">Например, условие по доступному сетевому признаку.</div></td><td><span class="idps-axis-table__possible">Возможна комбинация</span><div class="idps-axis-table__note">Если реализация строит нужный протокольный контекст.</div></td><td><span class="idps-axis-table__possible">Возможна комбинация</span><div class="idps-axis-table__note">Потоки и статистика могут сравниваться с моделью поведения.</div></td></tr>
+        <tr><th>Хостовые данные</th><td><span class="idps-axis-table__possible">Возможна комбинация</span><div class="idps-axis-table__note">Например, известный признак в событии или объекте.</div></td><td><span class="idps-axis-table__possible">Возможна комбинация</span><div class="idps-axis-table__note">Анализ последовательности или контекста событий узла.</div></td><td><span class="idps-axis-table__possible">Возможна комбинация</span><div class="idps-axis-table__note">Сравнение активности узла с ожидаемым профилем.</div></td></tr>
+        <tr><th>Беспроводные данные</th><td><span class="idps-axis-table__possible">Возможна комбинация</span><div class="idps-axis-table__note">Известные признаки кадров, точек доступа или клиентов.</div></td><td><span class="idps-axis-table__possible">Возможна комбинация</span><div class="idps-axis-table__note">Контекст состояния беспроводного протокола.</div></td><td><span class="idps-axis-table__possible">Возможна комбинация</span><div class="idps-axis-table__note">Отклонения от ожидаемой картины радиоокружения.</div></td></tr>
+      </tbody>
+    </table>
   </div>
-  <div class="idps-figure__caption">Одна ось не определяет другую. Здесь приведены только примеры способов анализа; основания обнаружения подробно разбираются в Главе 5.</div>
+  <div class="idps-figure__caption">Матрица показывает логическую независимость осей, а не обещает наличие каждой комбинации в любом продукте. Реальная возможность зависит от доступных данных, представления и реализации детектора.</div>
 </div>
 
 <div class="idps-equation idps-equation--warning">
@@ -246,15 +266,45 @@ NIDS и NBA оба используют сетевые данные, поэто�
 !!! note "Учебная модель / синтетический сценарий"
     На веб-сервере выполняется неизвестный процесс, который изменяет файл и устанавливает множество исходящих соединений.
 
-<div class="idps-figure">
-  <div class="idps-figure__label">СХЕМА 6 · ОДИН ЭПИЗОД, РАЗНЫЕ ДОКАЗАТЕЛЬСТВА</div>
-  <div class="idps-grid idps-grid--2 idps-grid--compact">
-    <article class="idps-card idps-card--sensor"><span class="idps-card__eyebrow">NIDS</span><strong class="idps-card__title">Соединения и протокольные признаки</strong><p>Поддерживает сетевые выводы в пределах доступной точки наблюдения.</p></article>
-    <article class="idps-card idps-card--source"><span class="idps-card__eyebrow">HIDS</span><strong class="idps-card__title">Процесс, пользователь, изменение файла</strong><p>Может дать локальный контекст узла, если соответствующая телеметрия собирается.</p></article>
-    <article class="idps-card idps-card--warning"><span class="idps-card__eyebrow">NBA / NTA</span><strong class="idps-card__title">Изменение количества и характера потоков</strong><p>Показывает изменение поведения, но не устанавливает его причину автоматически.</p></article>
-    <article class="idps-card"><span class="idps-card__eyebrow">WIDS</span><strong class="idps-card__title">Может не дать релевантных данных</strong><p>Если эпизод не затрагивает беспроводную область наблюдения, отсутствие релевантного события здесь ожидаемо.</p></article>
+<div class="idps-focus-map" data-idps-focus-map>
+  <div class="idps-focus-map__header">
+    <strong>СХЕМА 6 · ОДИН ЭПИЗОД, РАЗНЫЕ ДОКАЗАТЕЛЬСТВА</strong>
+    <small>При включённом JavaScript можно подсветить один источник. Без JavaScript вся карта остаётся видимой.</small>
   </div>
-  <div class="idps-figure__caption">Каждый источник поддерживает разные выводы. Отсутствие данных у одного источника не означает отсутствие самого события.</div>
+  <div class="idps-focus-map__controls" aria-label="Подсветка источников наблюдения">
+    <button class="idps-focus-map__button" type="button" data-idps-focus="all" aria-pressed="true">Все источники</button>
+    <button class="idps-focus-map__button" type="button" data-idps-focus="nids" aria-pressed="false">NIDS</button>
+    <button class="idps-focus-map__button" type="button" data-idps-focus="hids" aria-pressed="false">HIDS</button>
+    <button class="idps-focus-map__button" type="button" data-idps-focus="nba" aria-pressed="false">NBA / NTA</button>
+  </div>
+  <div class="idps-episode-map-wrap">
+    <div class="idps-episode-map">
+      <div class="idps-episode-map__cell idps-episode-map__cell--head">Источник</div>
+      <div class="idps-episode-map__cell idps-episode-map__cell--head">Входящий HTTP-запрос</div>
+      <div class="idps-episode-map__cell idps-episode-map__cell--head">Запуск процесса</div>
+      <div class="idps-episode-map__cell idps-episode-map__cell--head">Изменение файла</div>
+      <div class="idps-episode-map__cell idps-episode-map__cell--head">Много исходящих соединений</div>
+
+      <div class="idps-episode-map__cell idps-episode-map__cell--row" data-idps-focus-target="nids">NIDS</div>
+      <div class="idps-episode-map__cell" data-idps-focus-target="nids"><span class="idps-episode-map__mark">СЕТЕВОЙ СЛЕД</span><strong>Может наблюдать запрос</strong><small>Если он проходит через выбранную точку и доступен анализу.</small></div>
+      <div class="idps-episode-map__cell" data-idps-focus-target="nids"><span class="idps-episode-map__mark">ГРАНИЦА</span><strong>Не подтверждает процесс напрямую</strong><small>Сетевой артефакт сам по себе не называет локальный процесс.</small></div>
+      <div class="idps-episode-map__cell" data-idps-focus-target="nids"><span class="idps-episode-map__mark">ГРАНИЦА</span><strong>Не подтверждает изменение файла</strong><small>Для этого нужен соответствующий хостовый или прикладной источник.</small></div>
+      <div class="idps-episode-map__cell" data-idps-focus-target="nids"><span class="idps-episode-map__mark">СЕТЕВОЙ СЛЕД</span><strong>Может видеть исходящие соединения</strong><small>В пределах своей точки наблюдения.</small></div>
+
+      <div class="idps-episode-map__cell idps-episode-map__cell--row idps-episode-map__cell--hids" data-idps-focus-target="hids">HIDS</div>
+      <div class="idps-episode-map__cell" data-idps-focus-target="hids"><span class="idps-episode-map__mark">ЗАВИСИТ ОТ ТЕЛЕМЕТРИИ</span><strong>Может дать локальный контекст</strong><small>Например, через журнал приложения или локальные сетевые события, если они собираются.</small></div>
+      <div class="idps-episode-map__cell" data-idps-focus-target="hids"><span class="idps-episode-map__mark">ХОСТОВЫЙ СЛЕД</span><strong>Может подтвердить запуск</strong><small>Если события процессов доступны агенту или аудиту.</small></div>
+      <div class="idps-episode-map__cell" data-idps-focus-target="hids"><span class="idps-episode-map__mark">ХОСТОВЫЙ СЛЕД</span><strong>Может подтвердить изменение</strong><small>Если объект контролируется механизмом контроля целостности файлов, аудитом или другим настроенным источником.</small></div>
+      <div class="idps-episode-map__cell" data-idps-focus-target="hids"><span class="idps-episode-map__mark">ЛОКАЛЬНЫЙ КОНТЕКСТ</span><strong>Может связать соединение с процессом</strong><small>Только если такая телеметрия реально собирается.</small></div>
+
+      <div class="idps-episode-map__cell idps-episode-map__cell--row idps-episode-map__cell--nba" data-idps-focus-target="nba">NBA / NTA</div>
+      <div class="idps-episode-map__cell" data-idps-focus-target="nba"><span class="idps-episode-map__mark">АГРЕГИРОВАННЫЙ ВЗГЛЯД</span><strong>Содержание запроса может быть не нужно</strong><small>Анализ может опираться на потоки и статистику, а не на URI.</small></div>
+      <div class="idps-episode-map__cell" data-idps-focus-target="nba"><span class="idps-episode-map__mark">ГРАНИЦА</span><strong>Не устанавливает локальный процесс</strong><small>Это не хостовый источник.</small></div>
+      <div class="idps-episode-map__cell" data-idps-focus-target="nba"><span class="idps-episode-map__mark">ГРАНИЦА</span><strong>Не подтверждает изменение файла</strong><small>Нужен дополнительный контекст.</small></div>
+      <div class="idps-episode-map__cell" data-idps-focus-target="nba"><span class="idps-episode-map__mark">ПОВЕДЕНЧЕСКИЙ ПРИЗНАК</span><strong>Хорошо показывает изменение масштаба</strong><small>Но само изменение ещё не объясняет его причину.</small></div>
+    </div>
+  </div>
+  <div class="idps-figure__caption">WIDS здесь намеренно не включена в матрицу: учебный эпизод не задаёт беспроводную область наблюдения. Отсутствие релевантного WIDS-события в таком сценарии ожидаемо и ничего не говорит о фактах на сервере.</div>
 </div>
 
 Больше телеметрии — не автоматически лучше: дополнительные источники требуют хранения, настройки, вычислительных ресурсов и сопровождения. Цель — достаточная наблюдаемость для конкретной задачи безопасности.

@@ -1,5 +1,5 @@
 /* =========================================================
-   IDPS Course UI v1.1
+   IDPS Course UI v1.2
    Progressive enhancement only.
    All instructional content must remain available without JS.
    ========================================================= */
@@ -65,8 +65,51 @@
     activate(initiallySelected?.dataset.idpsSwitch || buttons[0].dataset.idpsSwitch);
   }
 
+  function initializeFocusMap(root) {
+    if (!root || root.dataset.idpsFocusReady === "true") return;
+
+    const controls = root.querySelector(".idps-focus-map__controls");
+    const buttons = [...root.querySelectorAll("[data-idps-focus]")];
+    const targets = [...root.querySelectorAll("[data-idps-focus-target]")];
+    if (!controls || !buttons.length || !targets.length) return;
+
+    root.dataset.idpsFocusReady = "true";
+    root.classList.add("is-enhanced");
+    controls.setAttribute("role", "group");
+
+    function targetMatches(target, name) {
+      if (name === "all") return true;
+      return (target.dataset.idpsFocusTarget || "")
+        .split(/\s+/)
+        .filter(Boolean)
+        .includes(name);
+    }
+
+    function activate(name) {
+      const showAll = name === "all";
+      root.classList.toggle("is-filtered", !showAll);
+
+      buttons.forEach((button) => {
+        button.setAttribute("aria-pressed", String(button.dataset.idpsFocus === name));
+      });
+
+      targets.forEach((target) => {
+        const active = targetMatches(target, name);
+        target.classList.toggle("is-focused", !showAll && active);
+        target.classList.toggle("is-dimmed", !showAll && !active);
+      });
+    }
+
+    buttons.forEach((button) => {
+      button.addEventListener("click", () => activate(button.dataset.idpsFocus));
+    });
+
+    activate(buttons.find((button) => button.getAttribute("aria-pressed") === "true")?.dataset.idpsFocus || "all");
+  }
+
   function initializeIdpsUI(context = document) {
     context.querySelectorAll("[data-idps-switcher]").forEach(initializeSwitcher);
+    context.querySelectorAll("[data-idps-focus-map]").forEach(initializeFocusMap);
   }
 
   function boot() {

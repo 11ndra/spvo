@@ -52,6 +52,29 @@ flowchart LR
   <p>Несколько функций могут выполняться одним процессом или устройством, а одна функция может быть распределена между несколькими узлами.</p>
 </div>
 
+<div class="idps-switcher" data-idps-switcher>
+  <div class="idps-switcher__header">
+    <strong>Разберите функциональную схему по одной задаче</strong>
+    <p>Переключатель не показывает обязательный порядок исполнения конкретного продукта. Он помогает отделить назначение функций и границы выводов.</p>
+  </div>
+  <div class="idps-switcher__controls" aria-label="Функциональные задачи IDS/IPS">
+    <button id="chapter3-control-acquire" class="idps-switcher__button" type="button" aria-controls="chapter3-panel-acquire" data-idps-switch="acquire">Получение</button>
+    <button id="chapter3-control-represent" class="idps-switcher__button" type="button" aria-controls="chapter3-panel-represent" data-idps-switch="represent">Представление</button>
+    <button id="chapter3-control-detect" class="idps-switcher__button" type="button" aria-controls="chapter3-panel-detect" data-idps-switch="detect">Обнаружение</button>
+    <button id="chapter3-control-result" class="idps-switcher__button" type="button" aria-controls="chapter3-panel-result" data-idps-switch="result">Результат</button>
+    <button id="chapter3-control-store" class="idps-switcher__button" type="button" aria-controls="chapter3-panel-store" data-idps-switch="store">Хранение</button>
+    <button id="chapter3-control-act" class="idps-switcher__button" type="button" aria-controls="chapter3-panel-act" data-idps-switch="act">Воздействие</button>
+  </div>
+  <div class="idps-switcher__panels">
+    <section id="chapter3-panel-acquire" class="idps-switcher__panel" data-idps-panel="acquire"><h3 class="idps-switcher__panel-title">Получение данных</h3><div class="idps-question-model"><div class="idps-question-model__cell"><span>Вход</span><strong>Трафик, события ОС, журналы, радиокадры или другой доступный источник</strong></div><div class="idps-question-model__cell"><span>Функция</span><strong>Доставить наблюдаемое представление в систему</strong></div><div class="idps-question-model__cell"><span>Не доказывает</span><strong>Что угроза уже обнаружена</strong></div><div class="idps-question-model__boundary"><strong>Проверяемый вопрос:</strong> нужные данные вообще дошли до системы?</div></div></section>
+    <section id="chapter3-panel-represent" class="idps-switcher__panel" data-idps-panel="represent"><h3 class="idps-switcher__panel-title">Представление и контекст</h3><div class="idps-question-model"><div class="idps-question-model__cell"><span>Вход</span><strong>Полученные данные</strong></div><div class="idps-question-model__cell"><span>Функция</span><strong>Сформировать подходящее представление: пакет, поток, событие, протокольный контекст и т. п.</strong></div><div class="idps-question-model__cell"><span>Не доказывает</span><strong>Что условие обнаружения совпало</strong></div><div class="idps-question-model__boundary"><strong>Проверяемый вопрос:</strong> существует ли представление, к которому применима нужная логика?</div></div></section>
+    <section id="chapter3-panel-detect" class="idps-switcher__panel" data-idps-panel="detect"><h3 class="idps-switcher__panel-title">Логика обнаружения</h3><div class="idps-question-model"><div class="idps-question-model__cell"><span>Вход</span><strong>Подходящее представление данных</strong></div><div class="idps-question-model__cell"><span>Функция</span><strong>Применить правило, условие или модель</strong></div><div class="idps-question-model__cell"><span>Не доказывает</span><strong>Инцидент или компрометацию</strong></div><div class="idps-question-model__boundary"><strong>Проверяемый вопрос:</strong> логика загружена, применима и её условие действительно совпало?</div></div></section>
+    <section id="chapter3-panel-result" class="idps-switcher__panel" data-idps-panel="result"><h3 class="idps-switcher__panel-title">Результат обнаружения</h3><div class="idps-question-model"><div class="idps-question-model__cell"><span>Форма</span><strong>Оповещение, событие, оценка, метка или дополнительный контекст</strong></div><div class="idps-question-model__cell"><span>Функция</span><strong>Зафиксировать вывод детектора относительно доступных данных</strong></div><div class="idps-question-model__cell"><span>Не равно</span><strong>Месту хранения результата</strong></div><div class="idps-question-model__boundary"><strong>Проверяемый вопрос:</strong> какой именно результат сформирован и на основании каких данных?</div></div></section>
+    <section id="chapter3-panel-store" class="idps-switcher__panel" data-idps-panel="store"><h3 class="idps-switcher__panel-title">Хранение и передача</h3><div class="idps-question-model"><div class="idps-question-model__cell"><span>Вход</span><strong>Сформированный результат и сопутствующие события</strong></div><div class="idps-question-model__cell"><span>Функция</span><strong>Записать или передать их в файл, хранилище, SIEM, консоль или API</strong></div><div class="idps-question-model__cell"><span>Не является</span><strong>Самим механизмом обнаружения</strong></div><div class="idps-question-model__boundary"><strong>Проверяемый вопрос:</strong> где искать результат и мог ли он потеряться на этапе вывода?</div></div></section>
+    <section id="chapter3-panel-act" class="idps-switcher__panel" data-idps-panel="act"><h3 class="idps-switcher__panel-title">Исполнительное воздействие</h3><div class="idps-question-model"><div class="idps-question-model__cell"><span>Основание</span><strong>Результат обнаружения + политика реакции</strong></div><div class="idps-question-model__cell"><span>Функция</span><strong>Выполнить предусмотренное действие локально или через внешний механизм</strong></div><div class="idps-question-model__cell"><span>Не обязано</span><strong>Находиться в том же компоненте, где выполнено обнаружение</strong></div><div class="idps-question-model__boundary"><strong>Проверяемый вопрос:</strong> какое средство реально выполнило воздействие и подтверждено ли оно?</div></div></section>
+  </div>
+</div>
+
 Например, небольшая IDS может работать на одной машине: она получает трафик, анализирует его и пишет события локально. В крупной инфраструктуре сенсоры могут передавать результаты на отдельные серверы управления и хранения.
 
 ---
@@ -170,15 +193,19 @@ flowchart LR
 
 Это означает только, что система **может получить** некоторый трафик при корректной конфигурации.
 
-Но ещё не означает, что:
+Но ещё не означает, что выполнены все условия, необходимые для ожидаемого результата.
 
-```text
-нужный интерфейс выбран;
-пакеты действительно захватываются;
-протокол распознан;
-нужное правило загружено;
-условие обнаружения совпало.
-```
+<div class="idps-figure">
+  <div class="idps-figure__label">ДИАГНОСТИЧЕСКИЕ ВОРОТА · ЧТО ПРОВЕРЯЕТСЯ ПЕРЕД ВЫВОДОМ «ДЕТЕКТОР НЕ СРАБОТАЛ»</div>
+  <div class="idps-gates">
+    <div class="idps-gate"><span>1 · ИСТОЧНИК</span><strong>Нужная активность доступна?</strong><small>Событие вообще проходит через выбранную область наблюдения.</small></div>
+    <div class="idps-gate"><span>2 · ПОЛУЧЕНИЕ</span><strong>Данные реально захвачены?</strong><small>Выбран правильный интерфейс, агент или другой источник.</small></div>
+    <div class="idps-gate"><span>3 · ПРЕДСТАВЛЕНИЕ</span><strong>Есть нужный контекст?</strong><small>Система смогла сформировать представление, требуемое условию.</small></div>
+    <div class="idps-gate"><span>4 · ЛОГИКА</span><strong>Детектор загружен и применим?</strong><small>Правило, модель или другая логика действительно активны.</small></div>
+    <div class="idps-gate"><span>5 · СОВПАДЕНИЕ</span><strong>Условие выполнено?</strong><small>Наблюдаемые значения действительно соответствуют условию.</small></div>
+  </div>
+  <div class="idps-figure__caption">Это порядок диагностических вопросов для конкретного ожидаемого результата, а не утверждение об обязательном внутреннем pipeline каждой IDS/IPS.</div>
+</div>
 
 Поэтому полезно разделять два вопроса:
 
@@ -210,37 +237,34 @@ flowchart LR
 
 Полученная информация часто преобразуется в более удобную структуру.
 
-Для сети это могут быть:
-
-```text
-поля пакета;
-состояние соединения;
-сетевой поток;
-восстановленная последовательность TCP-данных;
-HTTP-запрос;
-DNS-запрос;
-TLS-сеанс.
-```
-
-Для хоста это могут быть:
-
-```text
-событие аудита;
-сведения о процессе;
-изменение файла;
-запись журнала;
-событие аутентификации.
-```
+Для сети одно и то же полученное взаимодействие может быть представлено на разных уровнях — в зависимости от возможностей реализации и задачи детектора.
 
 <div class="idps-figure">
-  <div class="idps-figure__label">ПРЕДСТАВЛЕНИЯ ДАННЫХ · ОДИН ИСТОЧНИК НЕ ОЗНАЧАЕТ ОДИН ФОРМАТ АНАЛИЗА</div>
-  <div class="idps-grid idps-grid--4 idps-grid--compact">
-    <article class="idps-card"><span class="idps-card__eyebrow">ПАКЕТ</span><strong class="idps-card__title">Поля и признаки пакета</strong><p>Например, адреса, флаги, тип или код протокола.</p></article>
-    <article class="idps-card"><span class="idps-card__eyebrow">ПОТОК</span><strong class="idps-card__title">Состояние взаимодействия</strong><p>Характеристики соединения или последовательности обмена.</p></article>
-    <article class="idps-card"><span class="idps-card__eyebrow">ВОССТАНОВЛЕННЫЕ ДАННЫЕ</span><strong class="idps-card__title">Последовательность TCP-данных</strong><p>Контекст, полученный из нескольких сетевых сегментов.</p></article>
-    <article class="idps-card"><span class="idps-card__eyebrow">ПРИКЛАДНОЙ КОНТЕКСТ</span><strong class="idps-card__title">HTTP, DNS, TLS и др.</strong><p>Структура протокола, если она доступна и распознана.</p></article>
+  <div class="idps-figure__label">СЕТЕВЫЕ ПРЕДСТАВЛЕНИЯ · ВЕТВЛЕНИЕ, А НЕ ОБЯЗАТЕЛЬНЫЙ ЛИНЕЙНЫЙ PIPELINE</div>
+  <div class="idps-fanout">
+    <div class="idps-fanout__origin"><strong>Полученные сетевые данные</strong><small>То, что реально доступно системе в выбранной точке наблюдения.</small></div>
+    <div class="idps-fanout__arrow" aria-hidden="true">↠</div>
+    <div class="idps-fanout__targets">
+      <div class="idps-fanout__target"><strong>Поля пакета</strong><small>Адреса, флаги, типы и другие доступные признаки.</small></div>
+      <div class="idps-fanout__target"><strong>Поток / состояние соединения</strong><small>Агрегированный или контекстный взгляд на взаимодействие.</small></div>
+      <div class="idps-fanout__target"><strong>Восстановленные TCP-данные</strong><small>Контекст, формируемый из нескольких сегментов, если это требуется и возможно.</small></div>
+      <div class="idps-fanout__target"><strong>Прикладной контекст</strong><small>Например, HTTP, DNS или доступные свойства TLS-сеанса.</small></div>
+    </div>
   </div>
-  <p class="idps-figure__caption">Конкретный детектор использует то представление, которое требуется его условию. Нет универсального требования «сначала полностью разобрать приложение, затем начинать обнаружение».</p>
+  <div class="idps-figure__caption">Стрелка означает «из доступных данных могут быть получены разные представления», а не «каждый пакет обязан последовательно пройти все четыре стадии».</div>
+</div>
+
+Для хоста действует тот же принцип: агент или другой механизм может работать с несколькими типами локальных представлений.
+
+<div class="idps-fanout">
+  <div class="idps-fanout__origin"><strong>Доступная хостовая телеметрия</strong><small>Набор зависит от ОС, аудита, прав и конфигурации.</small></div>
+  <div class="idps-fanout__arrow" aria-hidden="true">↠</div>
+  <div class="idps-fanout__targets">
+    <div class="idps-fanout__target"><strong>Событие аудита</strong><small>Зафиксированное действие, если соответствующий аудит включён.</small></div>
+    <div class="idps-fanout__target"><strong>Сведения о процессе</strong><small>Процесс, пользователь и другие доступные атрибуты.</small></div>
+    <div class="idps-fanout__target"><strong>Изменение файла</strong><small>Событие или состояние контролируемого объекта.</small></div>
+    <div class="idps-fanout__target"><strong>Журнал / аутентификация</strong><small>Запись, которую реально сформировал и сохранил источник.</small></div>
+  </div>
 </div>
 
 Это исправляет распространённую ошибку: обнаружение не обязано начинаться только после TCP reassembly и разбора прикладного протокола. Например, интересующее условие может относиться непосредственно к IP/TCP-полям или событию декодирования.
@@ -257,14 +281,14 @@ TLS-сеанс.
 
 Логика может быть представлена в разных формах:
 
-```text
-правило;
-сигнатура;
-пороговое условие;
-модель состояния протокола;
-поведенческая последовательность;
-статистическая или иная модель.
-```
+<div class="idps-chip-list" aria-label="Примеры форм логики обнаружения">
+  <span class="idps-chip">правило</span>
+  <span class="idps-chip">сигнатура</span>
+  <span class="idps-chip">пороговое условие</span>
+  <span class="idps-chip">модель состояния протокола</span>
+  <span class="idps-chip">поведенческая последовательность</span>
+  <span class="idps-chip">статистическая или иная модель</span>
+</div>
 
 Подробно методы обнаружения разбираются в Главе 5. Здесь важно другое:
 
@@ -296,32 +320,25 @@ TLS-сеанс.
 
 Это может быть:
 
-```text
-событие;
-оповещение;
-оценка риска;
-метка;
-дополнительный контекст.
-```
+<div class="idps-chip-list" aria-label="Примеры результатов обнаружения">
+  <span class="idps-chip">событие</span><span class="idps-chip">оповещение</span><span class="idps-chip">оценка риска</span><span class="idps-chip">метка</span><span class="idps-chip">дополнительный контекст</span>
+</div>
 
-После этого результат нужно куда-то передать или сохранить.
+После этого результат можно передать или сохранить в одном или нескольких местах.
 
-<div class="idps-grid idps-grid--3">
-  <article class="idps-card idps-card--primary">
-    <span class="idps-card__eyebrow">1 · ОБНАРУЖЕНИЕ</span>
-    <strong class="idps-card__title">Механизм применяет условие</strong>
-    <p>Здесь формируется решение детектора относительно доступных данных.</p>
-  </article>
-  <article class="idps-card idps-card--result">
-    <span class="idps-card__eyebrow">2 · РЕЗУЛЬТАТ</span>
-    <strong class="idps-card__title">Событие / оповещение / метка</strong>
-    <p>Результат обнаружения — отдельный артефакт, а не место его хранения.</p>
-  </article>
-  <article class="idps-card">
-    <span class="idps-card__eyebrow">3 · ВЫВОД И ХРАНЕНИЕ</span>
-    <strong class="idps-card__title">Журнал · хранилище · SIEM · консоль</strong>
-    <p>Один и тот же результат может быть записан или передан в несколько систем.</p>
-  </article>
+<div class="idps-figure">
+  <div class="idps-figure__label">РЕЗУЛЬТАТ И КАНАЛЫ ВЫВОДА · ОДИН РЕЗУЛЬТАТ МОЖЕТ ИМЕТЬ НЕСКОЛЬКО НАЗНАЧЕНИЙ</div>
+  <div class="idps-fanout">
+    <div class="idps-fanout__origin idps-fanout__origin--result"><strong>Результат обнаружения</strong><small>Вывод детектора относительно доступных данных.</small></div>
+    <div class="idps-fanout__arrow" aria-hidden="true">↠</div>
+    <div class="idps-fanout__targets">
+      <div class="idps-fanout__target"><strong>Файл / журнал</strong><small>Например, структурированная запись события.</small></div>
+      <div class="idps-fanout__target"><strong>SIEM / центральное хранилище</strong><small>Передача для последующей корреляции и поиска.</small></div>
+      <div class="idps-fanout__target"><strong>Консоль / интерфейс</strong><small>Отображение результата оператору.</small></div>
+      <div class="idps-fanout__target"><strong>API / другая система</strong><small>Передача результата внешнему потребителю или механизму реакции.</small></div>
+    </div>
+  </div>
+  <div class="idps-figure__caption">Формирование результата и место, где этот результат оказался записан или показан, — разные функции.</div>
 </div>
 
 Например, в наших лабораториях Suricata формирует структурированные записи в `eve.json`. Сам файл не является «детектором»: это один из каналов вывода результата.
@@ -339,40 +356,26 @@ TLS-сеанс.
 
 IDS/IPS должна быть настроена.
 
-Управляющая часть может определять:
+Управляющая часть задаёт параметры, которые влияют на несколько разных функций системы.
 
-```text
-какие источники данных использовать;
-какие правила и политики загрузить;
-какие сети считать внутренними;
-какие протоколы и функции включить;
-куда отправлять результаты;
-разрешены ли действия предотвращения.
-```
+<div class="idps-figure">
+  <div class="idps-figure__label">УПРАВЛЕНИЕ И КОНФИГУРАЦИЯ · ОДНА ПОЛИТИКА ВЛИЯЕТ НА НЕСКОЛЬКО ФУНКЦИЙ</div>
+  <div class="idps-fanout">
+    <div class="idps-fanout__origin"><strong>Управление / конфигурация</strong><small>Локальная конфигурация или централизованный сервер — в зависимости от реализации.</small></div>
+    <div class="idps-fanout__arrow" aria-hidden="true">↠</div>
+    <div class="idps-fanout__targets">
+      <div class="idps-fanout__target"><strong>Источники и параметры сбора</strong><small>Какой интерфейс, агент, журнал или другой источник используется.</small></div>
+      <div class="idps-fanout__target"><strong>Правила, модели и область действия</strong><small>Какая логика загружена и к каким данным она применима.</small></div>
+      <div class="idps-fanout__target"><strong>Каналы вывода</strong><small>Куда отправляются события и результаты.</small></div>
+      <div class="idps-fanout__target"><strong>Политика реакции</strong><small>Разрешено ли исполнительное воздействие и каким механизмом.</small></div>
+    </div>
+  </div>
+</div>
 
-В небольшой системе настройки могут храниться локально. В крупном развёртывании возможна централизованная архитектура.
-
-<div class="idps-grid idps-grid--4">
-  <article class="idps-card">
-    <span class="idps-card__eyebrow">УПРАВЛЕНИЕ</span>
-    <strong class="idps-card__title">Сервер или локальная конфигурация</strong>
-    <p>Определяет параметры, правила и политики, используемые системой.</p>
-  </article>
-  <article class="idps-card idps-card--sensor">
-    <span class="idps-card__eyebrow">СБОР / АНАЛИЗ</span>
-    <strong class="idps-card__title">Сенсоры и агенты</strong>
-    <p>Получают доступные данные; в зависимости от реализации анализ может выполняться здесь же или в другом компоненте.</p>
-  </article>
-  <article class="idps-card">
-    <span class="idps-card__eyebrow">ХРАНЕНИЕ</span>
-    <strong class="idps-card__title">События и результаты</strong>
-    <p>Могут храниться локально или централизованно в отдельной системе.</p>
-  </article>
-  <article class="idps-card">
-    <span class="idps-card__eyebrow">ИНТЕРФЕЙС</span>
-    <strong class="idps-card__title">Консоль оператора</strong>
-    <p>Предоставляет доступ к управлению, наблюдению и просмотру результатов.</p>
-  </article>
+<div class="idps-grid idps-grid--3 idps-grid--compact">
+  <article class="idps-card idps-card--sensor"><span class="idps-card__eyebrow">СЕНСОРЫ / АГЕНТЫ</span><strong class="idps-card__title">Получают доступные данные</strong><p>Анализ может выполняться здесь же или в другом компоненте.</p></article>
+  <article class="idps-card"><span class="idps-card__eyebrow">ХРАНЕНИЕ</span><strong class="idps-card__title">События и результаты</strong><p>Могут храниться локально или централизованно.</p></article>
+  <article class="idps-card idps-card--interpretation"><span class="idps-card__eyebrow">КОНСОЛЬ</span><strong class="idps-card__title">Управление и просмотр</strong><p>Интерфейс оператора не обязан быть местом, где физически выполняется обнаружение.</p></article>
 </div>
 
 Классический NIST SP 800-94 перечисляет типичные компоненты IDPS: сенсоры или агенты, серверы управления, серверы хранения событий и консоли. При этом небольшие системы могут работать без отдельного сервера управления.
@@ -408,11 +411,16 @@ Suricata в нашем курсе — не определение IDS, а удо
 
 Упрощённое соответствие функций выглядит так:
 
-<div class="idps-grid idps-grid--4">
-  <article class="idps-card idps-card--source"><span class="idps-card__eyebrow">ПОЛУЧЕНИЕ ДАННЫХ</span><strong class="idps-card__title">Интерфейс / PCAP</strong><p>Suricata получает сетевой трафик из выбранного источника.</p></article>
-  <article class="idps-card"><span class="idps-card__eyebrow">ПРЕДСТАВЛЕНИЕ</span><strong class="idps-card__title">Пакеты · потоки · протоколы</strong><p>Движок формирует представления, необходимые различным механизмам анализа.</p></article>
-  <article class="idps-card idps-card--primary"><span class="idps-card__eyebrow">ОБНАРУЖЕНИЕ</span><strong class="idps-card__title">Правила и встроенная логика</strong><p>Условия применяются к подходящим представлениям данных.</p></article>
-  <article class="idps-card idps-card--result"><span class="idps-card__eyebrow">ВЫВОД</span><strong class="idps-card__title">EVE JSON и другие выходы</strong><p>Результаты фиксируются в выбранных каналах вывода.</p></article>
+<div class="idps-axis-table-wrap">
+  <table class="idps-axis-table">
+    <thead><tr><th>Функциональная задача</th><th>Пример в Suricata</th><th>Что важно не перепутать</th></tr></thead>
+    <tbody>
+      <tr><th>Получение данных</th><td>Сетевой интерфейс или PCAP</td><td>Сам источник трафика ещё не является детектором.</td></tr>
+      <tr><th>Представление</th><td>Пакеты, потоки, состояние, доступный протокольный контекст</td><td>Это не один универсальный обязательный путь для каждого условия.</td></tr>
+      <tr><th>Обнаружение</th><td>Правила и встроенная логика движка</td><td>Условие работает только с тем представлением, к которому оно применимо.</td></tr>
+      <tr><th>Результат / вывод</th><td>EVE JSON и другие настроенные выходы</td><td><code>eve.json</code> хранит записи; сам файл не выполняет обнаружение.</td></tr>
+    </tbody>
+  </table>
 </div>
 
 Это не означает, что каждый блок соответствует отдельному процессу ОС. Это **функциональное отображение**, помогающее понять эксперимент.
