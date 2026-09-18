@@ -1673,3 +1673,216 @@
     text-align: left;
   }
 }
+
+/* =========================================================
+   IDPS Course Design System v1.5
+   Chapter 6 rule anatomy and validation visuals.
+   ========================================================= */
+
+.idps-gates--four { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+
+/* ---------- General rule model ---------- */
+.idps-rule-model {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 0.65rem;
+  margin: 1.15rem 0 1.7rem;
+}
+
+.idps-rule-model article {
+  min-width: 0;
+  padding: 0.85rem;
+  border: 1px solid var(--course-border);
+  border-top: 4px solid var(--idps-sensor);
+  border-radius: 0.68rem;
+  background: var(--course-surface);
+  box-shadow: var(--course-shadow);
+}
+
+.idps-rule-model article:nth-child(1) { border-top-color: var(--idps-observation); }
+.idps-rule-model article:nth-child(3) { border-top-color: var(--idps-source); }
+.idps-rule-model article:nth-child(4) { border-top-color: var(--idps-result); }
+
+.idps-rule-model span,
+.idps-rule-model strong,
+.idps-rule-model p { display: block; }
+.idps-rule-model span {
+  margin-bottom: 0.28rem;
+  font-size: 0.65rem;
+  font-weight: 900;
+  letter-spacing: 0.05em;
+  color: var(--course-muted);
+}
+.idps-rule-model p { margin: 0.32rem 0 0; color: var(--course-muted); font-size: 0.84rem; line-height: 1.45; }
+
+/* ---------- Interactive anatomy of a Suricata rule ---------- */
+.idps-rule-anatomy {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  align-items: stretch;
+}
+
+.idps-rule-token {
+  display: flex;
+  flex: 1 1 11rem;
+  flex-direction: column;
+  justify-content: center;
+  min-width: 0;
+  padding: 0.68rem 0.72rem;
+  border: 1px solid var(--course-border);
+  border-top: 3px solid var(--idps-interpretation);
+  border-radius: 0.58rem;
+  background: var(--course-surface-soft);
+}
+
+.idps-rule-token--action { border-top-color: var(--idps-result); }
+.idps-rule-token--scope { border-top-color: var(--idps-observation); flex-basis: 20rem; }
+.idps-rule-token--condition { border-top-color: var(--idps-sensor); }
+
+.idps-rule-token code {
+  white-space: normal;
+  overflow-wrap: anywhere;
+  font-size: 0.78rem;
+  font-weight: 800;
+}
+
+.idps-rule-token small {
+  margin-top: 0.3rem;
+  color: var(--course-muted);
+  font-size: 0.7rem;
+  font-weight: 750;
+}
+
+/* ---------- Protocol representation stack ---------- */
+.idps-protocol-stack {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 0;
+  margin: 1rem 0 0.4rem;
+  overflow: hidden;
+  border: 1px solid var(--course-border);
+  border-radius: 0.72rem;
+}
+
+.idps-protocol-stack > div {
+  min-width: 0;
+  padding: 0.85rem;
+  border-right: 1px solid var(--course-border);
+  background: var(--course-surface);
+}
+.idps-protocol-stack > div:last-child { border-right: 0; }
+.idps-protocol-stack > div:nth-child(1) { box-shadow: inset 0 4px 0 var(--idps-sensor); }
+.idps-protocol-stack > div:nth-child(2) { box-shadow: inset 0 4px 0 var(--idps-source); }
+.idps-protocol-stack > div:nth-child(3) { box-shadow: inset 0 4px 0 var(--idps-observation); }
+.idps-protocol-stack > div:nth-child(4) { box-shadow: inset 0 4px 0 var(--idps-interpretation); }
+
+.idps-protocol-stack span,
+.idps-protocol-stack strong,
+.idps-protocol-stack small { display: block; }
+.idps-protocol-stack span { margin-bottom: 0.3rem; color: var(--course-muted); font-size: 0.64rem; font-weight: 900; }
+.idps-protocol-stack small { margin-top: 0.28rem; color: var(--course-muted); line-height: 1.42; }
+
+/* ---------- Normalized vs raw URI ---------- */
+.idps-uri-compare { margin: 0.9rem 0 0.3rem; }
+.idps-uri-compare__request {
+  padding: 0.85rem;
+  border: 1px solid var(--course-border);
+  border-top: 4px solid var(--idps-observation);
+  border-radius: 0.65rem;
+  background: var(--course-surface-soft);
+  text-align: center;
+}
+.idps-uri-compare__request span,
+.idps-uri-compare__request code,
+.idps-uri-compare__request small { display: block; }
+.idps-uri-compare__request span { color: var(--course-muted); font-size: 0.66rem; font-weight: 900; }
+.idps-uri-compare__request code { margin: 0.32rem 0; font-size: 0.9rem; font-weight: 850; }
+.idps-uri-compare__request small { color: var(--course-muted); }
+.idps-uri-compare__arrow { padding: 0.25rem 0; color: var(--course-muted); font-size: 1.35rem; font-weight: 900; text-align: center; }
+.idps-uri-compare__views { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 0.65rem; }
+.idps-uri-compare__views article {
+  min-width: 0;
+  padding: 0.85rem;
+  border: 1px solid var(--course-border);
+  border-left: 4px solid var(--idps-sensor);
+  border-radius: 0.65rem;
+  background: var(--course-surface);
+}
+.idps-uri-compare__views article:last-child { border-left-color: var(--idps-interpretation); }
+.idps-uri-compare__views span,
+.idps-uri-compare__views strong,
+.idps-uri-compare__views code,
+.idps-uri-compare__views small { display: block; }
+.idps-uri-compare__views span { margin-bottom: 0.24rem; color: var(--course-muted); font-size: 0.66rem; font-weight: 900; }
+.idps-uri-compare__views > article > code { margin: 0.38rem 0; font-size: 0.88rem; }
+.idps-uri-compare__views small { color: var(--course-muted); line-height: 1.42; }
+
+/* ---------- Match logic vs result-rate control ---------- */
+.idps-rule-two-layer {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr);
+  gap: 0.65rem;
+  align-items: stretch;
+  margin: 1.1rem 0 1.6rem;
+}
+.idps-rule-two-layer article {
+  padding: 0.85rem;
+  border: 1px solid var(--course-border);
+  border-top: 4px solid var(--idps-sensor);
+  border-radius: 0.65rem;
+  background: var(--course-surface);
+}
+.idps-rule-two-layer article:last-child { border-top-color: var(--idps-result); }
+.idps-rule-two-layer article span,
+.idps-rule-two-layer article strong,
+.idps-rule-two-layer article p,
+.idps-rule-two-layer article small { display: block; }
+.idps-rule-two-layer article span { color: var(--course-muted); font-size: 0.66rem; font-weight: 900; }
+.idps-rule-two-layer article p { margin: 0.35rem 0; }
+.idps-rule-two-layer article small { color: var(--course-muted); line-height: 1.42; }
+.idps-rule-two-layer__arrow { display: grid; place-items: center; color: var(--course-muted); font-size: 1.45rem; font-weight: 900; }
+
+/* ---------- Positive / negative test pair ---------- */
+.idps-test-matrix {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0.7rem;
+  margin: 1rem 0 1.5rem;
+}
+.idps-test-matrix article {
+  min-width: 0;
+  padding: 0.85rem;
+  border: 1px solid var(--course-border);
+  border-radius: 0.65rem;
+  background: var(--course-surface);
+}
+.idps-test-matrix__positive { border-left: 4px solid var(--idps-source) !important; }
+.idps-test-matrix__negative { border-left: 4px solid var(--idps-observation) !important; }
+.idps-test-matrix span,
+.idps-test-matrix strong,
+.idps-test-matrix p,
+.idps-test-matrix small { display: block; }
+.idps-test-matrix span { color: var(--course-muted); font-size: 0.66rem; font-weight: 900; }
+.idps-test-matrix p { margin: 0.35rem 0; }
+.idps-test-matrix small { color: var(--course-muted); }
+
+@media screen and (max-width: 900px) {
+  .idps-gates--four,
+  .idps-rule-model,
+  .idps-protocol-stack { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .idps-protocol-stack > div:nth-child(2) { border-right: 0; }
+  .idps-protocol-stack > div:nth-child(-n+2) { border-bottom: 1px solid var(--course-border); }
+}
+
+@media screen and (max-width: 680px) {
+  .idps-gates--four,
+  .idps-rule-model,
+  .idps-protocol-stack,
+  .idps-uri-compare__views,
+  .idps-test-matrix,
+  .idps-rule-two-layer { grid-template-columns: 1fr; }
+  .idps-protocol-stack > div { border-right: 0; border-bottom: 1px solid var(--course-border); }
+  .idps-protocol-stack > div:last-child { border-bottom: 0; }
+  .idps-rule-two-layer__arrow { transform: rotate(0deg); min-height: 1rem; }
+}

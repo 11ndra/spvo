@@ -156,3 +156,18 @@ Linux Audit в ЛР №2 используется только для демон
 - thresholding управляет частотой результатов и не исправляет логическую причину слишком широкого detection condition;
 - действие `drop` имеет предотвращающий эффект только в подходящем IPS/inline-режиме.
 
+## ЛР №5 — изменение условия правила
+
+ЛР №5 является **SYNTHETIC ENGINEERING / CONTROLLED EXPERIMENT**. На одном стенде студент выполняет две серии positive/negative tests для `SID 1000005`:
+
+- исходное условие: `http.uri; content:"/LAB5-ALPHA";`;
+- изменённое условие: `http.uri; content:"/LAB5-BETA";`.
+
+`rev` увеличивается как метаданные версии и не считается вторым содержательным условием обнаружения. HTTP-ответ учебного приложения используется как независимое подтверждение существования запроса, а EVE JSON — как подтверждение результата конкретного правила. Отсутствие alert не трактуется как отсутствие трафика.
+
+Технические reference:
+
+- Suricata Rules Format — https://docs.suricata.io/en/suricata-8.0.7/rules/intro.html
+- Suricata HTTP Keywords — https://docs.suricata.io/en/suricata-8.0.7/rules/http-keywords.html
+- Suricata EVE JSON Output — https://docs.suricata.io/en/suricata-8.0.7/output/eve/eve-json-output.html
+
