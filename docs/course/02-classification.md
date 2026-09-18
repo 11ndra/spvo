@@ -14,32 +14,32 @@
 
 ## 1. Почему одной IDS недостаточно
 
-Рассмотрим один эпизод:
+Рассмотрим один эпизод: сетевой запрос приводит к запуску процесса на сервере, процесс изменяет файл и устанавливает исходящее соединение.
 
-<div class="teaching-figure" markdown="1">
-<div class="figure-label">СХЕМА 1 · ОДИН ЭПИЗОД ОСТАВЛЯЕТ СЛЕДЫ В РАЗНЫХ СРЕДАХ</div>
-
-```mermaid
-flowchart LR
-    R[Сетевой запрос] --> P[Запуск процесса]
-    P --> F[Изменение файла]
-    P --> C[Исходящее соединение]
-    R -.->|сетевой след| N[Сеть]
-    P -.->|хостовый след| H[Операционная система]
-    F -.->|хостовый след| H
-    C -.->|сетевой и хостовый след| N
-    C -.->|локальный контекст| H
-```
-
-<div class="figure-caption">Одно действие может оставлять несколько следов. Сетевой сенсор и агент на хосте получают не одинаковые представления одного эпизода.</div>
+<div class="idps-figure">
+  <div class="idps-figure__label">СХЕМА 1 · ОДИН ЭПИЗОД ОСТАВЛЯЕТ РАЗНЫЕ СЛЕДЫ</div>
+  <article class="idps-card idps-card--primary">
+    <span class="idps-card__eyebrow">УЧЕБНЫЙ ЭПИЗОД</span>
+    <strong class="idps-card__title">Запрос → запуск процесса → изменение файла + исходящее соединение</strong>
+    <p>Это одна причинная цепочка в учебном сценарии, но наблюдать её части можно в разных средах.</p>
+  </article>
+  <div class="idps-grid idps-grid--2 idps-grid--compact">
+    <article class="idps-card idps-card--source">
+      <span class="idps-card__eyebrow">СЕТЕВОЙ СЛЕД</span>
+      <strong class="idps-card__title">Сеть</strong>
+      <p>Адреса, порты, соединения, протоколы, объёмы, время передачи и другие доступные сетевые признаки.</p>
+    </article>
+    <article class="idps-card idps-card--source">
+      <span class="idps-card__eyebrow">ХОСТОВЫЙ СЛЕД</span>
+      <strong class="idps-card__title">Операционная система</strong>
+      <p>Процессы, пользователи, файлы, системные события и локальный контекст — если соответствующая телеметрия собирается.</p>
+    </article>
+  </div>
+  <div class="idps-figure__caption">Сетевой сенсор и агент на хосте получают не одинаковые представления одного эпизода. Каждый источник подтверждает только тот факт, который реально зафиксирован.</div>
 </div>
 
-В сети могут быть видны адреса, порты, соединения, протоколы, объёмы и время передачи. На самом узле возникают другие сведения: процессы, пользователи, файлы, системные события.
-
-<div class="concept-formula primary-formula">
-  <span class="formula-left">РАЗНЫЕ СЛЕДЫ</span>
-  <span class="formula-sign">→</span>
-  <span class="formula-right">РАЗНЫЕ ИСТОЧНИКИ НАБЛЮДЕНИЯ</span>
+<div class="idps-equation idps-equation--primary">
+  <div class="idps-equation__expression"><span>РАЗНЫЕ СЛЕДЫ</span><b>→</b><span>РАЗНЫЕ ИСТОЧНИКИ НАБЛЮДЕНИЯ</span></div>
   <p>Чтобы увидеть разные стороны эпизода, могут потребоваться разные источники данных. Это не означает, что один источник автоматически «лучше» другого.</p>
 </div>
 
@@ -47,21 +47,63 @@ flowchart LR
 
 ## 2. Классическая классификация IDPS
 
-В NIST SP 800-94 выделялись четыре основных типа IDPS:
+В NIST SP 800-94 выделялись четыре основных типа IDPS. Эту классификацию важно знать, потому что она встречается в учебной и профессиональной литературе.
 
-<div class="source-type-grid">
-  <article><strong>Сетевая</strong><span>Network-Based</span><p>наблюдает доступную сетевую активность</p></article>
-  <article><strong>Беспроводная</strong><span>Wireless</span><p>наблюдает радиообмен и протоколы беспроводной сети</p></article>
-  <article><strong>Анализ сетевого поведения</strong><span>Network Behavior Analysis, NBA</span><p>делает акцент на потоках, статистике и изменениях сетевого поведения</p></article>
-  <article><strong>Хостовая</strong><span>Host-Based</span><p>наблюдает события и характеристики конкретного узла</p></article>
+<div class="idps-switcher" data-idps-switcher>
+  <div class="idps-switcher__header">
+    <strong>Четыре типа в классической модели NIST</strong>
+    <p>Переключатель показывает область наблюдения, типичные данные и границу вывода. Без JavaScript все четыре блока остаются доступны как обычный текст.</p>
+  </div>
+  <div class="idps-switcher__controls" aria-label="Классическая классификация IDPS">
+    <button id="chapter2-control-network" class="idps-switcher__button" type="button" aria-controls="chapter2-panel-network" data-idps-switch="network">Сетевая</button>
+    <button id="chapter2-control-wireless" class="idps-switcher__button" type="button" aria-controls="chapter2-panel-wireless" data-idps-switch="wireless">Беспроводная</button>
+    <button id="chapter2-control-nba" class="idps-switcher__button" type="button" aria-controls="chapter2-panel-nba" data-idps-switch="nba">NBA</button>
+    <button id="chapter2-control-host" class="idps-switcher__button" type="button" aria-controls="chapter2-panel-host" data-idps-switch="host">Хостовая</button>
+  </div>
+  <div class="idps-switcher__panels">
+    <section id="chapter2-panel-network" class="idps-switcher__panel" data-idps-panel="network">
+      <h3 class="idps-switcher__panel-title">Сетевая IDS/IPS</h3>
+      <div class="idps-question-model">
+        <div class="idps-question-model__cell"><span>Область наблюдения</span><strong>Доступная сетевой системе активность в конкретной точке наблюдения</strong></div>
+        <div class="idps-question-model__cell"><span>Типичные данные</span><strong>Адреса, порты, протоколы, поля сообщений, характеристики потоков</strong></div>
+        <div class="idps-question-model__cell"><span>Класс</span><strong>Network-Based IDS/IPS — NIDS/NIPS</strong></div>
+        <div class="idps-question-model__boundary"><strong>Граница вывода:</strong> сетевые данные сами по себе не раскрывают автоматически локальный процесс, пользователя или изменение файла на узле.</div>
+      </div>
+    </section>
+    <section id="chapter2-panel-wireless" class="idps-switcher__panel" data-idps-panel="wireless">
+      <h3 class="idps-switcher__panel-title">Беспроводная IDS/IPS</h3>
+      <div class="idps-question-model">
+        <div class="idps-question-model__cell"><span>Область наблюдения</span><strong>Радиосреда и протоколы семейства IEEE 802.11</strong></div>
+        <div class="idps-question-model__cell"><span>Типичные данные</span><strong>Точки доступа, клиенты, служебные кадры и другие доступные признаки радиообмена</strong></div>
+        <div class="idps-question-model__cell"><span>Класс</span><strong>Wireless IDS/IPS — WIDS/WIPS</strong></div>
+        <div class="idps-question-model__boundary"><strong>Граница вывода:</strong> представление радиообмена не тождественно картине проводного IP-трафика за точкой доступа.</div>
+      </div>
+    </section>
+    <section id="chapter2-panel-nba" class="idps-switcher__panel" data-idps-panel="nba">
+      <h3 class="idps-switcher__panel-title">Анализ сетевого поведения</h3>
+      <div class="idps-question-model">
+        <div class="idps-question-model__cell"><span>Область наблюдения</span><strong>Сетевой трафик, потоки и статистика сетевой активности</strong></div>
+        <div class="idps-question-model__cell"><span>Акцент анализа</span><strong>Объём, частота, направления, структура и изменения поведения</strong></div>
+        <div class="idps-question-model__cell"><span>Класс NIST</span><strong>Network Behavior Analysis — NBA</strong></div>
+        <div class="idps-question-model__boundary"><strong>Важная оговорка:</strong> NBA не образует идеально независимую от NIDS «среду». Здесь класс сильнее характеризует вид сетевой телеметрии и характер анализа.</div>
+      </div>
+    </section>
+    <section id="chapter2-panel-host" class="idps-switcher__panel" data-idps-panel="host">
+      <h3 class="idps-switcher__panel-title">Хостовая IDS/IPS</h3>
+      <div class="idps-question-model">
+        <div class="idps-question-model__cell"><span>Область наблюдения</span><strong>События и характеристики конкретного вычислительного узла</strong></div>
+        <div class="idps-question-model__cell"><span>Типичные данные</span><strong>Процессы, пользователи, файлы, конфигурация, журналы и локальные соединения</strong></div>
+        <div class="idps-question-model__cell"><span>Класс</span><strong>Host-Based IDS/IPS — HIDS/HIPS</strong></div>
+        <div class="idps-question-model__boundary"><strong>Граница вывода:</strong> агент видит только реально доступные ему и настроенные источники данных на конкретном узле.</div>
+      </div>
+    </section>
+  </div>
 </div>
 
-Эту классификацию важно знать, потому что она встречается в учебной литературе. Но она не идеально симметрична: сетевая, хостовая и беспроводная категории в основном различаются средой наблюдения, тогда как NBA сильнее характеризует вид сетевой телеметрии и характер анализа.
+Классификация NIST не идеально симметрична: сетевая, хостовая и беспроводная категории в основном различаются средой наблюдения, тогда как NBA сильнее характеризует вид сетевой телеметрии и характер анализа.
 
-<div class="concept-formula neutral-formula">
-  <span class="formula-left">ИСТОЧНИК ДАННЫХ</span>
-  <span class="formula-sign">≠</span>
-  <span class="formula-right">МЕТОД АНАЛИЗА</span>
+<div class="idps-equation idps-equation--warning">
+  <div class="idps-equation__expression"><span>ИСТОЧНИК ДАННЫХ</span><b>≠</b><span>МЕТОД АНАЛИЗА</span></div>
   <p>Откуда система получает сведения и как она принимает решение — два разных вопроса.</p>
 </div>
 
@@ -71,22 +113,25 @@ flowchart LR
 
 **Сетевая IDS/IPS (Network-Based IDS/IPS, NIDS/NIPS)** анализирует доступную ей сетевую активность.
 
-<div class="teaching-figure" markdown="1">
-<div class="figure-label">СХЕМА 2 · СЕТЕВОЙ ВЗГЛЯД</div>
+<div class="idps-figure" markdown="1">
+<div class="idps-figure__label">СХЕМА 2 · СЕТЕВОЙ ВЗГЛЯД</div>
 
 ```mermaid
 flowchart LR
     A[Узел A] -->|сетевое взаимодействие| P((Точка наблюдения)) --> B[Узел B]
     P -.->|копия доступной активности| N[NIDS]
-    N --> X[Адреса · порты · протоколы · потоки · доступные поля]
+    N --> X[Доступное сетевое представление]
 ```
 
-<div class="figure-caption">NIDS получает только ту сетевую активность, которая доступна в выбранной точке наблюдения и фактически захвачена системой.</div>
+<div class="idps-figure__caption">Сплошные стрелки показывают основной путь сетевого взаимодействия. Пунктир означает копию наблюдаемых данных в NIDS. Система получает только ту активность, которая доступна в выбранной точке и фактически захвачена.</div>
 </div>
 
 В зависимости от точки наблюдения, конфигурации и возможностей системы NIDS может получать адреса, порты, признаки TCP/UDP/ICMP, DNS- и HTTP-поля, сведения о TLS-сеансе, характеристики сетевых потоков и другие доступные признаки.
 
-Но сетевое наблюдение само по себе не сообщает автоматически, какой локальный процесс создал соединение. Если NIDS увидела `10.10.1.15 → 10.10.2.20:445`, из этого ещё не следует, что соединение создал конкретный процесс.
+<div class="idps-evidence-grid idps-evidence-grid--compact">
+  <article class="idps-evidence idps-evidence--supported"><span>СЕТЕВОЙ ИСТОЧНИК МОЖЕТ ПОДДЕРЖАТЬ ВЫВОД</span><p>Наблюдалось соединение <code>10.10.1.15 → 10.10.2.20:445</code> — если соответствующий обмен действительно попал в точку наблюдения и был захвачен.</p></article>
+  <article class="idps-evidence idps-evidence--not-proven"><span>ЭТО НЕ ДОКАЗЫВАЕТ АВТОМАТИЧЕСКИ</span><p>Какой локальный процесс создал соединение, от какого пользователя он работал и что произошло внутри операционной системы.</p></article>
+</div>
 
 ---
 
@@ -94,37 +139,26 @@ flowchart LR
 
 **Хостовая IDS/IPS (Host-Based IDS/IPS, HIDS/HIPS)** работает с событиями и характеристиками конкретного вычислительного узла.
 
-<div class="teaching-figure" markdown="1">
-<div class="figure-label">СХЕМА 3 · ХОСТОВЫЙ ВЗГЛЯД</div>
-
-```mermaid
-flowchart TB
-    subgraph S[Защищаемый узел]
-      P[Процессы]
-      U[Пользователи]
-      F[Файлы и конфигурация]
-      L[Журналы и системные события]
-      C[Локальные соединения]
-    end
-    P --> H[Агент HIDS]
-    U --> H
-    F --> H
-    L --> H
-    C --> H
-```
-
-<div class="figure-caption">HIDS потенциально получает контекст самого узла, но только через реально настроенные источники аудита и доступные агенту данные.</div>
+<div class="idps-figure">
+  <div class="idps-figure__label">СХЕМА 3 · ХОСТОВЫЙ ВЗГЛЯД</div>
+  <div class="idps-grid idps-grid--3 idps-grid--compact">
+    <article class="idps-card idps-card--source"><span class="idps-card__eyebrow">ИСТОЧНИК</span><strong class="idps-card__title">Процессы</strong><p>Запуск, завершение и доступный контекст процесса.</p></article>
+    <article class="idps-card idps-card--source"><span class="idps-card__eyebrow">ИСТОЧНИК</span><strong class="idps-card__title">Пользователи</strong><p>Учётные записи и доступные события аутентификации/действий.</p></article>
+    <article class="idps-card idps-card--source"><span class="idps-card__eyebrow">ИСТОЧНИК</span><strong class="idps-card__title">Файлы и конфигурация</strong><p>Изменения объектов, если они контролируются.</p></article>
+    <article class="idps-card idps-card--source"><span class="idps-card__eyebrow">ИСТОЧНИК</span><strong class="idps-card__title">Журналы и аудит</strong><p>Системные и прикладные события, которые реально журналируются.</p></article>
+    <article class="idps-card idps-card--source"><span class="idps-card__eyebrow">ИСТОЧНИК</span><strong class="idps-card__title">Локальные соединения</strong><p>Сетевой контекст, доступный на самом узле.</p></article>
+    <article class="idps-card idps-card--sensor"><span class="idps-card__eyebrow">СБОР / АНАЛИЗ</span><strong class="idps-card__title">Агент HIDS</strong><p>Получает только те данные, к которым имеет доступ и которые настроены для сбора.</p></article>
+  </div>
+  <div class="idps-figure__caption">Наличие агента не означает автоматической доступности любой телеметрии. Реальный набор данных зависит от продукта, ОС, настроек аудита, прав и конфигурации.</div>
 </div>
-
-Наличие агента не означает автоматической доступности любой телеметрии. Реальный набор данных зависит от продукта, операционной системы, настроек аудита, прав и конфигурации.
 
 ### Один эпизод глазами NIDS и HIDS
 
 Пусть веб-сервер устанавливает соединение `Web Server → 203.0.113.50:443`.
 
-<div class="scope-compare">
-  <article><span>NIDS</span><strong>Сетевой контекст</strong><p>Кто с кем взаимодействовал, когда, по какому протоколу, какие доступные сетевые признаки наблюдались.</p></article>
-  <article><span>HIDS</span><strong>Контекст узла</strong><p>Какой процесс инициировал действие, от какого пользователя, какой файл или конфигурация были затронуты — если эти данные собираются.</p></article>
+<div class="idps-grid idps-grid--2">
+  <article class="idps-card idps-card--sensor"><span class="idps-card__eyebrow">NIDS</span><strong class="idps-card__title">Сетевой контекст</strong><p>Кто с кем взаимодействовал, когда, по какому протоколу и какие доступные сетевые признаки наблюдались.</p></article>
+  <article class="idps-card idps-card--source"><span class="idps-card__eyebrow">HIDS</span><strong class="idps-card__title">Контекст узла</strong><p>Какой процесс инициировал действие, от какого пользователя, какой файл или конфигурация были затронуты — если эти данные собираются.</p></article>
 </div>
 
 Один источник не является автоматически «лучше» другого: они отвечают на разные вопросы.
@@ -135,18 +169,18 @@ flowchart TB
 
 **Беспроводная IDS/IPS (Wireless IDS/IPS, WIDS/WIPS)** наблюдает беспроводную среду и протоколы семейства IEEE 802.11.
 
-<div class="teaching-figure" markdown="1">
-<div class="figure-label">СХЕМА 4 · ПРОВОДНАЯ И БЕСПРОВОДНАЯ НАБЛЮДАЕМОСТЬ НЕ ТOЖДЕСТВЕННЫ</div>
+<div class="idps-figure" markdown="1">
+<div class="idps-figure__label">СХЕМА 4 · ПРОВОДНАЯ И БЕСПРОВОДНАЯ НАБЛЮДАЕМОСТЬ НЕ ТОЖДЕСТВЕННЫ</div>
 
 ```mermaid
 flowchart LR
-    C["Клиент Wi-Fi"] -.->|радиообмен 802.11| AP["Точка доступа"]
-    W["WIDS"] -.->|наблюдает радиоэфир| AP
-    AP -->|проводной IP-трафик| SW["Коммутатор"]
-    SW -.->|копия IP-трафика| N["NIDS"]
+    C[Клиент Wi-Fi] -->|радиообмен 802.11| R((Радиосреда / точка наблюдения)) --> AP[Точка доступа]
+    R -.->|копия наблюдаемых кадров| W[WIDS]
+    AP -->|проводной IP-трафик| SW[Коммутатор]
+    SW -.->|копия наблюдаемого IP-трафика| N[NIDS]
 ```
 
-<div class="figure-caption">NIDS за точкой доступа может видеть часть IP-трафика, но не получает автоматически то же представление радиообмена, что и WIDS.</div>
+<div class="idps-figure__caption">Сплошные стрелки показывают основной обмен. Пунктир используется только для копии наблюдаемых данных. NIDS за точкой доступа и WIDS в радиоэфире получают разные представления.</div>
 </div>
 
 WIDS/WIPS может использоваться для выявления неизвестных точек доступа, неожиданных беспроводных клиентов, подозрительных управляющих кадров и других событий беспроводной среды. Её ограничения связаны с радиопокрытием, каналами, способом сканирования и возможностями оборудования.
@@ -157,14 +191,19 @@ WIDS/WIPS может использоваться для выявления не
 
 **Анализ сетевого поведения (Network Behavior Analysis, NBA)** рассматривает сетевой трафик или статистику сетевой активности, делая акцент на необычных потоках и изменениях поведения.
 
-<div class="scope-compare">
-  <article><span>ОБЫЧНО</span><strong>20 внешних соединений в час</strong><p>Наблюдаемая активность соответствует ожидаемому профилю для данного узла и периода.</p></article>
-  <article><span>ИЗМЕНЕНИЕ</span><strong>12 000 соединений за несколько минут</strong><p>Изменение масштаба или структуры сетевого поведения становится признаком для анализа.</p></article>
+<div class="idps-grid idps-grid--2">
+  <article class="idps-card idps-card--source"><span class="idps-card__eyebrow">БАЗОВЫЙ ПРОФИЛЬ</span><strong class="idps-card__title">20 внешних соединений в час</strong><p>Наблюдаемая активность соответствует ожидаемому профилю для данного узла и периода.</p></article>
+  <article class="idps-card idps-card--warning"><span class="idps-card__eyebrow">НАБЛЮДАЕМОЕ ИЗМЕНЕНИЕ</span><strong class="idps-card__title">12 000 соединений за несколько минут</strong><p>Изменение масштаба или структуры сетевого поведения становится признаком, который требует анализа.</p></article>
+</div>
+
+<div class="idps-evidence-grid idps-evidence-grid--compact">
+  <article class="idps-evidence idps-evidence--supported"><span>НАБЛЮДЕНИЕ</span><p>Количество, частота или структура сетевых взаимодействий изменились относительно выбранной модели или базового профиля.</p></article>
+  <article class="idps-evidence idps-evidence--not-proven"><span>НЕ ДОКАЗЫВАЕТ ПРИЧИНУ</span><p>Само изменение не объясняет, было ли оно атакой, обновлением, резервным копированием или другой легитимной активностью.</p></article>
 </div>
 
 NIDS и NBA оба используют сетевые данные, поэтому граница между ними не абсолютна. Исторически NIDS чаще ассоциировалась с более глубоким анализом пакетов и протоколов, а NBA — с потоками, статистикой и изменениями поведения. Современные продукты могут совмещать эти возможности.
 
-Современные названия NTA и NDR встречаются часто, но их границы зависят от конкретного продукта. В курсе мы будем оценивать не маркетинговое название, а реальные источники данных и функции.
+Современные названия NTA и NDR встречаются часто, но их границы зависят от конкретного продукта. В курсе мы оцениваем не маркетинговое название, а реальные источники данных и функции.
 
 ---
 
@@ -178,27 +217,27 @@ NIDS и NBA оба используют сетевые данные, поэто�
 
 ## 8. Тип системы и метод обнаружения — не одно и то же
 
-<div class="teaching-figure" markdown="1">
-<div class="figure-label">СХЕМА 5 · ДВЕ НЕЗАВИСИМЫЕ ОСИ</div>
-
-```mermaid
-flowchart TB
-    Q1["Ось 1: откуда получены данные?"]
-    Q2["Ось 2: по какому принципу они анализируются?"]
-    Q1 --> N["Сеть"]
-    Q1 --> H["Хост"]
-    Q1 --> W["Беспроводная среда"]
-    Q1 --> A["Приложение"]
-    Q2 --> EX1["заранее известный признак"]
-    Q2 --> EX2["состояние и семантика"]
-    Q2 --> EX3["сравнение с ожидаемой моделью"]
-    Q1 -.->|одна ось не определяет другую| Q2
-```
-
-<div class="figure-caption">Здесь показаны только примеры способов анализа, без попытки заранее построить их полную классификацию. Подробно основания обнаружения разбираются в Главе 5.</div>
+<div class="idps-figure">
+  <div class="idps-figure__label">СХЕМА 5 · ДВЕ НЕЗАВИСИМЫЕ ОСИ</div>
+  <div class="idps-grid idps-grid--2 idps-grid--compact">
+    <article class="idps-card idps-card--source">
+      <span class="idps-card__eyebrow">ОСЬ 1 · ОТКУДА ПОЛУЧЕНЫ ДАННЫЕ?</span>
+      <strong class="idps-card__title">Источник / область наблюдения</strong>
+      <p>Сеть · хост · беспроводная среда · приложение.</p>
+    </article>
+    <article class="idps-card idps-card--sensor">
+      <span class="idps-card__eyebrow">ОСЬ 2 · КАК ДАННЫЕ АНАЛИЗИРУЮТСЯ?</span>
+      <strong class="idps-card__title">Метод / условие обнаружения</strong>
+      <p>Например: заранее известный признак, анализ состояния и семантики, сравнение с ожидаемой моделью.</p>
+    </article>
+  </div>
+  <div class="idps-figure__caption">Одна ось не определяет другую. Здесь приведены только примеры способов анализа; основания обнаружения подробно разбираются в Главе 5.</div>
 </div>
 
-Методы обнаружения подробно рассматриваются в Главе 5.
+<div class="idps-equation idps-equation--warning">
+  <div class="idps-equation__expression"><span>ТИП ИСТОЧНИКА</span><b>≠</b><span>МЕТОД ОБНАРУЖЕНИЯ</span></div>
+  <p>Например, хостовые и сетевые данные могут анализироваться разными методами. Нельзя строить одну плоскую классификацию из понятий разных уровней.</p>
+</div>
 
 ---
 
@@ -207,18 +246,15 @@ flowchart TB
 !!! note "Учебная модель / синтетический сценарий"
     На веб-сервере выполняется неизвестный процесс, который изменяет файл и устанавливает множество исходящих соединений.
 
-<div class="teaching-figure" markdown="1">
-<div class="figure-label">СХЕМА 6 · ОДИН ЭПИЗОД, РАЗНЫЕ ДОКАЗАТЕЛЬСТВА</div>
-
-```mermaid
-flowchart TB
-    E["Эпизод на веб-сервере"] --> N["Сетевая IDS: соединения и протокольные признаки"]
-    E --> H["Хостовая IDS: процесс, пользователь, изменение файла"]
-    E --> B["NBA/NTA: изменение количества и характера потоков"]
-    E -.->|вне беспроводной области| W["WIDS: может не дать релевантных данных"]
-```
-
-<div class="figure-caption">Каждый источник поддерживает разные выводы. Отсутствие данных у одного источника не означает отсутствие самого события.</div>
+<div class="idps-figure">
+  <div class="idps-figure__label">СХЕМА 6 · ОДИН ЭПИЗОД, РАЗНЫЕ ДОКАЗАТЕЛЬСТВА</div>
+  <div class="idps-grid idps-grid--2 idps-grid--compact">
+    <article class="idps-card idps-card--sensor"><span class="idps-card__eyebrow">NIDS</span><strong class="idps-card__title">Соединения и протокольные признаки</strong><p>Поддерживает сетевые выводы в пределах доступной точки наблюдения.</p></article>
+    <article class="idps-card idps-card--source"><span class="idps-card__eyebrow">HIDS</span><strong class="idps-card__title">Процесс, пользователь, изменение файла</strong><p>Может дать локальный контекст узла, если соответствующая телеметрия собирается.</p></article>
+    <article class="idps-card idps-card--warning"><span class="idps-card__eyebrow">NBA / NTA</span><strong class="idps-card__title">Изменение количества и характера потоков</strong><p>Показывает изменение поведения, но не устанавливает его причину автоматически.</p></article>
+    <article class="idps-card"><span class="idps-card__eyebrow">WIDS</span><strong class="idps-card__title">Может не дать релевантных данных</strong><p>Если эпизод не затрагивает беспроводную область наблюдения, отсутствие релевантного события здесь ожидаемо.</p></article>
+  </div>
+  <div class="idps-figure__caption">Каждый источник поддерживает разные выводы. Отсутствие данных у одного источника не означает отсутствие самого события.</div>
 </div>
 
 Больше телеметрии — не автоматически лучше: дополнительные источники требуют хранения, настройки, вычислительных ресурсов и сопровождения. Цель — достаточная наблюдаемость для конкретной задачи безопасности.
@@ -231,10 +267,10 @@ flowchart TB
 
 > **Какое явление требуется наблюдать и где существует нужный след?**
 
-<div class="source-choice-grid">
-  <article><span>Изменение критичного файла</span><strong>Типичный источник: хост</strong><p>События файловой системы или контроль целостности дают прямой контекст изменения.</p></article>
-  <article><span>Внутреннее сетевое сканирование</span><strong>Типичный источник: сеть</strong><p>Множество сетевых взаимодействий может наблюдаться NIDS или средствами анализа потоков.</p></article>
-  <article><span>Неизвестная точка Wi‑Fi</span><strong>Типичный источник: беспроводная среда</strong><p>Радиообмен и служебные кадры 802.11 требуют соответствующей беспроводной наблюдаемости.</p></article>
+<div class="idps-grid idps-grid--3">
+  <article class="idps-card idps-card--source"><span class="idps-card__eyebrow">ИЗМЕНЕНИЕ КРИТИЧНОГО ФАЙЛА</span><strong class="idps-card__title">Типичный источник: хост</strong><p>События файловой системы или контроль целостности могут дать прямой контекст изменения.</p></article>
+  <article class="idps-card idps-card--sensor"><span class="idps-card__eyebrow">ВНУТРЕННЕЕ СЕТЕВОЕ СКАНИРОВАНИЕ</span><strong class="idps-card__title">Типичный источник: сеть</strong><p>Множество сетевых взаимодействий может наблюдаться NIDS или средствами анализа потоков.</p></article>
+  <article class="idps-card idps-card--observation"><span class="idps-card__eyebrow">НЕИЗВЕСТНАЯ ТОЧКА WI-FI</span><strong class="idps-card__title">Типичный источник: беспроводная среда</strong><p>Радиообмен и служебные кадры 802.11 требуют соответствующей беспроводной наблюдаемости.</p></article>
 </div>
 
 Выбор конкретного продукта появляется после понимания задачи и доступных источников данных.
@@ -252,37 +288,26 @@ flowchart TB
 | **WIDS/WIPS** | Беспроводная среда и протоколы 802.11 | Радиообмен, точки доступа, клиенты и события беспроводной среды | Полную картину проводной сети или внутреннего состояния конечного узла |
 | **NBA** | Сетевые потоки и статистика сетевой активности | Изменение объёма, частоты, направлений и структуры сетевых взаимодействий | Причину изменения без дополнительного контекста |
 
-<div class="teaching-figure" markdown="1">
-<div class="figure-label">СХЕМА 7 · ЛОГИКА ВЫБОРА ИСТОЧНИКА</div>
+<div class="idps-figure" markdown="1">
+<div class="idps-figure__label">СХЕМА 7 · ЛОГИКА ВЫБОРА ИСТОЧНИКА</div>
 
 ```mermaid
 flowchart LR
-    Q["Какое явление нужно наблюдать?"] --> T["Какой след оно оставляет?"]
-    T --> N["Сетевой след: NIDS / анализ потоков"]
-    T --> H["Хостовый след: HIDS / системный аудит"]
-    T --> W["Беспроводной след: WIDS"]
-    N --> M["После выбора источника выбираем метод обнаружения"]
+    Q[Какое явление нужно наблюдать?] --> T[Какой след оно оставляет?]
+    T --> N[Сетевой след: NIDS / анализ потоков]
+    T --> H[Хостовый след: HIDS / системный аудит]
+    T --> W[Беспроводной след: WIDS]
+    N --> M[После выбора источника выбираем метод обнаружения]
     H --> M
     W --> M
 ```
 
-<div class="figure-caption">Сначала определяется нужный след и источник данных. Только после этого выбирается способ анализа. Поэтому тип системы и метод обнаружения нельзя смешивать в одну классификацию.</div>
+<div class="idps-figure__caption">Сначала определяется нужный след и источник данных. Только после этого выбирается способ анализа. Поэтому тип системы и метод обнаружения нельзя смешивать в одну классификацию.</div>
 </div>
 
-Из всей главы следуют два общих вывода.
-
-<div class="concept-formula primary-formula">
-  <span class="formula-left">ОДИН ЭПИЗОД</span>
-  <span class="formula-sign">→</span>
-  <span class="formula-right">РАЗНЫЕ СЛЕДЫ</span>
-  <p>Сетевой, хостовый и беспроводной источники могут описывать разные стороны одного события.</p>
-</div>
-
-<div class="concept-formula neutral-formula">
-  <span class="formula-left">ИСТОЧНИК ДАННЫХ</span>
-  <span class="formula-sign">≠</span>
-  <span class="formula-right">МЕТОД ОБНАРУЖЕНИЯ</span>
-  <p>«Откуда получены данные?» и «как система решила, что событие интересно?» — разные вопросы.</p>
+<div class="idps-summary-grid">
+  <article class="idps-summary-card"><span>01</span><strong>ОДИН ЭПИЗОД → РАЗНЫЕ СЛЕДЫ</strong><p>Сетевой, хостовый и беспроводной источники могут описывать разные стороны одного события.</p></article>
+  <article class="idps-summary-card"><span>02</span><strong>ИСТОЧНИК ДАННЫХ ≠ МЕТОД ОБНАРУЖЕНИЯ</strong><p>«Откуда получены данные?» и «как система решила, что событие интересно?» — разные вопросы.</p></article>
 </div>
 
 Эти два вывода подготавливают будущие лабораторные работы. Но перед ними нужно изучить функциональное устройство IDS/IPS в Главе 3: студент должен понимать, как полученные данные проходят от источника к логике обнаружения и результату.
