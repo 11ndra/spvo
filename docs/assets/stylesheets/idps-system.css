@@ -1565,3 +1565,111 @@
 .idps-dual-path__lane--lab { border-left-color: var(--idps-endpoint); }
 .idps-dual-path__lane--nat { border-left-color: var(--idps-observation); }
 .idps-proof-map__fact--source { border-top-color: var(--idps-source); }
+
+/* =========================================================
+   IDPS Course Design System v1.4
+   Chapter 5 detection-method visualizations.
+   ========================================================= */
+
+/* ---------- Fixed event window / threshold timeline ---------- */
+.idps-event-window {
+  position: relative;
+  margin: 0.75rem 0 0.25rem;
+  padding: 1rem 0.9rem 0.9rem;
+  border: 1px solid var(--course-border);
+  border-radius: 0.72rem;
+  background: var(--course-surface-soft);
+}
+
+.idps-event-window__axis {
+  display: flex;
+  justify-content: space-between;
+  gap: 0.45rem;
+  margin-bottom: 0.5rem;
+  color: var(--course-muted);
+  font-size: 0.72rem;
+  font-weight: 700;
+}
+
+.idps-event-window__track {
+  position: relative;
+  height: 4.2rem;
+  margin: 0 0.35rem;
+  border-top: 2px solid var(--course-border);
+}
+
+.idps-event-window__track::before,
+.idps-event-window__track::after {
+  content: "";
+  position: absolute;
+  top: -0.42rem;
+  width: 2px;
+  height: 0.85rem;
+  background: var(--course-border);
+}
+
+.idps-event-window__track::before { left: 0; }
+.idps-event-window__track::after { right: 0; }
+
+.idps-event-window__event {
+  position: absolute;
+  left: var(--idps-pos);
+  top: 0.72rem;
+  display: grid;
+  place-items: center;
+  width: 2rem;
+  height: 2rem;
+  transform: translateX(-50%);
+  border: 2px solid var(--idps-sensor);
+  border-radius: 50%;
+  background: color-mix(in srgb, var(--idps-sensor) 10%, var(--course-surface));
+  color: var(--course-text);
+  font-size: 0.74rem;
+  font-weight: 900;
+}
+
+.idps-event-window__event--outside {
+  border-color: var(--course-border);
+  background: var(--course-surface);
+  color: var(--course-muted);
+}
+
+.idps-event-window__window {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.8rem;
+  padding: 0.62rem 0.72rem;
+  border-left: 4px solid var(--idps-observation);
+  border-radius: 0.5rem;
+  background: color-mix(in srgb, var(--idps-observation) 8%, var(--course-surface));
+}
+
+.idps-event-window__window strong,
+.idps-event-window__window span {
+  display: block;
+}
+
+.idps-event-window__window span {
+  color: var(--course-muted);
+  font-size: 0.82rem;
+  text-align: right;
+}
+
+@media screen and (max-width: 720px) {
+  .idps-event-window__axis span:nth-child(2),
+  .idps-event-window__axis span:nth-child(3),
+  .idps-event-window__axis span:nth-child(4),
+  .idps-event-window__axis span:nth-child(5) {
+    display: none;
+  }
+
+  .idps-event-window__window {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+
+  .idps-event-window__window span {
+    text-align: left;
+  }
+}

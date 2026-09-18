@@ -22,6 +22,7 @@
       if (!panelId) return;
       const panel = root.querySelector(`#${CSS.escape(panelId)}`);
       if (!panel) return;
+      if (!button.id) button.id = `${panelId}-tab`;
       panel.setAttribute("role", "tabpanel");
       panel.setAttribute("aria-labelledby", button.id);
     });
