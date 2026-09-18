@@ -171,3 +171,19 @@ Linux Audit в ЛР №2 используется только для демон
 - Suricata HTTP Keywords — https://docs.suricata.io/en/suricata-8.0.7/rules/http-keywords.html
 - Suricata EVE JSON Output — https://docs.suricata.io/en/suricata-8.0.7/output/eve/eve-json-output.html
 
+
+
+## Глава 7 — ошибки, слепые зоны и границы наблюдаемости
+
+Основные технические основания новой Главы 7:
+
+- NIST SP 800-94 — исторический фундаментальный источник по ограничениям IDPS, false positive/false negative и эксплуатационным факторам. Документ 2007 года не используется как исчерпывающее описание современных продуктов: https://csrc.nist.gov/pubs/sp/800/94/final
+- RFC 8446, TLS 1.3 — handshake после `ServerHello` защищается шифрованием; используется для объяснения границы видимости сетевого сенсора: https://www.rfc-editor.org/rfc/rfc8446.html
+- RFC 9849, TLS Encrypted Client Hello (ECH) — актуальная оговорка о том, что SNI и другие поля `ClientHello` могут быть защищены: https://www.rfc-editor.org/rfc/rfc9849.html
+- Suricata 8.0.7 EVE Index — `stats.capture`, `kernel_drops`, exception-policy counters, `alert_queue_overflow`, `alerts_suppressed`, TLS metadata и другие диагностические поля: https://docs.suricata.io/en/suricata-8.0.7/appendix/eve-index.html
+- Suricata 8.0.7 Flow Keywords — направление, состояние потока, `only_stream`, `only_frag` и связанный контекст: https://docs.suricata.io/en/suricata-8.0.7/rules/flow-keywords.html
+- Suricata TLS Keywords — пример конкретных TLS-представлений, доступных движку при соответствующей видимости: https://docs.suricata.io/en/suricata-8.0.7/rules/tls-keywords.html
+
+Глава не учит техникам обхода IDS/IPS. Фрагментация, reassembly, неоднозначность представлений и шифрование рассматриваются только как инженерные причины, по которым наблюдаемое событие, данные сенсора и решение детектора могут расходиться.
+
+Связь с силлабусом: шифрование, безопасность сетевых протоколов, приложений, веб-сервисов и антивирусная/проактивная защита объединены темой **границ наблюдаемости**. AV/EDR рассматривается как возможный дополнительный хостовый источник/контроль, а не автоматически как HIDS.
