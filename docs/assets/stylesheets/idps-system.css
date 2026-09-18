@@ -1886,3 +1886,350 @@
   .idps-protocol-stack > div:last-child { border-bottom: 0; }
   .idps-rule-two-layer__arrow { transform: rotate(0deg); min-height: 1rem; }
 }
+
+/* =========================================================
+   IDPS Course Design System v1.6
+   Chapter 8 evaluation and evidence visuals.
+   ========================================================= */
+
+.idps-eval-levels {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr) auto minmax(0, 1fr);
+  gap: 0.65rem;
+  align-items: stretch;
+  margin: 1rem 0 1.6rem;
+}
+
+.idps-eval-levels article,
+.idps-eval-contract article,
+.idps-eval-dimensions article,
+.idps-coverage-map article,
+.idps-report-chain article,
+.idps-course-loop article {
+  min-width: 0;
+  padding: 0.82rem;
+  border: 1px solid var(--course-border);
+  border-radius: 0.68rem;
+  background: var(--course-surface);
+  box-shadow: var(--course-shadow);
+}
+
+.idps-eval-levels article { border-top: 4px solid var(--idps-sensor); }
+.idps-eval-levels article:nth-of-type(2) { border-top-color: var(--idps-observation); }
+.idps-eval-levels article:nth-of-type(3) { border-top-color: var(--idps-result); }
+.idps-eval-levels span,
+.idps-eval-levels strong,
+.idps-eval-levels p,
+.idps-eval-levels small,
+.idps-eval-contract span,
+.idps-eval-contract strong,
+.idps-eval-contract small,
+.idps-eval-dimensions span,
+.idps-eval-dimensions strong,
+.idps-eval-dimensions p,
+.idps-coverage-map span,
+.idps-coverage-map strong,
+.idps-coverage-map small,
+.idps-report-chain span,
+.idps-report-chain strong,
+.idps-report-chain small,
+.idps-course-loop span,
+.idps-course-loop strong,
+.idps-course-loop small { display: block; }
+.idps-eval-levels span,
+.idps-eval-contract span,
+.idps-eval-dimensions span,
+.idps-coverage-map span,
+.idps-report-chain span,
+.idps-course-loop span {
+  margin-bottom: 0.28rem;
+  color: var(--course-muted);
+  font-size: 0.65rem;
+  font-weight: 900;
+  letter-spacing: 0.04em;
+}
+.idps-eval-levels p,
+.idps-eval-dimensions p { margin: 0.36rem 0; }
+.idps-eval-levels small,
+.idps-eval-contract small,
+.idps-coverage-map small,
+.idps-report-chain small,
+.idps-course-loop small { color: var(--course-muted); line-height: 1.42; }
+.idps-eval-levels__arrow {
+  display: grid;
+  place-items: center;
+  color: var(--course-muted);
+  font-size: 1.4rem;
+  font-weight: 900;
+}
+
+.idps-eval-contract {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 0.65rem;
+  margin: 1rem 0 1.6rem;
+}
+.idps-eval-contract article { border-top: 4px solid var(--idps-interpretation); }
+.idps-eval-contract article:nth-child(2n) { border-top-color: var(--idps-sensor); }
+.idps-eval-contract span {
+  display: grid;
+  place-items: center;
+  width: 1.65rem;
+  height: 1.65rem;
+  border-radius: 50%;
+  background: color-mix(in srgb, var(--idps-interpretation) 12%, var(--course-surface));
+  color: var(--course-text);
+}
+
+.idps-confusion {
+  display: grid;
+  grid-template-columns: minmax(8rem, 0.8fr) repeat(2, minmax(0, 1fr));
+  gap: 0.45rem;
+  margin: 1rem 0 1.5rem;
+}
+.idps-confusion__corner,
+.idps-confusion__head,
+.idps-confusion__side,
+.idps-confusion__cell {
+  padding: 0.8rem;
+  border: 1px solid var(--course-border);
+  border-radius: 0.55rem;
+}
+.idps-confusion__corner { border-color: transparent; background: transparent; }
+.idps-confusion__head,
+.idps-confusion__side {
+  display: grid;
+  place-items: center;
+  background: var(--course-surface-soft);
+  color: var(--course-muted);
+  font-size: 0.72rem;
+  font-weight: 900;
+  text-align: center;
+}
+.idps-confusion__cell { background: var(--course-surface); }
+.idps-confusion__cell strong,
+.idps-confusion__cell span { display: block; }
+.idps-confusion__cell strong { font-size: 1.1rem; }
+.idps-confusion__cell span { margin-top: 0.2rem; color: var(--course-muted); font-size: 0.8rem; }
+.idps-confusion__cell--tp { border-left: 4px solid var(--idps-source); }
+.idps-confusion__cell--tn { border-left: 4px solid var(--idps-source); }
+.idps-confusion__cell--fp { border-left: 4px solid var(--idps-result); }
+.idps-confusion__cell--fn { border-left: 4px solid var(--idps-observation); }
+
+.idps-metric-grid,
+.idps-eval-dimensions,
+.idps-coverage-map,
+.idps-course-loop {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 0.65rem;
+  margin: 1rem 0 1.6rem;
+}
+.idps-metric-grid article {
+  min-width: 0;
+  padding: 0.88rem;
+  border: 1px solid var(--course-border);
+  border-top: 4px solid var(--idps-sensor);
+  border-radius: 0.68rem;
+  background: var(--course-surface);
+  box-shadow: var(--course-shadow);
+}
+.idps-metric-grid article:nth-child(2) { border-top-color: var(--idps-result); }
+.idps-metric-grid article:nth-child(3) { border-top-color: var(--idps-observation); }
+.idps-metric-grid article:nth-child(4) { border-top-color: var(--idps-interpretation); }
+.idps-metric-grid span,
+.idps-metric-grid strong,
+.idps-metric-grid p { display: block; }
+.idps-metric-grid span { color: var(--course-muted); font-size: 0.66rem; font-weight: 900; }
+.idps-metric-grid strong { margin: 0.3rem 0; font-family: var(--md-code-font-family, monospace); }
+.idps-metric-grid p { margin: 0; color: var(--course-muted); font-size: 0.82rem; line-height: 1.45; }
+
+.idps-base-rate {
+  margin: 1rem 0 0.4rem;
+  padding: 0.9rem;
+  border: 1px solid var(--course-border);
+  border-radius: 0.75rem;
+  background: var(--course-surface-soft);
+}
+.idps-base-rate__controls {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 0.65rem;
+  margin-bottom: 0.8rem;
+}
+.idps-base-rate__controls label {
+  display: grid;
+  gap: 0.35rem;
+  padding: 0.68rem;
+  border: 1px solid var(--course-border);
+  border-radius: 0.58rem;
+  background: var(--course-surface);
+}
+.idps-base-rate__controls label > span { color: var(--course-muted); font-size: 0.7rem; font-weight: 850; }
+.idps-base-rate__controls input[type="number"] {
+  width: 100%;
+  box-sizing: border-box;
+  padding: 0.42rem 0.5rem;
+  border: 1px solid var(--course-border);
+  border-radius: 0.4rem;
+  background: var(--course-surface);
+  color: var(--course-text);
+}
+.idps-base-rate__controls input[type="range"] { width: 100%; }
+.idps-base-rate__controls strong { font-size: 0.86rem; }
+.idps-base-rate__matrix {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 0.55rem;
+}
+.idps-base-rate__matrix article {
+  padding: 0.7rem;
+  border: 1px solid var(--course-border);
+  border-left: 4px solid var(--idps-source);
+  border-radius: 0.55rem;
+  background: var(--course-surface);
+}
+.idps-base-rate__matrix article.is-fn { border-left-color: var(--idps-observation); }
+.idps-base-rate__matrix article.is-fp { border-left-color: var(--idps-result); }
+.idps-base-rate__matrix span,
+.idps-base-rate__matrix strong,
+.idps-base-rate__matrix small { display: block; }
+.idps-base-rate__matrix span { color: var(--course-muted); font-size: 0.66rem; font-weight: 900; }
+.idps-base-rate__matrix strong { margin: 0.18rem 0; font-size: 1.15rem; }
+.idps-base-rate__matrix small { color: var(--course-muted); }
+.idps-base-rate__result {
+  display: grid;
+  grid-template-columns: auto auto minmax(0, 1fr);
+  gap: 0.55rem;
+  align-items: center;
+  margin-top: 0.7rem;
+  padding: 0.72rem;
+  border-left: 4px solid var(--idps-interpretation);
+  border-radius: 0.5rem;
+  background: var(--course-surface);
+}
+.idps-base-rate__result span { color: var(--course-muted); font-size: 0.72rem; font-weight: 900; }
+.idps-base-rate__result strong { font-size: 1.15rem; }
+.idps-base-rate__result p { margin: 0; color: var(--course-muted); font-size: 0.82rem; }
+
+.idps-threshold-tradeoff {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(8rem, 2fr) minmax(0, 1fr);
+  gap: 0.75rem;
+  align-items: center;
+  margin: 1rem 0 1.5rem;
+}
+.idps-threshold-tradeoff > div:first-child,
+.idps-threshold-tradeoff > div:last-child {
+  padding: 0.75rem;
+  border: 1px solid var(--course-border);
+  border-radius: 0.58rem;
+  background: var(--course-surface);
+}
+.idps-threshold-tradeoff strong,
+.idps-threshold-tradeoff span { display: block; }
+.idps-threshold-tradeoff span { color: var(--course-muted); font-size: 0.78rem; }
+.idps-threshold-tradeoff__track {
+  position: relative;
+  height: 0.6rem;
+  border-radius: 999px;
+  background: linear-gradient(90deg, color-mix(in srgb, var(--idps-observation) 70%, transparent), color-mix(in srgb, var(--idps-source) 70%, transparent));
+}
+.idps-threshold-tradeoff__track span {
+  position: absolute;
+  left: 52%;
+  top: 50%;
+  width: 1rem;
+  height: 1rem;
+  transform: translate(-50%, -50%);
+  border: 3px solid var(--course-surface);
+  border-radius: 50%;
+  background: var(--idps-interpretation);
+  box-shadow: 0 0 0 1px var(--course-border);
+}
+
+.idps-coverage-map article { border-top: 4px solid var(--idps-observation); }
+.idps-coverage-map article:nth-child(2) { border-top-color: var(--idps-sensor); }
+.idps-coverage-map article:nth-child(3) { border-top-color: var(--idps-source); }
+.idps-coverage-map article:nth-child(4) { border-top-color: var(--idps-interpretation); }
+
+.idps-eval-dimensions article { border-top: 4px solid var(--idps-observation); }
+.idps-eval-dimensions article:nth-child(2) { border-top-color: var(--idps-sensor); }
+.idps-eval-dimensions article:nth-child(3) { border-top-color: var(--idps-source); }
+.idps-eval-dimensions article:nth-child(4) { border-top-color: var(--idps-result); }
+
+.idps-evidence-strip,
+.idps-report-chain {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr) auto minmax(0, 1fr) auto minmax(0, 1fr);
+  gap: 0.45rem;
+  align-items: stretch;
+  margin: 1rem 0 1.5rem;
+}
+.idps-evidence-strip article {
+  min-width: 0;
+  padding: 0.75rem;
+  border: 1px solid var(--course-border);
+  border-top: 4px solid var(--idps-sensor);
+  border-radius: 0.6rem;
+  background: var(--course-surface);
+}
+.idps-evidence-strip article:nth-of-type(2) { border-top-color: var(--idps-observation); }
+.idps-evidence-strip article:nth-of-type(3) { border-top-color: var(--idps-source); }
+.idps-evidence-strip article:nth-of-type(4) { border-top-color: var(--idps-result); }
+.idps-evidence-strip span,
+.idps-evidence-strip strong { display: block; }
+.idps-evidence-strip span { color: var(--course-muted); font-size: 0.65rem; font-weight: 900; }
+.idps-evidence-strip > div,
+.idps-report-chain > div { display: grid; place-items: center; color: var(--course-muted); font-weight: 900; }
+
+.idps-report-chain {
+  grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr) auto minmax(0, 1fr) auto minmax(0, 1fr) auto minmax(0, 1fr);
+}
+.idps-report-chain article { border-top: 4px solid var(--idps-interpretation); }
+.idps-report-chain article:nth-of-type(2) { border-top-color: var(--idps-observation); }
+.idps-report-chain article:nth-of-type(3) { border-top-color: var(--idps-source); }
+.idps-report-chain article:nth-of-type(4) { border-top-color: var(--idps-sensor); }
+.idps-report-chain article:nth-of-type(5) { border-top-color: var(--idps-result); }
+
+.idps-course-loop { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+.idps-course-loop article { border-top: 4px solid var(--idps-sensor); }
+.idps-course-loop article:nth-child(4n+1) { border-top-color: var(--idps-observation); }
+.idps-course-loop article:nth-child(4n+3) { border-top-color: var(--idps-source); }
+.idps-course-loop article:nth-child(4n) { border-top-color: var(--idps-result); }
+
+@media screen and (max-width: 1000px) {
+  .idps-eval-contract,
+  .idps-metric-grid,
+  .idps-eval-dimensions,
+  .idps-coverage-map,
+  .idps-course-loop,
+  .idps-base-rate__controls,
+  .idps-base-rate__matrix { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .idps-report-chain { grid-template-columns: 1fr; }
+  .idps-report-chain > div { min-height: 1rem; }
+}
+
+@media screen and (max-width: 720px) {
+  .idps-eval-levels,
+  .idps-evidence-strip,
+  .idps-threshold-tradeoff { grid-template-columns: 1fr; }
+  .idps-eval-levels__arrow,
+  .idps-evidence-strip > div { min-height: 1rem; }
+  .idps-confusion { grid-template-columns: minmax(5.5rem, 0.7fr) repeat(2, minmax(0, 1fr)); font-size: 0.78rem; }
+  .idps-confusion__corner,
+  .idps-confusion__head,
+  .idps-confusion__side,
+  .idps-confusion__cell { padding: 0.55rem; }
+  .idps-base-rate__result { grid-template-columns: 1fr; }
+}
+
+@media screen and (max-width: 560px) {
+  .idps-eval-contract,
+  .idps-metric-grid,
+  .idps-eval-dimensions,
+  .idps-coverage-map,
+  .idps-course-loop,
+  .idps-base-rate__controls,
+  .idps-base-rate__matrix { grid-template-columns: 1fr; }
+}
