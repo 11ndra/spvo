@@ -199,4 +199,24 @@ Linux Audit в ЛР №2 используется только для демон
 - detection quality и prevention/actuation;
 - качество классификации и эксплуатационные характеристики (visibility, capacity, latency, delivery).
 
+## Глава 9 — протоколы, приложения и зашифрованный трафик
+
+Основные технические основания Главы 9:
+
+- RFC 9846 — актуальная спецификация TLS 1.3, заменившая RFC 8446: https://www.rfc-editor.org/rfc/rfc9846.html
+- RFC 9849 — TLS Encrypted Client Hello (ECH), защита внутреннего `ClientHello`, включая SNI и другие чувствительные поля: https://www.rfc-editor.org/rfc/rfc9849.html
+- RFC 9000 — QUIC как UDP-based multiplexed and secure transport: https://www.rfc-editor.org/rfc/rfc9000.html
+- RFC 9114 — HTTP/3, отображение HTTP semantics на QUIC: https://www.rfc-editor.org/rfc/rfc9114.html
+- RFC 9110 — HTTP Semantics, общая семантика HTTP независимо от конкретной версии wire protocol: https://www.rfc-editor.org/rfc/rfc9110.html
+- RFC 1035 и его обновления — базовая модель DNS: https://www.rfc-editor.org/rfc/rfc1035.html
+- RFC 7858 — DNS over TLS: https://www.rfc-editor.org/rfc/rfc7858.html
+- RFC 8484 — DNS over HTTPS: https://www.rfc-editor.org/rfc/rfc8484.html
+- RFC 9250 — DNS over QUIC: https://www.rfc-editor.org/rfc/rfc9250.html
+- RFC 4253 и его обновления — SSH Transport Layer Protocol: https://www.rfc-editor.org/rfc/rfc4253.html
+- Microsoft Open Specifications `[MS-SMB2]` — SMB Protocol Versions 2 and 3: https://learn.microsoft.com/en-us/openspecs/windows_protocols/ms-smb2/5606ad47-5ee0-437a-817e-70c366052962
+- Suricata 8.0.7 Generic App Layer Keywords — protocol detection states и app-layer matching: https://docs.suricata.io/en/suricata-8.0.7/rules/app-layer.html
+- Suricata 8.0.7 Flow Keywords — flow context, stream/fragment representation: https://docs.suricata.io/en/suricata-8.0.7/rules/flow-keywords.html
+- Suricata 8.0.7 EVE JSON Format — HTTP/DNS/TLS/SMB/SSH и другие protocol-specific records: https://docs.suricata.io/en/suricata-8.0.7/output/eve/eve-json-format.html
+
+Глава использует DNS, HTTP, TLS, QUIC, SSH и SMB как контрастные примеры того, как меняется доступное представление данных. Она не является заменой отдельного курса по сетевым протоколам и не обучает обходу IDS/IPS.
 

@@ -553,4 +553,6 @@ Alert с действием `drop` в журнале конкретного дв
 - официальная документация Suricata 8.0.7 — конкретные counters и EVE statistics для проверки capture/output/resource-состояния реализации;
 - материал Глав 1–7 этого курса — определения observation point, source, representation, detection result, prevention, blind spot и evidence boundary.
 
+---
 
+Главы 1–8 образуют базовое инженерное ядро. Дальше курс углубляет понятие representation: как один и тот же прикладной смысл выглядит для сенсора в DNS, HTTP, TLS, QUIC, SSH и SMB и как шифрование меняет допустимые условия обнаружения. Этому посвящена **Глава 9 «Протоколы, приложения и зашифрованный трафик глазами IDPS»**.
