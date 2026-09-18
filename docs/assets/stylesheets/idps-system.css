@@ -1222,3 +1222,346 @@
     grid-template-columns: 1fr;
   }
 }
+
+/* =========================================================
+   IDPS Course Design System v1.3
+   Chapter 4 placement / observation visualizations.
+   ========================================================= */
+
+/* ---------- Observation-point specification ---------- */
+.idps-placement-spec {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 0.7rem;
+}
+
+.idps-placement-spec > div {
+  min-width: 0;
+  padding: 0.85rem 0.9rem;
+  border: 1px solid var(--course-border);
+  border-top: 3px solid var(--idps-observation);
+  border-radius: 0.65rem;
+  background: var(--course-surface-soft);
+}
+
+.idps-placement-spec span,
+.idps-placement-spec strong,
+.idps-placement-spec small {
+  display: block;
+}
+
+.idps-placement-spec span {
+  margin-bottom: 0.32rem;
+  font-size: 0.66rem;
+  font-weight: 900;
+  letter-spacing: 0.08em;
+  color: var(--idps-observation);
+}
+
+.idps-placement-spec small {
+  margin-top: 0.28rem;
+  line-height: 1.42;
+  color: var(--course-muted);
+}
+
+/* ---------- Deterministic route diagrams ---------- */
+.idps-route-map {
+  display: grid;
+  gap: 0.68rem;
+  margin-top: 0.9rem;
+}
+
+.idps-route-map__row,
+.idps-policy-view,
+.idps-inline-path,
+.idps-copy-diagram__main {
+  display: grid;
+  grid-template-columns: minmax(8rem, 1fr) auto minmax(8rem, 1fr) auto minmax(8rem, 1fr) auto minmax(8rem, 1fr);
+  gap: 0.48rem;
+  align-items: center;
+}
+
+.idps-policy-view,
+.idps-inline-path,
+.idps-copy-diagram__main {
+  grid-template-columns: minmax(8rem, 1fr) auto minmax(8rem, 1fr) auto minmax(8rem, 1fr);
+}
+
+.idps-route-map__row {
+  padding: 0.65rem;
+  border: 1px solid var(--course-border);
+  border-radius: 0.68rem;
+  background: var(--course-surface-soft);
+}
+
+.idps-route-node {
+  min-width: 0;
+  padding: 0.72rem 0.75rem;
+  border: 1px solid var(--course-border);
+  border-top: 3px solid var(--idps-interpretation);
+  border-radius: 0.56rem;
+  background: var(--course-surface);
+  color: var(--course-text);
+  text-align: center;
+  font-weight: 750;
+  line-height: 1.35;
+}
+
+.idps-route-node small {
+  color: var(--course-muted);
+  font-weight: 600;
+}
+
+.idps-route-node--endpoint { border-top-color: var(--idps-endpoint); }
+.idps-route-node--observation { border-top-color: var(--idps-observation); }
+.idps-route-node--sensor { border-top-color: var(--idps-sensor); }
+
+.idps-route-arrow {
+  display: grid;
+  place-items: center;
+  min-width: 1.15rem;
+  color: var(--course-muted);
+  font-size: 1.2rem;
+  font-weight: 900;
+}
+
+.idps-route-arrow--down {
+  min-height: 1.4rem;
+}
+
+/* ---------- One host, two path lanes ---------- */
+.idps-dual-path {
+  display: grid;
+  gap: 0.8rem;
+}
+
+.idps-dual-path__lane {
+  display: grid;
+  grid-template-columns: minmax(7rem, 0.8fr) minmax(8rem, 1fr) auto minmax(8rem, 1fr) auto minmax(8rem, 1fr);
+  gap: 0.48rem;
+  align-items: center;
+  padding: 0.7rem;
+  border: 1px solid var(--course-border);
+  border-left: 4px solid var(--idps-observation);
+  border-radius: 0.68rem;
+  background: var(--course-surface-soft);
+}
+
+.idps-dual-path__lane > span {
+  font-size: 0.67rem;
+  font-weight: 900;
+  letter-spacing: 0.06em;
+  color: var(--course-muted);
+}
+
+/* ---------- Copy branch diagrams: SPAN/TAP/passive ---------- */
+.idps-figure--flush {
+  margin: 0;
+}
+
+.idps-copy-diagram {
+  display: grid;
+  gap: 0.7rem;
+}
+
+.idps-copy-diagram__branch {
+  display: grid;
+  grid-template-columns: 1fr;
+  justify-items: center;
+  gap: 0.15rem;
+  width: min(15rem, 80%);
+  margin: 0 auto;
+  padding-top: 0.38rem;
+  border-top: 2px dashed var(--idps-observation);
+  color: var(--course-muted);
+  text-align: center;
+  font-size: 0.76rem;
+  font-weight: 750;
+}
+
+/* The dashed branch is reserved for a copy of observed data. */
+.idps-copy-diagram__branch .idps-route-node {
+  width: 100%;
+}
+
+/* ---------- Local host/network representation ---------- */
+.idps-layer-chain {
+  display: grid;
+  grid-template-columns: minmax(8rem, 1fr) auto minmax(8rem, 1fr) auto minmax(8rem, 1fr) auto minmax(8rem, 1fr);
+  gap: 0.5rem;
+  align-items: stretch;
+}
+
+.idps-layer-chain__item {
+  min-width: 0;
+  padding: 0.82rem;
+  border: 1px solid var(--course-border);
+  border-top: 3px solid var(--idps-source);
+  border-radius: 0.65rem;
+  background: var(--course-surface-soft);
+}
+
+.idps-layer-chain__item--emphasis {
+  border-top-color: var(--idps-observation);
+  background: color-mix(in srgb, var(--idps-observation) 7%, var(--course-surface-soft));
+}
+
+.idps-layer-chain__item span,
+.idps-layer-chain__item strong,
+.idps-layer-chain__item small {
+  display: block;
+}
+
+.idps-layer-chain__item span {
+  margin-bottom: 0.3rem;
+  font-size: 0.65rem;
+  font-weight: 900;
+  color: var(--course-muted);
+}
+
+.idps-layer-chain__item small {
+  margin-top: 0.25rem;
+  line-height: 1.38;
+  color: var(--course-muted);
+}
+
+/* ---------- Bounded proof composition ---------- */
+.idps-proof-map {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(8.5rem, 1fr) auto) minmax(12rem, 1.35fr);
+  gap: 0.5rem;
+  align-items: stretch;
+}
+
+.idps-proof-map__fact,
+.idps-proof-map__conclusion {
+  min-width: 0;
+  padding: 0.78rem 0.82rem;
+  border: 1px solid var(--course-border);
+  border-top: 3px solid var(--idps-source);
+  border-radius: 0.65rem;
+  background: var(--course-surface-soft);
+}
+
+.idps-proof-map__fact--observation { border-top-color: var(--idps-observation); }
+.idps-proof-map__conclusion { border-top-color: var(--idps-interpretation); }
+
+.idps-proof-map__fact strong,
+.idps-proof-map__fact span,
+.idps-proof-map__conclusion strong,
+.idps-proof-map__conclusion span {
+  display: block;
+}
+
+.idps-proof-map__fact span,
+.idps-proof-map__conclusion span {
+  margin-top: 0.28rem;
+  color: var(--course-muted);
+  font-size: 0.82rem;
+  line-height: 1.42;
+}
+
+.idps-proof-map__operator {
+  display: grid;
+  place-items: center;
+  color: var(--course-muted);
+  font-size: 1.3rem;
+  font-weight: 900;
+}
+
+/* ---------- Placement decision ladder ---------- */
+.idps-placement-ladder {
+  display: grid;
+  grid-template-columns: repeat(7, minmax(8rem, 1fr));
+  gap: 0.55rem;
+  margin: 1.2rem 0 1.8rem;
+  overflow-x: auto;
+  padding-bottom: 0.2rem;
+}
+
+.idps-placement-ladder > div {
+  position: relative;
+  min-width: 8rem;
+  padding: 0.8rem;
+  border: 1px solid var(--course-border);
+  border-top: 3px solid var(--idps-observation);
+  border-radius: 0.65rem;
+  background: var(--course-surface);
+  box-shadow: var(--course-shadow);
+}
+
+.idps-placement-ladder > div:not(:last-child)::after {
+  content: "→";
+  position: absolute;
+  top: 50%;
+  right: -0.44rem;
+  z-index: 2;
+  transform: translate(50%, -50%);
+  padding: 0.05rem 0.14rem;
+  background: var(--course-surface);
+  color: var(--course-muted);
+  font-weight: 900;
+}
+
+.idps-placement-ladder span,
+.idps-placement-ladder strong,
+.idps-placement-ladder small {
+  display: block;
+}
+
+.idps-placement-ladder span {
+  margin-bottom: 0.28rem;
+  font-size: 0.65rem;
+  font-weight: 900;
+  color: var(--idps-observation);
+}
+
+.idps-placement-ladder small {
+  margin-top: 0.25rem;
+  line-height: 1.4;
+  color: var(--course-muted);
+}
+
+@media screen and (max-width: 980px) {
+  .idps-placement-spec { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .idps-proof-map { grid-template-columns: 1fr; }
+  .idps-proof-map__operator { min-height: 1rem; }
+}
+
+@media screen and (max-width: 780px) {
+  .idps-route-map__row,
+  .idps-policy-view,
+  .idps-inline-path,
+  .idps-copy-diagram__main,
+  .idps-dual-path__lane,
+  .idps-layer-chain {
+    grid-template-columns: 1fr;
+  }
+
+  .idps-route-arrow {
+    min-height: 1.35rem;
+    transform: rotate(90deg);
+  }
+
+  .idps-dual-path__lane > span {
+    margin-bottom: 0.15rem;
+  }
+
+  .idps-placement-ladder {
+    grid-template-columns: 1fr;
+    overflow-x: visible;
+  }
+
+  .idps-placement-ladder > div:not(:last-child)::after {
+    display: none;
+  }
+}
+
+@media screen and (max-width: 560px) {
+  .idps-placement-spec { grid-template-columns: 1fr; }
+}
+
+/* Semantic modifiers used by Chapter 4 route/proof visuals. */
+.idps-dual-path__lane--lab { border-left-color: var(--idps-endpoint); }
+.idps-dual-path__lane--nat { border-left-color: var(--idps-observation); }
+.idps-proof-map__fact--source { border-top-color: var(--idps-source); }
