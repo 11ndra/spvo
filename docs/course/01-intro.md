@@ -72,6 +72,35 @@ flowchart LR
 
 Например, `Внешняя сеть → база данных:5432` может быть запрещено вообще, независимо от того, содержит ли соединение атаку. А обращение к публичному веб-сервису может быть разрешено, потому что без него система не выполняет свою функцию.
 
+<div class="idps-switcher" data-idps-switcher>
+  <div class="idps-switcher__header">
+    <strong>Один сетевой поток — два разных защитных вопроса</strong>
+    <p>Переключатель меняет только рассматриваемую функцию защиты. Конкретный продукт может совмещать несколько функций.</p>
+  </div>
+  <div class="idps-switcher__controls" role="tablist" aria-label="Сравнение защитных функций">
+    <button id="chapter1-control-access" class="idps-switcher__button" type="button" role="tab" aria-controls="chapter1-panel-access" aria-selected="true" data-idps-switch="access">Контроль доступа</button>
+    <button id="chapter1-control-detection" class="idps-switcher__button" type="button" role="tab" aria-controls="chapter1-panel-detection" aria-selected="false" data-idps-switch="detection">Обнаружение</button>
+  </div>
+  <div class="idps-switcher__panels">
+    <section id="chapter1-panel-access" class="idps-switcher__panel" role="tabpanel" aria-labelledby="chapter1-control-access" data-idps-panel="access">
+      <div class="idps-question-model">
+        <div class="idps-question-model__cell"><span>Вопрос</span><strong>Допустимо ли данное сетевое взаимодействие по политике?</strong></div>
+        <div class="idps-question-model__cell"><span>Основание решения</span><strong>Политика доступа и доступный системе контекст соединения</strong></div>
+        <div class="idps-question-model__cell"><span>Результат</span><strong>Например: разрешить или запретить взаимодействие</strong></div>
+        <div class="idps-question-model__boundary"><strong>Граница вывода:</strong> разрешение сетевого пути само по себе не доказывает безопасность конкретного содержимого запроса.</div>
+      </div>
+    </section>
+    <section id="chapter1-panel-detection" class="idps-switcher__panel" role="tabpanel" aria-labelledby="chapter1-control-detection" data-idps-panel="detection">
+      <div class="idps-question-model">
+        <div class="idps-question-model__cell"><span>Вопрос</span><strong>Есть ли в доступных данных признак, удовлетворяющий логике обнаружения?</strong></div>
+        <div class="idps-question-model__cell"><span>Основание решения</span><strong>Доступные системе данные и заданная логика обнаружения</strong></div>
+        <div class="idps-question-model__cell"><span>Результат</span><strong>Результат обнаружения, например оповещение</strong></div>
+        <div class="idps-question-model__boundary"><strong>Граница вывода:</strong> результат обнаружения сам по себе не доказывает успешную эксплуатацию или компрометацию.</div>
+      </div>
+    </section>
+  </div>
+</div>
+
 ---
 
 ## 3. Где возникает задача обнаружения

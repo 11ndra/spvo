@@ -55,8 +55,10 @@ markdown_extensions:
 
 extra_css:
   - assets/stylesheets/extra.css
+  - assets/stylesheets/idps-system.css
 extra_javascript:
   - assets/javascripts/course.js
+  - assets/javascripts/idps-system.js
 
 nav:
   - Курс:

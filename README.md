@@ -39,11 +39,21 @@
 - [x] Legacy и developer-only материалы исключены из student-facing `docs/`
 - [ ] Runtime QA актуальной classroom-цепочки на эталонных Ubuntu/VirtualBox VM
 - [x] Глава 6 — что такое правила и как они устроены
-- [ ] Consistency table и проектирование ЛР №5
+- [~] Visual/UI pass Глав 1–6 на `idps-system.css` + `idps-system.js` (начата Глава 1)
+- [ ] Consistency table и проектирование ЛР №5 после visual/UI pass
 
 
 
 
+
+## v2.29-rc3 — CSS/JS design-system foundation
+
+- существующие `extra.css` и `course.js` сохранены для обратной совместимости; поверх них добавлены отдельные `idps-system.css` и `idps-system.js`;
+- новые компоненты используют namespace `idps-` и семантические роли endpoint / observation / sensor / source / result / interpretation;
+- JavaScript переведён в модель progressive enhancement: обязательный учебный контент остаётся доступным без JS;
+- в Главу 1 добавлен первый переиспользуемый интерактивный компонент «один сетевой поток — два защитных вопроса», сравнивающий контроль доступа и обнаружение без смешения функций;
+- удалены два устаревших вызова несуществующих JS-инициализаторов `initializeBaseRateLab()` и `initializePlacementScenarioLab()`;
+- `internal/resources/visual-guide.md` обновлён под гибрид Mermaid + HTML/CSS + SVG/CSS + минимальный JS.
 
 ## v2.29-rc2 — Chapter 3 visual/evidence clarification
 

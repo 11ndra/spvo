@@ -217,22 +217,6 @@ document.addEventListener("DOMContentLoaded", () => {
 
 
 
-document.addEventListener("DOMContentLoaded", () => {
-  initializeBaseRateLab();
-});
-
-
-
-
-
-
-
-
-document.addEventListener("DOMContentLoaded", () => {
-  initializePlacementScenarioLab();
-});
-
-
 
 
 
