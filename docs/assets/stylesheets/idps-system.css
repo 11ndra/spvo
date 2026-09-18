@@ -802,56 +802,73 @@
   background: color-mix(in srgb, var(--idps-observation) 7%, var(--course-surface-soft));
 }
 
-/* ---------- Compact activity plot for baseline/change examples ---------- */
-.idps-activity-plot {
+/* ---------- Same-window NBA baseline/current comparison ---------- */
+.idps-nba-compare {
   display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: 0.9rem;
+  grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr);
+  gap: 0.75rem;
+  align-items: stretch;
   margin: 1.15rem 0 1.7rem;
 }
 
-.idps-activity-plot__group {
-  padding: 0.9rem;
+.idps-nba-compare__group {
+  min-width: 0;
+  padding: 0.95rem;
   border: 1px solid var(--course-border);
+  border-left: 4px solid var(--idps-source);
   border-radius: 0.72rem;
   background: var(--course-surface);
   box-shadow: var(--course-shadow);
 }
 
-.idps-activity-plot__group > strong,
-.idps-activity-plot__group > small {
+.idps-nba-compare__group--change {
+  border-left-color: var(--idps-result);
+}
+
+.idps-nba-compare__group span,
+.idps-nba-compare__group strong,
+.idps-nba-compare__group b,
+.idps-nba-compare__group small {
   display: block;
 }
 
-.idps-activity-plot__group > small {
-  margin-top: 0.22rem;
+.idps-nba-compare__group > p {
+  margin: 0;
+}
+
+.idps-nba-compare__group > span,
+.idps-nba-compare__group > p > span {
+  color: var(--course-muted);
+  font-size: 0.68rem;
+  font-weight: 900;
+  letter-spacing: 0.06em;
+}
+
+.idps-nba-compare__group > strong,
+.idps-nba-compare__group > p > strong {
+  margin-top: 0.35rem;
+  font-size: clamp(1.65rem, 4vw, 2.35rem);
+  line-height: 1;
+}
+
+.idps-nba-compare__group > b,
+.idps-nba-compare__group > p > b {
+  margin-top: 0.3rem;
+  font-size: 0.86rem;
+}
+
+.idps-nba-compare__group > small,
+.idps-nba-compare__group > p > small {
+  margin-top: 0.55rem;
   color: var(--course-muted);
 }
 
-.idps-activity-plot__bars {
-  display: flex;
-  align-items: end;
-  gap: 0.38rem;
-  height: 8rem;
-  margin-top: 0.75rem;
-  padding: 0.65rem 0.55rem 0.35rem;
-  border-left: 1px solid var(--course-border);
-  border-bottom: 1px solid var(--course-border);
-  background: linear-gradient(to top, color-mix(in srgb, var(--course-border) 28%, transparent) 1px, transparent 1px);
-  background-size: 100% 25%;
-}
-
-.idps-activity-plot__bar {
-  flex: 1 1 0;
-  min-width: 0.55rem;
-  height: var(--idps-level, 20%);
-  min-height: 0.35rem;
-  border-radius: 0.28rem 0.28rem 0 0;
-  background: color-mix(in srgb, var(--idps-source) 72%, var(--course-surface));
-}
-
-.idps-activity-plot__group--change .idps-activity-plot__bar {
-  background: color-mix(in srgb, var(--idps-result) 72%, var(--course-surface));
+.idps-nba-compare__arrow {
+  display: grid;
+  place-items: center;
+  color: var(--course-muted);
+  font-size: 1.35rem;
+  font-weight: 900;
 }
 
 /* ---------- Two-axis comparison matrix ---------- */
@@ -1216,10 +1233,18 @@
 
 @media screen and (max-width: 720px) {
   .idps-source-hub__sources,
-  .idps-activity-plot,
   .idps-fanout__targets,
   .idps-gates {
     grid-template-columns: 1fr;
+  }
+
+  .idps-nba-compare {
+    grid-template-columns: 1fr;
+  }
+
+  .idps-nba-compare__arrow {
+    min-height: 1.25rem;
+    transform: rotate(90deg);
   }
 }
 
@@ -1891,6 +1916,101 @@
    IDPS Course Design System v1.6
    Chapter 8 evaluation and evidence visuals.
    ========================================================= */
+/* ---------- Evidence claim boundary matrix ---------- */
+.idps-claim-matrix {
+  margin: 1rem 0 1.6rem;
+  border: 1px solid var(--course-border);
+  border-radius: 0.7rem;
+  overflow: hidden;
+  background: var(--course-border);
+  box-shadow: var(--course-shadow);
+}
+
+.idps-claim-matrix__head,
+.idps-claim-matrix__row {
+  display: grid;
+  grid-template-columns: minmax(9.5rem, 0.9fr) minmax(0, 1fr) minmax(0, 1.1fr);
+  gap: 1px;
+  min-width: 0;
+  background: var(--course-border);
+}
+
+.idps-claim-matrix__head [role="columnheader"],
+.idps-claim-matrix__row > div {
+  min-width: 0;
+  padding: 0.78rem 0.82rem;
+  overflow-wrap: anywhere;
+}
+
+.idps-claim-matrix__head > p {
+  display: contents;
+}
+
+.idps-claim-matrix__head [role="columnheader"] {
+  background: var(--course-surface-soft);
+  color: var(--course-muted);
+  font-size: 0.7rem;
+  font-weight: 900;
+  letter-spacing: 0.035em;
+  text-transform: uppercase;
+}
+
+.idps-claim-matrix__row > div {
+  background: var(--course-surface);
+  color: var(--course-text);
+  line-height: 1.48;
+}
+
+.idps-claim-matrix__row > div:first-child {
+  border-left: 4px solid var(--idps-source);
+}
+
+.idps-claim-matrix__mobile-label {
+  display: none;
+  margin-bottom: 0.22rem;
+  color: var(--course-muted);
+  font-size: 0.64rem;
+  font-weight: 900;
+  letter-spacing: 0.04em;
+}
+
+@media screen and (max-width: 700px) {
+  .idps-claim-matrix {
+    border: 0;
+    overflow: visible;
+    background: transparent;
+    box-shadow: none;
+  }
+
+  .idps-claim-matrix__head {
+    display: none;
+  }
+
+  .idps-claim-matrix__row {
+    grid-template-columns: 1fr;
+    gap: 0;
+    margin-bottom: 0.7rem;
+    border: 1px solid var(--course-border);
+    border-radius: 0.66rem;
+    overflow: hidden;
+    background: var(--course-surface);
+    box-shadow: var(--course-shadow);
+  }
+
+  .idps-claim-matrix__row > div {
+    border-top: 1px solid var(--course-border);
+  }
+
+  .idps-claim-matrix__row > div:first-child {
+    border-top: 0;
+    border-left: 4px solid var(--idps-source);
+  }
+
+  .idps-claim-matrix__mobile-label {
+    display: block;
+  }
+}
+
 
 .idps-eval-levels {
   display: grid;

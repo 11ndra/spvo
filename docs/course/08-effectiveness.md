@@ -409,13 +409,35 @@ Alert с действием `drop` в журнале конкретного дв
 
 Даже хороший тест не даёт права утверждать больше, чем покрывает эксперимент.
 
-<div class="idps-axis-table" role="table" aria-label="Границы выводов оценки IDPS">
-  <div class="idps-axis-table__head">Артефакт / результат</div><div class="idps-axis-table__head">Что поддерживает</div><div class="idps-axis-table__head">Чего не доказывает</div>
-  <div><strong>100% recall на test corpus</strong></div><div>все размеченные positive этого набора обнаружены</div><div>что обнаруживаются все возможные варианты в production</div>
-  <div><strong>0 FP в negative-наборе</strong></div><div>на выбранных negative cases ложных срабатываний не было</div><div>нулевой FPR на всей реальной активности</div>
-  <div><strong>0 kernel drops в тесте</strong></div><div>в данном запуске этот счётчик не показал kernel capture loss</div><div>полное отсутствие любых потерь во всех внутренних стадиях и будущих нагрузках</div>
-  <div><strong>alert с SID</strong></div><div>конкретная логика сформировала результат</div><div>успешную компрометацию или end-to-end блокирование</div>
-  <div><strong>успешный inline test</strong></div><div>воздействие сработало в проверенной топологии и сценарии</div><div>безошибочное предотвращение всех атак этого класса</div>
+<div class="idps-claim-matrix" role="table" aria-label="Границы выводов оценки IDPS">
+  <div class="idps-claim-matrix__head" role="row">
+    <span role="columnheader">Артефакт / результат</span><span role="columnheader">Что поддерживает</span><span role="columnheader">Чего не доказывает</span>
+  </div>
+  <div class="idps-claim-matrix__row" role="row">
+    <div role="cell"><span class="idps-claim-matrix__mobile-label">АРТЕФАКТ / РЕЗУЛЬТАТ</span><strong>100% recall на test corpus</strong></div>
+    <div role="cell"><span class="idps-claim-matrix__mobile-label">ПОДДЕРЖИВАЕТ</span>все размеченные positive этого набора обнаружены</div>
+    <div role="cell"><span class="idps-claim-matrix__mobile-label">НЕ ДОКАЗЫВАЕТ</span>что обнаруживаются все возможные варианты в production</div>
+  </div>
+  <div class="idps-claim-matrix__row" role="row">
+    <div role="cell"><span class="idps-claim-matrix__mobile-label">АРТЕФАКТ / РЕЗУЛЬТАТ</span><strong>0 FP в negative-наборе</strong></div>
+    <div role="cell"><span class="idps-claim-matrix__mobile-label">ПОДДЕРЖИВАЕТ</span>на выбранных negative cases ложных срабатываний не было</div>
+    <div role="cell"><span class="idps-claim-matrix__mobile-label">НЕ ДОКАЗЫВАЕТ</span>нулевой FPR на всей реальной активности</div>
+  </div>
+  <div class="idps-claim-matrix__row" role="row">
+    <div role="cell"><span class="idps-claim-matrix__mobile-label">АРТЕФАКТ / РЕЗУЛЬТАТ</span><strong>0 kernel drops в тесте</strong></div>
+    <div role="cell"><span class="idps-claim-matrix__mobile-label">ПОДДЕРЖИВАЕТ</span>в данном запуске этот счётчик не показал kernel capture loss</div>
+    <div role="cell"><span class="idps-claim-matrix__mobile-label">НЕ ДОКАЗЫВАЕТ</span>полное отсутствие любых потерь во всех внутренних стадиях и при других нагрузках</div>
+  </div>
+  <div class="idps-claim-matrix__row" role="row">
+    <div role="cell"><span class="idps-claim-matrix__mobile-label">АРТЕФАКТ / РЕЗУЛЬТАТ</span><strong>alert с SID</strong></div>
+    <div role="cell"><span class="idps-claim-matrix__mobile-label">ПОДДЕРЖИВАЕТ</span>конкретная логика сформировала результат</div>
+    <div role="cell"><span class="idps-claim-matrix__mobile-label">НЕ ДОКАЗЫВАЕТ</span>успешную компрометацию или end-to-end блокирование</div>
+  </div>
+  <div class="idps-claim-matrix__row" role="row">
+    <div role="cell"><span class="idps-claim-matrix__mobile-label">АРТЕФАКТ / РЕЗУЛЬТАТ</span><strong>успешный inline test</strong></div>
+    <div role="cell"><span class="idps-claim-matrix__mobile-label">ПОДДЕРЖИВАЕТ</span>воздействие сработало в проверенной топологии и сценарии</div>
+    <div role="cell"><span class="idps-claim-matrix__mobile-label">НЕ ДОКАЗЫВАЕТ</span>безошибочное предотвращение всех атак этого класса</div>
+  </div>
 </div>
 
 Это ключевой навык всей дисциплины: **формулировать вывод ровно на уровне доступных доказательств**.

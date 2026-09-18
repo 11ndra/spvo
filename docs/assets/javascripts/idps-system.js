@@ -133,19 +133,21 @@
     root.dataset.idpsBaseRateReady = "true";
 
     const clamp = (value, min, max) => Math.max(min, Math.min(max, value));
-    const formatCount = (value) => Math.round(value).toLocaleString("ru-RU");
+    const formatCount = (value) => value.toLocaleString("ru-RU");
 
     function render() {
-      const total = Math.max(1, Number(totalInput.value) || 1);
+      const total = Math.max(100, Math.round(Number(totalInput.value) || 100));
       const prevalence = clamp(Number(prevalenceInput.value) || 0, 0, 100) / 100;
       const tpr = clamp(Number(tprInput.value) || 0, 0, 100) / 100;
       const fpr = clamp(Number(fprInput.value) || 0, 0, 100) / 100;
 
-      const positive = total * prevalence;
+      // The matrix represents discrete evaluation units. Round each class once,
+      // then derive its complement so TP+FN+FP+TN is always exactly N.
+      const positive = Math.round(total * prevalence);
       const negative = total - positive;
-      const tp = positive * tpr;
+      const tp = Math.round(positive * tpr);
       const fn = positive - tp;
-      const fp = negative * fpr;
+      const fp = Math.round(negative * fpr);
       const tn = negative - fp;
       const precision = tp + fp > 0 ? tp / (tp + fp) : 0;
 
@@ -163,10 +165,17 @@
           : "Подтверждённые positive составляют значимую долю положительных решений, но вывод всё равно относится только к заданной выборке.";
     }
 
-    [totalInput, prevalenceInput, tprInput, fprInput].forEach((input) => {
+    [prevalenceInput, tprInput, fprInput].forEach((input) => {
       input.addEventListener("input", render);
       input.addEventListener("change", render);
     });
+
+    const normalizeTotal = () => {
+      totalInput.value = String(Math.max(100, Math.round(Number(totalInput.value) || 100)));
+      render();
+    };
+    totalInput.addEventListener("change", normalizeTotal);
+    totalInput.addEventListener("blur", normalizeTotal);
 
     render();
   }

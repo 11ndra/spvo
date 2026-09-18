@@ -196,24 +196,23 @@ WIDS/WIPS может использоваться для выявления не
 **Анализ сетевого поведения (Network Behavior Analysis, NBA)** рассматривает сетевой трафик или статистику сетевой активности, делая акцент на необычных потоках и изменениях поведения.
 
 <div class="idps-figure">
-  <div class="idps-figure__label">ВИЗУАЛЬНЫЙ ПРИМЕР · ПРОФИЛЬ И РЕЗКОЕ ИЗМЕНЕНИЕ СЕТЕВОЙ АКТИВНОСТИ</div>
-  <div class="idps-activity-plot" aria-label="Слева показан стабильный низкий профиль активности, справа — резкий всплеск. Высота столбцов условная и иллюстрирует изменение, а не измерительную шкалу.">
-    <div class="idps-activity-plot__group">
-      <strong>Базовый профиль · около 20 внешних соединений в час</strong>
-      <small>Условно стабильная активность в нескольких последовательных интервалах.</small>
-      <div class="idps-activity-plot__bars" aria-hidden="true">
-        <span class="idps-activity-plot__bar" style="--idps-level:18%"></span><span class="idps-activity-plot__bar" style="--idps-level:22%"></span><span class="idps-activity-plot__bar" style="--idps-level:17%"></span><span class="idps-activity-plot__bar" style="--idps-level:24%"></span><span class="idps-activity-plot__bar" style="--idps-level:20%"></span><span class="idps-activity-plot__bar" style="--idps-level:21%"></span><span class="idps-activity-plot__bar" style="--idps-level:19%"></span><span class="idps-activity-plot__bar" style="--idps-level:23%"></span>
-      </div>
+  <div class="idps-figure__label">ВИЗУАЛЬНЫЙ ПРИМЕР · СРАВНЕНИЕ В ОДИНАКОВОМ ОКНЕ НАБЛЮДЕНИЯ</div>
+  <div class="idps-nba-compare" aria-label="Сравниваются одинаковые пятиминутные окна: в базовом профиле наблюдалось от 18 до 22 внешних соединений, а в текущем окне — 180.">
+    <div class="idps-nba-compare__group">
+      <span>БАЗОВЫЙ ПРОФИЛЬ</span>
+      <strong>18–22</strong>
+      <b>внешних соединения / 5 минут</b>
+      <small>Диапазон, полученный по выбранным опорным окнам.</small>
     </div>
-    <div class="idps-activity-plot__group idps-activity-plot__group--change">
-      <strong>Наблюдаемое изменение · 12 000 соединений за несколько минут</strong>
-      <small>Масштаб и структура активности резко отличаются от выбранного базового профиля.</small>
-      <div class="idps-activity-plot__bars" aria-hidden="true">
-        <span class="idps-activity-plot__bar" style="--idps-level:20%"></span><span class="idps-activity-plot__bar" style="--idps-level:24%"></span><span class="idps-activity-plot__bar" style="--idps-level:38%"></span><span class="idps-activity-plot__bar" style="--idps-level:58%"></span><span class="idps-activity-plot__bar" style="--idps-level:82%"></span><span class="idps-activity-plot__bar" style="--idps-level:96%"></span><span class="idps-activity-plot__bar" style="--idps-level:90%"></span><span class="idps-activity-plot__bar" style="--idps-level:86%"></span>
-      </div>
+    <div class="idps-nba-compare__arrow" aria-hidden="true">→</div>
+    <div class="idps-nba-compare__group idps-nba-compare__group--change">
+      <span>ТЕКУЩЕЕ ОКНО</span>
+      <strong>180</strong>
+      <b>внешних соединений / 5 минут</b>
+      <small>Наблюдаемое значение существенно выше выбранного базового диапазона.</small>
     </div>
   </div>
-  <div class="idps-figure__caption">Столбцы — учебная визуализация, а не реальный график измерений. NBA фиксирует изменение наблюдаемого поведения относительно выбранной модели; причина изменения требует дополнительного контекста.</div>
+  <div class="idps-figure__caption">Обе величины относятся к одинаковым пятиминутным окнам, поэтому сравнение имеет одну измерительную рамку. NBA фиксирует изменение относительно выбранной модели; причина изменения требует дополнительного контекста.</div>
 </div>
 
 <div class="idps-evidence-grid idps-evidence-grid--compact">
@@ -301,7 +300,7 @@ NIDS и NBA оба используют сетевые данные, поэто�
       <div class="idps-episode-map__cell" data-idps-focus-target="nba"><span class="idps-episode-map__mark">АГРЕГИРОВАННЫЙ ВЗГЛЯД</span><strong>Содержание запроса может быть не нужно</strong><small>Анализ может опираться на потоки и статистику, а не на URI.</small></div>
       <div class="idps-episode-map__cell" data-idps-focus-target="nba"><span class="idps-episode-map__mark">ГРАНИЦА</span><strong>Не устанавливает локальный процесс</strong><small>Это не хостовый источник.</small></div>
       <div class="idps-episode-map__cell" data-idps-focus-target="nba"><span class="idps-episode-map__mark">ГРАНИЦА</span><strong>Не подтверждает изменение файла</strong><small>Нужен дополнительный контекст.</small></div>
-      <div class="idps-episode-map__cell" data-idps-focus-target="nba"><span class="idps-episode-map__mark">ПОВЕДЕНЧЕСКИЙ ПРИЗНАК</span><strong>Хорошо показывает изменение масштаба</strong><small>Но само изменение ещё не объясняет его причину.</small></div>
+      <div class="idps-episode-map__cell" data-idps-focus-target="nba"><span class="idps-episode-map__mark">ИЗМЕНЕНИЕ СЕТЕВОЙ АКТИВНОСТИ</span><strong>Хорошо показывает изменение масштаба</strong><small>Но само изменение ещё не объясняет его причину.</small></div>
     </div>
   </div>
   <div class="idps-figure__caption">WIDS здесь намеренно не включена в матрицу: учебный эпизод не задаёт беспроводную область наблюдения. Отсутствие релевантного WIDS-события в таком сценарии ожидаемо и ничего не говорит о фактах на сервере.</div>
@@ -360,7 +359,7 @@ flowchart LR
   <article class="idps-summary-card"><span>02</span><strong>ИСТОЧНИК ДАННЫХ ≠ МЕТОД ОБНАРУЖЕНИЯ</strong><p>«Откуда получены данные?» и «как система решила, что событие интересно?» — разные вопросы.</p></article>
 </div>
 
-Эти два вывода подготавливают будущие лабораторные работы. Но перед ними нужно изучить функциональное устройство IDS/IPS в Главе 3: студент должен понимать, как полученные данные проходят от источника к логике обнаружения и результату.
+Эти два вывода используются далее в лабораторных работах. Перед практикой нужно изучить функциональное устройство IDS/IPS в Главе 3: студент должен понимать, как полученные данные проходят от источника к логике обнаружения и результату.
 
 ---
 
