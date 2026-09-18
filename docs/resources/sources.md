@@ -133,3 +133,26 @@ Linux Audit в ЛР №2 используется только для демон
 
 `START → DATA → END` не является стандартом HTTP, а поле `phase` — служебная метка контролируемого эксперимента, не индикатор атаки. Этот сценарий используется только как синтетическая модель для разделения оснований принятия решения.
 
+## Глава 6 — правила и их структура
+
+Основной технический reference новой Главы 6 — официальная документация Suricata 8.x. Глава использует Suricata как конкретную реализацию rule-based detection и не обобщает её синтаксис на все IDS/IPS.
+
+- Suricata Rules Format — https://docs.suricata.io/en/suricata-8.0.7/rules/intro.html
+- Suricata Meta Keywords — https://docs.suricata.io/en/suricata-8.0.7/rules/meta.html
+- Suricata Flow Keywords — https://docs.suricata.io/en/suricata-8.0.7/rules/flow-keywords.html
+- Suricata HTTP Keywords — https://docs.suricata.io/en/suricata-8.0.7/rules/http-keywords.html
+- Suricata Thresholding Keywords — https://docs.suricata.io/en/suricata-8.0.7/rules/thresholding.html
+- Suricata Global Thresholds / suppress — https://docs.suricata.io/en/suricata-8.0.7/configuration/global-thresholds.html
+- Suricata configuration / action order — https://docs.suricata.io/en/suricata-8.0.7/configuration/suricata-yaml.html
+
+Сквозной пример Главы 6 — правило `SID 1000001` из ЛР №1. Оно является **SYNTHETIC ENGINEERING**: маркер `ATTACK-LAB` создан для учебного стенда и не является индикатором реальной атаки.
+
+Ключевые границы:
+
+- action/header/options — формат правила Suricata, а не универсальная грамматика любой IDPS;
+- `http.uri` выбирает нормализованное представление URI, тогда как `http.uri.raw` предназначен для ненормализованного URI;
+- `flow` и `flowbits` предоставляют контекст/состояние, но отдельное ключевое слово не определяет методологию обнаружения;
+- `msg`, `sid`, `rev`, `classtype` и `priority` относятся к идентификации/описанию результата и не заменяют условие совпадения;
+- thresholding управляет частотой результатов и не исправляет логическую причину слишком широкого detection condition;
+- действие `drop` имеет предотвращающий эффект только в подходящем IPS/inline-режиме.
+

@@ -27,7 +27,7 @@
 ```text
 Что произошло?
       ↓
-Какой след осталось?
+Какой след остался?
       ↓
 Где этот след можно наблюдать?
       ↓
@@ -150,6 +150,12 @@
   <a class="course-route__item course-route__item--lab" href="labs/lab04/">
     <span class="course-route__type">Лаборатория</span>
     <strong>ЛР №4 — Четыре основания решения</strong>
+  </a>
+  <div class="course-route__connector" aria-hidden="true">↓</div>
+
+  <a class="course-route__item course-route__item--theory" href="course/06-rules/">
+    <span class="course-route__type">Теория</span>
+    <strong>Глава 6 — Что такое правила и как они устроены</strong>
   </a>
 </div>
 

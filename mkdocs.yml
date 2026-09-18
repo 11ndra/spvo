@@ -67,6 +67,7 @@ nav:
           - "03 — Из чего состоит IDS/IPS и как она работает": course/03-detection.md
           - "04 — Где и как размещают IDS/IPS": course/04-detection-methods.md
           - "05 — Как IDS/IPS обнаруживает подозрительную активность": course/05-firewall-vs-idps.md
+          - "06 — Что такое правила и как они устроены": course/06-rules.md
   - Лабораторные работы:
       - "00 — Подготовка лабораторной среды": labs/environment/index.md
       - "Практикум 0 — Знакомство с рабочей IDPS": labs/orientation/index.md
