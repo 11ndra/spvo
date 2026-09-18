@@ -1,5 +1,5 @@
 /* =========================================================
-   IDPS Course UI v1.0
+   IDPS Course UI v1.1
    Progressive enhancement only.
    All instructional content must remain available without JS.
    ========================================================= */
@@ -10,9 +10,21 @@
   function initializeSwitcher(root) {
     if (!root || root.dataset.idpsReady === "true") return;
 
+    const controls = root.querySelector(".idps-switcher__controls");
     const buttons = [...root.querySelectorAll("[data-idps-switch]")];
     const panels = [...root.querySelectorAll("[data-idps-panel]")];
-    if (!buttons.length || !panels.length) return;
+    if (!controls || !buttons.length || !panels.length) return;
+
+    controls.setAttribute("role", "tablist");
+    buttons.forEach((button) => {
+      button.setAttribute("role", "tab");
+      const panelId = button.getAttribute("aria-controls");
+      if (!panelId) return;
+      const panel = root.querySelector(`#${CSS.escape(panelId)}`);
+      if (!panel) return;
+      panel.setAttribute("role", "tabpanel");
+      panel.setAttribute("aria-labelledby", button.id);
+    });
 
     root.dataset.idpsReady = "true";
     root.classList.add("is-enhanced");

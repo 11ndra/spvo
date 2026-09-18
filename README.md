@@ -39,12 +39,23 @@
 - [x] Legacy и developer-only материалы исключены из student-facing `docs/`
 - [ ] Runtime QA актуальной classroom-цепочки на эталонных Ubuntu/VirtualBox VM
 - [x] Глава 6 — что такое правила и как они устроены
-- [~] Visual/UI pass Глав 1–6 на `idps-system.css` + `idps-system.js` (начата Глава 1)
+- [~] Visual/UI pass Глав 1–6 на `idps-system.css` + `idps-system.js` (Глава 1 завершена, следующая — Глава 2)
 - [ ] Consistency table и проектирование ЛР №5 после visual/UI pass
 
 
 
 
+
+## v2.29-rc4 — Chapter 1 visual/UI reference implementation
+
+- Глава 1 полностью пройдена сверху вниз и переведена с одноразовых visual-классов на переиспользуемые компоненты `idps-*`;
+- все четыре небольшие технические схемы сохранены в Mermaid и обёрнуты единым `idps-figure`;
+- в Схемах 1–2 удалён пунктир с несогласованным смыслом: в актуальном visual layer пунктир резервируется за копией наблюдаемых данных;
+- policy decisions, concept equations, process model, evidence boundaries, IDS/IPS contrast, NGFW function stack и summary cards переведены на общую design system;
+- switcher усилен как progressive enhancement: без JS кнопки скрыты, оба содержательных представления остаются видимы с собственными заголовками; с JS включаются tab controls;
+- исправлены мелкие языковые дефекты Главы 1 (`IPS` definition punctuation, `AUTOMATIC/alert-only`, `URL filtering`/`Logging` → русские подписи);
+- создан `internal/resources/chapter1-visual-audit.md` с решением по каждому визуальному элементу и reference component catalog;
+- следующий visual/UI шаг — Глава 2.
 
 ## v2.29-rc3 — CSS/JS design-system foundation
 

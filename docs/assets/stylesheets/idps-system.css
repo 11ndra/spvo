@@ -1,5 +1,5 @@
 /* =========================================================
-   IDPS Course Design System v1.0
+   IDPS Course Design System v1.1
    Reusable semantic components for course visualizations.
 
    Principle:
@@ -139,7 +139,6 @@
 }
 
 .idps-switcher__controls {
-  display: flex;
   gap: 0.5rem;
   flex-wrap: wrap;
   padding: 0.75rem 1rem;
@@ -248,5 +247,484 @@
 
   .idps-switcher__button {
     flex: 1 1 12rem;
+  }
+}
+
+/* =========================================================
+   IDPS Course Design System v1.1
+   Reusable Chapter 1 components. These classes intentionally
+   replace one-off visual classes in the new visual pass.
+   ========================================================= */
+
+/* ---------- Mermaid inside the shared figure shell ---------- */
+.idps-figure .mermaid {
+  margin: 0.45rem 0 0.55rem;
+  padding: 0.8rem;
+  overflow-x: auto;
+  border: 1px solid var(--course-border);
+  border-radius: 0.65rem;
+  background: var(--course-surface-soft);
+}
+
+/* ---------- Generic responsive grids ---------- */
+.idps-grid {
+  display: grid;
+  gap: var(--idps-gap);
+  margin: 1.2rem 0 1.7rem;
+}
+
+.idps-grid--2 {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.idps-grid--3 {
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+
+.idps-grid--4 {
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+}
+
+.idps-grid--compact {
+  margin-top: 0.9rem;
+}
+
+/* ---------- Generic semantic card ---------- */
+.idps-card {
+  --idps-card-accent: var(--course-border);
+  min-width: 0;
+  padding: 1rem 1.05rem;
+  border: 1px solid var(--course-border);
+  border-top: 3px solid var(--idps-card-accent);
+  border-radius: 0.75rem;
+  background: var(--course-surface);
+  color: var(--course-text);
+  box-shadow: var(--course-shadow);
+}
+
+.idps-card > p {
+  margin: 0.35rem 0 0;
+  color: var(--course-muted);
+}
+
+.idps-card__eyebrow {
+  display: block;
+  margin-bottom: 0.38rem;
+  font-size: 0.66rem;
+  font-weight: 900;
+  letter-spacing: 0.085em;
+  text-transform: uppercase;
+  color: var(--course-muted);
+}
+
+.idps-card__title {
+  display: block;
+  margin-bottom: 0.35rem;
+  font-size: 1.03rem;
+  line-height: 1.4;
+  color: var(--course-text);
+}
+
+.idps-card--primary { --idps-card-accent: var(--md-primary-fg-color); }
+.idps-card--success { --idps-card-accent: var(--course-success-border); }
+.idps-card--warning { --idps-card-accent: #d89218; }
+.idps-card--danger { --idps-card-accent: var(--course-danger-border); }
+.idps-card--endpoint { --idps-card-accent: var(--idps-endpoint); }
+.idps-card--observation { --idps-card-accent: var(--idps-observation); }
+.idps-card--sensor { --idps-card-accent: var(--idps-sensor); }
+.idps-card--source { --idps-card-accent: var(--idps-source); }
+.idps-card--result { --idps-card-accent: var(--idps-result); }
+.idps-card--interpretation { --idps-card-accent: var(--idps-interpretation); }
+
+/* ---------- Policy decisions ---------- */
+.idps-policy-list {
+  display: grid;
+  gap: 0.55rem;
+  margin: 1rem 0 1.5rem;
+}
+
+.idps-policy-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  padding: 0.72rem 0.9rem;
+  border: 1px solid var(--course-border);
+  border-left-width: 4px;
+  border-radius: 0.6rem;
+  background: var(--course-surface);
+  color: var(--course-text);
+}
+
+.idps-policy-item strong {
+  letter-spacing: 0.055em;
+}
+
+.idps-policy-item--allow { border-left-color: var(--course-success-border); }
+.idps-policy-item--deny { border-left-color: var(--course-danger-border); }
+
+/* ---------- Concept equation ---------- */
+.idps-equation {
+  --idps-equation-accent: var(--md-primary-fg-color);
+  margin: 1.5rem 0 1.9rem;
+  padding: 1.2rem 1.25rem 1rem;
+  border: 1px solid var(--course-border);
+  border-top: 4px solid var(--idps-equation-accent);
+  border-radius: 0.85rem;
+  background: var(--course-surface-accent);
+  text-align: center;
+  box-shadow: var(--course-shadow);
+}
+
+.idps-equation__expression {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: clamp(0.55rem, 2vw, 1rem);
+  flex-wrap: wrap;
+}
+
+.idps-equation__expression > span {
+  font-size: clamp(1.25rem, 3.5vw, 2rem);
+  font-weight: 900;
+  letter-spacing: 0.025em;
+  line-height: 1.15;
+}
+
+.idps-equation__expression > b {
+  font-size: clamp(1.75rem, 4.5vw, 2.65rem);
+  line-height: 1;
+  color: var(--idps-equation-accent);
+}
+
+.idps-equation > p {
+  max-width: 46rem;
+  margin: 0.65rem auto 0;
+  color: var(--course-muted);
+}
+
+.idps-equation--primary { --idps-equation-accent: var(--md-primary-fg-color); }
+.idps-equation--success { --idps-equation-accent: var(--course-success-border); }
+.idps-equation--warning { --idps-equation-accent: #d89218; }
+.idps-equation--danger { --idps-equation-accent: var(--course-danger-border); }
+
+/* ---------- Code/example card ---------- */
+.idps-code-card pre {
+  margin: 0.55rem 0 0.7rem;
+  padding: 0.8rem 0.9rem;
+  overflow-x: auto;
+  border: 1px solid var(--course-border);
+  border-radius: 0.55rem;
+  background: var(--course-surface-soft);
+}
+
+/* ---------- Four-stage process ---------- */
+.idps-process {
+  display: grid;
+  grid-template-columns: 1fr auto 1fr auto 1fr auto 1fr;
+  gap: 0.55rem;
+  align-items: stretch;
+  margin: 1.35rem 0 1.8rem;
+}
+
+.idps-process__step {
+  min-width: 0;
+  min-height: 108px;
+  padding: 0.82rem;
+  border: 1px solid var(--course-border);
+  border-top: 3px solid var(--course-border);
+  border-radius: 0.7rem;
+  background: var(--course-surface);
+  color: var(--course-text);
+  box-shadow: var(--course-shadow);
+}
+
+.idps-process__step--source { border-top-color: var(--idps-source); }
+.idps-process__step--sensor { border-top-color: var(--idps-sensor); }
+.idps-process__step--result { border-top-color: var(--idps-result); }
+
+.idps-process__step > span {
+  display: grid;
+  place-items: center;
+  width: 1.65rem;
+  height: 1.65rem;
+  margin-bottom: 0.45rem;
+  border-radius: 50%;
+  background: var(--md-primary-fg-color);
+  color: #fff;
+  font-size: 0.72rem;
+  font-weight: 900;
+}
+
+.idps-process__step > strong,
+.idps-process__step > small {
+  display: block;
+}
+
+.idps-process__step > small {
+  margin-top: 0.25rem;
+  line-height: 1.35;
+  color: var(--course-muted);
+}
+
+.idps-process__arrow {
+  display: grid;
+  place-items: center;
+  color: var(--course-muted);
+  font-size: 1.3rem;
+}
+
+/* ---------- Detection result ---------- */
+.idps-result-card {
+  margin: 1.15rem 0 1.4rem;
+  padding: 1rem 1.1rem;
+  border: 1px solid var(--course-danger-border);
+  border-left: 5px solid var(--idps-result);
+  border-radius: 0.7rem;
+  background: color-mix(in srgb, var(--idps-result) 8%, var(--course-surface));
+  color: var(--course-text);
+}
+
+.idps-result-card > strong,
+.idps-result-card > code {
+  display: block;
+}
+
+.idps-result-card > strong {
+  font-size: 1.05rem;
+}
+
+.idps-result-card > code {
+  margin-top: 0.35rem;
+  color: var(--course-muted);
+}
+
+/* ---------- Evidence boundary ---------- */
+.idps-evidence-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: var(--idps-gap);
+  margin: 1.2rem 0 1.75rem;
+}
+
+.idps-evidence-grid--compact {
+  margin-top: 1rem;
+}
+
+.idps-evidence {
+  padding: 1rem 1.05rem;
+  border: 1px solid var(--course-border);
+  border-top-width: 3px;
+  border-radius: 0.75rem;
+  background: var(--course-surface);
+  color: var(--course-text);
+  box-shadow: var(--course-shadow);
+}
+
+.idps-evidence > span {
+  display: block;
+  margin-bottom: 0.42rem;
+  font-size: 0.66rem;
+  font-weight: 900;
+  letter-spacing: 0.085em;
+  color: var(--course-muted);
+}
+
+.idps-evidence > p {
+  margin: 0;
+  color: var(--course-muted);
+}
+
+.idps-evidence--supported { border-top-color: var(--course-success-border); }
+.idps-evidence--not-proven { border-top-color: var(--course-danger-border); }
+
+/* ---------- Detection versus prevention ---------- */
+.idps-contrast {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr);
+  gap: var(--idps-gap);
+  align-items: stretch;
+  margin: 1.2rem 0 1.75rem;
+}
+
+.idps-contrast__arrow {
+  display: grid;
+  place-items: center;
+  min-width: 2rem;
+  color: var(--course-muted);
+  font-size: 2rem;
+}
+
+/* ---------- Single policy decision ---------- */
+.idps-decision {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto minmax(9.5rem, 0.8fr);
+  gap: 0.9rem;
+  align-items: center;
+  margin: 1rem 0 1.4rem;
+  padding: 0.85rem 1rem;
+  border: 1px solid var(--course-border);
+  border-left-width: 5px;
+  border-radius: 0.65rem;
+  background: var(--course-surface);
+  color: var(--course-text);
+}
+
+.idps-decision > span {
+  color: var(--course-muted);
+}
+
+.idps-decision--deny { border-left-color: var(--course-danger-border); }
+.idps-decision--allow { border-left-color: var(--course-success-border); }
+
+/* ---------- One product, several functions ---------- */
+.idps-stack {
+  display: grid;
+  grid-template-columns: repeat(5, minmax(7rem, 1fr));
+  gap: 0.55rem;
+  margin: 1.15rem 0 1.6rem;
+}
+
+.idps-stack__label {
+  grid-column: 1 / -1;
+  font-size: 0.68rem;
+  font-weight: 900;
+  letter-spacing: 0.09em;
+  color: var(--course-muted);
+  text-transform: uppercase;
+}
+
+.idps-stack > div {
+  padding: 0.75rem 0.7rem;
+  border: 1px solid var(--course-border);
+  border-top: 3px solid var(--md-primary-fg-color);
+  border-radius: 0.55rem;
+  background: var(--course-surface);
+  color: var(--course-text);
+  text-align: center;
+  font-weight: 700;
+}
+
+/* ---------- Chapter summary / axioms ---------- */
+.idps-summary-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0.85rem;
+  margin: 1.2rem 0 1.8rem;
+}
+
+.idps-summary-card {
+  position: relative;
+  min-width: 0;
+  padding: 1rem 1rem 0.95rem 3.45rem;
+  border: 1px solid var(--course-border);
+  border-radius: 0.75rem;
+  background: var(--course-surface-accent);
+  color: var(--course-text);
+  box-shadow: var(--course-shadow);
+}
+
+.idps-summary-card > span {
+  position: absolute;
+  left: 1rem;
+  top: 1rem;
+  display: grid;
+  place-items: center;
+  width: 1.9rem;
+  height: 1.9rem;
+  border-radius: 50%;
+  background: var(--md-primary-fg-color);
+  color: #fff;
+  font-size: 0.7rem;
+  font-weight: 900;
+}
+
+.idps-summary-card > strong {
+  display: block;
+  font-size: 1.02rem;
+}
+
+.idps-summary-card > p {
+  margin: 0.3rem 0 0;
+  color: var(--course-muted);
+}
+
+/* ---------- Progressive enhancement: controls exist only with JS ---------- */
+.idps-switcher__controls {
+  display: none;
+}
+
+.idps-switcher.is-enhanced .idps-switcher__controls {
+  display: flex;
+}
+
+.idps-switcher__panel-title {
+  margin: 0 0 0.7rem;
+  font-size: 1rem;
+}
+
+.idps-switcher.is-enhanced .idps-switcher__panel-title {
+  display: none;
+}
+
+.idps-switcher:not(.is-enhanced) .idps-switcher__panel + .idps-switcher__panel {
+  margin-top: 1.15rem;
+  padding-top: 1.15rem;
+  border-top: 1px solid var(--course-border);
+}
+
+/* ---------- Responsive behavior ---------- */
+@media screen and (max-width: 860px) {
+  .idps-grid--3,
+  .idps-grid--4,
+  .idps-stack {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .idps-stack__label {
+    grid-column: 1 / -1;
+  }
+}
+
+@media screen and (max-width: 720px) {
+  .idps-grid--2,
+  .idps-grid--3,
+  .idps-grid--4,
+  .idps-evidence-grid,
+  .idps-summary-grid,
+  .idps-stack {
+    grid-template-columns: 1fr;
+  }
+
+  .idps-process {
+    grid-template-columns: 1fr;
+  }
+
+  .idps-process__arrow {
+    min-height: 1.4rem;
+    transform: rotate(90deg);
+  }
+
+  .idps-contrast {
+    grid-template-columns: 1fr;
+  }
+
+  .idps-contrast__arrow {
+    min-height: 2rem;
+    transform: rotate(90deg);
+  }
+
+  .idps-decision {
+    grid-template-columns: 1fr;
+  }
+
+  .idps-policy-item {
+    align-items: flex-start;
+    flex-direction: column;
+    gap: 0.35rem;
+  }
+
+  .idps-stack__label {
+    grid-column: auto;
   }
 }

@@ -14,36 +14,33 @@
 
 ## 1. Сначала обычная информационная система
 
-<div class="teaching-figure" markdown="1">
-<div class="figure-label">СХЕМА 1 · БАЗОВЫЙ СЕТЕВОЙ КОНТУР</div>
+<div class="idps-figure" markdown="1">
+<div class="idps-figure__label">СХЕМА 1 · БАЗОВЫЙ СЕТЕВОЙ КОНТУР</div>
 
 ```mermaid
 flowchart LR
-    I[Внешняя сеть] -->|запросы| F[Межсетевой экран]
-    F -->|РАЗРЕШЕНО: TCP/8080| W[Публичный веб-сервер]
-    F -.->|ЗАПРЕЩЕНО: TCP/22| S[Административный SSH]
-    F -.->|ЗАПРЕЩЕНО: TCP/5432| D[База данных]
+    I[Внешняя сеть] -->|входящие запросы| F[Межсетевой экран]
+    F -->|РАЗРЕШИТЬ: TCP/8080| W[Публичный веб-сервер]
+    F -->|ЗАПРЕТИТЬ: TCP/22, TCP/5432| B[Дальше не пропускать]
 ```
 
-<div class="figure-caption">Сплошная стрелка показывает разрешённый путь к публичному сервису. Пунктирные стрелки показывают взаимодействия, которые политика доступа не должна пропускать.</div>
+<div class="idps-figure__caption">Схема показывает два возможных результата политики доступа: запрос к публичному сервису разрешается, а ненужные внешние пути не пропускаются дальше межсетевого экрана.</div>
 </div>
 
 Веб-сервер должен быть доступен пользователям. Полностью запретить обращения к нему нельзя, иначе сервис перестанет выполнять свою функцию.
 
-<div class="policy-grid">
-  <div class="policy-row allow"><span>Внешняя сеть → веб-сервер</span><strong>РАЗРЕШИТЬ</strong></div>
-  <div class="policy-row deny"><span>Внешняя сеть → база данных</span><strong>ЗАПРЕТИТЬ</strong></div>
-  <div class="policy-row deny"><span>Внешняя сеть → административный SSH</span><strong>ЗАПРЕТИТЬ</strong></div>
+<div class="idps-policy-list" aria-label="Пример политики сетевого доступа">
+  <div class="idps-policy-item idps-policy-item--allow"><span>Внешняя сеть → веб-сервер</span><strong>РАЗРЕШИТЬ</strong></div>
+  <div class="idps-policy-item idps-policy-item--deny"><span>Внешняя сеть → база данных</span><strong>ЗАПРЕТИТЬ</strong></div>
+  <div class="idps-policy-item idps-policy-item--deny"><span>Внешняя сеть → административный SSH</span><strong>ЗАПРЕТИТЬ</strong></div>
 </div>
 
 Если взаимодействие не требуется для работы системы, его следует ограничить политикой доступа, а не оставлять открытым в надежде, что IDS обнаружит каждую попытку атаки.
 
 Но разрешённый веб-сервис всё равно остаётся доступным для взаимодействия.
 
-<div class="concept-formula primary-formula">
-  <span class="formula-left">РАЗРЕШЕНО</span>
-  <span class="formula-sign">≠</span>
-  <span class="formula-right">БЕЗОПАСНО</span>
+<div class="idps-equation idps-equation--success">
+  <div class="idps-equation__expression"><span>РАЗРЕШЕНО</span><b>≠</b><span>БЕЗОПАСНО</span></div>
   <p>Разрешённое взаимодействие не обязательно является безопасным взаимодействием.</p>
 </div>
 
@@ -57,15 +54,15 @@ flowchart LR
 
 Современные межсетевые экраны следующего поколения (NGFW) могут учитывать приложения, пользователей и свойства прикладных протоколов. Поэтому противопоставление `межсетевой экран = L3/L4`, а `IDS = L7` некорректно.
 
-<div class="control-question-grid">
-  <article class="control-question firewall-question">
-    <span>МЕЖСЕТЕВОЙ ЭКРАН</span>
-    <strong>Допустимо ли данное сетевое взаимодействие?</strong>
+<div class="idps-grid idps-grid--2">
+  <article class="idps-card idps-card--primary">
+    <span class="idps-card__eyebrow">МЕЖСЕТЕВОЙ ЭКРАН</span>
+    <strong class="idps-card__title">Допустимо ли данное сетевое взаимодействие?</strong>
     <p>Решение принимается в контексте политики доступа.</p>
   </article>
-  <article class="control-question detection-question">
-    <span>IDS/IPS</span>
-    <strong>Есть ли в наблюдаемой активности признаки, требующие обнаружения?</strong>
+  <article class="idps-card idps-card--sensor">
+    <span class="idps-card__eyebrow">IDS/IPS</span>
+    <strong class="idps-card__title">Есть ли в наблюдаемой активности признаки, требующие обнаружения?</strong>
     <p>Это уже другая защитная задача.</p>
   </article>
 </div>
@@ -77,12 +74,13 @@ flowchart LR
     <strong>Один сетевой поток — два разных защитных вопроса</strong>
     <p>Переключатель меняет только рассматриваемую функцию защиты. Конкретный продукт может совмещать несколько функций.</p>
   </div>
-  <div class="idps-switcher__controls" role="tablist" aria-label="Сравнение защитных функций">
-    <button id="chapter1-control-access" class="idps-switcher__button" type="button" role="tab" aria-controls="chapter1-panel-access" aria-selected="true" data-idps-switch="access">Контроль доступа</button>
-    <button id="chapter1-control-detection" class="idps-switcher__button" type="button" role="tab" aria-controls="chapter1-panel-detection" aria-selected="false" data-idps-switch="detection">Обнаружение</button>
+  <div class="idps-switcher__controls" aria-label="Сравнение защитных функций">
+    <button id="chapter1-control-access" class="idps-switcher__button" type="button" aria-controls="chapter1-panel-access" data-idps-switch="access">Контроль доступа</button>
+    <button id="chapter1-control-detection" class="idps-switcher__button" type="button" aria-controls="chapter1-panel-detection" data-idps-switch="detection">Обнаружение</button>
   </div>
   <div class="idps-switcher__panels">
-    <section id="chapter1-panel-access" class="idps-switcher__panel" role="tabpanel" aria-labelledby="chapter1-control-access" data-idps-panel="access">
+    <section id="chapter1-panel-access" class="idps-switcher__panel" data-idps-panel="access">
+      <h3 class="idps-switcher__panel-title">Контроль доступа</h3>
       <div class="idps-question-model">
         <div class="idps-question-model__cell"><span>Вопрос</span><strong>Допустимо ли данное сетевое взаимодействие по политике?</strong></div>
         <div class="idps-question-model__cell"><span>Основание решения</span><strong>Политика доступа и доступный системе контекст соединения</strong></div>
@@ -90,7 +88,8 @@ flowchart LR
         <div class="idps-question-model__boundary"><strong>Граница вывода:</strong> разрешение сетевого пути само по себе не доказывает безопасность конкретного содержимого запроса.</div>
       </div>
     </section>
-    <section id="chapter1-panel-detection" class="idps-switcher__panel" role="tabpanel" aria-labelledby="chapter1-control-detection" data-idps-panel="detection">
+    <section id="chapter1-panel-detection" class="idps-switcher__panel" data-idps-panel="detection">
+      <h3 class="idps-switcher__panel-title">Обнаружение</h3>
       <div class="idps-question-model">
         <div class="idps-question-model__cell"><span>Вопрос</span><strong>Есть ли в доступных данных признак, удовлетворяющий логике обнаружения?</strong></div>
         <div class="idps-question-model__cell"><span>Основание решения</span><strong>Доступные системе данные и заданная логика обнаружения</strong></div>
@@ -108,29 +107,28 @@ flowchart LR
 !!! note "Учебная модель / синтетический сценарий"
     В этой главе намеренно используется обычный HTTP без TLS. Мы изолируем один механизм: различие между контролем допустимости взаимодействия и обнаружением. Ограничения видимости зашифрованного трафика будут изучаться позднее.
 
-<div class="teaching-figure" markdown="1">
-<div class="figure-label">СХЕМА 2 · РАЗРЕШЁННЫЙ WEB-ПУТЬ</div>
+<div class="idps-figure" markdown="1">
+<div class="idps-figure__label">СХЕМА 2 · РАЗРЕШЁННЫЙ ВЕБ-ПУТЬ</div>
 
 ```mermaid
 flowchart LR
-    C[Клиент] -->|HTTP-запрос| F[Межсетевой экран]
+    N[Обычный HTTP-запрос] --> F[Межсетевой экран]
+    M[HTTP-запрос с учебным маркером] --> F
     F -->|политика: TCP/8080 разрешён| W[Веб-сервер]
-    N[Обычный запрос] -. использует тот же путь .-> F
-    M[Запрос с учебным маркером] -. использует тот же путь .-> F
 ```
 
-<div class="figure-caption">Политика разрешает сам сетевой путь к сервису. Смысл конкретного HTTP-запроса — отдельный вопрос, который требует наблюдения и анализа.</div>
+<div class="idps-figure__caption">Политика разрешает сам сетевой путь к сервису. Смысл конкретного HTTP-запроса — отдельный вопрос, который требует наблюдения и анализа.</div>
 </div>
 
-<div class="example-compare">
-  <article class="example-card normal-example">
-    <span class="example-label">ШТАТНЫЙ ЗАПРОС</span>
+<div class="idps-grid idps-grid--2">
+  <article class="idps-card idps-code-card">
+    <span class="idps-card__eyebrow">ШТАТНЫЙ ЗАПРОС</span>
     <pre><code>GET /lab-test HTTP/1.1
 Host: web.lab</code></pre>
     <p>Запрос использует разрешённый веб-сервис.</p>
   </article>
-  <article class="example-card signal-example">
-    <span class="example-label">ЗАПРОС С УЧЕБНЫМ МАРКЕРОМ</span>
+  <article class="idps-card idps-card--primary idps-code-card">
+    <span class="idps-card__eyebrow">ЗАПРОС С УЧЕБНЫМ МАРКЕРОМ</span>
     <pre><code>GET /admin-test?marker=ATTACK-LAB HTTP/1.1
 Host: web.lab</code></pre>
     <p>Сетевой путь тот же, но наблюдаемая активность отличается.</p>
@@ -153,14 +151,14 @@ Host: web.lab</code></pre>
 
 В общем виде IDS получает доступные ей сведения о происходящей активности и анализирует их на наличие заданных признаков возможных инцидентов или иной активности, значимой для безопасности.
 
-<div class="process-strip">
-  <div><span>1</span><strong>Активность</strong><small>в системе или сети</small></div>
-  <b>→</b>
-  <div><span>2</span><strong>Доступные данные</strong><small>то, что реально получает IDS</small></div>
-  <b>→</b>
-  <div><span>3</span><strong>Анализ</strong><small>применение логики обнаружения</small></div>
-  <b>→</b>
-  <div><span>4</span><strong>Результат</strong><small>например, оповещение</small></div>
+<div class="idps-process" aria-label="Базовая модель работы IDS">
+  <div class="idps-process__step"><span>1</span><strong>Активность</strong><small>в системе или сети</small></div>
+  <b class="idps-process__arrow" aria-hidden="true">→</b>
+  <div class="idps-process__step idps-process__step--source"><span>2</span><strong>Доступные данные</strong><small>то, что реально получает IDS</small></div>
+  <b class="idps-process__arrow" aria-hidden="true">→</b>
+  <div class="idps-process__step idps-process__step--sensor"><span>3</span><strong>Анализ</strong><small>применение логики обнаружения</small></div>
+  <b class="idps-process__arrow" aria-hidden="true">→</b>
+  <div class="idps-process__step idps-process__step--result"><span>4</span><strong>Результат</strong><small>например, оповещение</small></div>
 </div>
 
 Ключевое выражение — **«доступные системе данные»**. IDS не обладает абсолютной наблюдаемостью. Что именно она сможет получить, зависит от типа системы, места размещения, способа получения данных, шифрования и конфигурации.
@@ -169,15 +167,15 @@ Host: web.lab</code></pre>
 
 ## 5. Событие и оповещение — не одно и то же
 
-<div class="concept-pair compact-pair">
-  <article class="concept-card">
-    <span class="concept-index">СОБЫТИЕ</span>
-    <h3>Зафиксированное событие</h3>
+<div class="idps-grid idps-grid--2 idps-grid--compact">
+  <article class="idps-card">
+    <span class="idps-card__eyebrow">СОБЫТИЕ</span>
+    <strong class="idps-card__title">Зафиксированное событие</strong>
     <p>Например: соединение установлено, DNS-запрос получен, процесс запущен, файл изменён.</p>
   </article>
-  <article class="concept-card accent-card">
-    <span class="concept-index">ОПОВЕЩЕНИЕ</span>
-    <h3>Выделенный результат обнаружения</h3>
+  <article class="idps-card idps-card--result">
+    <span class="idps-card__eyebrow">ОПОВЕЩЕНИЕ</span>
+    <strong class="idps-card__title">Выделенный результат обнаружения</strong>
     <p>Наблюдаемая активность удовлетворила условию, которое требует внимания или дальнейшей обработки.</p>
   </article>
 </div>
@@ -190,8 +188,8 @@ Host: web.lab</code></pre>
 
 Добавим к стенду пассивный сетевой сенсор.
 
-<div class="teaching-figure" markdown="1">
-<div class="figure-label">СХЕМА 3 · ПАССИВНЫЙ NIDS НЕ НАХОДИТСЯ В ТРАНЗИТНОМ ПУТИ</div>
+<div class="idps-figure" markdown="1">
+<div class="idps-figure__label">СХЕМА 3 · ПАССИВНЫЙ NIDS НЕ НАХОДИТСЯ В ТРАНЗИТНОМ ПУТИ</div>
 
 ```mermaid
 flowchart LR
@@ -202,32 +200,30 @@ flowchart LR
     N -->|условие совпало| A[Оповещение]
 ```
 
-<div class="figure-caption">Сплошные стрелки — физический путь основного трафика. Пунктирная стрелка — копия данных в пассивный NIDS. Оповещение является результатом анализа копии и не находится в пути передачи.</div>
+<div class="idps-figure__caption">Сплошные стрелки — физический путь основного трафика. Пунктирная стрелка — копия данных в пассивный NIDS. Оповещение является результатом анализа копии и не находится в пути передачи.</div>
 </div>
 
 Пусть детектор ищет маркер `ATTACK-LAB` в определённом поле HTTP-запроса. При получении запроса с этим маркером система формирует оповещение.
 
-<div class="alert-demo">
-  <span class="alert-demo-label">РЕЗУЛЬТАТ ОБНАРУЖЕНИЯ</span>
+<div class="idps-result-card">
+  <span class="idps-card__eyebrow">РЕЗУЛЬТАТ ОБНАРУЖЕНИЯ</span>
   <strong>LAB1: обнаружен учебный HTTP-маркер</strong>
   <code>sid: 1000001 · marker: ATTACK-LAB</code>
 </div>
 
-<div class="evidence-boundary">
-  <article class="evidence-supported">
+<div class="idps-evidence-grid">
+  <article class="idps-evidence idps-evidence--supported">
     <span>ПОДТВЕРЖДЕНО</span>
     <p>В анализируемом системой представлении запроса присутствовал признак, удовлетворивший условию детектора.</p>
   </article>
-  <article class="evidence-not-proven">
+  <article class="idps-evidence idps-evidence--not-proven">
     <span>НЕ ПОДТВЕРЖДЕНО</span>
     <p>Что приложение уязвимо, эксплуатация была успешной, атакующий получил доступ или сервер был скомпрометирован.</p>
   </article>
 </div>
 
-<div class="concept-formula danger-formula">
-  <span class="formula-left">ОПОВЕЩЕНИЕ</span>
-  <span class="formula-sign">≠</span>
-  <span class="formula-right">КОМПРОМЕТАЦИЯ</span>
+<div class="idps-equation idps-equation--danger">
+  <div class="idps-equation__expression"><span>ОПОВЕЩЕНИЕ</span><b>≠</b><span>КОМПРОМЕТАЦИЯ</span></div>
   <p>Оповещение сообщает о результате обнаружения, но само по себе не доказывает успешный взлом.</p>
 </div>
 
@@ -235,18 +231,18 @@ flowchart LR
 
 ## 7. Что такое IPS
 
-**Система предотвращения вторжений (Intrusion Prevention System, IPS)** Она выполняет обнаружение и дополнительно может инициировать действие, направленное на предотвращение или прекращение обнаруженной нежелательной активности.
+**Система предотвращения вторжений (Intrusion Prevention System, IPS)** выполняет обнаружение и дополнительно может инициировать действие, направленное на предотвращение или прекращение обнаруженной нежелательной активности.
 
-<div class="ids-ips-contrast">
-  <article>
-    <span>IDS</span>
-    <strong>Обнаружить</strong>
+<div class="idps-contrast" aria-label="Различие IDS и IPS">
+  <article class="idps-card idps-card--sensor">
+    <span class="idps-card__eyebrow">IDS</span>
+    <strong class="idps-card__title">Обнаружить</strong>
     <p>Получить данные, применить логику обнаружения, сформировать результат.</p>
   </article>
-  <div class="contrast-arrow">→</div>
-  <article class="ips-card">
-    <span>IPS</span>
-    <strong>Обнаружить + воздействовать</strong>
+  <div class="idps-contrast__arrow" aria-hidden="true">→</div>
+  <article class="idps-card idps-card--warning">
+    <span class="idps-card__eyebrow">IPS</span>
+    <strong class="idps-card__title">Обнаружить + воздействовать</strong>
     <p>После обнаружения система может инициировать действие по предотвращению.</p>
   </article>
 </div>
@@ -255,10 +251,8 @@ flowchart LR
 
 Система, включённая в разрыв, может работать только в режиме оповещения и ничего не блокировать. А пассивный детектор в некоторых архитектурах может инициировать действие через другой механизм управления, например API межсетевого экрана.
 
-<div class="concept-formula warning-formula">
-  <span class="formula-left">ОБНАРУЖЕНИЕ</span>
-  <span class="formula-sign">≠</span>
-  <span class="formula-right">ПРЕДОТВРАЩЕНИЕ</span>
+<div class="idps-equation idps-equation--warning">
+  <div class="idps-equation__expression"><span>ОБНАРУЖЕНИЕ</span><b>≠</b><span>ПРЕДОТВРАЩЕНИЕ</span></div>
   <p>Обнаружение и воздействие — разные операции и имеют разную цену ошибки.</p>
 </div>
 
@@ -266,15 +260,15 @@ flowchart LR
 
 ## 8. Почему ошибка предотвращения имеет другую цену
 
-<div class="impact-grid">
-  <article>
-    <span>ОПОВЕЩЕНИЕ-ONLY</span>
-    <strong>Ошибочное решение</strong>
+<div class="idps-grid idps-grid--2">
+  <article class="idps-card idps-card--result">
+    <span class="idps-card__eyebrow">ТОЛЬКО ОПОВЕЩЕНИЕ</span>
+    <strong class="idps-card__title">Цена ошибочного решения</strong>
     <p>Может создать лишнее оповещение и потребовать дополнительной проверки.</p>
   </article>
-  <article class="impact-active">
-    <span>AUTOMATIC ПРЕДОТВРАЩЕНИЕ</span>
-    <strong>Ошибочное решение</strong>
+  <article class="idps-card idps-card--warning">
+    <span class="idps-card__eyebrow">АВТОМАТИЧЕСКОЕ ПРЕДОТВРАЩЕНИЕ</span>
+    <strong class="idps-card__title">Цена ошибочного решения</strong>
     <p>Может отбросить легитимный трафик, прервать сессию или нарушить бизнес-процесс.</p>
   </article>
 </div>
@@ -291,16 +285,14 @@ FP/FN и методы оценки качества появятся поздн�
 
 Если внешний SSH-доступ не требуется, правильное решение — запретить его политикой доступа:
 
-<div class="policy-decision deny-decision"><code>Внешняя сеть → сервер:22</code><strong>ЗАПРЕТИТЬ</strong><span>ненужный путь закрывается</span></div>
+<div class="idps-decision idps-decision--deny"><code>Внешняя сеть → сервер:22</code><strong>ЗАПРЕТИТЬ</strong><span>ненужный путь закрывается</span></div>
 
 IDS/IPS не должна подменять возможность устранить ненужный сетевой путь.
 
 Но если публичный сервис должен обслуживать клиентов, некоторый набор взаимодействий необходимо разрешить. После этого остаётся задача наблюдения за активностью, значимой для безопасности внутри доступной системе области.
 
-<div class="concept-formula neutral-formula">
-  <span class="formula-left">МЕЖСЕТЕВОЙ ЭКРАН</span>
-  <span class="formula-sign">≠</span>
-  <span class="formula-right">IDS/IPS</span>
+<div class="idps-equation idps-equation--primary">
+  <div class="idps-equation__expression"><span>МЕЖСЕТЕВОЙ ЭКРАН</span><b>≠</b><span>IDS/IPS</span></div>
   <p>Это разные защитные функции, даже когда они реализованы внутри одного продукта.</p>
 </div>
 
@@ -310,13 +302,13 @@ IDS/IPS не должна подменять возможность устран
 
 Одна платформа NGFW может совмещать несколько функций.
 
-<div class="function-stack">
-  <span>ЕДИНАЯ ПЛАТФОРМА NGFW</span>
+<div class="idps-stack" aria-label="Функции внутри одной платформы NGFW">
+  <span class="idps-stack__label">ЕДИНАЯ ПЛАТФОРМА NGFW</span>
   <div>Политика межсетевого экрана</div>
   <div>IPS</div>
   <div>Распознавание приложений</div>
-  <div>URL filtering</div>
-  <div>Logging</div>
+  <div>Фильтрация URL</div>
+  <div>Журналирование</div>
 </div>
 
 Нужно отличать **физическое устройство или программный продукт** от **защитной функции**. Если IPS встроена в NGFW, функция предотвращения вторжений никуда не исчезла — она реализована внутри той же платформы.
@@ -327,15 +319,15 @@ IDS/IPS не должна подменять возможность устран
 
 **Межсетевой экран веб-приложений (Web Application Firewall, WAF)** — специализированное средство защиты веб-приложений и связанного с ними веб-трафика.
 
-<div class="scope-compare">
-  <article>
-    <span>WAF</span>
-    <strong>Трафик веб-приложения</strong>
+<div class="idps-grid idps-grid--2">
+  <article class="idps-card idps-card--primary">
+    <span class="idps-card__eyebrow">WAF</span>
+    <strong class="idps-card__title">Трафик веб-приложения</strong>
     <p>Работает с доступными ему элементами HTTP-транзакций и применяет политику защиты веб-приложения.</p>
   </article>
-  <article>
-    <span>IDS/IPS</span>
-    <strong>Более широкий класс</strong>
+  <article class="idps-card idps-card--sensor">
+    <span class="idps-card__eyebrow">IDS/IPS</span>
+    <strong class="idps-card__title">Более широкий класс</strong>
     <p>Сетевые, хостовые и беспроводные IDS/IPS используют разные источники данных и не ограничиваются веб-трафиком.</p>
   </article>
 </div>
@@ -346,8 +338,8 @@ IDS/IPS не должна подменять возможность устран
 
 ## 12. Соберём пример целиком
 
-<div class="teaching-figure" markdown="1">
-<div class="figure-label">СХЕМА 4 · ОТ РАЗРЕШЁННОГО ТРАФИКА К ОПОВЕЩЕНИЮ</div>
+<div class="idps-figure" markdown="1">
+<div class="idps-figure__label">СХЕМА 4 · ОТ РАЗРЕШЁННОГО ТРАФИКА К ОПОВЕЩЕНИЮ</div>
 
 ```mermaid
 flowchart LR
@@ -358,25 +350,25 @@ flowchart LR
     N -->|маркер совпал| A[Оповещение]
 ```
 
-<div class="figure-caption">Сплошной путь показывает разрешённое взаимодействие. Пунктир показывает копию данных в NIDS. Межсетевой экран применяет политику доступа, а NIDS — логику обнаружения.</div>
+<div class="idps-figure__caption">Сплошной путь показывает разрешённое взаимодействие. Пунктир показывает копию данных в NIDS. Межсетевой экран применяет политику доступа, а NIDS — логику обнаружения.</div>
 </div>
 
 Клиент отправляет запрос с `ATTACK-LAB`. Межсетевой экран применяет политику доступа и допускает взаимодействие с опубликованным сервисом. NIDS получает доступную ему копию активности. Условие обнаружения совпадает с признаком, и система формирует оповещение.
 
-<div class="evidence-boundary compact-evidence">
-  <article class="evidence-supported"><span>МОЖНО СКАЗАТЬ</span><p>Детектор получил достаточное представление запроса и его условие выполнилось.</p></article>
-  <article class="evidence-not-proven"><span>ЭТО ОПОВЕЩЕНИЕ НЕ ДОКАЗЫВАЕТ</span><p>Кто именно отправил запрос, уязвимо ли приложение, был ли достигнут нежелательный результат и произошла ли компрометация.</p></article>
+<div class="idps-evidence-grid idps-evidence-grid--compact">
+  <article class="idps-evidence idps-evidence--supported"><span>МОЖНО СКАЗАТЬ</span><p>Детектор получил достаточное представление запроса и его условие выполнилось.</p></article>
+  <article class="idps-evidence idps-evidence--not-proven"><span>ЭТО ОПОВЕЩЕНИЕ НЕ ДОКАЗЫВАЕТ</span><p>Кто именно отправил запрос, уязвимо ли приложение, был ли достигнут нежелательный результат и произошла ли компрометация.</p></article>
 </div>
 
 ---
 
 ## 13. Четыре идеи первой главы
 
-<div class="axiom-grid">
-  <article class="axiom-card"><span>01</span><strong>РАЗРЕШЕНО ≠ БЕЗОПАСНО</strong><p>Политика разрешила путь, но не доказала безопасность активности.</p></article>
-  <article class="axiom-card"><span>02</span><strong>МЕЖСЕТЕВОЙ ЭКРАН ≠ IDS/IPS</strong><p>Разные защитные функции могут находиться в одном продукте.</p></article>
-  <article class="axiom-card"><span>03</span><strong>ОБНАРУЖЕНИЕ ≠ ПРЕДОТВРАЩЕНИЕ</strong><p>Обнаружить и воздействовать — разные действия.</p></article>
-  <article class="axiom-card"><span>04</span><strong>ОПОВЕЩЕНИЕ ≠ КОМПРОМЕТАЦИЯ</strong><p>Срабатывание детектора не равно доказанному взлому.</p></article>
+<div class="idps-summary-grid">
+  <article class="idps-summary-card"><span>01</span><strong>РАЗРЕШЕНО ≠ БЕЗОПАСНО</strong><p>Политика разрешила путь, но не доказала безопасность активности.</p></article>
+  <article class="idps-summary-card"><span>02</span><strong>МЕЖСЕТЕВОЙ ЭКРАН ≠ IDS/IPS</strong><p>Разные защитные функции могут находиться в одном продукте.</p></article>
+  <article class="idps-summary-card"><span>03</span><strong>ОБНАРУЖЕНИЕ ≠ ПРЕДОТВРАЩЕНИЕ</strong><p>Обнаружить и воздействовать — разные действия.</p></article>
+  <article class="idps-summary-card"><span>04</span><strong>ОПОВЕЩЕНИЕ ≠ КОМПРОМЕТАЦИЯ</strong><p>Срабатывание детектора не равно доказанному взлому.</p></article>
 </div>
 
 Если эти четыре отношения понятны, первая глава выполнила свою задачу.
