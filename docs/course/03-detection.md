@@ -24,35 +24,31 @@
 
 В реальной IDS/IPS можно выделить несколько **функциональных задач**.
 
-<div class="teaching-figure" markdown="1">
-<div class="figure-label">СХЕМА 1 · ФУНКЦИОНАЛЬНАЯ ДЕКОМПОЗИЦИЯ IDS/IPS</div>
+<div class="idps-figure" markdown="1">
+<div class="idps-figure__label">СХЕМА 1 · ФУНКЦИОНАЛЬНАЯ ДЕКОМПОЗИЦИЯ IDS/IPS</div>
 
 ```mermaid
 flowchart LR
-    S[Источник наблюдаемой активности]
-    A[Получение данных]
-    P[Построение представления и контекста]
-    D[Логика обнаружения]
-    O[Событие / оповещение]
-    R[Хранение и передача результата]
-    M[Управление и конфигурация]
-    E[Воздействие при наличии функции предотвращения]
+    S[Источник наблюдаемой активности] --> A[Получение данных]
+    A --> P[Представление и контекст]
+    P --> D[Логика обнаружения]
+    D --> O[Результат обнаружения]
+    O --> R[Хранение / передача результата]
 
-    S --> A --> P --> D --> O --> R
-    M -. настройки / правила / обновления .-> A
-    M -. настройки / правила / модели .-> D
-    O -. при настроенной реакции .-> E
+    M[Управление и конфигурация] -->|источники / параметры| A
+    M -->|правила / модели / политика| D
+    O -->|если настроена реакция| E[Исполнительное воздействие]
 ```
 
-<div class="figure-caption">Это функциональная схема, а не обязательная внутренняя цепочка обработки конкретного продукта. Разные реализации могут объединять, разделять или переставлять отдельные функции.</div>
+<p class="idps-figure__caption">Это функциональная схема, а не обязательная внутренняя цепочка конкретного продукта. Реализация может объединять функции в одном процессе или распределять их между несколькими компонентами.</p>
 </div>
 
 Главная идея:
 
-<div class="concept-formula primary-formula">
-  <span class="formula-left">ФУНКЦИЯ</span>
-  <span class="formula-sign">≠</span>
-  <span class="formula-right">ФИЗИЧЕСКИЙ КОМПОНЕНТ</span>
+<div class="idps-equation idps-equation--primary">
+  <div class="idps-equation__expression">
+    <span>ФУНКЦИЯ</span><b>≠</b><span>ФИЗИЧЕСКИЙ КОМПОНЕНТ</span>
+  </div>
   <p>Несколько функций могут выполняться одним процессом или устройством, а одна функция может быть распределена между несколькими узлами.</p>
 </div>
 
@@ -64,9 +60,17 @@ flowchart LR
 
 В классической терминологии IDPS обычно используют два слова:
 
-<div class="scope-compare">
-  <article><span>СЕНСОР</span><strong>Наблюдает среду</strong><p>Чаще используется для сетевых и беспроводных систем: получает доступный трафик или радиообмен.</p></article>
-  <article><span>АГЕНТ</span><strong>Работает на узле</strong><p>Чаще используется для хостовых систем: получает доступ к событиям конкретной операционной системы или приложения.</p></article>
+<div class="idps-grid idps-grid--2">
+  <article class="idps-card idps-card--sensor">
+    <span class="idps-card__eyebrow">СЕНСОР</span>
+    <strong class="idps-card__title">Наблюдает среду</strong>
+    <p>Чаще используется для сетевых и беспроводных систем: получает доступное представление трафика или радиообмена.</p>
+  </article>
+  <article class="idps-card idps-card--sensor">
+    <span class="idps-card__eyebrow">АГЕНТ</span>
+    <strong class="idps-card__title">Работает на узле</strong>
+    <p>Чаще используется для хостовых систем: получает доступ к настроенным событиям конкретной операционной системы или приложения.</p>
+  </article>
 </div>
 
 В NIST SP 800-94 используются соответствующие английские термины `sensor` и `agent`; далее в курсе мы используем русские термины **сенсор** и **агент**.
@@ -77,42 +81,50 @@ flowchart LR
 
 ### Сетевой пример
 
-<div class="teaching-figure" markdown="1">
-<div class="figure-label">СХЕМА 2 · СЕТЕВОЙ СЕНСОР</div>
-
-```mermaid
-flowchart LR
-    C[Клиент] --> P((Точка наблюдения)) --> W[Сервер]
-    P -. копия доступного трафика .-> S[Сенсор NIDS]
-    S --> X[Сетевые данные для анализа]
-```
-
-<div class="figure-caption">Сенсор не создаёт сетевое событие: он получает доступное ему представление уже происходящего взаимодействия.</div>
+<div class="idps-grid idps-grid--3">
+  <article class="idps-card idps-card--endpoint">
+    <span class="idps-card__eyebrow">ОСНОВНОЙ ПОТОК</span>
+    <strong class="idps-card__title">Клиент ↔ сервер</strong>
+    <p>Сетевое взаимодействие существует независимо от сенсора.</p>
+  </article>
+  <article class="idps-card idps-card--observation">
+    <span class="idps-card__eyebrow">ТОЧКА НАБЛЮДЕНИЯ</span>
+    <strong class="idps-card__title">Доступный сетевой след</strong>
+    <p>Именно здесь определяется, какое представление трафика вообще может быть передано сенсору.</p>
+  </article>
+  <article class="idps-card idps-card--sensor">
+    <span class="idps-card__eyebrow">СЕНСОР NIDS</span>
+    <strong class="idps-card__title">Получает доступные данные</strong>
+    <p>Сенсор не создаёт сетевое событие: он анализирует доступное ему представление уже происходящего взаимодействия.</p>
+  </article>
 </div>
 
 ### Хостовый пример
 
-<div class="teaching-figure" markdown="1">
-<div class="figure-label">СХЕМА 3 · ХОСТОВЫЙ АГЕНТ</div>
-
-```mermaid
-flowchart LR
-    OS[ОС и приложения] --> A[Агент HIDS]
-    OS -->|процессы · файлы · аудит · журналы| A
-    A --> X[Хостовые данные для анализа]
-```
-
-<div class="figure-caption">Агент получает только те сведения, к которым имеет доступ и которые реально включены в конфигурацию сбора.</div>
+<div class="idps-grid idps-grid--3">
+  <article class="idps-card idps-card--source">
+    <span class="idps-card__eyebrow">ИСТОЧНИК</span>
+    <strong class="idps-card__title">ОС и приложения</strong>
+    <p>Процессы, файлы, аудит, журналы и другие локальные события существуют на наблюдаемом узле.</p>
+  </article>
+  <article class="idps-card idps-card--sensor">
+    <span class="idps-card__eyebrow">АГЕНТ HIDS</span>
+    <strong class="idps-card__title">Получает настроенную телеметрию</strong>
+    <p>Агент имеет только тот доступ и тот набор источников, которые реально предоставлены ему конфигурацией.</p>
+  </article>
+  <article class="idps-card idps-card--interpretation">
+    <span class="idps-card__eyebrow">ГРАНИЦА</span>
+    <strong class="idps-card__title">Установлен ≠ видит всё</strong>
+    <p>Наличие агента само по себе не доказывает наблюдаемость всех процессов, файлов и действий пользователя.</p>
+  </article>
 </div>
-
-Поэтому наличие установленного агента ещё не означает, что система автоматически видит все процессы, файлы и действия пользователя.
 
 ### Один эпизод — несколько наблюдаемых следов
 
 Один и тот же HTTP-запрос может быть представлен разными артефактами в зависимости от точки наблюдения и включённых источников данных. При этом результат обнаружения, запись приложения и событие аудита — не одно и то же: каждый артефакт имеет собственную доказательную силу и должен интерпретироваться в контексте своей точки наблюдения.
 
-<div class="teaching-figure" markdown="1">
-<div class="figure-label">СХЕМА 4 · ОДИН HTTP-ЗАПРОС — РАЗНЫЕ ТОЧКИ НАБЛЮДЕНИЯ</div>
+<div class="idps-figure" markdown="1">
+<div class="idps-figure__label">СХЕМА 2 · ОДИН HTTP-ЗАПРОС — РАЗНЫЕ ТОЧКИ НАБЛЮДЕНИЯ</div>
 
 ```mermaid
 flowchart LR
@@ -147,7 +159,7 @@ flowchart LR
     class K,K1,K2,K3,K4 conclusion;
 ```
 
-<div class="figure-caption">Точка наблюдения обозначает логическое место на пути трафика, а не конкретный способ получения копии. Suricata формирует результат обнаружения из доступного сетевого представления; лог приложения и Linux Audit являются отдельными источниками хостовых и прикладных свидетельств. Совместная интерпретация этих артефактов не создаёт причинную связь автоматически.</div>
+<p class="idps-figure__caption">Точка наблюдения обозначает логическое место на пути трафика, а не конкретный способ получения копии. Suricata формирует результат обнаружения из доступного сетевого представления; лог приложения и Linux Audit являются отдельными источниками хостовых и прикладных свидетельств. Совместная интерпретация этих артефактов не создаёт причинную связь автоматически.</p>
 </div>
 
 ---
@@ -170,19 +182,27 @@ flowchart LR
 
 Поэтому полезно разделять два вопроса:
 
-<div class="scope-compare">
-  <article><span>СБОР</span><strong>Какие данные получила система?</strong><p>Интерфейс, агент, журнал, поток событий, радиоканал, API или другой источник.</p></article>
-  <article><span>АНАЛИЗ</span><strong>Что система сделала с полученными данными?</strong><p>Построила контекст, применила правило или модель, сформировала результат.</p></article>
+<div class="idps-grid idps-grid--2">
+  <article class="idps-card idps-card--source">
+    <span class="idps-card__eyebrow">СБОР</span>
+    <strong class="idps-card__title">Какие данные получила система?</strong>
+    <p>Интерфейс, агент, журнал, поток событий, радиоканал, API или другой источник.</p>
+  </article>
+  <article class="idps-card">
+    <span class="idps-card__eyebrow">АНАЛИЗ</span>
+    <strong class="idps-card__title">Что система сделала с полученными данными?</strong>
+    <p>Построила контекст, применила правило или модель, сформировала результат.</p>
+  </article>
 </div>
 
-<div class="concept-formula neutral-formula">
-  <span class="formula-left">ДАННЫЕ ПОЛУЧЕНЫ</span>
-  <span class="formula-sign">≠</span>
-  <span class="formula-right">УГРОЗА ОБНАРУЖЕНА</span>
+<div class="idps-equation idps-equation--warning">
+  <div class="idps-equation__expression">
+    <span>ДАННЫЕ ПОЛУЧЕНЫ</span><b>≠</b><span>УГРОЗА ОБНАРУЖЕНА</span>
+  </div>
   <p>Система может успешно собирать телеметрию и не иметь условия, которое выделяет конкретную активность.</p>
 </div>
 
-И наоборот, идеальное правило бесполезно, если нужные данные до механизма анализа не дошли.
+И наоборот, корректная логика обнаружения бесполезна для конкретного события, если нужные данные до механизма анализа не дошли.
 
 ---
 
@@ -212,24 +232,15 @@ TLS-сеанс.
 событие аутентификации.
 ```
 
-<div class="teaching-figure" markdown="1">
-<div class="figure-label">СХЕМА 5 · ОДНИ И ТЕ ЖЕ ИСХОДНЫЕ ДАННЫЕ МОГУТ ДАТЬ НЕСКОЛЬКО ПРЕДСТАВЛЕНИЙ</div>
-
-```mermaid
-flowchart TB
-    N[Полученные сетевые данные]
-    N --> P[Поля пакетов]
-    N --> F[Состояние и характеристики потока]
-    N --> S[Восстановленный TCP-поток]
-    S --> H[HTTP / другой прикладной протокол]
-
-    P --> D1[Детектор A]
-    F --> D2[Детектор B]
-    S --> D3[Детектор C]
-    H --> D4[Детектор D]
-```
-
-<div class="figure-caption">Нет обязательного правила «сначала полностью разобрать приложение, потом начинать обнаружение». Конкретный детектор использует то представление, которое требуется его условию.</div>
+<div class="idps-figure">
+  <div class="idps-figure__label">ПРЕДСТАВЛЕНИЯ ДАННЫХ · ОДИН ИСТОЧНИК НЕ ОЗНАЧАЕТ ОДИН ФОРМАТ АНАЛИЗА</div>
+  <div class="idps-grid idps-grid--4 idps-grid--compact">
+    <article class="idps-card"><span class="idps-card__eyebrow">ПАКЕТ</span><strong class="idps-card__title">Поля и признаки пакета</strong><p>Например, адреса, флаги, тип или код протокола.</p></article>
+    <article class="idps-card"><span class="idps-card__eyebrow">ПОТОК</span><strong class="idps-card__title">Состояние взаимодействия</strong><p>Характеристики соединения или последовательности обмена.</p></article>
+    <article class="idps-card"><span class="idps-card__eyebrow">ВОССТАНОВЛЕННЫЕ ДАННЫЕ</span><strong class="idps-card__title">Последовательность TCP-данных</strong><p>Контекст, полученный из нескольких сетевых сегментов.</p></article>
+    <article class="idps-card"><span class="idps-card__eyebrow">ПРИКЛАДНОЙ КОНТЕКСТ</span><strong class="idps-card__title">HTTP, DNS, TLS и др.</strong><p>Структура протокола, если она доступна и распознана.</p></article>
+  </div>
+  <p class="idps-figure__caption">Конкретный детектор использует то представление, которое требуется его условию. Нет универсального требования «сначала полностью разобрать приложение, затем начинать обнаружение».</p>
 </div>
 
 Это исправляет распространённую ошибку: обнаружение не обязано начинаться только после TCP reassembly и разбора прикладного протокола. Например, интересующее условие может относиться непосредственно к IP/TCP-полям или событию декодирования.
@@ -257,11 +268,11 @@ flowchart TB
 
 Подробно методы обнаружения разбираются в Главе 5. Здесь важно другое:
 
-<div class="concept-formula primary-formula">
-  <span class="formula-left">ПРАВИЛО / МОДЕЛЬ</span>
-  <span class="formula-sign">+</span>
-  <span class="formula-right">ПОДХОДЯЩИЕ ДАННЫЕ</span>
-  <p>Только совместное наличие логики и нужного представления позволяет получить ожидаемый результат обнаружения.</p>
+<div class="idps-equation idps-equation--primary">
+  <div class="idps-equation__expression">
+    <span>ЛОГИКА ОБНАРУЖЕНИЯ</span><b>+</b><span>ПОДХОДЯЩИЕ ДАННЫЕ</span>
+  </div>
+  <p>Ожидаемый результат возможен только тогда, когда системе одновременно доступны нужное представление и применимая к нему логика.</p>
 </div>
 
 ### Почему правила вообще нужны
@@ -295,22 +306,32 @@ flowchart TB
 
 После этого результат нужно куда-то передать или сохранить.
 
-<div class="teaching-figure" markdown="1">
-<div class="figure-label">СХЕМА 6 · ОБНАРУЖЕНИЕ И ХРАНЕНИЕ НЕ НУЖНО СМЕШИВАТЬ</div>
-
-```mermaid
-flowchart LR
-    D[Механизм обнаружения] --> A[Оповещение / событие]
-    A --> L[Локальный журнал]
-    A --> DB[Центральное хранилище]
-    A --> SIEM[SIEM / другая система]
-    A --> C[Консоль оператора]
-```
-
-<div class="figure-caption">Детектор принимает решение, а журнал, база данных или SIEM сохраняют и предоставляют результат. Это разные функции, даже если технически они объединены в одном продукте.</div>
+<div class="idps-grid idps-grid--3">
+  <article class="idps-card idps-card--primary">
+    <span class="idps-card__eyebrow">1 · ОБНАРУЖЕНИЕ</span>
+    <strong class="idps-card__title">Механизм применяет условие</strong>
+    <p>Здесь формируется решение детектора относительно доступных данных.</p>
+  </article>
+  <article class="idps-card idps-card--result">
+    <span class="idps-card__eyebrow">2 · РЕЗУЛЬТАТ</span>
+    <strong class="idps-card__title">Событие / оповещение / метка</strong>
+    <p>Результат обнаружения — отдельный артефакт, а не место его хранения.</p>
+  </article>
+  <article class="idps-card">
+    <span class="idps-card__eyebrow">3 · ВЫВОД И ХРАНЕНИЕ</span>
+    <strong class="idps-card__title">Журнал · хранилище · SIEM · консоль</strong>
+    <p>Один и тот же результат может быть записан или передан в несколько систем.</p>
+  </article>
 </div>
 
 Например, в наших лабораториях Suricata формирует структурированные записи в `eve.json`. Сам файл не является «детектором»: это один из каналов вывода результата.
+
+<div class="idps-equation idps-equation--warning">
+  <div class="idps-equation__expression">
+    <span>РЕЗУЛЬТАТ ОБНАРУЖЕНИЯ</span><b>≠</b><span>МЕСТО ХРАНЕНИЯ</span>
+  </div>
+  <p>Файл, база данных или SIEM могут содержать результат, но не становятся от этого механизмом, который его сформировал.</p>
+</div>
 
 ---
 
@@ -329,33 +350,29 @@ IDS/IPS должна быть настроена.
 разрешены ли действия предотвращения.
 ```
 
-В небольшой системе настройки могут храниться локально.
+В небольшой системе настройки могут храниться локально. В крупном развёртывании возможна централизованная архитектура.
 
-В крупном развёртывании возможна централизованная архитектура.
-
-<div class="teaching-figure" markdown="1">
-<div class="figure-label">СХЕМА 7 · ПРИМЕР РАСПРЕДЕЛЁННОЙ IDS/IPS</div>
-
-```mermaid
-flowchart TB
-    M[Сервер управления]
-    DB[(Хранилище событий)]
-    C[Консоль]
-    S1[Сенсор 1]
-    S2[Сенсор 2]
-    A1[Агент 1]
-
-    M -. конфигурация .-> S1
-    M -. конфигурация .-> S2
-    M -. конфигурация .-> A1
-    S1 -->|события| M
-    S2 -->|события| M
-    A1 -->|события| M
-    M --> DB
-    C <--> M
-```
-
-<div class="figure-caption">Это пример архитектуры, а не обязательная схема. Небольшая IDS может обходиться без отдельного сервера управления или отдельной базы данных.</div>
+<div class="idps-grid idps-grid--4">
+  <article class="idps-card">
+    <span class="idps-card__eyebrow">УПРАВЛЕНИЕ</span>
+    <strong class="idps-card__title">Сервер или локальная конфигурация</strong>
+    <p>Определяет параметры, правила и политики, используемые системой.</p>
+  </article>
+  <article class="idps-card idps-card--sensor">
+    <span class="idps-card__eyebrow">СБОР / АНАЛИЗ</span>
+    <strong class="idps-card__title">Сенсоры и агенты</strong>
+    <p>Получают доступные данные; в зависимости от реализации анализ может выполняться здесь же или в другом компоненте.</p>
+  </article>
+  <article class="idps-card">
+    <span class="idps-card__eyebrow">ХРАНЕНИЕ</span>
+    <strong class="idps-card__title">События и результаты</strong>
+    <p>Могут храниться локально или централизованно в отдельной системе.</p>
+  </article>
+  <article class="idps-card">
+    <span class="idps-card__eyebrow">ИНТЕРФЕЙС</span>
+    <strong class="idps-card__title">Консоль оператора</strong>
+    <p>Предоставляет доступ к управлению, наблюдению и просмотру результатов.</p>
+  </article>
 </div>
 
 Классический NIST SP 800-94 перечисляет типичные компоненты IDPS: сенсоры или агенты, серверы управления, серверы хранения событий и консоли. При этом небольшие системы могут работать без отдельного сервера управления.
@@ -364,24 +381,24 @@ flowchart TB
 
 ## 8. Где появляется предотвращение
 
-Функция предотвращения возникает **после решения о реакции**, но не обязана находиться физически там же, где выполнено обнаружение.
+Предотвращение требует не только результата обнаружения, но и **решения о реакции** и механизма, способного выполнить воздействие.
 
-<div class="teaching-figure" markdown="1">
-<div class="figure-label">СХЕМА 8 · ОБНАРУЖЕНИЕ И ТОЧКА ВОЗДЕЙСТВИЯ МОГУТ БЫТЬ РАЗНЕСЕНЫ</div>
-
-```mermaid
-flowchart LR
-    T[Наблюдаемая активность] --> S[Сенсор]
-    S --> D[Результат обнаружения]
-    D --> A[Решение о реакции]
-    A --> E1[Локальное воздействие: drop / reject]
-    A -. управляющая команда .-> E2[Внешний межсетевой экран / другое средство]
-```
-
-<div class="figure-caption">Размещение сенсора и место применения воздействия — разные архитектурные решения. Подробно это разбирается в Главе 4.</div>
+<div class="idps-process">
+  <div class="idps-process__step idps-process__step--source"><span>1</span><strong>Наблюдаемая активность</strong><small>Доступные системе данные о происходящем событии.</small></div>
+  <div class="idps-process__arrow">→</div>
+  <div class="idps-process__step idps-process__step--result"><span>2</span><strong>Результат обнаружения</strong><small>Условие выделило активность как интересующую.</small></div>
+  <div class="idps-process__arrow">→</div>
+  <div class="idps-process__step"><span>3</span><strong>Решение о реакции</strong><small>Политика определяет, требуется ли воздействие.</small></div>
+  <div class="idps-process__arrow">→</div>
+  <div class="idps-process__step"><span>4</span><strong>Исполнительное воздействие</strong><small>Локальный drop/reject или команда внешнему средству — если архитектура это поддерживает.</small></div>
 </div>
 
-Поэтому нельзя определять IPS только формулой «сенсор стоит inline».
+<div class="idps-evidence-grid idps-evidence-grid--compact">
+  <article class="idps-evidence idps-evidence--supported"><span>МОЖЕТ БЫТЬ ЛОКАЛЬНО</span><p>Компонент обнаружения сам способен выполнить предусмотренное действие, например отбросить трафик в поддерживаемом режиме.</p></article>
+  <article class="idps-evidence idps-evidence--not-proven"><span>НЕ ОБЯЗАНО БЫТЬ В ОДНОМ МЕСТЕ</span><p>Обнаружение и исполнительное воздействие могут быть распределены между разными компонентами системы.</p></article>
+</div>
+
+Поэтому нельзя определять IPS только формулой «сенсор стоит inline». Подробно размещение и режимы подключения разбираются в Главе 4.
 
 ---
 
@@ -391,11 +408,11 @@ Suricata в нашем курсе — не определение IDS, а удо
 
 Упрощённое соответствие функций выглядит так:
 
-<div class="source-type-grid">
-  <article><strong>Получение данных</strong><span>Интерфейс / PCAP</span><p>Suricata получает сетевой трафик из выбранного источника.</p></article>
-  <article><strong>Построение контекста</strong><span>Пакеты · потоки · протоколы</span><p>Движок формирует представления, необходимые различным механизмам анализа.</p></article>
-  <article><strong>Обнаружение</strong><span>Правила и встроенная логика</span><p>Условия применяются к подходящим представлениям данных.</p></article>
-  <article><strong>Вывод</strong><span>EVE JSON и другие выходы</span><p>Результаты фиксируются в выбранных каналах вывода.</p></article>
+<div class="idps-grid idps-grid--4">
+  <article class="idps-card idps-card--source"><span class="idps-card__eyebrow">ПОЛУЧЕНИЕ ДАННЫХ</span><strong class="idps-card__title">Интерфейс / PCAP</strong><p>Suricata получает сетевой трафик из выбранного источника.</p></article>
+  <article class="idps-card"><span class="idps-card__eyebrow">ПРЕДСТАВЛЕНИЕ</span><strong class="idps-card__title">Пакеты · потоки · протоколы</strong><p>Движок формирует представления, необходимые различным механизмам анализа.</p></article>
+  <article class="idps-card idps-card--primary"><span class="idps-card__eyebrow">ОБНАРУЖЕНИЕ</span><strong class="idps-card__title">Правила и встроенная логика</strong><p>Условия применяются к подходящим представлениям данных.</p></article>
+  <article class="idps-card idps-card--result"><span class="idps-card__eyebrow">ВЫВОД</span><strong class="idps-card__title">EVE JSON и другие выходы</strong><p>Результаты фиксируются в выбранных каналах вывода.</p></article>
 </div>
 
 Это не означает, что каждый блок соответствует отдельному процессу ОС. Это **функциональное отображение**, помогающее понять эксперимент.
@@ -410,8 +427,8 @@ Suricata в нашем курсе — не определение IDS, а удо
 
 Возможны совершенно разные причины:
 
-<div class="teaching-figure" markdown="1">
-<div class="figure-label">СХЕМА 9 · ГДЕ МОЖЕТ РАЗОРВАТЬСЯ ОЖИДАЕМАЯ ЦЕПОЧКА</div>
+<div class="idps-figure" markdown="1">
+<div class="idps-figure__label">СХЕМА 3 · ГДЕ МОЖЕТ РАЗОРВАТЬСЯ ОЖИДАЕМАЯ ЦЕПОЧКА</div>
 
 ```mermaid
 flowchart TB
@@ -426,9 +443,10 @@ flowchart TB
     D -->|нет| D1[Сравнить наблюдаемые данные с условием]
     D -->|да| E{Результат записан туда, где его ищут?}
     E -->|нет| E1[Проверить канал вывода и хранение]
+    E -->|да| E2[Проверить способ поиска и интерпретацию результата]
 ```
 
-<div class="figure-caption">Одинаковый внешний симптом — «нет оповещения» — может возникать на разных функциональных уровнях. Поэтому диагностика начинается не с хаотичного переписывания правила.</div>
+<p class="idps-figure__caption">Одинаковый внешний симптом — «нет оповещения» — может возникать на разных функциональных уровнях. Поэтому диагностика начинается не с хаотичного переписывания правила, а с последовательной проверки фактов.</p>
 </div>
 
 Эта схема станет основой дальнейших лабораторных работ.
@@ -437,11 +455,11 @@ flowchart TB
 
 ## 11. Что нужно запомнить
 
-<div class="axiom-grid">
-  <article class="axiom-card"><span>01</span><strong>СЕНСОР / АГЕНТ ≠ ВСЯ IDS</strong><p>Получение данных — только одна функция системы.</p></article>
-  <article class="axiom-card"><span>02</span><strong>СБОР ДАННЫХ ≠ ОБНАРУЖЕНИЕ</strong><p>Телеметрия может поступать, но нужного детектора может не быть.</p></article>
-  <article class="axiom-card"><span>03</span><strong>ОБНАРУЖЕНИЕ ≠ ХРАНЕНИЕ</strong><p>Решение детектора и запись результата в журнал или SIEM — разные функции.</p></article>
-  <article class="axiom-card"><span>04</span><strong>ФУНКЦИОНАЛЬНАЯ СХЕМА ≠ ФИЗИЧЕСКАЯ ТОПОЛОГИЯ</strong><p>Компоненты могут быть объединены или распределены в зависимости от реализации.</p></article>
+<div class="idps-summary-grid">
+  <article class="idps-summary-card"><span>01</span><strong>СЕНСОР / АГЕНТ ≠ ВСЯ IDS</strong><p>Получение данных — только одна функция системы.</p></article>
+  <article class="idps-summary-card"><span>02</span><strong>СБОР ДАННЫХ ≠ ОБНАРУЖЕНИЕ</strong><p>Телеметрия может поступать, но нужного детектора может не быть.</p></article>
+  <article class="idps-summary-card"><span>03</span><strong>ОБНАРУЖЕНИЕ ≠ ХРАНЕНИЕ</strong><p>Решение детектора и запись результата в журнал или SIEM — разные функции.</p></article>
+  <article class="idps-summary-card"><span>04</span><strong>ФУНКЦИОНАЛЬНАЯ СХЕМА ≠ ФИЗИЧЕСКАЯ ТОПОЛОГИЯ</strong><p>Компоненты могут быть объединены или распределены в зависимости от реализации.</p></article>
 </div>
 
 ---
