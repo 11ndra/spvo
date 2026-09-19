@@ -7,7 +7,7 @@
 
 <div class="chapter-outcomes">
 <strong>После изучения главы студент должен уметь:</strong>
-<p>объяснить различия между сетевыми, хостовыми и беспроводными IDS/IPS; объяснить место анализа сетевого поведения (NBA) в классической классификации; определить, какие сведения потенциально доступны каждому типу; не путать источник данных с методом обнаружения.</p>
+<p>объяснить различия между сетевыми, хостовыми и беспроводными IDS/IPS; объяснить место анализа сетевого поведения в классической классификации; определить, какие сведения потенциально доступны каждому типу; не путать источник данных с методом обнаружения.</p>
 </div>
 
 ---
@@ -47,12 +47,12 @@
 
 ## 2. Классическая классификация IDPS
 
-В NIST SP 800-94 выделялись четыре основных типа IDPS. Эту классификацию важно знать, потому что она встречается в учебной и профессиональной литературе.
+**NIST** — Национальный институт стандартов и технологий США (National Institute of Standards and Technology). Английское название приведено для происхождения аббревиатуры, под которой публикуются документы института. В NIST SP 800-94 выделялись четыре основных типа IDPS. Эту классификацию важно знать, потому что она встречается в учебной и профессиональной литературе. В оригинале используются названия `Network-Based`, `Wireless`, `Network Behavior Analysis` и `Host-Based`; английские формы приведены здесь один раз, потому что от них образованы распространённые сокращения NIDS/NIPS, WIDS/WIPS, NBA и HIDS/HIPS. Далее в объяснении используются русские названия и сокращения.
 
 <div class="idps-switcher" data-idps-switcher>
   <div class="idps-switcher__header">
     <strong>Четыре типа в классической модели NIST</strong>
-    <p>Переключатель показывает область наблюдения, типичные данные и границу вывода. Без JavaScript все четыре блока остаются доступны как обычный текст.</p>
+    <p>Переключатель показывает область наблюдения, типичные данные и границу допустимого вывода для каждого класса.</p>
   </div>
   <div class="idps-switcher__controls" aria-label="Классическая классификация IDPS">
     <button id="chapter2-control-network" class="idps-switcher__button" type="button" aria-controls="chapter2-panel-network" data-idps-switch="network">Сетевая</button>
@@ -66,7 +66,7 @@
       <div class="idps-question-model">
         <div class="idps-question-model__cell"><span>Область наблюдения</span><strong>Доступная сетевой системе активность в конкретной точке наблюдения</strong></div>
         <div class="idps-question-model__cell"><span>Типичные данные</span><strong>Адреса, порты, протоколы, поля сообщений, характеристики потоков</strong></div>
-        <div class="idps-question-model__cell"><span>Класс</span><strong>Network-Based IDS/IPS — NIDS/NIPS</strong></div>
+        <div class="idps-question-model__cell"><span>Класс</span><strong>Сетевая IDS/IPS — NIDS/NIPS</strong></div>
         <div class="idps-question-model__boundary"><strong>Граница вывода:</strong> сетевые данные сами по себе не раскрывают автоматически локальный процесс, пользователя или изменение файла на узле.</div>
       </div>
     </section>
@@ -75,8 +75,8 @@
       <div class="idps-question-model">
         <div class="idps-question-model__cell"><span>Область наблюдения</span><strong>Радиосреда и протоколы семейства IEEE 802.11</strong></div>
         <div class="idps-question-model__cell"><span>Типичные данные</span><strong>Точки доступа, клиенты, служебные кадры и другие доступные признаки радиообмена</strong></div>
-        <div class="idps-question-model__cell"><span>Класс</span><strong>Wireless IDS/IPS — WIDS/WIPS</strong></div>
-        <div class="idps-question-model__boundary"><strong>Граница вывода:</strong> представление радиообмена не тождественно картине проводного IP-трафика за точкой доступа.</div>
+        <div class="idps-question-model__cell"><span>Класс</span><strong>Беспроводная IDS/IPS — WIDS/WIPS</strong></div>
+        <div class="idps-question-model__boundary"><strong>Граница вывода:</strong> представление радиообмена не тождественно картине проводного сетевого трафика за точкой доступа.</div>
       </div>
     </section>
     <section id="chapter2-panel-nba" class="idps-switcher__panel" data-idps-panel="nba">
@@ -84,7 +84,7 @@
       <div class="idps-question-model">
         <div class="idps-question-model__cell"><span>Область наблюдения</span><strong>Сетевой трафик, потоки и статистика сетевой активности</strong></div>
         <div class="idps-question-model__cell"><span>Акцент анализа</span><strong>Объём, частота, направления, структура и изменения поведения</strong></div>
-        <div class="idps-question-model__cell"><span>Класс NIST</span><strong>Network Behavior Analysis — NBA</strong></div>
+        <div class="idps-question-model__cell"><span>Класс NIST</span><strong>Анализ сетевого поведения — NBA</strong></div>
         <div class="idps-question-model__boundary"><strong>Важная оговорка:</strong> NBA не образует идеально независимую от NIDS «среду». Здесь класс сильнее характеризует вид сетевой телеметрии и характер анализа.</div>
       </div>
     </section>
@@ -93,7 +93,7 @@
       <div class="idps-question-model">
         <div class="idps-question-model__cell"><span>Область наблюдения</span><strong>События и характеристики конкретного вычислительного узла</strong></div>
         <div class="idps-question-model__cell"><span>Типичные данные</span><strong>Процессы, пользователи, файлы, конфигурация, журналы и локальные соединения</strong></div>
-        <div class="idps-question-model__cell"><span>Класс</span><strong>Host-Based IDS/IPS — HIDS/HIPS</strong></div>
+        <div class="idps-question-model__cell"><span>Класс</span><strong>Хостовая IDS/IPS — HIDS/HIPS</strong></div>
         <div class="idps-question-model__boundary"><strong>Граница вывода:</strong> агент видит только реально доступные ему и настроенные источники данных на конкретном узле.</div>
       </div>
     </section>
@@ -111,7 +111,9 @@
 
 ## 3. Сетевая IDS/IPS — NIDS/NIPS
 
-**Сетевая IDS/IPS (Network-Based IDS/IPS, NIDS/NIPS)** анализирует доступную ей сетевую активность.
+**Сетевая IDS/IPS (NIDS/NIPS)** анализирует доступную ей сетевую активность.
+
+В сетевых примерах дальше используются стандартные обозначения протоколов из сетевого пререквизита курса: **IP (Internet Protocol)**, **TCP (Transmission Control Protocol)**, **UDP (User Datagram Protocol)**, **ICMP (Internet Control Message Protocol)** и **DNS (Domain Name System)**. Английские названия приведены только для происхождения официальных сокращений из спецификаций; далее используются сами сокращения. `HTTP` и `TLS` уже были введены в Главе 1.
 
 <div class="idps-figure" markdown="1">
 <div class="idps-figure__label">СХЕМА 2 · СЕТЕВОЙ ВЗГЛЯД</div>
@@ -137,7 +139,7 @@ flowchart LR
 
 ## 4. Хостовая IDS/IPS — HIDS/HIPS
 
-**Хостовая IDS/IPS (Host-Based IDS/IPS, HIDS/HIPS)** работает с событиями и характеристиками конкретного вычислительного узла.
+**Хостовая IDS/IPS (HIDS/HIPS)** работает с событиями и характеристиками конкретного вычислительного узла.
 
 <div class="idps-figure">
   <div class="idps-figure__label">СХЕМА 3 · ХОСТОВЫЕ ИСТОЧНИКИ СХОДЯТСЯ К АГЕНТУ, НО НЕ ПОЯВЛЯЮТСЯ АВТОМАТИЧЕСКИ</div>
@@ -158,7 +160,7 @@ flowchart LR
 
 ### Один эпизод глазами NIDS и HIDS
 
-Пусть веб-сервер устанавливает соединение `Web Server → 203.0.113.50:443`.
+Пусть веб-сервер устанавливает соединение `Веб-сервер → 203.0.113.50:443`.
 
 <div class="idps-grid idps-grid--2">
   <article class="idps-card idps-card--sensor"><span class="idps-card__eyebrow">NIDS</span><strong class="idps-card__title">Сетевой контекст</strong><p>Кто с кем взаимодействовал, когда, по какому протоколу и какие доступные сетевые признаки наблюдались.</p></article>
@@ -171,7 +173,7 @@ flowchart LR
 
 ## 5. Беспроводная IDS/IPS — WIDS/WIPS
 
-**Беспроводная IDS/IPS (Wireless IDS/IPS, WIDS/WIPS)** наблюдает беспроводную среду и протоколы семейства IEEE 802.11.
+**Беспроводная IDS/IPS (WIDS/WIPS)** наблюдает беспроводную среду и протоколы семейства IEEE 802.11.
 
 <div class="idps-figure" markdown="1">
 <div class="idps-figure__label">СХЕМА 4 · ПРОВОДНАЯ И БЕСПРОВОДНАЯ НАБЛЮДАЕМОСТЬ НЕ ТОЖДЕСТВЕННЫ</div>
@@ -193,7 +195,7 @@ WIDS/WIPS может использоваться для выявления не
 
 ## 6. Анализ сетевого поведения — NBA
 
-**Анализ сетевого поведения (Network Behavior Analysis, NBA)** рассматривает сетевой трафик или статистику сетевой активности, делая акцент на необычных потоках и изменениях поведения.
+**Анализ сетевого поведения (NBA)** рассматривает сетевой трафик или статистику сетевой активности, делая акцент на необычных потоках и изменениях поведения.
 
 <div class="idps-figure">
   <div class="idps-figure__label">ВИЗУАЛЬНЫЙ ПРИМЕР · СРАВНЕНИЕ В ОДИНАКОВОМ ОКНЕ НАБЛЮДЕНИЯ</div>
@@ -222,13 +224,13 @@ WIDS/WIPS может использоваться для выявления не
 
 NIDS и NBA оба используют сетевые данные, поэтому граница между ними не абсолютна. Исторически NIDS чаще ассоциировалась с более глубоким анализом пакетов и протоколов, а NBA — с потоками, статистикой и изменениями поведения. Современные продукты могут совмещать эти возможности.
 
-Современные названия NTA и NDR встречаются часто, но их границы зависят от конкретного продукта. В курсе мы оцениваем не маркетинговое название, а реальные источники данных и функции.
+В современных продуктах также встречаются названия **анализ сетевого трафика (Network Traffic Analysis, NTA)** и **сетевое обнаружение и реагирование (Network Detection and Response, NDR)**. Английские названия приведены только для происхождения распространённых сокращений `NTA` и `NDR`; границы этих классов зависят от конкретного продукта. В курсе мы оцениваем не маркетинговое название, а реальные источники данных и функции.
 
 ---
 
 ## 7. Прикладная IDS — это пятый тип?
 
-В литературе встречается **прикладная IDS (Application-Based IDPS)**, ориентированная на конкретный сервис, например веб-сервер или СУБД. В классической модели NIST она рассматривается как разновидность хостовой IDS/IPS.
+В NIST SP 800-94 встречается категория **прикладной IDPS** (`Application-Based IDPS`), ориентированная на конкретный сервис, например веб-сервер или СУБД. Английское название приведено только потому, что именно так категория названа в первичном источнике. В классической модели NIST она рассматривается как разновидность хостовой IDS/IPS.
 
 Поэтому мы не создаём отдельную пятую равноправную категорию, но фиксируем идею: источник данных может находиться очень близко к самому приложению.
 
@@ -244,9 +246,9 @@ NIDS и NBA оба используют сетевые данные, поэто�
         <tr><th>Источник / область наблюдения ↓</th><th>Известный признак</th><th>Состояние / семантика</th><th>Отклонение от ожидаемой модели</th></tr>
       </thead>
       <tbody>
-        <tr><th>Сетевые данные</th><td><span class="idps-axis-table__possible">Возможна комбинация</span><div class="idps-axis-table__note">Например, условие по доступному сетевому признаку.</div></td><td><span class="idps-axis-table__possible">Возможна комбинация</span><div class="idps-axis-table__note">Если реализация строит нужный протокольный контекст.</div></td><td><span class="idps-axis-table__possible">Возможна комбинация</span><div class="idps-axis-table__note">Потоки и статистика могут сравниваться с моделью поведения.</div></td></tr>
-        <tr><th>Хостовые данные</th><td><span class="idps-axis-table__possible">Возможна комбинация</span><div class="idps-axis-table__note">Например, известный признак в событии или объекте.</div></td><td><span class="idps-axis-table__possible">Возможна комбинация</span><div class="idps-axis-table__note">Анализ последовательности или контекста событий узла.</div></td><td><span class="idps-axis-table__possible">Возможна комбинация</span><div class="idps-axis-table__note">Сравнение активности узла с ожидаемым профилем.</div></td></tr>
-        <tr><th>Беспроводные данные</th><td><span class="idps-axis-table__possible">Возможна комбинация</span><div class="idps-axis-table__note">Известные признаки кадров, точек доступа или клиентов.</div></td><td><span class="idps-axis-table__possible">Возможна комбинация</span><div class="idps-axis-table__note">Контекст состояния беспроводного протокола.</div></td><td><span class="idps-axis-table__possible">Возможна комбинация</span><div class="idps-axis-table__note">Отклонения от ожидаемой картины радиоокружения.</div></td></tr>
+        <tr><th>Сетевые данные</th><td data-label="Известный признак"><span class="idps-axis-table__possible">Возможна комбинация</span><div class="idps-axis-table__note">Например, условие по доступному сетевому признаку.</div></td><td data-label="Состояние / семантика"><span class="idps-axis-table__possible">Возможна комбинация</span><div class="idps-axis-table__note">Если реализация строит нужный протокольный контекст.</div></td><td data-label="Отклонение от ожидаемой модели"><span class="idps-axis-table__possible">Возможна комбинация</span><div class="idps-axis-table__note">Потоки и статистика могут сравниваться с моделью поведения.</div></td></tr>
+        <tr><th>Хостовые данные</th><td data-label="Известный признак"><span class="idps-axis-table__possible">Возможна комбинация</span><div class="idps-axis-table__note">Например, известный признак в событии или объекте.</div></td><td data-label="Состояние / семантика"><span class="idps-axis-table__possible">Возможна комбинация</span><div class="idps-axis-table__note">Анализ последовательности или контекста событий узла.</div></td><td data-label="Отклонение от ожидаемой модели"><span class="idps-axis-table__possible">Возможна комбинация</span><div class="idps-axis-table__note">Сравнение активности узла с ожидаемым профилем.</div></td></tr>
+        <tr><th>Беспроводные данные</th><td data-label="Известный признак"><span class="idps-axis-table__possible">Возможна комбинация</span><div class="idps-axis-table__note">Известные признаки кадров, точек доступа или клиентов.</div></td><td data-label="Состояние / семантика"><span class="idps-axis-table__possible">Возможна комбинация</span><div class="idps-axis-table__note">Контекст состояния беспроводного протокола.</div></td><td data-label="Отклонение от ожидаемой модели"><span class="idps-axis-table__possible">Возможна комбинация</span><div class="idps-axis-table__note">Отклонения от ожидаемой картины радиоокружения.</div></td></tr>
       </tbody>
     </table>
   </div>
@@ -268,7 +270,7 @@ NIDS и NBA оба используют сетевые данные, поэто�
 <div class="idps-focus-map" data-idps-focus-map>
   <div class="idps-focus-map__header">
     <strong>СХЕМА 6 · ОДИН ЭПИЗОД, РАЗНЫЕ ДОКАЗАТЕЛЬСТВА</strong>
-    <small>При включённом JavaScript можно подсветить один источник. Без JavaScript вся карта остаётся видимой.</small>
+    <small>Выберите источник, чтобы подсветить его вклад в общую картину наблюдения.</small>
   </div>
   <div class="idps-focus-map__controls" aria-label="Подсветка источников наблюдения">
     <button class="idps-focus-map__button" type="button" data-idps-focus="all" aria-pressed="true">Все источники</button>
@@ -297,7 +299,7 @@ NIDS и NBA оба используют сетевые данные, поэто�
       <div class="idps-episode-map__cell" data-idps-focus-target="hids"><span class="idps-episode-map__mark">ЛОКАЛЬНЫЙ КОНТЕКСТ</span><strong>Может связать соединение с процессом</strong><small>Только если такая телеметрия реально собирается.</small></div>
 
       <div class="idps-episode-map__cell idps-episode-map__cell--row idps-episode-map__cell--nba" data-idps-focus-target="nba">NBA / NTA</div>
-      <div class="idps-episode-map__cell" data-idps-focus-target="nba"><span class="idps-episode-map__mark">АГРЕГИРОВАННЫЙ ВЗГЛЯД</span><strong>Содержание запроса может быть не нужно</strong><small>Анализ может опираться на потоки и статистику, а не на URI.</small></div>
+      <div class="idps-episode-map__cell" data-idps-focus-target="nba"><span class="idps-episode-map__mark">АГРЕГИРОВАННЫЙ ВЗГЛЯД</span><strong>Содержание запроса может быть не нужно</strong><small>Анализ может опираться на потоки и статистику, а не на содержимое конкретного прикладного запроса.</small></div>
       <div class="idps-episode-map__cell" data-idps-focus-target="nba"><span class="idps-episode-map__mark">ГРАНИЦА</span><strong>Не устанавливает локальный процесс</strong><small>Это не хостовый источник.</small></div>
       <div class="idps-episode-map__cell" data-idps-focus-target="nba"><span class="idps-episode-map__mark">ГРАНИЦА</span><strong>Не подтверждает изменение файла</strong><small>Нужен дополнительный контекст.</small></div>
       <div class="idps-episode-map__cell" data-idps-focus-target="nba"><span class="idps-episode-map__mark">ИЗМЕНЕНИЕ СЕТЕВОЙ АКТИВНОСТИ</span><strong>Хорошо показывает изменение масштаба</strong><small>Но само изменение ещё не объясняет его причину.</small></div>

@@ -1,13 +1,13 @@
 # Глава 8. Как проверить и обосновать эффективность IDS/IPS
 
 <div class="chapter-lead">
-<p>Работающая IDS/IPS ещё не обязательно является эффективной. Система может стабильно запускаться, получать трафик и создавать alert, но при этом пропускать нужные события, генерировать неприемлемый шум, терять данные под нагрузкой или давать выводы, которые нельзя воспроизвести и защитить доказательствами.</p>
+<p>Работающая IDS/IPS ещё не обязательно является эффективной. Система может стабильно запускаться, получать трафик и создавать оповещения, но при этом пропускать нужные события, генерировать неприемлемый шум, терять данные под нагрузкой или давать выводы, которые нельзя воспроизвести и защитить доказательствами.</p>
 <p>Поэтому финальный вопрос базовой части курса звучит так: <strong>как перейти от фразы «у нас IDS работает» к проверяемому утверждению «в заданных условиях этот контроль решает конкретную задачу с известными ограничениями»?</strong></p>
 </div>
 
 <div class="chapter-outcomes">
 <strong>После этой главы вы должны уметь:</strong>
-<p>задавать контракт оценки; определять единицу оценки и ground truth; строить матрицу TP/FP/TN/FN; интерпретировать recall, precision, FPR и accuracy; объяснять влияние базовой частоты; проверять покрытие, устойчивость, производительность и задержку; отделять качество детектора от качества предотвращения; а также оформлять вывод так, чтобы было ясно, что именно доказано экспериментом и где заканчиваются границы доказательства.</p>
+<p>задавать контракт оценки; определять единицу оценки и эталон истинного состояния; строить матрицу результатов бинарной оценки; интерпретировать полноту, долю подтверждённых положительных решений, долю ложноположительных решений и общую долю правильных решений; объяснять влияние базовой частоты; проверять покрытие, устойчивость, производительность и задержку; отделять качество детектора от качества предотвращения; а также оформлять вывод так, чтобы было ясно, что именно доказано экспериментом и где заканчиваются границы доказательства.</p>
 </div>
 
 ---
@@ -21,7 +21,7 @@
 <div class="idps-grid idps-grid--3">
   <div class="idps-card"><span class="idps-card__eyebrow">ЦЕЛЬ A</span><strong class="idps-card__title">Определить конкретный HTTP-признак</strong><p>Проверяется правило над доступным прикладным представлением.</p></div>
   <div class="idps-card"><span class="idps-card__eyebrow">ЦЕЛЬ B</span><strong class="idps-card__title">Выделить сетевое сканирование</strong><p>Проверяется серия событий, окно времени и выбранное основание решения.</p></div>
-  <div class="idps-card"><span class="idps-card__eyebrow">ЦЕЛЬ C</span><strong class="idps-card__title">Заблокировать запрещённый обмен</strong><p>Помимо detection нужно отдельно проверить исполнительное воздействие и влияние на разрешённый трафик.</p></div>
+  <div class="idps-card"><span class="idps-card__eyebrow">ЦЕЛЬ C</span><strong class="idps-card__title">Заблокировать запрещённый обмен</strong><p>Помимо обнаружения нужно отдельно проверить исполнительное воздействие и влияние на разрешённый трафик.</p></div>
 </div>
 
 У каждой задачи будут разные:
@@ -38,7 +38,7 @@
 
 <div class="principle-box">
 <strong>ЭФФЕКТИВНОСТЬ ВСЕГДА ОТНОСИТЕЛЬНА К ЗАРАНЕЕ ОПРЕДЕЛЁННОЙ ЦЕЛИ</strong>
-<p>Без detection objective число alert, процент CPU и даже высокий recall сами по себе не отвечают на вопрос, полезен ли контроль для конкретной задачи.</p>
+<p>Без заранее определённой цели обнаружения число оповещений, загрузка процессора и даже высокая полнота сами по себе не отвечают на вопрос, полезен ли контроль для конкретной задачи.</p>
 </div>
 
 ---
@@ -52,9 +52,9 @@
 <div class="idps-eval-levels">
   <article><span>УРОВЕНЬ 1</span><strong>Конкретное правило</strong><p>Выполняется ли условие на заданном представлении данных?</p><small>Например, SID 1000005 на фиксированном HTTP-наборе.</small></article>
   <div class="idps-eval-levels__arrow">→</div>
-  <article><span>УРОВЕНЬ 2</span><strong>Детектор / движок</strong><p>Получает ли он нужные данные, сохраняет состояние, выдерживает нагрузку и формирует результаты?</p><small>Качество правила не доказывает отсутствие потерь в capture path.</small></article>
+  <article><span>УРОВЕНЬ 2</span><strong>Детектор / движок</strong><p>Получает ли он нужные данные, сохраняет состояние, выдерживает нагрузку и формирует результаты?</p><small>Качество правила не доказывает отсутствие потерь на пути получения данных.</small></article>
   <div class="idps-eval-levels__arrow">→</div>
-  <article><span>УРОВЕНЬ 3</span><strong>Защитный контроль</strong><p>Обеспечивает ли вся архитектура нужное обнаружение или предотвращение в реальной области применения?</p><small>Здесь важны placement, coverage, доставка результата и исполнительное воздействие.</small></article>
+  <article><span>УРОВЕНЬ 3</span><strong>Защитный контроль</strong><p>Обеспечивает ли вся архитектура нужное обнаружение или предотвращение в реальной области применения?</p><small>Здесь важны точка наблюдения, покрытие, доставка результата и исполнительное воздействие.</small></article>
 </div>
 </div>
 
@@ -66,38 +66,38 @@
 
 ---
 
-## 3. Evaluation Contract: сначала зафиксировать условия измерения
+## 3. Контракт оценки: сначала зафиксировать условия измерения
 
-До расчёта метрик нужен **контракт оценки (Evaluation Contract)** — набор условий, без которых результаты нельзя корректно интерпретировать или сравнивать.
+До расчёта метрик нужен **контракт оценки** — набор условий, без которых результаты нельзя корректно интерпретировать или сравнивать.
 
 <div class="teaching-figure">
-<div class="figure-label">ВИЗУАЛЬНАЯ МОДЕЛЬ 2 · EVALUATION CONTRACT</div>
+<div class="figure-label">ВИЗУАЛЬНАЯ МОДЕЛЬ 2 · КОНТРАКТ ОЦЕНКИ</div>
 <div class="idps-eval-contract">
   <article><span>1</span><strong>Цель</strong><small>Какое свойство должен выделять контроль?</small></article>
-  <article><span>2</span><strong>Единица оценки</strong><small>Запрос, flow, файл, хост, временное окно или иной объект.</small></article>
-  <article><span>3</span><strong>Ground truth</strong><small>Откуда независимо известно истинное состояние объекта?</small></article>
-  <article><span>4</span><strong>Правило сопоставления</strong><small>Как alert связывается с одной единицей оценки?</small></article>
-  <article><span>5</span><strong>Выборка и окно</strong><small>Какие positive/negative cases и какой период входят в тест?</small></article>
-  <article><span>6</span><strong>Среда и версия</strong><small>Placement, интерфейс, конфигурация, ruleset, версия продукта.</small></article>
+  <article><span>2</span><strong>Единица оценки</strong><small>Запрос, сетевой поток, файл, хост, временное окно или иной объект.</small></article>
+  <article><span>3</span><strong>Эталон истинного состояния</strong><small>Откуда независимо известно истинное состояние объекта?</small></article>
+  <article><span>4</span><strong>Правило сопоставления</strong><small>Как оповещение связывается с одной единицей оценки?</small></article>
+  <article><span>5</span><strong>Выборка и окно</strong><small>Какие положительные и отрицательные случаи и какой период входят в тест?</small></article>
+  <article><span>6</span><strong>Среда и версия</strong><small>Точка наблюдения, интерфейс, конфигурация, набор правил, версия продукта.</small></article>
   <article><span>7</span><strong>Критерии приёмки</strong><small>Какие показатели считаются приемлемыми именно для этой задачи?</small></article>
   <article><span>8</span><strong>Границы</strong><small>На какие среды, сценарии и варианты результат не распространяется?</small></article>
 </div>
 </div>
 
-Если два теста используют разные единицы оценки или разные ground truth, их значения precision/recall могут быть математически корректными, но **несопоставимыми по смыслу**.
+Если два теста используют разные единицы оценки или разные эталоны истинного состояния, их значения полноты и доли подтверждённых положительных решений могут быть математически корректными, но **несопоставимыми по смыслу**.
 
 ---
 
-## 4. Ground truth должен быть независим от самого alert
+## 4. Эталон истинного состояния должен быть независим от самого оповещения
 
-**Ground truth** — независимое основание считать единицу оценки положительной или отрицательной.
+**Эталон истинного состояния** — независимое основание считать единицу оценки положительной или отрицательной. В англоязычной литературе по оценке детекторов для этого часто используется выражение `ground truth`; оно приведено здесь, чтобы студент узнавал термин в источниках, но далее используется русский вариант.
 
 Плохая логика:
 
 ```text
-Suricata создала alert
+Suricata создала оповещение
 → значит событие было атакой
-→ этот же alert используем как доказательство TP
+→ это же оповещение используем как доказательство правильного положительного результата
 ```
 
 Это замкнутое доказательство: решение детектора объявляется одновременно и проверяемым результатом, и эталоном истины.
@@ -105,33 +105,33 @@ Suricata создала alert
 Хорошая логика в контролируемом эксперименте:
 
 <div class="idps-process">
-  <div class="idps-process__step idps-process__step--source"><span>1</span><strong>Заранее размеченный сценарий</strong><small>мы знаем, какой запрос считается positive и какой negative</small></div>
+  <div class="idps-process__step idps-process__step--source"><span>1</span><strong>Заранее размеченный сценарий</strong><small>мы знаем, какой запрос считается положительным и какой отрицательным</small></div>
   <div class="idps-process__arrow">→</div>
   <div class="idps-process__step"><span>2</span><strong>Независимое подтверждение события</strong><small>PCAP, лог приложения, журнал ОС или другой независимый источник</small></div>
   <div class="idps-process__arrow">→</div>
-  <div class="idps-process__step idps-process__step--sensor"><span>3</span><strong>Результат детектора</strong><small>alert / отсутствие alert для конкретного правила</small></div>
+  <div class="idps-process__step idps-process__step--sensor"><span>3</span><strong>Результат детектора</strong><small>оповещение / отсутствие оповещения для конкретного правила</small></div>
   <div class="idps-process__arrow">→</div>
-  <div class="idps-process__step idps-process__step--result"><span>4</span><strong>Сопоставление</strong><small>только теперь определяется TP, FP, TN или FN</small></div>
+  <div class="idps-process__step idps-process__step--result"><span>4</span><strong>Сопоставление</strong><small>только теперь определяется один из четырёх типов результата</small></div>
 </div>
 
-Ground truth тоже имеет ограничения. Например, отсутствие записи в одном application log ещё не доказывает, что сетевого пакета не существовало. Эталон должен соответствовать тому факту, который оценивается.
+Эталон тоже имеет ограничения. Например, отсутствие записи в одном журнале приложения ещё не доказывает, что сетевого пакета не существовало. Эталон должен соответствовать тому факту, который оценивается.
 
 ---
 
-## 5. Матрица результатов: TP, FP, TN и FN
+## 5. Матрица результатов: четыре исхода бинарной оценки
 
-После фиксации единицы оценки и ground truth бинарный детектор даёт четыре типа результата.
+После фиксации единицы оценки и эталона бинарный детектор даёт четыре типа результата. В формулах и профильной литературе для них приняты сокращения **TP, FP, TN и FN** от английских названий *True Positive*, *False Positive*, *True Negative* и *False Negative*. Английские формы приведены только для происхождения этой международно распространённой записи; в объяснении ниже главным остаётся русский смысл каждой ячейки. FP и FN уже были введены в Главе 7 как ложноположительный и ложноотрицательный результаты.
 
 <div class="teaching-figure">
-<div class="figure-label">ВИЗУАЛЬНАЯ МОДЕЛЬ 3 · CONFUSION MATRIX</div>
+<div class="figure-label">ВИЗУАЛЬНАЯ МОДЕЛЬ 3 · МАТРИЦА РЕЗУЛЬТАТОВ</div>
 <div class="idps-confusion" role="table" aria-label="Матрица результатов бинарного детектора">
   <div class="idps-confusion__corner"></div>
-  <div class="idps-confusion__head">Ground truth: positive</div>
-  <div class="idps-confusion__head">Ground truth: negative</div>
-  <div class="idps-confusion__side">Детектор: positive</div>
+  <div class="idps-confusion__head">Эталон: положительный</div>
+  <div class="idps-confusion__head">Эталон: отрицательный</div>
+  <div class="idps-confusion__side">Детектор: положительный</div>
   <div class="idps-confusion__cell idps-confusion__cell--tp"><strong>TP</strong><span>положительный объект обнаружен</span></div>
   <div class="idps-confusion__cell idps-confusion__cell--fp"><strong>FP</strong><span>отрицательный объект ошибочно выделен</span></div>
-  <div class="idps-confusion__side">Детектор: negative</div>
+  <div class="idps-confusion__side">Детектор: отрицательный</div>
   <div class="idps-confusion__cell idps-confusion__cell--fn"><strong>FN</strong><span>положительный объект не обнаружен</span></div>
   <div class="idps-confusion__cell idps-confusion__cell--tn"><strong>TN</strong><span>отрицательный объект корректно не выделен</span></div>
 </div>
@@ -141,7 +141,7 @@ Ground truth тоже имеет ограничения. Например, от�
 
 - **FN** — результат оценки;
 - **слепая зона** — возможная причина FN;
-- отсутствие alert ещё не является FN, пока нет ground truth, подтверждающего положительный объект.
+- отсутствие оповещения ещё не является FN, пока нет эталона, подтверждающего положительный объект.
 
 ---
 
@@ -149,11 +149,13 @@ Ground truth тоже имеет ограничения. Например, от�
 
 Одна метрика не описывает качество детектора целиком.
 
+В англоязычной литературе по оценке детекторов широко используются названия `recall`, `precision`, `accuracy` и сокращения `TPR`/`FPR`. Они сохраняются в этой главе только для связи с литературой и формулами; рядом всегда даётся русский смысл метрики, а в основном объяснении используются русские формулировки. `TPR` происходит от *True Positive Rate* и в этой главе соответствует полноте для бинарной оценки; `FPR` — от *False Positive Rate* и обозначает долю отрицательных объектов, ошибочно выделенных детектором. В формуле общей доли правильных решений `N` обозначает размер оцениваемой выборки.
+
 <div class="idps-metric-grid">
-  <article><span>RECALL / TPR</span><strong>TP / (TP + FN)</strong><p>Какую долю положительных объектов мы обнаружили?</p></article>
-  <article><span>PRECISION</span><strong>TP / (TP + FP)</strong><p>Какую долю положительных решений детектора можно подтвердить?</p></article>
-  <article><span>FPR</span><strong>FP / (FP + TN)</strong><p>Какую долю отрицательных объектов детектор ошибочно выделяет?</p></article>
-  <article><span>ACCURACY</span><strong>(TP + TN) / N</strong><p>Какова общая доля правильных решений на данной выборке?</p></article>
+  <article><span>ПОЛНОТА · RECALL / TPR</span><strong>TP / (TP + FN)</strong><p>Какую долю положительных объектов мы обнаружили?</p></article>
+  <article><span>ПОДТВЕРЖДЁННОСТЬ · PRECISION</span><strong>TP / (TP + FP)</strong><p>Какую долю положительных решений детектора можно подтвердить?</p></article>
+  <article><span>ДОЛЯ ЛОЖНОПОЛОЖИТЕЛЬНЫХ · FPR</span><strong>FP / (FP + TN)</strong><p>Какую долю отрицательных объектов детектор ошибочно выделяет?</p></article>
+  <article><span>ОБЩАЯ ДОЛЯ ПРАВИЛЬНЫХ · ACCURACY</span><strong>(TP + TN) / N</strong><p>Какова общая доля правильных решений на данной выборке?</p></article>
 </div>
 
 Например, тест дал:
@@ -168,54 +170,54 @@ TN = 882
 Тогда:
 
 ```text
-Recall    = 92 / 100  = 92%
-Precision = 92 / 110  ≈ 83.6%
-FPR       = 18 / 900  = 2%
-Accuracy  = 974 / 1000 = 97.4%
+Полнота (recall) = 92 / 100 = 92%
+Подтверждённость (precision) = 92 / 110 ≈ 83.6%
+FPR = 18 / 900 = 2%
+Общая доля правильных решений (accuracy) = 974 / 1000 = 97.4%
 ```
 
-`97.4% accuracy` выглядит очень хорошо, но не заменяет остальные показатели. В задачах с редкими положительными событиями accuracy особенно легко создаёт ложное ощущение качества.
+Общая доля правильных решений `97,4%` выглядит очень хорошо, но не заменяет остальные показатели. В задачах с редкими положительными событиями эта метрика особенно легко создаёт ложное ощущение качества.
 
 <div class="principle-box">
 <strong>МЕТРИКА ОТВЕЧАЕТ ТОЛЬКО НА СВОЙ ВОПРОС</strong>
-<p>Recall не описывает шум. Precision не говорит, сколько положительных объектов пропущено. FPR зависит от количества отрицательных объектов. Accuracy зависит от состава выборки.</p>
+<p>Полнота (`recall`) не описывает шум. Доля подтверждённых положительных решений (`precision`) не говорит, сколько положительных объектов пропущено. FPR зависит от количества отрицательных объектов. Общая доля правильных решений (`accuracy`) зависит от состава выборки.</p>
 </div>
 
 ---
 
 ## 7. Базовая частота может радикально изменить практический смысл результата
 
-Intrusion detection часто работает в среде, где интересующие события встречаются намного реже нормальной активности. Поэтому даже небольшой False Positive Rate может дать большое абсолютное число ложных alert.
+Системы обнаружения вторжений часто работают в среде, где интересующие события встречаются намного реже нормальной активности. Поэтому даже небольшая доля ложноположительных решений (FPR) может дать большое абсолютное число ложных оповещений.
 
 <div class="teaching-figure">
-<div class="figure-label">ИНТЕРАКТИВНАЯ МОДЕЛЬ · BASE-RATE EFFECT</div>
+<div class="figure-label">ИНТЕРАКТИВНАЯ МОДЕЛЬ · ЭФФЕКТ БАЗОВОЙ ЧАСТОТЫ</div>
 <div class="idps-base-rate" data-idps-base-rate>
   <div class="idps-base-rate__controls">
     <label><span>Всего единиц оценки</span><input type="number" min="100" step="100" value="100000" data-idps-br-total></label>
-    <label><span>Доля positive</span><input type="range" min="0.01" max="10" step="0.01" value="0.10" data-idps-br-prevalence><strong data-idps-br-prevalence-value>0.10%</strong></label>
-    <label><span>Recall / TPR</span><input type="range" min="50" max="100" step="0.1" value="99" data-idps-br-tpr><strong data-idps-br-tpr-value>99.0%</strong></label>
-    <label><span>False Positive Rate</span><input type="range" min="0" max="10" step="0.1" value="1" data-idps-br-fpr><strong data-idps-br-fpr-value>1.0%</strong></label>
+    <label><span>Доля положительных объектов</span><input type="range" min="0.01" max="10" step="0.01" value="0.10" data-idps-br-prevalence><strong data-idps-br-prevalence-value>0.10%</strong></label>
+    <label><span>Полнота / TPR</span><input type="range" min="50" max="100" step="0.1" value="99" data-idps-br-tpr><strong data-idps-br-tpr-value>99.0%</strong></label>
+    <label><span>Доля ложноположительных / FPR</span><input type="range" min="0" max="10" step="0.1" value="1" data-idps-br-fpr><strong data-idps-br-fpr-value>1.0%</strong></label>
   </div>
   <div class="idps-base-rate__matrix">
-    <article class="is-tp"><span>TP</span><strong data-idps-br-tp>99</strong><small>positive обнаружены</small></article>
-    <article class="is-fn"><span>FN</span><strong data-idps-br-fn>1</strong><small>positive пропущены</small></article>
-    <article class="is-fp"><span>FP</span><strong data-idps-br-fp>999</strong><small>ложные positive</small></article>
-    <article class="is-tn"><span>TN</span><strong data-idps-br-tn>98901</strong><small>корректные negative</small></article>
+    <article class="is-tp"><span>TP</span><strong data-idps-br-tp>99</strong><small>положительные обнаружены</small></article>
+    <article class="is-fn"><span>FN</span><strong data-idps-br-fn>1</strong><small>положительные пропущены</small></article>
+    <article class="is-fp"><span>FP</span><strong data-idps-br-fp>999</strong><small>ложноположительные решения</small></article>
+    <article class="is-tn"><span>TN</span><strong data-idps-br-tn>98901</strong><small>корректные отрицательные решения</small></article>
   </div>
-  <div class="idps-base-rate__result"><span>Precision</span><strong data-idps-br-precision>9.0%</strong><p data-idps-br-explanation>При редких positive даже небольшой FPR создаёт много ложных alert.</p></div>
+  <div class="idps-base-rate__result"><span>Подтверждённость (precision)</span><strong data-idps-br-precision>9.0%</strong><p data-idps-br-explanation>При редких положительных объектах даже небольшой FPR создаёт много ложных оповещений.</p></div>
 </div>
-<div class="figure-caption">Модель использует заранее известную prevalence тестовой выборки. Она показывает влияние состава выборки, а не предсказывает частоту реальных атак в конкретной организации.</div>
+<div class="figure-caption">Модель использует заранее известную долю положительных объектов в тестовой выборке. Она показывает влияние состава выборки, а не предсказывает частоту реальных атак в конкретной организации.</div>
 </div>
 
-При исходных значениях из 100 000 объектов только 100 являются positive. Детектор с `99% recall` обнаружит примерно 99 из них, но `1% FPR` на 99 900 negative даст примерно 999 FP. В результате precision окажется около 9%.
+При исходных значениях из 100 000 объектов только 100 являются положительными. Детектор с `99%` полноты означает, что детектор обнаружит примерно 99 из них, но `1% FPR` на 99 900 отрицательных объектов даст примерно 999 FP. В результате доля подтверждённых положительных решений окажется около 9%.
 
-Именно поэтому качество нельзя описывать фразой «99% detection rate» без контекста выборки и ошибок на negative-классе.
+Именно поэтому качество нельзя описывать фразой «99% обнаружения» без контекста выборки и ошибок на отрицательном классе.
 
 ---
 
-## 8. Threshold и tuning меняют компромисс, но не дают бесплатного улучшения
+## 8. Порог и настройка меняют компромисс, но не дают бесплатного улучшения
 
-Во многих детекторах есть параметр, который влияет на чувствительность: порог частоты, score, величина отклонения или иная decision boundary.
+Во многих детекторах есть параметр, который влияет на чувствительность: порог частоты, числовая оценка, величина отклонения или иная граница решения.
 
 <div class="idps-threshold-tradeoff">
   <div><strong>Чувствительнее</strong><span>обычно меньше FN</span><span>часто больше FP</span></div>
@@ -223,13 +225,13 @@ Intrusion detection часто работает в среде, где интер
   <div><strong>Строже</strong><span>часто меньше FP</span><span>обычно больше FN</span></div>
 </div>
 
-Это не универсальный закон для любого изменения правила: не каждое редактирование монотонно двигает один и тот же порог. Но **если меняется одна decision boundary при прочих равных**, появляется измеримый trade-off.
+Это не универсальный закон для любого изменения правила: не каждое редактирование монотонно двигает один и тот же порог. Но **если меняется одна граница решения при прочих равных**, появляется измеримый компромисс.
 
-Tuning поэтому оценивают не по количеству отключённых alert, а по тому, как изменение влияет на заранее определённые positive и negative cases.
+Настройку детектора под конкретную среду оценивают не по количеству отключённых оповещений, а по тому, как изменение влияет на заранее определённые положительные и отрицательные случаи.
 
 ---
 
-## 9. Coverage: высокий результат на узком наборе ещё не означает широкое покрытие
+## 9. Покрытие: высокий результат на узком наборе ещё не означает широкое покрытие
 
 Представим правило, которое идеально обнаруживает один подготовленный HTTP-запрос. Это доказывает его работу только для проверенного представления и контекста.
 
@@ -237,18 +239,18 @@ Tuning поэтому оценивают не по количеству откл
 
 <div class="idps-coverage-map">
   <article><span>СЦЕНАРИЙ</span><strong>Что происходит?</strong><small>запрос, последовательность, сетевое поведение, хостовое действие</small></article>
-  <article><span>ПРЕДСТАВЛЕНИЕ</span><strong>Как событие выглядит для сенсора?</strong><small>raw/normalized, stream, app-layer buffer, metadata</small></article>
+  <article><span>ПРЕДСТАВЛЕНИЕ</span><strong>Как событие выглядит для сенсора?</strong><small>исходное/нормализованное представление, поток, прикладное поле или область данных, метаданные</small></article>
   <article><span>КОНТЕКСТ</span><strong>При каких условиях?</strong><small>направление, состояние, сегмент, роль узла, временное окно</small></article>
   <article><span>ВАРИАНТ</span><strong>Какие допустимые изменения проверены?</strong><small>размер, частота, последовательность, кодирование, маршрут</small></article>
 </div>
 
-Полезный тестовый набор обычно включает не только один positive и один negative, а несколько классов:
+Полезный тестовый набор обычно включает не только один положительный и один отрицательный случай, а несколько классов:
 
 <div class="idps-test-matrix">
-  <article class="idps-test-matrix__positive"><span>POSITIVE</span><strong>Известный целевой случай</strong><p>Должен быть обнаружен.</p><small>Проверяет базовую способность детектора.</small></article>
-  <article class="idps-test-matrix__negative"><span>NEGATIVE</span><strong>Обычная активность</strong><p>Не должна удовлетворять условию.</p><small>Проверяет очевидный шум.</small></article>
-  <article class="idps-test-matrix__negative"><span>NEAR-MISS</span><strong>Похожий, но отрицательный случай</strong><p>Специально близок к границе правила.</p><small>Ищет риск FP.</small></article>
-  <article class="idps-test-matrix__positive"><span>VARIANT</span><strong>Изменённый positive</strong><p>Смысл сохраняется, представление меняется.</p><small>Ищет риск FN и хрупкость правила.</small></article>
+  <article class="idps-test-matrix__positive"><span>ПОЛОЖИТЕЛЬНЫЙ</span><strong>Известный целевой случай</strong><p>Должен быть обнаружен.</p><small>Проверяет базовую способность детектора.</small></article>
+  <article class="idps-test-matrix__negative"><span>ОТРИЦАТЕЛЬНЫЙ</span><strong>Обычная активность</strong><p>Не должна удовлетворять условию.</p><small>Проверяет очевидный шум.</small></article>
+  <article class="idps-test-matrix__negative"><span>ПОГРАНИЧНЫЙ ОТРИЦАТЕЛЬНЫЙ</span><strong>Похожий, но отрицательный случай</strong><p>Специально близок к границе правила.</p><small>Ищет риск FP.</small></article>
+  <article class="idps-test-matrix__positive"><span>ВАРИАНТ</span><strong>Изменённый положительный случай</strong><p>Смысл сохраняется, представление меняется.</p><small>Ищет риск FN и хрупкость правила.</small></article>
 </div>
 
 <div class="admonition warning">
@@ -260,23 +262,23 @@ Tuning поэтому оценивают не по количеству откл
 
 ## 10. Проверять нужно не только классификацию, но и путь данных
 
-Даже идеальная логика на офлайн-наборе не доказывает, что тот же результат сохранится в рабочей архитектуре.
+Даже идеальная логика на заранее подготовленном наборе не доказывает, что тот же результат сохранится в рабочей архитектуре.
 
 <div class="teaching-figure">
 <div class="figure-label">ВИЗУАЛЬНАЯ МОДЕЛЬ 4 · ЧЕТЫРЕ ИЗМЕРЕНИЯ ИНЖЕНЕРНОЙ ЭФФЕКТИВНОСТИ</div>
 <div class="idps-eval-dimensions">
-  <article><span>1 · VISIBILITY</span><strong>Нужные данные доступны?</strong><p>Placement, capture, host telemetry, encryption boundary.</p></article>
-  <article><span>2 · DETECTION QUALITY</span><strong>Решение корректно?</strong><p>TP/FP/TN/FN, precision, recall, FPR, coverage.</p></article>
-  <article><span>3 · CAPACITY</span><strong>Система выдерживает условия?</strong><p>Drops, resource limits, throughput, queue overflow, стабильность состояния.</p></article>
-  <article><span>4 · DELIVERY / ACTION</span><strong>Результат доходит до нужного действия?</strong><p>Запись события, задержка, оповещение, а для IPS — отдельная проверка воздействия.</p></article>
+  <article><span>1 · НАБЛЮДАЕМОСТЬ</span><strong>Нужные данные доступны?</strong><p>Точка наблюдения, получение данных, хостовая телеметрия, граница шифрования.</p></article>
+  <article><span>2 · КАЧЕСТВО ОБНАРУЖЕНИЯ</span><strong>Решение корректно?</strong><p>TP/FP/TN/FN, подтверждённость, полнота, FPR, покрытие.</p></article>
+  <article><span>3 · ПРОИЗВОДИТЕЛЬНОСТЬ</span><strong>Система выдерживает условия?</strong><p>Потери, ограничения ресурсов, пропускная способность, переполнение очередей, стабильность состояния.</p></article>
+  <article><span>4 · ДОСТАВКА / ВОЗДЕЙСТВИЕ</span><strong>Результат доходит до нужного действия?</strong><p>Запись события, задержка, оповещение, а для IPS — отдельная проверка воздействия.</p></article>
 </div>
-<div class="figure-caption">Эти измерения связаны, но не взаимозаменяемы. Высокий precision не доказывает полноту visibility; отсутствие packet drops не доказывает корректность detection logic.</div>
+<div class="figure-caption">Эти измерения связаны, но не взаимозаменяемы. Высокая доля подтверждённых положительных решений не доказывает полноту наблюдаемости; отсутствие потерь пакетов не доказывает корректность логики обнаружения.</div>
 </div>
 
 Так мы избегаем неправильного вывода:
 
 ```text
-правило прошло unit-test
+правило прошло модульную проверку
 → значит вся IDS эффективна
 ```
 
@@ -284,7 +286,7 @@ Tuning поэтому оценивают не по количеству откл
 
 ## 11. Производительность оценивается вместе с потерями и рабочей нагрузкой
 
-Для IDPS производительность важна не как абстрактный benchmark, а потому что перегрузка может изменить **доступный системе набор данных**.
+Для IDPS производительность важна не как абстрактный тест производительности, а потому что перегрузка может изменить **доступный системе набор данных**.
 
 Нужно разделять как минимум:
 
@@ -292,31 +294,31 @@ Tuning поэтому оценивают не по количеству откл
 - фактически обработанные данные;
 - потери при захвате;
 - внутренние исключения/лимиты;
-- CPU и память;
+- загрузка процессора и использование памяти;
 - переполнение очередей результатов;
 - задержку от события до доступного результата.
 
-Для Suricata конкретными диагностическими артефактами могут быть EVE statistics: capture counters, `kernel_drops`, exception-policy counters, `alert_queue_overflow`, `alerts_suppressed` и другие поля. Они доказывают состояние **конкретной реализации и конкретного запуска**, а не универсальную производительность любой NIDS.
+Для Suricata конкретными диагностическими артефактами могут быть статистические записи EVE: счётчики захвата, `kernel_drops`, счётчики политики исключений, `alert_queue_overflow`, `alerts_suppressed` и другие поля. Они доказывают состояние **конкретной реализации и конкретного запуска**, а не универсальную производительность любой NIDS.
 
 <div class="idps-evidence-strip">
-  <article><span>INPUT</span><strong>Сколько данных ожидалось?</strong></article>
+  <article><span>ВХОД</span><strong>Сколько данных ожидалось?</strong></article>
   <div>→</div>
-  <article><span>CAPTURE</span><strong>Сколько реально получено?</strong></article>
+  <article><span>ПОЛУЧЕНИЕ</span><strong>Сколько реально получено?</strong></article>
   <div>→</div>
-  <article><span>ENGINE</span><strong>Были ли resource/exception limits?</strong></article>
+  <article><span>ДВИЖОК</span><strong>Были ли ограничения ресурсов или исключительные ситуации?</strong></article>
   <div>→</div>
-  <article><span>OUTPUT</span><strong>Сохранился ли результат вовремя?</strong></article>
+  <article><span>ВЫВОД</span><strong>Сохранился ли результат вовремя?</strong></article>
 </div>
 
 Если нагрузочный тест не фиксирует потери и фактически обработанный объём, фраза «IDS выдержала 1 Гбит/с» может оказаться необоснованной.
 
 ---
 
-## 12. Detection latency — отдельная характеристика
+## 12. Задержка обнаружения — отдельная характеристика
 
 Два детектора могут иметь одинаковые TP/FP/FN, но различаться временем появления результата.
 
-Для некоторых задач alert через несколько секунд приемлем. Для inline-предотвращения или короткого автоматизированного эпизода такое же запаздывание может менять практический эффект.
+Для некоторых задач оповещение через несколько секунд приемлем. Для предотвращения в режиме подключения в разрыв или короткого автоматизированного эпизода такое же запаздывание может менять практический эффект.
 
 Поэтому для задачи с требованием по времени заранее фиксируют две точки:
 
@@ -324,7 +326,7 @@ Tuning поэтому оценивают не по количеству откл
 t_event  — момент возникновения/поступления контролируемого события
 t_result — момент доступности результата детектора
 
-latency = t_result - t_event
+задержка = t_result - t_event
 ```
 
 Важно использовать согласованные часы или другой детерминированный способ сопоставления времени. Иначе измеренная «задержка» может быть следствием рассинхронизации источников.
@@ -336,18 +338,18 @@ latency = t_result - t_event
 Из Глав 1 и 4 мы уже знаем:
 
 ```text
-detection capability ≠ prevention capability
-inline placement ≠ факт блокирования
+возможность обнаружения ≠ возможность предотвращения
+подключение в разрыв ≠ факт блокирования
 ```
 
 Поэтому для IPS минимум два независимых вопроса:
 
 <div class="idps-grid idps-grid--2">
-  <div class="idps-card idps-card--sensor"><span class="idps-card__eyebrow">DETECTION</span><strong class="idps-card__title">Правильно ли выделяется целевое событие?</strong><p>Проверяется ground truth, alert/result и классификационные метрики.</p></div>
-  <div class="idps-card idps-card--result"><span class="idps-card__eyebrow">ACTUATION</span><strong class="idps-card__title">Произошло ли требуемое воздействие?</strong><p>Нужен независимый артефакт того, что запрещённый обмен действительно не завершился, а разрешённый трафик не был ошибочно нарушен.</p></div>
+  <div class="idps-card idps-card--sensor"><span class="idps-card__eyebrow">ОБНАРУЖЕНИЕ</span><strong class="idps-card__title">Правильно ли выделяется целевое событие?</strong><p>Проверяется эталон истинного состояния, результат обнаружения и классификационные метрики.</p></div>
+  <div class="idps-card idps-card--result"><span class="idps-card__eyebrow">ИСПОЛНИТЕЛЬНОЕ ВОЗДЕЙСТВИЕ</span><strong class="idps-card__title">Произошло ли требуемое воздействие?</strong><p>Нужен независимый артефакт того, что запрещённый обмен действительно не завершился, а разрешённый трафик не был ошибочно нарушен.</p></div>
 </div>
 
-Alert с действием `drop` в журнале конкретного движка не следует автоматически объявлять доказательством end-to-end блокирования без проверки режима, placement и фактического результата обмена.
+Оповещение с действием `drop` в журнале конкретного движка не следует автоматически объявлять доказательством сквозного блокирования без проверки режима, точки наблюдения и фактического результата обмена.
 
 ---
 
@@ -361,16 +363,16 @@ Alert с действием `drop` в журнале конкретного дв
   <span>версия IDPS</span>
   <span>режим запуска</span>
   <span>точка наблюдения</span>
-  <span>ruleset / hash</span>
+  <span>набор правил / хэш</span>
   <span>конфигурация</span>
-  <span>test corpus</span>
+  <span>тестовый набор</span>
   <span>время теста</span>
-  <span>ground truth</span>
+  <span>эталон истинного состояния</span>
   <span>правила сопоставления</span>
   <span>сырые артефакты</span>
 </div>
 
-Если после tuning правило изменилось, старые метрики нельзя автоматически приписывать новой версии. Нужна **регрессионная проверка** на зафиксированном наборе случаев.
+Если после настройки правило изменилось, старые метрики нельзя автоматически приписывать новой версии. Нужна **регрессионная проверка** на зафиксированном наборе случаев.
 
 ---
 
@@ -381,13 +383,13 @@ Alert с действием `drop` в журнале конкретного дв
 <div class="teaching-figure">
 <div class="figure-label">ВИЗУАЛЬНАЯ МОДЕЛЬ 5 · ОТ ЭКСПЕРИМЕНТА К ЗАЩИЩАЕМОМУ ВЫВОДУ</div>
 <div class="idps-report-chain">
-  <article><span>1</span><strong>Цель и scope</strong><small>что именно оценивается и где</small></article>
+  <article><span>1</span><strong>Цель и область</strong><small>что именно оценивается и где</small></article>
   <div>→</div>
-  <article><span>2</span><strong>Методика</strong><small>unit, ground truth, cases, versions, window</small></article>
+  <article><span>2</span><strong>Методика</strong><small>единица оценки, эталон, тестовые случаи, версии, временное окно</small></article>
   <div>→</div>
-  <article><span>3</span><strong>Наблюдения</strong><small>сырые результаты, counters, timestamps, EVE/PCAP/logs</small></article>
+  <article><span>3</span><strong>Наблюдения</strong><small>исходные результаты, счётчики, временные метки, EVE/PCAP/журналы</small></article>
   <div>→</div>
-  <article><span>4</span><strong>Расчёт</strong><small>матрица ошибок, метрики, coverage, latency, drops</small></article>
+  <article><span>4</span><strong>Расчёт</strong><small>матрица ошибок, метрики, покрытие, задержка, потери</small></article>
   <div>→</div>
   <article><span>5</span><strong>Вывод и границы</strong><small>что доказано и на что результат не распространяется</small></article>
 </div>
@@ -399,7 +401,7 @@ Alert с действием `drop` в журнале конкретного дв
 
 инженерная формулировка выглядит примерно так:
 
-> «На фиксированном наборе из 100 размеченных HTTP-событий, при указанной версии ruleset и точке наблюдения, детектор обнаружил 46 из 50 positive cases и ошибочно выделил 4 из 50 negative cases. Recall составил 92%, precision — 92%. Результат относится только к протестированным представлениям и не доказывает такое же качество для зашифрованного трафика, других маршрутов или непроверенных вариантов события.»
+> «На фиксированном наборе из 100 размеченных HTTP-событий, при указанной версии набора правил и точке наблюдения, детектор обнаружил 46 из 50 положительных случаев и ошибочно выделил 4 из 50 отрицательных случаев. Полнота (`recall`) составила 92%, доля подтверждённых положительных решений (`precision`) — 92%. Результат относится только к протестированным представлениям и не доказывает такое же качество для зашифрованного трафика, других маршрутов или непроверенных вариантов события.»
 
 Такой вывод длиннее, но его можно проверить.
 
@@ -414,27 +416,27 @@ Alert с действием `drop` в журнале конкретного дв
     <span role="columnheader">Артефакт / результат</span><span role="columnheader">Что поддерживает</span><span role="columnheader">Чего не доказывает</span>
   </div>
   <div class="idps-claim-matrix__row" role="row">
-    <div role="cell"><span class="idps-claim-matrix__mobile-label">АРТЕФАКТ / РЕЗУЛЬТАТ</span><strong>100% recall на test corpus</strong></div>
-    <div role="cell"><span class="idps-claim-matrix__mobile-label">ПОДДЕРЖИВАЕТ</span>все размеченные positive этого набора обнаружены</div>
-    <div role="cell"><span class="idps-claim-matrix__mobile-label">НЕ ДОКАЗЫВАЕТ</span>что обнаруживаются все возможные варианты в production</div>
+    <div role="cell"><span class="idps-claim-matrix__mobile-label">АРТЕФАКТ / РЕЗУЛЬТАТ</span><strong>100% полноты на тестовом наборе</strong></div>
+    <div role="cell"><span class="idps-claim-matrix__mobile-label">ПОДДЕРЖИВАЕТ</span>все размеченные положительные случаи этого набора обнаружены</div>
+    <div role="cell"><span class="idps-claim-matrix__mobile-label">НЕ ДОКАЗЫВАЕТ</span>что обнаруживаются все возможные варианты в рабочей среде</div>
   </div>
   <div class="idps-claim-matrix__row" role="row">
-    <div role="cell"><span class="idps-claim-matrix__mobile-label">АРТЕФАКТ / РЕЗУЛЬТАТ</span><strong>0 FP в negative-наборе</strong></div>
-    <div role="cell"><span class="idps-claim-matrix__mobile-label">ПОДДЕРЖИВАЕТ</span>на выбранных negative cases ложных срабатываний не было</div>
+    <div role="cell"><span class="idps-claim-matrix__mobile-label">АРТЕФАКТ / РЕЗУЛЬТАТ</span><strong>0 FP в отрицательном наборе</strong></div>
+    <div role="cell"><span class="idps-claim-matrix__mobile-label">ПОДДЕРЖИВАЕТ</span>на выбранных отрицательных случаях ложных срабатываний не было</div>
     <div role="cell"><span class="idps-claim-matrix__mobile-label">НЕ ДОКАЗЫВАЕТ</span>нулевой FPR на всей реальной активности</div>
   </div>
   <div class="idps-claim-matrix__row" role="row">
-    <div role="cell"><span class="idps-claim-matrix__mobile-label">АРТЕФАКТ / РЕЗУЛЬТАТ</span><strong>0 kernel drops в тесте</strong></div>
-    <div role="cell"><span class="idps-claim-matrix__mobile-label">ПОДДЕРЖИВАЕТ</span>в данном запуске этот счётчик не показал kernel capture loss</div>
+    <div role="cell"><span class="idps-claim-matrix__mobile-label">АРТЕФАКТ / РЕЗУЛЬТАТ</span><strong>0 <code>kernel_drops</code> в тесте</strong></div>
+    <div role="cell"><span class="idps-claim-matrix__mobile-label">ПОДДЕРЖИВАЕТ</span>в данном запуске этот счётчик не показал потерь, учитываемых счётчиком `kernel_drops`</div>
     <div role="cell"><span class="idps-claim-matrix__mobile-label">НЕ ДОКАЗЫВАЕТ</span>полное отсутствие любых потерь во всех внутренних стадиях и при других нагрузках</div>
   </div>
   <div class="idps-claim-matrix__row" role="row">
-    <div role="cell"><span class="idps-claim-matrix__mobile-label">АРТЕФАКТ / РЕЗУЛЬТАТ</span><strong>alert с SID</strong></div>
+    <div role="cell"><span class="idps-claim-matrix__mobile-label">АРТЕФАКТ / РЕЗУЛЬТАТ</span><strong>оповещение с SID</strong></div>
     <div role="cell"><span class="idps-claim-matrix__mobile-label">ПОДДЕРЖИВАЕТ</span>конкретная логика сформировала результат</div>
-    <div role="cell"><span class="idps-claim-matrix__mobile-label">НЕ ДОКАЗЫВАЕТ</span>успешную компрометацию или end-to-end блокирование</div>
+    <div role="cell"><span class="idps-claim-matrix__mobile-label">НЕ ДОКАЗЫВАЕТ</span>успешную компрометацию или сквозное блокирование</div>
   </div>
   <div class="idps-claim-matrix__row" role="row">
-    <div role="cell"><span class="idps-claim-matrix__mobile-label">АРТЕФАКТ / РЕЗУЛЬТАТ</span><strong>успешный inline test</strong></div>
+    <div role="cell"><span class="idps-claim-matrix__mobile-label">АРТЕФАКТ / РЕЗУЛЬТАТ</span><strong>успешная проверка подключения в разрыв</strong></div>
     <div role="cell"><span class="idps-claim-matrix__mobile-label">ПОДДЕРЖИВАЕТ</span>воздействие сработало в проверенной топологии и сценарии</div>
     <div role="cell"><span class="idps-claim-matrix__mobile-label">НЕ ДОКАЗЫВАЕТ</span>безошибочное предотвращение всех атак этого класса</div>
   </div>
@@ -446,13 +448,13 @@ Alert с действием `drop` в журнале конкретного дв
 
 ## 17. Как связать оценку с риском и эксплуатацией
 
-Нет универсального значения recall или precision, которое автоматически означает «хорошая IDS».
+Нет универсального значения полноты или подтверждённости положительных решений, которое автоматически означает «хорошая IDS».
 
 Цена ошибок зависит от задачи:
 
 <div class="idps-grid idps-grid--2">
   <div class="idps-card idps-card--warning"><span class="idps-card__eyebrow">ВЫСОКАЯ ЦЕНА FN</span><strong class="idps-card__title">Критичное событие нельзя легко пропустить</strong><p>Организация может принять больше FP, если последующая проверка дешева и пропуск существенно опаснее.</p></div>
-  <div class="idps-card idps-card--danger"><span class="idps-card__eyebrow">ВЫСОКАЯ ЦЕНА FP</span><strong class="idps-card__title">Автоматическое воздействие может нарушить сервис</strong><p>Для prevention false positive может означать блокирование легитимного обмена, поэтому критерии приёмки могут быть строже.</p></div>
+  <div class="idps-card idps-card--danger"><span class="idps-card__eyebrow">ВЫСОКАЯ ЦЕНА FP</span><strong class="idps-card__title">Автоматическое воздействие может нарушить сервис</strong><p>При автоматическом предотвращении ложноположительный результат может означать блокирование легитимного обмена, поэтому критерии приёмки могут быть строже.</p></div>
 </div>
 
 Но оценка стоимости ошибок — это уже вход для управленческого решения. Технический отчёт должен сначала честно показать измеренный результат и неопределённость, а не подгонять метрики под желаемый вывод.
@@ -467,15 +469,15 @@ Alert с действием `drop` в журнале конкретного дв
 <div class="figure-label">ВИЗУАЛЬНАЯ МОДЕЛЬ 6 · ОТ СОБЫТИЯ ДО ОБОСНОВАННОЙ ОЦЕНКИ</div>
 <div class="idps-course-loop">
   <article><span>1</span><strong>Что защищаем и зачем?</strong><small>назначение IDS/IPS</small></article>
-  <article><span>2</span><strong>Какой источник нужен?</strong><small>network / host / wireless / другие данные</small></article>
+  <article><span>2</span><strong>Какой источник нужен?</strong><small>сетевые / хостовые / беспроводные / другие данные</small></article>
   <article><span>3</span><strong>Как устроена функция?</strong><small>сбор, представление, анализ, результат</small></article>
-  <article><span>4</span><strong>Где наблюдать?</strong><small>placement и visibility</small></article>
-  <article><span>5</span><strong>По какому основанию решать?</strong><small>signature, state, series, anomaly</small></article>
+  <article><span>4</span><strong>Где наблюдать?</strong><small>точка наблюдения и наблюдаемость</small></article>
+  <article><span>5</span><strong>По какому основанию решать?</strong><small>сигнатура, состояние, серия событий, аномалия</small></article>
   <article><span>6</span><strong>Как формализовать?</strong><small>правило и его область применимости</small></article>
-  <article><span>7</span><strong>Где границы?</strong><small>FP/FN, blind spots, encryption, loss</small></article>
-  <article><span>8</span><strong>Как доказать качество?</strong><small>evaluation contract, evidence, metrics, limits</small></article>
+  <article><span>7</span><strong>Где границы?</strong><small>FP/FN, слепые зоны, шифрование, потери</small></article>
+  <article><span>8</span><strong>Как доказать качество?</strong><small>контракт оценки, свидетельства, метрики, границы</small></article>
 </div>
-<div class="figure-caption">Это базовый инженерный цикл курса. Он не означает, что восемь глав исчерпывают весь предмет IDPS; они задают общий язык, на который дальше можно накладывать эксплуатацию, современные архитектуры, корреляцию, threat intelligence и другие расширенные темы.</div>
+<div class="figure-caption">Это базовый инженерный цикл курса. Он не означает, что восемь глав исчерпывают весь предмет IDPS; они задают общий язык, на который дальше можно накладывать эксплуатацию, современные архитектуры, корреляцию, разведывательные данные об угрозах и другие расширенные темы.</div>
 </div>
 
 ---
@@ -484,11 +486,11 @@ Alert с действием `drop` в журнале конкретного дв
 
 1. Эффективность нельзя оценивать без заранее определённой задачи.
 2. Результат одного правила нельзя автоматически переносить на всю IDS/IPS.
-3. TP/FP/TN/FN требуют единицы оценки и независимого ground truth.
-4. Recall, precision, FPR и accuracy отвечают на разные вопросы.
+3. TP/FP/TN/FN требуют единицы оценки и независимого эталона истинного состояния.
+4. Полнота (`recall`), подтверждённость положительных решений (`precision`), FPR и общая доля правильных решений (`accuracy`) отвечают на разные вопросы.
 5. Базовая частота влияет на практический смысл даже хороших TPR/FPR.
-6. Coverage, производительность, потери и задержка являются отдельными измерениями оценки.
-7. Для IPS detection и исполнительное воздействие проверяются раздельно.
+6. Покрытие, производительность, потери и задержка являются отдельными измерениями оценки.
+7. Для IPS обнаружение и исполнительное воздействие проверяются раздельно.
 8. Результат должен быть повторяемым: версия, конфигурация, набор данных и сырые артефакты фиксируются.
 9. Хороший отчёт явно указывает границы применимости вывода.
 10. «Доказано в этом эксперименте» сильнее и профессиональнее, чем необоснованное «система эффективна вообще».
@@ -498,47 +500,47 @@ Alert с действием `drop` в журнале конкретного дв
 ## 20. Проверка понимания
 
 <div class="quiz" data-question-id="chapter8-q1">
-  <p><strong>Правило обнаружило все 20 positive cases тестового набора. Что можно утверждать?</strong></p>
+  <p><strong>Правило обнаружило все 20 положительных случаев тестового набора. Что можно утверждать?</strong></p>
   <button data-choice="a">A. Оно обнаруживает все атаки этого класса во всей инфраструктуре</button>
-  <button data-choice="b" data-correct="true">B. На данном наборе и в зафиксированных условиях не было FN среди этих 20 positive cases</button>
-  <button data-choice="c">C. У него автоматически 100% precision</button>
+  <button data-choice="b" data-correct="true">B. На данном наборе и в зафиксированных условиях не было FN среди этих 20 положительных случаев</button>
+  <button data-choice="c">C. У него автоматически 100% подтверждённости положительных решений</button>
   <button data-choice="d">D. IPS гарантированно блокирует все такие события</button>
   <div class="quiz-feedback"></div>
 </div>
 
 <div class="quiz" data-question-id="chapter8-q2">
-  <p><strong>Для чего нужен независимый ground truth?</strong></p>
-  <button data-choice="a">A. Чтобы увеличить число alert</button>
+  <p><strong>Для чего нужен независимый эталон истинного состояния?</strong></p>
+  <button data-choice="a">A. Чтобы увеличить число оповещений</button>
   <button data-choice="b">B. Чтобы заменить правила IDS</button>
   <button data-choice="c" data-correct="true">C. Чтобы знать истинное состояние единицы оценки независимо от решения детектора</button>
-  <button data-choice="d">D. Только для измерения CPU</button>
+  <button data-choice="d">D. Только для измерения загрузки процессора</button>
   <div class="quiz-feedback"></div>
 </div>
 
 <div class="quiz" data-question-id="chapter8-q3">
-  <p><strong>Recall высокий, но precision низкий. Что это означает?</strong></p>
-  <button data-choice="a" data-correct="true">A. Большая доля positive обнаруживается, но среди положительных решений детектора много FP</button>
-  <button data-choice="b">B. Детектор почти не видит positive cases</button>
-  <button data-choice="c">C. Нет packet loss</button>
-  <button data-choice="d">D. Все alert подтверждают компрометацию</button>
+  <p><strong>Полнота высокая, но подтверждённость положительных решений низкая. Что это означает?</strong></p>
+  <button data-choice="a" data-correct="true">A. Большая доля положительных случаев обнаруживается, но среди положительных решений детектора много FP</button>
+  <button data-choice="b">B. Детектор почти не видит положительные случаи</button>
+  <button data-choice="c">C. Нет потерь пакетов</button>
+  <button data-choice="d">D. Все оповещения подтверждают компрометацию</button>
   <div class="quiz-feedback"></div>
 </div>
 
 <div class="quiz" data-question-id="chapter8-q4">
-  <p><strong>Почему 0 kernel drops недостаточно для вывода «IDS ничего не потеряла»?</strong></p>
+  <p><strong>Почему 0 <code>kernel_drops</code> недостаточно для вывода «IDS ничего не потеряла»?</strong></p>
   <button data-choice="a">A. Потому что этот счётчик всегда равен нулю</button>
   <button data-choice="b" data-correct="true">B. Он относится только к конкретному месту учёта потерь; другие ограничения обработки и вывода требуют отдельных доказательств</button>
-  <button data-choice="c">C. Потому что kernel не участвует в capture</button>
-  <button data-choice="d">D. Потому что packet loss измеряется только precision</button>
+  <button data-choice="c">C. Потому что ядро системы не участвует в захвате данных</button>
+  <button data-choice="d">D. Потому что потери пакетов измеряются только подтверждённостью положительных решений</button>
   <div class="quiz-feedback"></div>
 </div>
 
 <div class="quiz" data-question-id="chapter8-q5">
   <p><strong>Что является наиболее зрелым итогом оценки?</strong></p>
   <button data-choice="a">A. «IDS эффективна»</button>
-  <button data-choice="b">B. «Получили много alert»</button>
-  <button data-choice="c">C. «CPU был ниже 50%»</button>
-  <button data-choice="d" data-correct="true">D. Вывод с указанными scope, методикой, evidence, метриками и границами применимости</button>
+  <button data-choice="b">B. «Получили много оповещений»</button>
+  <button data-choice="c">C. «Загрузка процессора была ниже 50%»</button>
+  <button data-choice="d" data-correct="true">D. Вывод с указанными областью, методикой, свидетельствами, метриками и границами применимости</button>
   <div class="quiz-feedback"></div>
 </div>
 
@@ -548,11 +550,11 @@ Alert с действием `drop` в журнале конкретного дв
 
 Основные основания главы:
 
-- NIST SP 800-94 — исторический фундаментальный источник по IDPS, эксплуатационным факторам, false positive/false negative, tuning и оценке; документ 2007 года не используется как исчерпывающее описание современных продуктов;
-- Stefan Axelsson, *The Base-Rate Fallacy and the Difficulty of Intrusion Detection* — классическое объяснение влияния низкой базовой частоты на intrusion detection;
-- официальная документация Suricata 8.0.7 — конкретные counters и EVE statistics для проверки capture/output/resource-состояния реализации;
-- материал Глав 1–7 этого курса — определения observation point, source, representation, detection result, prevention, blind spot и evidence boundary.
+- NIST SP 800-94 — исторический фундаментальный источник по IDPS, эксплуатационным факторам, ложноположительных/ложноотрицательных результатах, настройке и оценке; документ 2007 года не используется как исчерпывающее описание современных продуктов;
+- Stefan Axelsson, *The Base-Rate Fallacy and the Difficulty of Intrusion Detection* — классическое объяснение влияния низкой базовой частоты на обнаружение вторжений;
+- официальная документация Suricata 8.0.7 — конкретные счётчики и статистические записи EVE для проверки получения данных, вывода и ресурсного состояния реализации;
+- материал Глав 1–7 этого курса — определения точки наблюдения, источника данных, представления, результата обнаружения, предотвращения, слепой зоны и границы доказательности.
 
 ---
 
-Главы 1–8 образуют базовое инженерное ядро. Дальше курс углубляет понятие representation: как один и тот же прикладной смысл выглядит для сенсора в DNS, HTTP, TLS, QUIC, SSH и SMB и как шифрование меняет допустимые условия обнаружения. Этому посвящена **Глава 9 «Протоколы, приложения и зашифрованный трафик глазами IDPS»**.
+Главы 1–8 образуют базовое инженерное ядро. Дальше курс углубляет понятие представления данных: как один и тот же прикладной смысл выглядит для сенсора в разных сетевых и прикладных протоколах и как шифрование меняет допустимые условия обнаружения. Этому посвящена **Глава 9 «Протоколы, приложения и зашифрованный трафик глазами IDPS»**.

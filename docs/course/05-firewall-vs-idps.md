@@ -23,7 +23,7 @@ HTTP-запрос;
 статистика сетевых потоков.
 ```
 
-Само наличие данных ещё не объясняет, почему система должна выделить конкретное наблюдение среди остальных. Нужен **принцип принятия решения** — основание, по которому наблюдаемые признаки превращаются в результат детектора.
+Само наличие данных ещё не объясняет, почему система должна выделить конкретное наблюдение среди остальных. Нужен **принцип принятия решения** — основание, по которому наблюдаемые признаки превращаются в результат обнаружения.
 
 <div class="idps-figure">
 <div class="idps-figure__label">ВИЗУАЛЬНАЯ МОДЕЛЬ · ОТ ДАННЫХ К РЕЗУЛЬТАТУ</div>
@@ -62,7 +62,9 @@ HTTP-запрос;
 
 ## 2. Сигнатурное обнаружение: известный признак
 
-**Сигнатурное обнаружение (signature-based detection)** сравнивает наблюдаемую активность с заранее определённым признаком или условием, связанным с интересующим событием.
+В NIST SP 800-94 и другой англоязычной литературе встречаются названия `signature-based detection`, `stateful protocol analysis` и `anomaly-based detection`. Они приводятся в этой главе только для связи с первичным источником; далее используются русские названия соответствующих подходов.
+
+**Сигнатурное обнаружение** сравнивает наблюдаемую активность с заранее определённым признаком или условием, связанным с интересующим событием.
 
 В ЛР №4 таким признаком будет специально созданный учебный путь:
 
@@ -73,9 +75,9 @@ HTTP-запрос;
 <div class="idps-figure">
 <div class="idps-figure__label">ВИЗУАЛЬНАЯ МОДЕЛЬ · СИГНАТУРНОЕ СОВПАДЕНИЕ</div>
 <div class="idps-process">
-  <div class="idps-process__step idps-process__step--source"><span>1</span><strong>Наблюдаемое поле</strong><small>HTTP path = /download/LAB4-KNOWN-BAD</small></div>
+  <div class="idps-process__step idps-process__step--source"><span>1</span><strong>Наблюдаемое поле</strong><small>путь HTTP-запроса = /download/LAB4-KNOWN-BAD</small></div>
   <div class="idps-process__arrow">→</div>
-  <div class="idps-process__step idps-process__step--sensor"><span>2</span><strong>Заранее заданное условие</strong><small>path == /download/LAB4-KNOWN-BAD</small></div>
+  <div class="idps-process__step idps-process__step--sensor"><span>2</span><strong>Заранее заданное условие</strong><small>путь запроса == /download/LAB4-KNOWN-BAD</small></div>
   <div class="idps-process__arrow">→</div>
   <div class="idps-process__step idps-process__step--result"><span>3</span><strong>Совпадение</strong><small>условие выполнено</small></div>
   <div class="idps-process__arrow">→</div>
@@ -89,7 +91,7 @@ HTTP-запрос;
 <div class="idps-chip-list">
   <span class="idps-chip">значение поля протокола</span>
   <span class="idps-chip">последовательность байтов</span>
-  <span class="idps-chip">адрес, домен или URI</span>
+  <span class="idps-chip">адрес, домен или путь к ресурсу</span>
   <span class="idps-chip">комбинацию признаков</span>
   <span class="idps-chip">направление и состояние потока</span>
 </div>
@@ -109,7 +111,7 @@ HTTP-запрос;
 
 Некоторые события становятся понятны только тогда, когда система знает **смысл сообщений** и **допустимую последовательность состояний**.
 
-В ЛР №4 используется синтетический прикладной протокол поверх HTTP-маршрутов:
+В ЛР №4 используется синтетический прикладной протокол поверх HTTP-маршрутов. Имена `START`, `DATA` и `END` ниже — буквальные названия учебных сообщений, а `IDLE`, `OPEN` и `VIOLATION` — буквальные метки состояний и результата в артефактах лаборатории. Английские слова здесь сохраняются только для точного совпадения теории с тем, что студент увидит в файлах и выводе лабораторного стенда.
 
 ```text
 IDLE --START--> OPEN
@@ -140,7 +142,7 @@ OPEN --END--> IDLE
   <div class="idps-card idps-card--sensor"><strong class="idps-card__title">Допустимые переходы</strong><p>Порядок событий может быть значимее каждого события по отдельности.</p></div>
 </div>
 
-NIST SP 800-94 исторически выделяет **анализ состояния протокола (stateful protocol analysis)** как один из основных классов методов обнаружения: система сопоставляет наблюдаемую активность с моделью допустимого использования протокола и отслеживает состояние.
+NIST SP 800-94 исторически выделяет **анализ состояния протокола** как один из основных классов методов обнаружения: система сопоставляет наблюдаемую активность с моделью допустимого использования протокола и отслеживает состояние.
 
 <div class="principle-box">
 <strong>НАРУШЕНИЕ ПРОТОКОЛЬНОЙ МОДЕЛИ ≠ ДОКАЗАННАЯ АТАКА</strong>
@@ -174,12 +176,12 @@ NIST SP 800-94 исторически выделяет **анализ состо
     <span class="idps-event-window__event" style="--idps-pos: 76%">5</span>
     <span class="idps-event-window__event idps-event-window__event--outside" style="--idps-pos: 96%">6</span>
   </div>
-  <div class="idps-event-window__window"><strong>окно 2 с</strong><span>count = 5 → условие выполнено</span></div>
+  <div class="idps-event-window__window"><strong>окно 2 с</strong><span>счётчик = 5 → условие выполнено</span></div>
 </div>
 <div class="idps-figure__caption">Порог и окно заданы заранее. Для самого решения не требуется сначала строить модель нормальной активности.</div>
 </div>
 
-Подобный детектор может учитывать частоту, повторяемость, последовательность или сочетание нескольких событий. В литературе и продуктах для таких механизмов встречается слово <em>behavioral</em>, но оно используется неодинаково.
+Подобный детектор может учитывать частоту, повторяемость, последовательность или сочетание нескольких событий. В литературе и продуктах для таких механизмов встречается английское слово <em>behavioral</em> («поведенческий»), но оно используется неодинаково. Оно приведено здесь только потому, что студент встретит его в документации и литературе; в курсе оно не становится отдельным универсальным методом обнаружения.
 
 Чтобы не вводить ложную четвёртую универсальную методологию, в этом курсе мы называем конкретный механизм по существу: **фиксированное условие над серией событий**.
 
@@ -192,7 +194,7 @@ NIST SP 800-94 исторически выделяет **анализ состо
 
 ## 5. Аномальное обнаружение: отклонение от ожидаемого
 
-**Аномальное обнаружение (anomaly-based detection)** использует другую логику: сначала определяется представление **ожидаемой или нормальной активности**, затем текущее наблюдение сравнивается с этой моделью.
+**Аномальное обнаружение** использует другую логику: сначала определяется представление **ожидаемой или нормальной активности**, затем текущее наблюдение сравнивается с этой моделью.
 
 В ЛР №4 базовая линия и всплеск строятся на одном и том же пути `/catalog`, но имеют разную временную структуру.
 
@@ -232,7 +234,7 @@ NIST SP 800-94 исторически выделяет **анализ состо
 ```
 
 <div class="idps-equation idps-equation--danger">
-  <div class="idps-equation__expression"><span>ТЕКУЩЕЕ НАБЛЮДЕНИЕ</span><b>vs</b><span>ОЖИДАЕМАЯ МОДЕЛЬ</span></div>
+  <div class="idps-equation__expression"><span>ТЕКУЩЕЕ НАБЛЮДЕНИЕ</span><b>↔</b><span>ОЖИДАЕМАЯ МОДЕЛЬ</span></div>
   <p>Аномалия — это значимое отклонение от выбранной модели, а не синоним вредоносности.</p>
 </div>
 
@@ -257,7 +259,7 @@ NIST SP 800-94 исторически выделяет **анализ состо
   <div class="idps-node idps-node--result"><strong>Аномалия</strong><small>базовая модель + наблюдения → оценка отклонения → результат</small></div>
 </div>
 
-Поэтому временное окно, счётчик или слово <em>behavioral</em> сами по себе не определяют методологию. Нужно смотреть, **с чем сравниваются наблюдения и как принимается решение**.
+Поэтому временное окно, счётчик или термин <em>behavioral</em> сами по себе не определяют методологию. Нужно смотреть, **с чем сравниваются наблюдения и как принимается решение**.
 
 ---
 
@@ -277,7 +279,7 @@ IDPS не получает «вредоносность» как готовый 
 <div class="idps-figure__label">ВИЗУАЛЬНАЯ МОДЕЛЬ · ОДНА АКТИВНОСТЬ МОЖЕТ ОСТАВИТЬ РАЗНЫЕ СЛЕДЫ</div>
 <div class="idps-source-hub">
   <div class="idps-source-hub__sources">
-    <div class="idps-source-hub__source"><strong>Сетевой след</strong><small>URI, домен, адрес, последовательность обмена, объём или частота</small></div>
+    <div class="idps-source-hub__source"><strong>Сетевой след</strong><small>путь к ресурсу, домен, адрес, последовательность обмена, объём или частота</small></div>
     <div class="idps-source-hub__source"><strong>Хостовый след</strong><small>процесс, файл, журнал ОС, изменение объекта</small></div>
     <div class="idps-source-hub__source"><strong>Временной след</strong><small>повторяемость, интервалы, серия однотипных событий</small></div>
     <div class="idps-source-hub__source"><strong>Прикладной след</strong><small>событие сервиса, HTTP/API-поле, журнал приложения</small></div>
@@ -321,8 +323,8 @@ IDPS не получает «вредоносность» как готовый 
       <h3 class="idps-switcher__panel-title">Сигнатура</h3>
       <div class="idps-question-model">
         <div class="idps-question-model__cell"><span>Наблюдение</span><strong>/download/LAB4-KNOWN-BAD</strong></div>
-        <div class="idps-question-model__cell"><span>Вопрос</span><strong>Совпадает ли path с известным условием?</strong></div>
-        <div class="idps-question-model__cell"><span>Результат</span><strong>Signature match</strong></div>
+        <div class="idps-question-model__cell"><span>Вопрос</span><strong>Совпадает ли путь запроса с известным условием?</strong></div>
+        <div class="idps-question-model__cell"><span>Результат</span><strong>Сигнатурное совпадение</strong></div>
         <div class="idps-question-model__boundary"><strong>Поддерживает:</strong> условие совпало. <strong>Не доказывает:</strong> успешную атаку или компрометацию.</div>
       </div>
     </section>
@@ -331,7 +333,7 @@ IDPS не получает «вредоносность» как готовый 
       <div class="idps-question-model">
         <div class="idps-question-model__cell"><span>Наблюдение</span><strong>DATA пришёл в состоянии IDLE</strong></div>
         <div class="idps-question-model__cell"><span>Вопрос</span><strong>Допустимо ли сообщение в текущем состоянии?</strong></div>
-        <div class="idps-question-model__cell"><span>Результат</span><strong>State violation</strong></div>
+        <div class="idps-question-model__cell"><span>Результат</span><strong>Нарушение модели состояния</strong></div>
         <div class="idps-question-model__boundary"><strong>Поддерживает:</strong> модель состояния нарушена. <strong>Не доказывает:</strong> что причиной является злоумышленник.</div>
       </div>
     </section>
@@ -340,16 +342,16 @@ IDPS не получает «вредоносность» как готовый 
       <div class="idps-question-model">
         <div class="idps-question-model__cell"><span>Наблюдение</span><strong>≥ 5 /catalog за 2 секунды</strong></div>
         <div class="idps-question-model__cell"><span>Вопрос</span><strong>Выполнено ли заранее заданное условие?</strong></div>
-        <div class="idps-question-model__cell"><span>Результат</span><strong>Threshold match</strong></div>
+        <div class="idps-question-model__cell"><span>Результат</span><strong>Сработало пороговое условие</strong></div>
         <div class="idps-question-model__boundary"><strong>Поддерживает:</strong> порог выполнен. <strong>Не доказывает:</strong> что активность отклоняется от реальной нормы среды.</div>
       </div>
     </section>
     <section class="idps-switcher__panel" id="ch5-anomaly" data-idps-panel="anomaly" role="tabpanel">
       <h3 class="idps-switcher__panel-title">Аномалия</h3>
       <div class="idps-question-model">
-        <div class="idps-question-model__cell"><span>Наблюдение</span><strong>всплеск быстрее измеренного baseline</strong></div>
+        <div class="idps-question-model__cell"><span>Наблюдение</span><strong>всплеск быстрее измеренного базового профиля</strong></div>
         <div class="idps-question-model__cell"><span>Вопрос</span><strong>Насколько активность отклоняется от выбранной модели?</strong></div>
-        <div class="idps-question-model__cell"><span>Результат</span><strong>Anomaly = yes/no</strong></div>
+        <div class="idps-question-model__cell"><span>Результат</span><strong>Аномалия: да / нет</strong></div>
         <div class="idps-question-model__boundary"><strong>Поддерживает:</strong> измеренное отклонение. <strong>Не доказывает:</strong> вредоносность наблюдаемой активности.</div>
       </div>
     </section>
@@ -405,7 +407,7 @@ IDPS не получает «вредоносность» как готовый 
   <div class="idps-process__arrow">→</div>
   <div class="idps-process__step"><span>4</span><strong>Реакция</strong><small>журнал, оповещение, расследование или исполнительное воздействие</small></div>
 </div>
-<div class="idps-figure__caption">Даже одинаковый результат детектора может приводить к разным действиям в зависимости от конфигурации и политики.</div>
+<div class="idps-figure__caption">Даже одинаковый результат обнаружения может приводить к разным действиям в зависимости от конфигурации и политики.</div>
 </div>
 
 Поэтому фраза:
@@ -489,7 +491,7 @@ flowchart TB
 <div class="quiz" data-question-id="chapter5-v229-q2">
   <p><strong>Что необходимо, чтобы утверждение «активность аномальна» имело определённый смысл?</strong></p>
   <button data-choice="a">A. Любая строковая сигнатура</button>
-  <button data-choice="b">B. Только inline-размещение</button>
+  <button data-choice="b">B. Только подключение в разрыв</button>
   <button data-choice="c" data-correct="true">C. Модель, профиль или иной ожидаемый диапазон, относительно которого измеряется отклонение</button>
   <button data-choice="d">D. Обязательное блокирование события</button>
   <div class="quiz-feedback"></div>
@@ -505,7 +507,7 @@ flowchart TB
 </div>
 
 <div class="quiz" data-question-id="chapter5-v229-q4">
-  <p><strong>Почему обнаруженный след потенциально вредоносной программы нельзя автоматически считать доказательством malware-инфекции?</strong></p>
+  <p><strong>Почему обнаруженный след потенциально вредоносной программы нельзя автоматически считать доказательством заражения вредоносным ПО?</strong></p>
   <button data-choice="a">A. Потому что IDS вообще не анализирует сетевые данные</button>
   <button data-choice="b">B. Потому что вредоносное ПО всегда обнаруживается только антивирусом</button>
   <button data-choice="c" data-correct="true">C. Потому что конкретный детектор подтверждает только своё условие, а вывод о вредоносности требует дополнительного контекста и свидетельств</button>
@@ -523,7 +525,7 @@ flowchart TB
 /download/LAB4-KNOWN-BAD        → сигнатурное совпадение;
 DATA в состоянии IDLE           → нарушение модели состояния;
 ≥ 5 /catalog за 2 секунды       → фиксированный порог;
-всплеск против baseline         → аномальное отклонение.
+всплеск против базового профиля → аномальное отклонение.
 ```
 
 Перед экспериментом студент уже должен понимать:
@@ -531,7 +533,7 @@ DATA в состоянии IDLE           → нарушение модели с
 <div class="idps-grid idps-grid--2 idps-grid--compact">
   <div class="idps-card idps-card--source"><strong class="idps-card__title">Что не меняется</strong><p>Среда, сервис, исходный журнал событий и контролируемый сценарий.</p></div>
   <div class="idps-card idps-card--sensor"><strong class="idps-card__title">Что меняется</strong><p>Только основание, по которому один и тот же набор данных анализируется.</p></div>
-  <div class="idps-card idps-card--result"><strong class="idps-card__title">Артефакты</strong><p>Исходный JSONL и вывод каждого из четырёх детекторов.</p></div>
+  <div class="idps-card idps-card--result"><strong class="idps-card__title">Артефакты</strong><p>Исходный файл событий и вывод каждого из четырёх детекторов.</p></div>
   <div class="idps-card idps-card--interpretation"><strong class="idps-card__title">Главная граница</strong><p>Ни один из четырёх результатов сам по себе не доказывает компрометацию или вредоносность.</p></div>
 </div>
 
@@ -547,7 +549,7 @@ DATA в состоянии IDLE           → нарушение модели с
 
 - NIST SP 800-94, раздел 2.3 — исторический фундаментальный источник для трёх выделенных в документе методологий: signature-based detection, anomaly-based detection и stateful protocol analysis. Публикация 2007 года используется как основа принципов, а не как исчерпывающая современная классификация продуктов.
 - Документация Suricata 8.0.7 — подтверждает, что движок правил может использовать состояние потока, разобранные поля прикладного протокола и сохраняемое состояние (`flowbits`), поэтому синтаксис правила нельзя считать отдельным методом обнаружения.
-- Термин `behavioral` в литературе и продуктах употребляется неодинаково. Поэтому курс не вводит его как отдельную четвёртую универсальную методологию: для сценария без базовой модели используется точное описание **фиксированное условие над серией событий**.
+- Английское слово `behavioral` («поведенческий») в литературе и продуктах употребляется неодинаково. Поэтому курс не вводит его как отдельную четвёртую универсальную методологию: для сценария без базовой модели используется точное описание **фиксированное условие над серией событий**.
 - Учебная модель состояний `START → DATA → END` является **синтетической учебной моделью** и создана для ЛР №4. Она демонстрирует принцип анализа состояния, но не является моделью стандарта HTTP.
 
 Актуальные ссылки и статус источников собраны в разделе [«Источники курса»](../../resources/sources/).

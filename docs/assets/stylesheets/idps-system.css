@@ -2562,3 +2562,259 @@
 .idps-event-window { padding: 0.8rem 0.8rem 0.75rem; }
 .idps-event-window__track { height: 3.45rem; }
 .idps-event-window__event { width: 1.65rem; height: 1.65rem; top: 0.58rem; }
+
+/* =========================================================
+   Narrow-content remediation: matrices must not require
+   horizontal scrolling inside the teaching column.
+   Container queries are used because Material sidebars can
+   narrow the article even when the viewport itself is wide.
+   ========================================================= */
+.idps-axis-table-wrap,
+.idps-focus-map {
+  container-type: inline-size;
+}
+
+@container (max-width: 44rem) {
+  .idps-axis-table {
+    display: block;
+    min-width: 0;
+    width: 100%;
+  }
+
+  .idps-axis-table thead {
+    display: none;
+  }
+
+  .idps-axis-table tbody,
+  .idps-axis-table tr,
+  .idps-axis-table th,
+  .idps-axis-table td {
+    display: block;
+    width: 100%;
+  }
+
+  .idps-axis-table tr {
+    margin: 0;
+    border-bottom: 1px solid var(--course-border);
+  }
+
+  .idps-axis-table tr:last-child {
+    border-bottom: 0;
+  }
+
+  .idps-axis-table tbody th {
+    width: 100%;
+    border-right: 0;
+    border-bottom: 1px solid var(--course-border);
+  }
+
+  .idps-axis-table td {
+    border-right: 0;
+    border-bottom: 1px solid var(--course-border);
+  }
+
+  .idps-axis-table td:last-child {
+    border-bottom: 0;
+  }
+
+  .idps-axis-table td::before {
+    display: block;
+    margin-bottom: 0.25rem;
+    color: var(--course-muted);
+    font-size: 0.69rem;
+    font-weight: 850;
+    letter-spacing: 0.035em;
+    text-transform: uppercase;
+  }
+
+  .idps-axis-table td[data-label]::before { content: attr(data-label); }
+}
+
+@container (max-width: 54rem) {
+  .idps-episode-map-wrap {
+    overflow-x: visible;
+  }
+
+  .idps-episode-map {
+    display: block;
+    min-width: 0;
+    width: 100%;
+    border: 0;
+    overflow: visible;
+  }
+
+  .idps-episode-map__cell.idps-episode-map__cell--head {
+    display: none;
+  }
+
+  .idps-episode-map__cell {
+    display: block;
+    width: 100%;
+    border: 1px solid var(--course-border);
+    border-top: 0;
+  }
+
+  .idps-episode-map__cell--row {
+    margin-top: 0.8rem;
+    border-top: 1px solid var(--course-border);
+    border-left-width: 4px;
+    border-radius: 0.55rem 0.55rem 0 0;
+  }
+
+  .idps-episode-map__cell--row:first-of-type {
+    margin-top: 0;
+  }
+
+  .idps-episode-map__cell:nth-child(10),
+  .idps-episode-map__cell:nth-child(15),
+  .idps-episode-map__cell:nth-child(20) {
+    border-radius: 0 0 0.55rem 0.55rem;
+  }
+
+  .idps-episode-map__cell:nth-child(7)::before,
+  .idps-episode-map__cell:nth-child(12)::before,
+  .idps-episode-map__cell:nth-child(17)::before,
+  .idps-episode-map__cell:nth-child(8)::before,
+  .idps-episode-map__cell:nth-child(13)::before,
+  .idps-episode-map__cell:nth-child(18)::before,
+  .idps-episode-map__cell:nth-child(9)::before,
+  .idps-episode-map__cell:nth-child(14)::before,
+  .idps-episode-map__cell:nth-child(19)::before,
+  .idps-episode-map__cell:nth-child(10)::before,
+  .idps-episode-map__cell:nth-child(15)::before,
+  .idps-episode-map__cell:nth-child(20)::before {
+    display: block;
+    margin-bottom: 0.3rem;
+    color: var(--course-muted);
+    font-size: 0.68rem;
+    font-weight: 850;
+    letter-spacing: 0.035em;
+    text-transform: uppercase;
+  }
+
+  .idps-episode-map__cell:nth-child(7)::before,
+  .idps-episode-map__cell:nth-child(12)::before,
+  .idps-episode-map__cell:nth-child(17)::before {
+    content: "Входящий HTTP-запрос";
+  }
+
+  .idps-episode-map__cell:nth-child(8)::before,
+  .idps-episode-map__cell:nth-child(13)::before,
+  .idps-episode-map__cell:nth-child(18)::before {
+    content: "Запуск процесса";
+  }
+
+  .idps-episode-map__cell:nth-child(9)::before,
+  .idps-episode-map__cell:nth-child(14)::before,
+  .idps-episode-map__cell:nth-child(19)::before {
+    content: "Изменение файла";
+  }
+
+  .idps-episode-map__cell:nth-child(10)::before,
+  .idps-episode-map__cell:nth-child(15)::before,
+  .idps-episode-map__cell:nth-child(20)::before {
+    content: "Много исходящих соединений";
+  }
+}
+
+
+/* =========================================================
+   Chapter 10: content-column responsive remediation.
+   Material sidebars can narrow the article while the viewport
+   itself remains wide, so these layouts respond to their
+   actual teaching-column width rather than viewport width.
+   ========================================================= */
+.idps-responsive-shell,
+.idps-switcher--ops {
+  container-type: inline-size;
+}
+
+@container (max-width: 44rem) {
+  .idps-responsive-shell > .idps-grid--2,
+  .idps-responsive-shell > .idps-grid--3,
+  .idps-responsive-shell > .idps-grid--4,
+  .idps-responsive-shell > .idps-question-model,
+  .idps-responsive-shell > .idps-gates,
+  .idps-responsive-shell > .idps-evidence-grid,
+  .idps-responsive-shell > .idps-test-matrix,
+  .idps-responsive-shell > .idps-contrast,
+  .idps-responsive-shell .idps-process,
+  .idps-responsive-shell .idps-gates {
+    grid-template-columns: 1fr;
+  }
+
+  .idps-responsive-shell .idps-process__arrow,
+  .idps-responsive-shell .idps-contrast__arrow {
+    min-height: 1.4rem;
+    transform: rotate(90deg);
+  }
+
+  .idps-responsive-shell .idps-gate:not(:last-child)::after {
+    display: none;
+  }
+
+  .idps-responsive-shell .idps-question-model__boundary {
+    grid-column: auto;
+  }
+
+  .idps-switcher--ops .idps-question-model {
+    grid-template-columns: 1fr;
+  }
+
+  .idps-switcher--ops .idps-question-model__boundary {
+    grid-column: auto;
+  }
+
+  .idps-switcher--ops .idps-switcher__controls {
+    align-items: stretch;
+  }
+
+  .idps-switcher--ops .idps-switcher__button {
+    flex: 1 1 12rem;
+    min-width: 0;
+  }
+}
+
+@container (max-width: 44rem) {
+  .idps-axis-table th,
+  .idps-axis-table td {
+    box-sizing: border-box;
+  }
+}
+
+@container (max-width: 54rem) {
+  .idps-responsive-shell > .idps-gates,
+  .idps-responsive-shell .idps-gates {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .idps-responsive-shell .idps-gate:not(:last-child)::after {
+    display: none;
+  }
+}
+
+@container (max-width: 44rem) {
+  .idps-responsive-shell > .idps-gates,
+  .idps-responsive-shell .idps-gates {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* Chapter 10 semantic variants: keep the number of columns aligned
+   with the number of compared states before container adaptation. */
+.idps-question-model--four {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.idps-gates--three,
+.idps-gates--six {
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+
+.idps-gates--five {
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+}
+
+.idps-gates--eight {
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+}

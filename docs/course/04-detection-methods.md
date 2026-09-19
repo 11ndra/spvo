@@ -6,7 +6,7 @@
 
 <div class="chapter-outcomes">
 <strong>После этой главы вы должны уметь:</strong>
-<p>определять точку наблюдения по реальному пути трафика; отличать точку наблюдения от способа доставки копии трафика; различать пассивное подключение и подключение в разрыв (inline); объяснять, почему сенсор на периметре не обеспечивает автоматически видимость внутренних взаимодействий; и проверять размещение контролируемым экспериментом.</p>
+<p>определять точку наблюдения по реальному пути трафика; отличать точку наблюдения от способа доставки копии трафика; различать пассивное подключение и подключение в разрыв; объяснять, почему сенсор на периметре не обеспечивает автоматически видимость внутренних взаимодействий; и проверять размещение контролируемым экспериментом.</p>
 </div>
 
 ---
@@ -45,7 +45,7 @@ flowchart LR
   </div>
 </div>
 
-Первый вопрос относится к размещению и получению данных. Второй — к обнаружению. Смешение этих вопросов приводит к типичной ошибке: отсутствие alert принимают за доказательство отсутствия трафика.
+Первый вопрос относится к размещению и получению данных. Второй — к обнаружению. Смешение этих вопросов приводит к типичной ошибке: отсутствие оповещения принимают за доказательство отсутствия трафика.
 
 ---
 
@@ -96,44 +96,44 @@ NIDS на сервере
   <div class="idps-figure__label">СХЕМА · ТРИ СЕТЕВЫХ ПУТИ — ТРИ ТОЧКИ НАБЛЮДЕНИЯ</div>
   <div class="idps-focus-map__controls" aria-label="Выбор сетевого пути">
     <button class="idps-focus-map__button" type="button" data-idps-focus="all" aria-pressed="true">Все пути</button>
-    <button class="idps-focus-map__button" type="button" data-idps-focus="external" aria-pressed="false">Internet → Web</button>
-    <button class="idps-focus-map__button" type="button" data-idps-focus="webapp" aria-pressed="false">Web → App</button>
-    <button class="idps-focus-map__button" type="button" data-idps-focus="workapp" aria-pressed="false">Workstation → App</button>
+    <button class="idps-focus-map__button" type="button" data-idps-focus="external" aria-pressed="false">Интернет → веб-сегмент</button>
+    <button class="idps-focus-map__button" type="button" data-idps-focus="webapp" aria-pressed="false">Веб-сегмент → приложение</button>
+    <button class="idps-focus-map__button" type="button" data-idps-focus="workapp" aria-pressed="false">Рабочая станция → приложение</button>
   </div>
   <div class="idps-route-map">
     <div class="idps-route-map__row" data-idps-focus-target="external">
       <div class="idps-route-node idps-route-node--endpoint">Интернет</div><div class="idps-route-arrow">→</div>
       <div class="idps-route-node idps-route-node--observation">Точка A</div><div class="idps-route-arrow">→</div>
       <div class="idps-route-node">Межсетевой экран</div><div class="idps-route-arrow">→</div>
-      <div class="idps-route-node idps-route-node--endpoint">Web / DMZ</div>
+      <div class="idps-route-node idps-route-node--endpoint">Веб-сегмент</div>
     </div>
     <div class="idps-route-map__row" data-idps-focus-target="webapp">
-      <div class="idps-route-node idps-route-node--endpoint">Web / DMZ</div><div class="idps-route-arrow">→</div>
+      <div class="idps-route-node idps-route-node--endpoint">Веб-сегмент</div><div class="idps-route-arrow">→</div>
       <div class="idps-route-node idps-route-node--observation">Точка B</div><div class="idps-route-arrow">→</div>
       <div class="idps-route-node">Внутренняя граница</div><div class="idps-route-arrow">→</div>
-      <div class="idps-route-node idps-route-node--endpoint">App-сервер</div>
+      <div class="idps-route-node idps-route-node--endpoint">Сервер приложения</div>
     </div>
     <div class="idps-route-map__row" data-idps-focus-target="workapp">
       <div class="idps-route-node idps-route-node--endpoint">Рабочая станция</div><div class="idps-route-arrow">→</div>
       <div class="idps-route-node idps-route-node--observation">Точка C</div><div class="idps-route-arrow">→</div>
       <div class="idps-route-node">Внутренний сегмент</div><div class="idps-route-arrow">→</div>
-      <div class="idps-route-node idps-route-node--endpoint">App-сервер</div>
+      <div class="idps-route-node idps-route-node--endpoint">Сервер приложения</div>
     </div>
   </div>
-  <div class="idps-figure__caption">Пригодность точки определяется относительно интересующего потока. Точка A может быть полезна для внешнего пути и одновременно ничего не доказывать о внутреннем Web → App или Workstation → App.</div>
+  <div class="idps-figure__caption">Пригодность точки определяется относительно интересующего потока. Точка A может быть полезна для внешнего пути и одновременно ничего не доказывать о внутреннем пути «веб-сегмент → приложение» или «рабочая станция → приложение».</div>
 </div>
 
-### Сценарий 1. Внешний клиент обращается к Web-серверу
+### Сценарий 1. Внешний клиент обращается к веб-серверу
 
-Интересующий путь — `Интернет → межсетевой экран → Web`. Полезна точка, через которую проходит именно этот поток.
+Интересующий путь — `Интернет → межсетевой экран → веб-сегмент`. Полезна точка, через которую проходит именно этот поток.
 
-### Сценарий 2. Web-сервер обращается к внутреннему App-серверу
+### Сценарий 2. Веб-сервер обращается к внутреннему серверу приложения
 
-Интересующий путь уже другой — `Web → App`. Наличие сенсора на внешнем периметре само по себе не подтверждает, что внутренний поток попадёт в него.
+Интересующий путь уже другой — `веб-сегмент → сервер приложения`. Наличие сенсора на внешнем периметре само по себе не подтверждает, что внутренний поток попадёт в него.
 
 ### Сценарий 3. Рабочая станция взаимодействует с внутренним сервером
 
-Путь `Workstation → Internal Server` может вообще не пересекать внешний периметр.
+Путь `рабочая станция → внутренний сервер` может вообще не пересекать внешний периметр.
 
 <div class="principle-box">
 <strong>ПЕРИМЕТРОВЫЙ СЕНСОР ≠ ПОЛНАЯ ВИДИМОСТЬ СЕТИ</strong>
@@ -142,7 +142,7 @@ NIDS на сервере
 
 ### Одна точка может быть подходящей для одного потока и неподходящей для другого
 
-Даже на одном узле разные взаимодействия могут идти через разные интерфейсы. В нашем стенде сервер принимает внутренний HTTP через учебный интерфейс и использует другой интерфейс для маршрута по умолчанию.
+Даже на одном узле разные взаимодействия могут идти через разные интерфейсы. В нашем стенде сервер принимает внутренний HTTP через учебный интерфейс и использует другой интерфейс для маршрута по умолчанию. Второй интерфейс связан с режимом **преобразования сетевых адресов (Network Address Translation, NAT)** в VirtualBox. Английское название приведено только для происхождения распространённой аббревиатуры `NAT`. Подписи `LAB_IFACE` и `NAT_IFACE` ниже — условные имена интерфейсов учебного стенда, а не отдельные категории IDPS.
 
 <div class="idps-figure">
   <div class="idps-figure__label">СХЕМА · ОДИН СЕРВЕР — ДВА СЕТЕВЫХ ПУТИ</div>
@@ -164,7 +164,7 @@ NIDS на сервере
       <div class="idps-route-node idps-route-node--endpoint">шлюз по умолчанию</div>
     </div>
   </div>
-  <div class="idps-figure__caption">LAB_IFACE может быть правильной точкой для внутреннего HTTP-потока, но неправильной для исходящего потока через NAT. Для NAT_IFACE верно обратное.</div>
+  <div class="idps-figure__caption">LAB_IFACE может быть правильной точкой для внутреннего HTTP-потока, но неправильной для исходящего потока через интерфейс маршрута по умолчанию. Для NAT_IFACE верно обратное.</div>
 </div>
 
 Корректная формулировка всегда привязана к объекту наблюдения:
@@ -194,22 +194,22 @@ NIDS на сервере
       <div class="idps-policy-view">
         <div class="idps-route-node idps-route-node--endpoint">Внешний узел</div><div class="idps-route-arrow">→</div>
         <div class="idps-route-node idps-route-node--observation">Точка A</div><div class="idps-route-arrow">→</div>
-        <div class="idps-route-node">Firewall</div>
+        <div class="idps-route-node">Межсетевой экран</div>
       </div>
       <div class="idps-policy-list">
-        <div class="idps-policy-item idps-policy-item--allow"><span>TCP/8080</span><strong>попытка наблюдаема до решения firewall</strong></div>
-        <div class="idps-policy-item idps-policy-item--deny"><span>TCP/22</span><strong>попытка тоже наблюдаема до решения firewall</strong></div>
+        <div class="idps-policy-item idps-policy-item--allow"><span>TCP/8080</span><strong>попытка наблюдаема до решения межсетевого экрана</strong></div>
+        <div class="idps-policy-item idps-policy-item--deny"><span>TCP/22</span><strong>попытка тоже наблюдаема до решения межсетевого экрана</strong></div>
       </div>
     </section>
     <section id="ch4-fw-after" class="idps-switcher__panel" data-idps-panel="after">
       <h4 class="idps-switcher__panel-title">Точка B · после фильтрации</h4>
       <div class="idps-policy-view">
-        <div class="idps-route-node">Firewall</div><div class="idps-route-arrow">→</div>
+        <div class="idps-route-node">Межсетевой экран</div><div class="idps-route-arrow">→</div>
         <div class="idps-route-node idps-route-node--observation">Точка B</div><div class="idps-route-arrow">→</div>
-        <div class="idps-route-node idps-route-node--endpoint">Web-сервер</div>
+        <div class="idps-route-node idps-route-node--endpoint">Веб-сервер</div>
       </div>
       <div class="idps-policy-list">
-        <div class="idps-policy-item idps-policy-item--allow"><span>TCP/8080</span><strong>разрешённый поток может быть наблюдаем после firewall</strong></div>
+        <div class="idps-policy-item idps-policy-item--allow"><span>TCP/8080</span><strong>разрешённый поток может быть наблюдаем после межсетевого экрана</strong></div>
         <div class="idps-policy-item idps-policy-item--deny"><span>TCP/22</span><strong>запрещённый поток дальше по этому пути не проходит</strong></div>
       </div>
     </section>
@@ -227,7 +227,7 @@ NIDS на сервере
 
 ## 5. Точка наблюдения и способ получения трафика — не одно и то же
 
-После выбора точки нужно решить, **как предоставить данные сенсору**. Для пассивного сетевого сенсора распространены способы, при которых он получает копию трафика. NIST SP 800-94 рассматривает, среди прочего, зеркалирование порта коммутатора и сетевой ответвитель как варианты подключения пассивного сенсора.
+После выбора точки нужно решить, **как предоставить данные сенсору**. Для пассивного сетевого сенсора распространены способы, при которых он получает копию трафика. NIST SP 800-94 рассматривает, среди прочего, зеркалирование порта коммутатора и сетевой ответвитель как варианты подключения пассивного сенсора. В документации Cisco зеркалирование порта называется **Switched Port Analyzer (SPAN)**; английское название приведено только для происхождения сокращения `SPAN`, которое студент встретит в конфигурациях оборудования. Для физического ответвителя в англоязычной документации часто используется термин **network tap**. Это не обязательная для курса аббревиатура: далее используется русское «сетевой ответвитель». Оба механизма описывают способ получения копии, а не метод обнаружения.
 
 <div class="idps-grid idps-grid--2 idps-grid--diagram-pair">
   <div class="idps-figure idps-figure--flush">
@@ -243,11 +243,11 @@ NIDS на сервере
     <div class="idps-figure__caption">Копию формирует коммутатор согласно конфигурации зеркалирования.</div>
   </div>
   <div class="idps-figure idps-figure--flush">
-    <div class="idps-figure__label">СХЕМА · NETWORK TAP</div>
+    <div class="idps-figure__label">СХЕМА · СЕТЕВОЙ ОТВЕТВИТЕЛЬ</div>
     <div class="idps-copy-diagram">
       <div class="idps-copy-diagram__main">
         <div class="idps-route-node idps-route-node--endpoint">Узел A</div><div class="idps-route-arrow">→</div>
-        <div class="idps-route-node idps-route-node--observation">Network TAP</div><div class="idps-route-arrow">→</div>
+        <div class="idps-route-node idps-route-node--observation">Сетевой ответвитель</div><div class="idps-route-arrow">→</div>
         <div class="idps-route-node idps-route-node--endpoint">Узел B</div>
       </div>
       <div class="idps-copy-diagram__branch"><span>копия наблюдаемой линии</span><div class="idps-route-arrow idps-route-arrow--down">↓</div><div class="idps-route-node idps-route-node--sensor">NIDS</div></div>
@@ -258,7 +258,7 @@ NIDS на сервере
 
 <div class="idps-equation idps-equation--warning">
   <div class="idps-equation__expression"><span>точка наблюдения</span><b>≠</b><span>способ получения копии</span></div>
-  <p>SPAN и TAP отвечают на вопрос «как получить данные в выбранной точке», а не на вопрос «какое событие обнаруживать».</p>
+  <p>SPAN и сетевой ответвитель отвечают на вопрос «как получить данные в выбранной точке», а не на вопрос «какое событие обнаруживать».</p>
 </div>
 
 Эти механизмы не следует превращать в универсальную шкалу «плохой/хороший». Выбор зависит от архитектуры, требуемой полноты наблюдения, оборудования и эксплуатационных ограничений.
@@ -267,7 +267,7 @@ NIDS на сервере
 
 ## 6. Пассивное и подключение в разрыв — ещё одна отдельная характеристика
 
-В Главе 1 мы уже разделили обнаружение и предотвращение. Теперь закрепим это на уровне топологии.
+В Главе 1 мы уже разделили обнаружение и предотвращение. Теперь закрепим это на уровне топологии. В англоязычной документации сетевых средств подключение в разрыв часто обозначается словом `inline`. Термин приведён только для узнавания настроек и документации; далее используется русское «подключение в разрыв».
 
 <div class="idps-grid idps-grid--2 idps-grid--diagram-pair">
   <div class="idps-figure idps-figure--flush">
@@ -286,18 +286,18 @@ NIDS на сервере
     <div class="idps-figure__label">СХЕМА · ПОДКЛЮЧЕНИЕ В РАЗРЫВ</div>
     <div class="idps-inline-path">
       <div class="idps-route-node idps-route-node--endpoint">Клиент</div><div class="idps-route-arrow">→</div>
-      <div class="idps-route-node idps-route-node--sensor">Inline IDS/IPS</div><div class="idps-route-arrow">→</div>
+      <div class="idps-route-node idps-route-node--sensor">IDS/IPS в разрыве</div><div class="idps-route-arrow">→</div>
       <div class="idps-route-node idps-route-node--endpoint">Сервер</div>
     </div>
     <div class="idps-figure__caption">Основной поток проходит через систему, поэтому топология допускает непосредственное воздействие на этот поток — если оно действительно настроено.</div>
   </div>
 </div>
 
-Но нельзя автоматически делать вывод `пассивный = IDS`, `в разрыв = IPS`. Inline-система может работать только в режиме оповещения. Пассивный сенсор, в свою очередь, может инициировать действие через другое средство контроля.
+Но нельзя автоматически делать вывод `пассивный = IDS`, `в разрыв = IPS`. Система, подключённая в разрыв, может работать только в режиме оповещения. Пассивный сенсор, в свою очередь, может инициировать действие через другое средство контроля.
 
 <div class="idps-question-model">
   <div class="idps-question-model__cell"><span>ГДЕ?</span><strong>В какой точке существует нужный сетевой след?</strong></div>
-  <div class="idps-question-model__cell"><span>КАК ПОЛУЧАЕМ?</span><strong>Копия через SPAN/TAP, локальный интерфейс или иной механизм?</strong></div>
+  <div class="idps-question-model__cell"><span>КАК ПОЛУЧАЕМ?</span><strong>Копия через SPAN, сетевой ответвитель, локальный интерфейс или иной механизм?</strong></div>
   <div class="idps-question-model__cell"><span>КАКОВА РОЛЬ?</span><strong>Только наблюдение или система находится в пути и может воздействовать на поток?</strong></div>
   <div class="idps-question-model__boundary"><strong>Эти три характеристики связаны, но не являются синонимами.</strong></div>
 </div>
@@ -306,33 +306,33 @@ NIDS на сервере
 
 ## 7. Виртуальный интерфейс тоже влияет на наблюдение
 
-В виртуальной машине между приложением и средством захвата находится сетевой стек гостевой ОС. Он может использовать механизмы разгрузки: объединять сегменты, откладывать вычисление контрольных сумм или выполнять часть обработки не в том месте, где её ожидает средство анализа.
+В виртуальной машине между приложением и средством захвата находится сетевой стек гостевой ОС. Он может использовать механизмы разгрузки: объединять сегменты, откладывать вычисление контрольных сумм или выполнять часть обработки не в том месте, где её ожидает средство анализа. В документации ядра и сетевых драйверов для этого класса механизмов употребляется слово `offloading` («разгрузка»); оно приведено только для чтения документации, а далее используется русский термин.
 
 <div class="idps-figure">
   <div class="idps-figure__label">СХЕМА · ГДЕ МОЖЕТ ИЗМЕНИТЬСЯ ПРЕДСТАВЛЕНИЕ ПАКЕТА</div>
   <div class="idps-layer-chain">
     <div class="idps-layer-chain__item"><span>1</span><strong>Приложение</strong><small>создаёт данные</small></div>
     <div class="idps-route-arrow">→</div>
-    <div class="idps-layer-chain__item idps-layer-chain__item--emphasis"><span>2</span><strong>Сетевой стек ОС</strong><small>GRO/GSO/TSO, checksum offloading</small></div>
+    <div class="idps-layer-chain__item idps-layer-chain__item--emphasis"><span>2</span><strong>Сетевой стек ОС</strong><small>объединение или сегментация крупных блоков данных, разгрузка вычисления контрольной суммы</small></div>
     <div class="idps-route-arrow">→</div>
     <div class="idps-layer-chain__item"><span>3</span><strong>Виртуальный адаптер</strong><small>точка локального захвата</small></div>
     <div class="idps-route-arrow">→</div>
     <div class="idps-layer-chain__item"><span>4</span><strong>Виртуальная сеть</strong><small>дальнейшая передача</small></div>
   </div>
-  <div class="idps-figure__caption">Локальный capture может видеть представление, отличающееся от того, что инженер интуитивно представляет как «кадр на проводе». Это важно для воспроизводимости учебного эксперимента.</div>
+  <div class="idps-figure__caption">Локальный захват трафика может видеть представление, отличающееся от того, что инженер интуитивно представляет как «кадр на проводе». Это важно для воспроизводимости учебного эксперимента.</div>
 </div>
 
 Для учебного стенда это важно по двум причинам:
 
 <div class="idps-grid idps-grid--2 idps-grid--compact">
-  <div class="idps-card idps-card--warning"><strong class="idps-card__title">tcpdump</strong><p>может показать пакет и отметить кажущуюся некорректной checksum из-за места вычисления контрольной суммы;</p></div>
+  <div class="idps-card idps-card--warning"><strong class="idps-card__title">tcpdump</strong><p>может показать пакет и отметить кажущуюся некорректной контрольную сумму из-за места вычисления контрольной суммы;</p></div>
   <div class="idps-card idps-card--sensor"><strong class="idps-card__title">IDS</strong><p>может получить представление пакетов, отличающееся от ожидаемого «проводного» вида.</p></div>
 </div>
 
-Поэтому лабораторные не должны молча полагаться на настройки виртуального адаптера. В нашем стенде используются две меры: скрипт пытается отключить поддерживаемые механизмы offloading на наблюдаемых интерфейсах, а Suricata в учебных live-запусках стартует с `-k none`.
+Поэтому лабораторные не должны молча полагаться на настройки виртуального адаптера. В нашем стенде используются две меры: скрипт пытается отключить поддерживаемые механизмы разгрузки на наблюдаемых интерфейсах, а Suricata в учебных запусках с захватом трафика в реальном времени стартует с `-k none`.
 
 !!! note
-    Это решение относится к воспроизводимости виртуального учебного стенда. Оно не является универсальной рекомендацией для промышленного развёртывания. Настройки захвата и offloading в рабочей системе подбираются с учётом драйвера, метода захвата и требований производительности.
+    Это решение относится к воспроизводимости виртуального учебного стенда. Оно не является универсальной рекомендацией для промышленного развёртывания. Настройки захвата и механизмов разгрузки в рабочей системе подбираются с учётом драйвера, метода захвата и требований производительности.
 
 ---
 
@@ -386,20 +386,20 @@ NIDS на сервере
 <div class="idps-figure">
   <div class="idps-figure__label">СХЕМА · КАК СОБРАТЬ ОГРАНИЧЕННОЕ ДОКАЗАТЕЛЬСТВО</div>
   <div class="idps-proof-map">
-    <div class="idps-proof-map__fact idps-proof-map__fact--source"><strong>Application log</strong><span>подтверждает прикладную доставку конкретного HTTP-запроса</span></div>
+    <div class="idps-proof-map__fact idps-proof-map__fact--source"><strong>Журнал приложения</strong><span>подтверждает прикладную доставку конкретного HTTP-запроса</span></div>
     <div class="idps-proof-map__operator">+</div>
-    <div class="idps-proof-map__fact idps-proof-map__fact--observation"><strong>Capture на B</strong><span>поток наблюдается в точке B</span></div>
+    <div class="idps-proof-map__fact idps-proof-map__fact--observation"><strong>Захват в точке B</strong><span>поток наблюдается в точке B</span></div>
     <div class="idps-proof-map__operator">+</div>
-    <div class="idps-proof-map__fact idps-proof-map__fact--observation"><strong>Capture на A</strong><span>в условиях теста поток не наблюдался в точке A</span></div>
+    <div class="idps-proof-map__fact idps-proof-map__fact--observation"><strong>Захват в точке A</strong><span>в условиях теста поток не наблюдался в точке A</span></div>
     <div class="idps-proof-map__operator">⇒</div>
     <div class="idps-proof-map__conclusion"><strong>Допустимый вывод</strong><span>для данного потока и способа захвата B подходит как точка наблюдения, A — нет</span></div>
   </div>
   <div class="idps-figure__caption">Каждый артефакт подтверждает только свой факт. Совместно они поддерживают ограниченный вывод о конкретном маршруте, но не доказывают свойства интерфейсов «вообще».</div>
 </div>
 
-Журнал приложения здесь используется как **независимое подтверждение именно прикладной доставки**. Он не является универсальным доказательством существования любого сетевого события. Если интересующее действие происходит только на L3/L4, запрос повреждён до уровня HTTP или приложение не дошло до стадии журналирования, в веб-журнале может не быть записи, хотя пакеты на интерфейсе присутствовали.
+Журнал приложения здесь используется как **независимое подтверждение именно прикладной доставки**. Он не является универсальным доказательством существования любого сетевого события. Если интересующее действие происходит только на сетевом или транспортном уровне, запрос повреждён до уровня HTTP или приложение не дошло до стадии журналирования, в веб-журнале может не быть записи, хотя пакеты на интерфейсе присутствовали.
 
-Поэтому вид независимого подтверждения выбирают под проверяемое событие. Для HTTP это может быть application log; для низкоуровневого сетевого теста потребуется другой источник.
+Поэтому вид независимого подтверждения выбирают под проверяемое событие. Для HTTP это может быть журнал приложения; для низкоуровневого сетевого теста потребуется другой источник.
 
 Корректный вывод:
 
@@ -411,7 +411,7 @@ NIDS на сервере
 
 ## 10. Что мы пока намеренно не добавляем
 
-На реальную полезность точки наблюдения дополнительно влияют шифрование, асимметричная маршрутизация, NAT и другие преобразования адресов, потеря пакетов, нагрузка и особенности реконструкции потока.
+На реальную полезность точки наблюдения дополнительно влияют шифрование, асимметричная маршрутизация, уже введённое выше преобразование сетевых адресов (`NAT`), потеря пакетов, нагрузка и особенности реконструкции потока.
 
 <div class="idps-grid idps-grid--3 idps-grid--compact">
   <div class="idps-card idps-card--interpretation"><strong class="idps-card__title">Шифрование</strong><p>может ограничивать доступность содержимого, даже когда сам поток наблюдаем.</p></div>
@@ -425,14 +425,14 @@ NIDS на сервере
 
 ## 11. Сводная логика главы
 
-Вместо правила «поставить IDS рядом с firewall» используйте последовательность инженерных вопросов.
+Вместо правила «поставить IDS рядом с межсетевым экраном» используйте последовательность инженерных вопросов.
 
 <div class="idps-placement-ladder">
   <div><span>1</span><strong>Какое событие?</strong><small>Что именно нужно наблюдать?</small></div>
   <div><span>2</span><strong>Какие узлы?</strong><small>Между какими участниками существует сетевой след?</small></div>
   <div><span>3</span><strong>Какой маршрут?</strong><small>Где реально проходит этот трафик?</small></div>
   <div><span>4</span><strong>Какая точка?</strong><small>Какое место находится на этом пути?</small></div>
-  <div><span>5</span><strong>Как получить данные?</strong><small>Интерфейс, SPAN, TAP или иной механизм?</small></div>
+  <div><span>5</span><strong>Как получить данные?</strong><small>Интерфейс, SPAN, сетевой ответвитель или иной механизм?</small></div>
   <div><span>6</span><strong>Какова роль?</strong><small>Пассивное наблюдение или подключение в разрыв?</small></div>
   <div><span>7</span><strong>Как проверить?</strong><small>Контролируемый тест и независимое подтверждение.</small></div>
 </div>
@@ -447,9 +447,9 @@ NIDS на сервере
 ## 12. Проверка понимания
 
 <div class="quiz" data-question-id="chapter4-v224-q1">
-  <p><strong>Внешний NIDS установлен перед межсетевым экраном. Можно ли из этого сделать вывод, что он наблюдает взаимодействие Web → App внутри сети?</strong></p>
+  <p><strong>Внешний NIDS установлен перед межсетевым экраном. Можно ли из этого сделать вывод, что он наблюдает взаимодействие «веб-сегмент → приложение» внутри сети?</strong></p>
   <button data-choice="a">A. Да, любой NIDS видит все сегменты организации</button>
-  <button data-choice="b" data-correct="true">B. Нет, сначала нужно установить, проходит ли поток Web → App через его точку наблюдения</button>
+  <button data-choice="b" data-correct="true">B. Нет, сначала нужно установить, проходит ли поток «веб-сегмент → приложение» через его точку наблюдения</button>
   <button data-choice="c">C. Да, если у NIDS достаточно сигнатур</button>
   <button data-choice="d">D. Нет, потому что сетевой IDS не умеет анализировать внутренний трафик</button>
   <div class="quiz-feedback"></div>
@@ -514,7 +514,7 @@ NIDS на сервере
 
 ## Источники и границы главы
 
-- NIST SP 800-94 — исторический фундаментальный источник для различия пассивных и inline-сенсоров и вариантов подключения пассивных сенсоров через сетевой ответвитель (TAP) или зеркалирование порта коммутатора (SPAN).
+- NIST SP 800-94 — исторический фундаментальный источник для различия пассивных сенсоров и сенсоров, подключённых в разрыв (`inline`) и вариантов подключения пассивных сенсоров через сетевой ответвитель (*network tap*) или зеркалирование порта коммутатора (SPAN).
 - William Stallings, *Computer Security: Principles and Practice* — учебное описание пассивных NIDS и NIDS, подключённых в разрыв, и типовых вариантов размещения.
 - Wireshark User’s Guide, раздел *Checksum Offloading* — источник для пояснения, почему локальный захват на виртуальном/физическом хосте может показывать частичные или кажущиеся некорректными контрольные суммы до обработки сетевым оборудованием.
 - Визуальные модели маршрутов, «паспорт точки», доказательная цепочка и алгоритм выбора размещения являются учебной синтезированной моделью курса.

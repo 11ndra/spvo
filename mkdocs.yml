@@ -74,6 +74,7 @@ nav:
           - "08 — Как проверить и обосновать эффективность IDS/IPS": course/08-effectiveness.md
       - Эксплуатация и современные IDPS:
           - "09 — Протоколы, приложения и зашифрованный трафик глазами IDPS": course/09-protocol-visibility.md
+          - "10 — Как поддерживать возможности обнаружения в рабочем состоянии": course/10-operations-lifecycle.md
   - Лабораторные работы:
       - "00 — Подготовка лабораторной среды": labs/environment/index.md
       - "Практикум 0 — Знакомство с рабочей IDPS": labs/orientation/index.md
