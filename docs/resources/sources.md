@@ -8,6 +8,11 @@
 - Stefan Axelsson — *The Base-Rate Fallacy and the Difficulty of Intrusion Detection*.
 - NIST SP 800-94 — *Guide to Intrusion Detection and Prevention Systems*.
 
+
+## Дополнительная operational-литература
+
+- Joshua Wright, *Dynamic Incident Response: A Framework for Security Teams*, SANS Institute, 2026 — дополнительный источник примеров по detection data sources, encrypted-traffic metadata, verification/triage, scoping и response. Книга не заменяет RFC/стандарты/официальную документацию и не используется как универсальная taxonomy IDPS.
+
 ## Реальные угрозы и TTP
 - MITRE ATT&CK Enterprise — https://attack.mitre.org/
 - MITRE D3FEND — https://d3fend.mitre.org/
@@ -201,7 +206,7 @@ Linux Audit в ЛР №2 используется только для демон
 
 ## Глава 9 — протоколы, приложения и зашифрованный трафик
 
-Основные технические основания Главы 9:
+### Первичные протокольные источники
 
 - RFC 9846 — актуальная спецификация TLS 1.3, заменившая RFC 8446: https://www.rfc-editor.org/rfc/rfc9846.html
 - RFC 9849 — TLS Encrypted Client Hello (ECH), защита внутреннего `ClientHello`, включая SNI и другие чувствительные поля: https://www.rfc-editor.org/rfc/rfc9849.html
@@ -214,9 +219,13 @@ Linux Audit в ЛР №2 используется только для демон
 - RFC 9250 — DNS over QUIC: https://www.rfc-editor.org/rfc/rfc9250.html
 - RFC 4253 и его обновления — SSH Transport Layer Protocol: https://www.rfc-editor.org/rfc/rfc4253.html
 - Microsoft Open Specifications `[MS-SMB2]` — SMB Protocol Versions 2 and 3: https://learn.microsoft.com/en-us/openspecs/windows_protocols/ms-smb2/5606ad47-5ee0-437a-817e-70c366052962
+- Microsoft Learn, *SMB features in Windows and Windows Server* — SMB over QUIC для SMB 3.1.1 в актуальных Windows-сценариях: https://learn.microsoft.com/en-us/windows-server/storage/file-server/smb-feature-descriptions
+
+### Документация реализации
+
 - Suricata 8.0.7 Generic App Layer Keywords — protocol detection states и app-layer matching: https://docs.suricata.io/en/suricata-8.0.7/rules/app-layer.html
 - Suricata 8.0.7 Flow Keywords — flow context, stream/fragment representation: https://docs.suricata.io/en/suricata-8.0.7/rules/flow-keywords.html
 - Suricata 8.0.7 EVE JSON Format — HTTP/DNS/TLS/SMB/SSH и другие protocol-specific records: https://docs.suricata.io/en/suricata-8.0.7/output/eve/eve-json-format.html
 
-Глава использует DNS, HTTP, TLS, QUIC, SSH и SMB как контрастные примеры того, как меняется доступное представление данных. Она не является заменой отдельного курса по сетевым протоколам и не обучает обходу IDS/IPS.
+Глава использует DNS, HTTP, TLS, QUIC, SSH и SMB как контрастные примеры того, как меняется доступное представление данных. Она не задаёт универсальный pipeline обработки и не является заменой отдельного курса по сетевым протоколам. Suricata используется как конкретный проверяемый пример реализации, а не как источник универсальной taxonomy IDPS.
 

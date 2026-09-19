@@ -33,7 +33,7 @@ UDP/53  = DNS
 - туннелирование и проксирование могут скрывать внутренний протокол за внешним;
 - современная реализация IDPS может распознавать протокол по структуре обмена, а не только по порту.
 
-Suricata, например, имеет отдельный механизм определения прикладного протокола и различает состояния `unknown`, `failed`, первоначально распознанный и итоговый протокол. Это хороший пример общей инженерной идеи: **protocol identification — отдельный шаг анализа**.
+Suricata, например, имеет отдельный механизм определения прикладного протокола и позволяет различать `unknown`, `failed`, а также исходное (`original`) и итоговое (`final`) состояние распознавания там, где это применимо. Это хороший пример общей инженерной идеи: **protocol identification — отдельная функция анализа, а не синоним номера порта**.
 
 <div class="teaching-figure">
 <div class="figure-label">ВИЗУАЛЬНАЯ МОДЕЛЬ 1 · ПОРТ — ПРИЗНАК, НО НЕ ДОКАЗАТЕЛЬСТВО ПРОТОКОЛА</div>
@@ -46,7 +46,7 @@ Suricata, например, имеет отдельный механизм оп�
   <div class="idps-process__arrow">→</div>
   <div class="idps-process__step idps-process__step--result"><span>4</span><strong>Detection logic</strong><small>проверяет уже доступное представление</small></div>
 </div>
-<div class="figure-caption">Правило «порт 443 означает HTTPS» смешивает транспортный признак и вывод о прикладном протоколе. Зрелая модель разводит эти шаги.</div>
+<div class="figure-caption">Правило «порт 443 означает HTTPS» смешивает транспортный признак и вывод о прикладном протоколе. Схема показывает один возможный app-layer path, а не универсальный обязательный pipeline: часть условий может работать на packet/flow metadata без application parser.</div>
 </div>
 
 Отсюда первое правило главы:
@@ -60,9 +60,9 @@ Suricata, например, имеет отдельный механизм оп�
 
 ## 2. Один обмен существует сразу в нескольких представлениях
 
-Возьмём обычный HTTP-запрос. На проводе он не существует как одна готовая строка «GET /report».
+Возьмём контролируемый случай: **незашифрованный HTTP/1.1 поверх TCP**. Даже здесь прикладной запрос не обязан целиком совпадать с границей одного IP-пакета или TCP-сегмента.
 
-В зависимости от точки анализа система может иметь дело с такими уровнями:
+Для такого случая полезна следующая **иллюстративная лестница представлений**:
 
 ```text
 кадр канального уровня
@@ -77,14 +77,14 @@ TCP-сегмент
         ↓
 распознанный HTTP
         ↓
-HTTP-транзакция
+HTTP request/response structure
         ↓
 method / target / headers / body
         ↓
 условие обнаружения
 ```
 
-Каждый переход создаёт новое представление и новые предпосылки.
+Каждый переход может создать новое представление и новые предпосылки для последующей логики. Но это **не универсальный pipeline IDS/IPS**. Packet/flow-условие может применяться до application parsing; DNS/QUIC имеют другой transport/state path; host- и application-источники вообще не обязаны проходить через такую сетевую цепочку.
 
 <div class="idps-gates">
   <div class="idps-gate"><span>1 · PACKET</span><strong>Отдельный сетевой фрагмент</strong><small>Может содержать только часть прикладного сообщения.</small></div>
@@ -155,9 +155,9 @@ TCP предоставляет приложению упорядоченный �
 
 ## 4. Parser превращает поток байтов в объект, имеющий смысл для правила
 
-После восстановления потока движок всё ещё видит только байты. Чтобы появилось понятие «HTTP method», «DNS qname» или «SMB filename», нужен parser конкретного протокола.
+В рассматриваемом TCP/HTTP-примере восстановленный поток всё ещё является последовательностью байтов. Чтобы появилось понятие «HTTP method», «DNS qname» или «SMB filename», требуется интерпретация конкретного протокола. Для datagram- и других transport-моделей вход parser может быть устроен иначе — TCP reassembly не является обязательной стадией для любого протокола.
 
-Parser выполняет несколько функций:
+Parser конкретной реализации может выполнять такие функции:
 
 ```text
 определяет границы сообщений;
@@ -168,19 +168,17 @@ Parser выполняет несколько функций:
 сообщает о некорректных или неожиданных состояниях.
 ```
 
-Именно здесь возникает важное слово **transaction — транзакция протокола**.
+Для request/response-протоколов здесь удобно говорить о **transaction — транзакции протокола**. Но термин `transaction` не нужно насильно переносить на любой parser: некоторые протоколы естественнее описываются состоянием соединения, handshake или набором структурированных сообщений.
 
-Для разных протоколов транзакция означает разное:
-
-| Протокол | Пример структурированной единицы |
+| Протокол | Пример структурированного объекта после parsing |
 |---|---|
-| DNS | запрос + соответствующий ответ |
+| DNS | query/response transaction |
 | HTTP | request и связанный response |
-| TLS | handshake/состояние TLS-сессии и доступные метаданные |
-| SMB | команда/операция и связанный результат |
-| SSH | доступные до/во время установления защищённого сеанса параметры |
+| TLS | handshake/connection state и доступные metadata |
+| SMB | command/operation и связанный result, если parser это выделяет |
+| SSH | identification/negotiation и состояние защищённого соединения |
 
-Не все протоколы укладываются в одинаковую request/response-модель, но общий принцип сохраняется: **detector может работать не с packet payload, а с результатом stateful parsing**.
+Общий принцип сохраняется: **detector может работать не с raw packet payload, а со структурированным результатом parsing/state tracking**. Конкретная единица анализа определяется протоколом и реализацией.
 
 ---
 
@@ -298,6 +296,8 @@ Suricata, например, может журналировать различн
 
 Но RFC 9849 определяет **Encrypted Client Hello (ECH)**. ECH позволяет защищать внутренний `ClientHello`, включая чувствительные расширения, такие как SNI и список ALPN.
 
+При этом ECH не означает «в сети больше нет никаких TLS-метаданных»: внешний `ClientHelloOuter` и свойства внешнего соединения остаются наблюдаемыми, а конкретно доступные outer values зависят от конфигурации и сценария. Корректный вывод уже не «SNI всегда виден» и не «ECH скрывает вообще всё», а **нужно установить, какое именно представление доступно в данном соединении**.
+
 Это важный урок шире самого TLS:
 
 <div class="principle-box">
@@ -383,7 +383,7 @@ sudo systemctl restart nginx
 
 выполненная пользователем внутри уже защищённой SSH-сессии.
 
-Для такого вывода обычно нужен другой источник: audit/logging на endpoint, shell/session recording, PAM/PAM-like telemetry или иной хостовый/административный контроль.
+Для такого вывода обычно нужен другой источник: audit/logging на endpoint, запись shell/session на бастионе или в Privileged Access Management (PAM), либо иной хостовый/административный контроль.
 
 ---
 
@@ -402,7 +402,7 @@ SMB 2/3 — stateful прикладной протокол для файловы
 
 Но современные варианты SMB поддерживают криптографическую защиту. В частности, семейство SMB 3.x может использовать шифрование client/server traffic.
 
-Кроме того, SMB 3.1.1 может работать поверх QUIC, а значит привычная модель «SMB = TCP/445» тоже перестаёт быть универсальной.
+Кроме того, в современных Windows-сценариях **SMB over QUIC** использует SMB 3.1.1 поверх QUIC/TLS 1.3. Поэтому привычная модель «SMB = TCP/445» также не является универсальной.
 
 <div class="idps-grid idps-grid--2">
   <div class="idps-card idps-card--success"><span class="idps-card__eyebrow">СТРУКТУРИРОВАННЫЙ SMB</span><strong class="idps-card__title">Parser видит операцию</strong><p>Если представление доступно, правило может работать с конкретным command, share или filename, а не с произвольным участком payload.</p></div>
@@ -566,7 +566,58 @@ network anomalies;
   <div class="idps-source-hub__boundary"><strong>Граница:</strong><small>совпадение времени, адреса или request id может поддерживать связь событий; само по себе оно не отменяет ограничения каждого отдельного источника.</small></div>
 </div>
 
-Именно на этой базе позже будет строиться глава о multi-source correlation.
+<div class="idps-switcher" data-idps-switcher>
+  <div class="idps-switcher__header">
+    <strong>ИНТЕРАКТИВ · ОДИН HTTPS-ЗАПРОС — РАЗНЫЕ ИСТОЧНИКИ И ТОЧКИ ФОРМИРОВАНИЯ</strong>
+    <p>Переключайте контекст и следите не за «истиной вообще», а за тем, какое представление реально доступно выбранному источнику. Без JavaScript все четыре контекста остаются видимыми последовательно.</p>
+  </div>
+  <div class="idps-switcher__controls" aria-label="Выбор источника и точки формирования">
+    <button id="chapter9-visibility-network-tab" class="idps-switcher__button" data-idps-switch="network" aria-controls="chapter9-visibility-network" aria-selected="true">Сеть до TLS termination</button>
+    <button id="chapter9-visibility-termination-tab" class="idps-switcher__button" data-idps-switch="termination" aria-controls="chapter9-visibility-termination" aria-selected="false">Точка TLS termination</button>
+    <button id="chapter9-visibility-app-tab" class="idps-switcher__button" data-idps-switch="application" aria-controls="chapter9-visibility-app" aria-selected="false">Application telemetry</button>
+    <button id="chapter9-visibility-host-tab" class="idps-switcher__button" data-idps-switch="host" aria-controls="chapter9-visibility-host" aria-selected="false">Host telemetry</button>
+  </div>
+  <div class="idps-switcher__panels">
+    <section id="chapter9-visibility-network" class="idps-switcher__panel" data-idps-panel="network">
+      <h3 class="idps-switcher__panel-title">Сеть до TLS termination</h3>
+      <div class="idps-question-model">
+        <div class="idps-question-model__cell"><span>Потенциально доступно</span><strong>IP/transport metadata, timing/volume и поддерживаемые TLS/QUIC handshake-признаки</strong></div>
+        <div class="idps-question-model__cell"><span>Зависит от условий</span><strong>Отдельные hostname/fingerprint-поля — только если они присутствуют в наблюдаемом representation и поддерживаются parser/configuration</strong></div>
+        <div class="idps-question-model__cell"><span>Не доказано</span><strong>HTTP URI/body и факт выполнения бизнес-операции</strong></div>
+        <div class="idps-question-model__boundary"><strong>Evidence boundary:</strong> отсутствие совпадения по URI здесь не доказывает отсутствие HTTPS-запроса.</div>
+      </div>
+    </section>
+    <section id="chapter9-visibility-termination" class="idps-switcher__panel" data-idps-panel="termination">
+      <h3 class="idps-switcher__panel-title">Точка TLS termination</h3>
+      <div class="idps-question-model">
+        <div class="idps-question-model__cell"><span>Потенциально доступно</span><strong>HTTP method/target/headers после termination — если архитектура действительно передаёт plaintext соответствующему сенсору или источнику telemetry</strong></div>
+        <div class="idps-question-model__cell"><span>Нужно подтвердить</span><strong>Где именно происходит termination, какой поток получает анализатор и какие поля журналируются/парсятся</strong></div>
+        <div class="idps-question-model__cell"><span>Не доказано</span><strong>Что endpoint выполнил требуемую операцию или изменил локальное состояние</strong></div>
+        <div class="idps-question-model__boundary"><strong>Evidence boundary:</strong> сам факт наличия reverse proxy/TLS terminator не означает, что NIDS автоматически получает расшифрованный HTTP.</div>
+      </div>
+    </section>
+    <section id="chapter9-visibility-app" class="idps-switcher__panel" data-idps-panel="application">
+      <h3 class="idps-switcher__panel-title">Application telemetry</h3>
+      <div class="idps-question-model">
+        <div class="idps-question-model__cell"><span>Потенциально доступно</span><strong>Route, status, application identity, business operation id — только если приложение это реально пишет</strong></div>
+        <div class="idps-question-model__cell"><span>Точка формирования</span><strong>После того, как приложение интерпретировало запрос в собственной логике</strong></div>
+        <div class="idps-question-model__cell"><span>Не доказано</span><strong>Полный сетевой путь, все пакеты или причины отсутствия записи вне самого приложения</strong></div>
+        <div class="idps-question-model__boundary"><strong>Evidence boundary:</strong> application log может подтвердить конкретный прикладной факт, но не заменяет сетевой источник.</div>
+      </div>
+    </section>
+    <section id="chapter9-visibility-host" class="idps-switcher__panel" data-idps-panel="host">
+      <h3 class="idps-switcher__panel-title">Host telemetry</h3>
+      <div class="idps-question-model">
+        <div class="idps-question-model__cell"><span>Потенциально доступно</span><strong>Process/file/socket/audit events в пределах включённой instrumentation</strong></div>
+        <div class="idps-question-model__cell"><span>Связь с запросом</span><strong>Требует correlation по времени, идентификатору, процессу, соединению или другому независимому признаку</strong></div>
+        <div class="idps-question-model__cell"><span>Не доказано</span><strong>Точный HTTP request только из факта локального изменения без дополнительной связи</strong></div>
+        <div class="idps-question-model__boundary"><strong>Evidence boundary:</strong> host evidence может подтверждать эффект на endpoint, но причинная связь с конкретным сетевым запросом требует отдельного основания.</div>
+      </div>
+    </section>
+  </div>
+</div>
+
+Такой переход между источниками не создаёт «главную версию истины». Он показывает, почему более зрелый анализ строится на согласовании независимых evidence с явно указанными границами каждого источника.
 
 ---
 
@@ -582,15 +633,22 @@ network anomalies;
 HTTP parser распознаёт транзакцию
 ```
 
-Возможный артефакт:
+Возможные артефакты нужно различать:
 
 ```text
-http event / alert с соответствующим URI
+HTTP/app-layer event → parser зафиксировал соответствующее HTTP-представление;
+alert               → конкретное detection condition выполнилось на доступном представлении.
 ```
 
-Допустимый вывод:
+Допустимый вывод при наличии соответствующего app-layer evidence:
 
-> В данной точке наблюдения и конфигурации движок получил HTTP-представление, содержащее `/LAB9-VISIBLE`, и конкретное условие могло быть проверено на этом поле.
+> В данной точке наблюдения и конфигурации движок сформировал HTTP-представление, содержащее `/LAB9-VISIBLE`.
+
+Если дополнительно получен alert нужного правила, можно отдельно утверждать:
+
+> На этом представлении выполнилось конкретное detection condition.
+
+Сам app-layer event и alert не нужно сливать в один артефакт: они отвечают на разные вопросы.
 
 Что это не доказывает:
 
@@ -640,13 +698,14 @@ DoH/DoT/DoQ
 | Шаг | Вопрос | Пример |
 |---|---|---|
 | 1. Событие | Что должно действительно произойти? | HTTP request к тестовому route |
-| 2. Observation point | Где его след проходит? | интерфейс перед web server |
-| 3. Acquisition | Получает ли сенсор нужный трафик? | capture подтверждён |
-| 4. Protocol | Что реально распознано? | HTTP / TLS / QUIC / unknown |
-| 5. Representation | Какое поле доступно? | `http.uri`, TLS metadata, DNS qname |
-| 6. Condition | Что именно проверяется? | точное значение/паттерн/состояние |
-| 7. Result | Как фиксируется совпадение? | alert/EVE event |
-| 8. Boundary | Что результат не доказывает? | alert не равен incident; отсутствие поля не равно отсутствию события |
+| 2. Источник данных | Какой источник должен оставить след? | network sensor / application telemetry / host telemetry |
+| 3. Observation point | Где этот источник формирует или получает данные? | интерфейс перед web server / reverse proxy / endpoint |
+| 4. Acquisition | Каким механизмом данные реально поступают? | capture, agent, log/API feed |
+| 5. Protocol/state | Что фактически распознано? | HTTP / TLS / QUIC / unknown |
+| 6. Representation | Какое поле или объект доступен? | `http.uri`, TLS metadata, DNS qname, application event |
+| 7. Condition | Что именно проверяется? | точное значение/паттерн/состояние |
+| 8. Result | Как фиксируется выполнение условия? | alert, score, classification, protocol event — по семантике конкретной системы |
+| 9. Boundary | Что результат не доказывает? | alert не равен incident; отсутствие поля не равно отсутствию события |
 
 Эта таблица предотвращает типичную ошибку:
 
@@ -655,7 +714,16 @@ DoH/DoT/DoQ
 → значит сетевой сенсор обязан видеть X
 ```
 
-Между этими двумя утверждениями всегда есть цепочка observation/acquisition/representation.
+Между этими двумя утверждениями необходимо проверить цепочку source/observation/acquisition/representation.
+
+<div class="idps-gates">
+  <div class="idps-gate"><span>ВОЗМОЖНОСТЬ</span><strong>Система умеет</strong><small>Документация или спецификация подтверждает capability.</small></div>
+  <div class="idps-gate"><span>КОНФИГУРАЦИЯ</span><strong>Функция включена и применима</strong><small>Проверяется конкретная версия, parser, rule и deployment.</small></div>
+  <div class="idps-gate"><span>НАБЛЮДЕНИЕ</span><strong>Артефакт реально получен</strong><small>PCAP/event/log/alert подтверждает факт на выбранном уровне.</small></div>
+  <div class="idps-gate"><span>ВЫВОД</span><strong>Формулируем только поддерживаемое</strong><small>Граница вывода следует из evidence, а не из capability продукта.</small></div>
+</div>
+
+Так мы не перескакиваем от «продукт умеет разбирать HTTP» к «этот запрос был разобран и правило его проверило» без промежуточных доказательств.
 
 ---
 
@@ -667,9 +735,11 @@ DoH/DoT/DoQ
 |---|---|---|
 | Plain HTTP | network + TCP + HTTP fields при успешном parsing | серверная бизнес-логика, локальные действия процесса |
 | HTTPS/TLS 1.3 | network + доступные TLS/handshake metadata | HTTP URI/body без предусмотренного доступа к plaintext |
-| HTTP/3 | network + UDP/QUIC признаки и поддерживаемые parser fields | полный HTTP content без соответствующего доступа/поддержки |
+| HTTP/3 | network + UDP/QUIC metadata и поддерживаемые QUIC-level parser fields | HTTP method/target/body без доступа к соответствующему защищённому HTTP/3 representation |
 | Plain DNS | DNS query/response fields при успешном parsing | локальная логика resolver/cache вне наблюдаемого обмена |
-| DoT/DoH/DoQ | outer TLS/HTTP/QUIC representation в пределах доступной видимости | обычные DNS fields без доступа к внутреннему DNS message |
+| DoT | network + TCP/TLS metadata в пределах доступной видимости | обычные DNS fields без доступа к внутреннему DNS message |
+| DoH | network + TLS/transport metadata; HTTP representation только при доступе к plaintext/decrypted HTTP | DNS message/fields без доступа к защищённому DoH content |
+| DoQ | network + UDP/QUIC metadata и поддерживаемые QUIC-level fields | DNS message/fields без доступа к защищённому DoQ content |
 | SSH | network + доступные SSH negotiation/identification fields | shell commands и действия на endpoint после установления защиты |
 | SMB без защищённого payload | структурированные SMB operations при поддержке parser | фактический эффект операции на файловой системе требует независимого host evidence |
 | SMB encryption / SMB over QUIC | outer/transport/protocol metadata в доступном объёме | внутренние file/share operations без соответствующей видимости plaintext |
@@ -784,11 +854,20 @@ ECH и другие изменения протокола делают таку�
   <div class="quiz-feedback"></div>
 </div>
 
+<div class="quiz" data-question-id="chapter9-q7">
+  <p><strong>Правило по <code>http.uri</code> не сформировало alert. Какой вывод допустим без дополнительных доказательств?</strong></p>
+  <button data-choice="a">A. HTTP-запроса точно не было</button>
+  <button data-choice="b">B. Пользователь не обращался к приложению</button>
+  <button data-choice="c" data-correct="true">C. Условие не дало положительного результата; отдельно нужно проверить источник, observation point, acquisition, protocol/representation и применимость правила</button>
+  <button data-choice="d">D. TLS гарантированно был включён</button>
+  <div class="quiz-feedback"></div>
+</div>
+
 ---
 
 ## Источники и границы главы
 
-Основные технические основания главы:
+### Первичные протокольные и нормативные источники
 
 - RFC 9846, *The Transport Layer Security (TLS) Protocol Version 1.3* — актуальная спецификация TLS 1.3, заменившая RFC 8446: https://www.rfc-editor.org/rfc/rfc9846.html
 - RFC 9849, *TLS Encrypted Client Hello* — защита внутреннего `ClientHello`, включая SNI и другие чувствительные поля: https://www.rfc-editor.org/rfc/rfc9849.html
@@ -800,13 +879,19 @@ ECH и другие изменения протокола делают таку�
 - RFC 8484, DNS over HTTPS: https://www.rfc-editor.org/rfc/rfc8484.html
 - RFC 9250, DNS over QUIC: https://www.rfc-editor.org/rfc/rfc9250.html
 - RFC 4253 и его обновления — SSH Transport Layer Protocol: https://www.rfc-editor.org/rfc/rfc4253.html
-- Microsoft Open Specifications `[MS-SMB2]`, SMB Protocol Versions 2 and 3 — современная спецификация SMB 2/3, включая capabilities семейства SMB 3.x: https://learn.microsoft.com/en-us/openspecs/windows_protocols/ms-smb2/5606ad47-5ee0-437a-817e-70c366052962
+- Microsoft Open Specifications `[MS-SMB2]`, SMB Protocol Versions 2 and 3: https://learn.microsoft.com/en-us/openspecs/windows_protocols/ms-smb2/5606ad47-5ee0-437a-817e-70c366052962
+- Microsoft Learn, *SMB features in Windows and Windows Server* — конкретная реализация SMB over QUIC для SMB 3.1.1: https://learn.microsoft.com/en-us/windows-server/storage/file-server/smb-feature-descriptions
+
+### Документация конкретной реализации
+
 - официальная документация Suricata 8.0.7: protocol detection, app-layer rules, flow/reassembly, EVE protocol records и protocol-specific fields: https://docs.suricata.io/en/suricata-8.0.7/
 
-Suricata используется в этой главе только как конкретный пример реализации parser/detection pipeline. Общая модель `packet → flow/state → reassembly → protocol → transaction → field → detection result` не объявляется уникальной архитектурой Suricata и применяется как учебный способ разделять уровни представления.
+Suricata используется только как проверяемый пример реализации. Глава **не задаёт универсальный обязательный pipeline** вида `packet → flow → reassembly → parser → detection`: такой путь показан лишь там, где он соответствует конкретному сетевому представлению, например plaintext HTTP/1.x over TCP. Packet/flow detection, datagram/QUIC analysis и host/application sources имеют другие пути обработки.
+
+Дополнительная operational-литература, включая Joshua Wright, *Dynamic Incident Response: A Framework for Security Teams* (SANS Institute, 2026), может поддерживать примеры работы с несколькими источниками и encrypted-traffic metadata, но не заменяет RFC/официальную документацию и не задаёт универсальную taxonomy IDPS.
 
 Глава не обучает обходу IDS/IPS. Неоднозначность parsing, normalization и sensor/endpoint semantic gap рассматриваются как задачи корректности и robustness: цель — понять границы наблюдения и построить проверяемое условие обнаружения.
 
 ---
 
-Дальше мы перейдём от отдельного протокола и отдельного правила к эксплуатации IDPS как длительно живущей системы: версиям detection content, тестированию изменений, staged deployment, rollback, health, capacity, времени, хранению и hardening. Этому будет посвящена **Глава 10 «Эксплуатация и жизненный цикл IDPS»**.
+Из этой главы следует следующий инженерный вопрос: **как сохранить корректность detection capability во времени**, когда меняются ruleset, parser, версия движка, конфигурация, нагрузка и инфраструктура? Это естественный переход от разовой видимости к эксплуатации и жизненному циклу IDPS — без предположения, что capability, однажды подтверждённая в тесте, остаётся неизменной автоматически.
