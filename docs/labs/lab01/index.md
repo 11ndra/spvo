@@ -30,7 +30,7 @@ SERVER ENVIRONMENT READY
 !!! important
     ЛР №1 не предназначена для исправления базовой конфигурации VirtualBox или установки Suricata. Если среда не получила статус `READY`, вернитесь к странице подготовки и устраните причину.
 
-[Скачать пакет ЛР №1 v0.5](../../assets/downloads/idps-lab01-bundle-v0.5.zip){ .md-button }
+[Скачать пакет ЛР №1 v0.6](../../assets/downloads/idps-lab01-bundle-v0.6.zip){ .md-button }
 
 ---
 
@@ -40,8 +40,8 @@ SERVER ENVIRONMENT READY
 
 ```bash
 cd ~
-unzip idps-lab01-bundle-v0.5.zip
-cd idps-lab01-bundle-v0.5
+unzip idps-lab01-bundle-v0.6.zip
+cd idps-lab01-bundle-v0.6
 ```
 
 Запустите подготовку веб-сервиса:
@@ -76,8 +76,8 @@ SERVER PRE-FLIGHT PASSED.
 
 ```bash
 cd ~
-unzip idps-lab01-bundle-v0.5.zip
-cd idps-lab01-bundle-v0.5
+unzip idps-lab01-bundle-v0.6.zip
+cd idps-lab01-bundle-v0.6
 bash client/check-client.sh
 ```
 
@@ -170,7 +170,7 @@ rm -f "$HOME/lab01-output"/*
 sudo suricata \
   -k none \
   -c /etc/suricata/suricata.yaml \
-  -S "$HOME/idps-lab01-bundle-v0.5/server/lab01.rules" \
+  -S "$HOME/idps-lab01-bundle-v0.6/server/lab01.rules" \
   -i "$LAB_IFACE" \
   -l "$HOME/lab01-output"
 ```
@@ -197,16 +197,31 @@ curl -sS http://10.13.37.20:8080/normal
 
 Ответ учебного приложения должен содержать `path=/normal`. Это независимо подтверждает, что приложение обработало запрос; отсутствие оповещения ниже нельзя трактовать как отсутствие самого запроса.
 
-На `idps-server`, Терминал 2:
+На `idps-server`, Терминал 2 сначала убедитесь, что Suricata зафиксировала сам HTTP-запрос:
+
+```bash
+jq -c '
+  select(.event_type=="http" and .http.url=="/normal")
+  | {timestamp,src_ip,dest_ip,url:.http.url,status:.http.status}
+' "$HOME/lab01-output/eve.json" | tail -n 1
+```
+
+Затем проверьте отсутствие оповещения SID `1000001`:
 
 ```bash
 jq 'select(.event_type=="alert" and .alert.signature_id==1000001)' \
   "$HOME/lab01-output/eve.json"
 ```
 
-Ожидаемый результат — отсутствие вывода.
+Ожидаемый результат второй команды — отсутствие вывода. В совокупности эти два наблюдения показывают, что запрос `/normal` был получен и разобран Suricata, но SID `1000001` на нём не сработал.
 
-Это означает только, что SID `1000001` не сработал на данном запросе.
+!!! important
+    Отсутствие оповещения само по себе не доказывает отсутствие трафика. Именно поэтому отрицательный тест сохраняет независимое подтверждение HTTP-события.
+
+<div class="lab-evidence">
+<strong>Контрольная точка 3</strong>
+<p>Сохраните HTTP-событие <code>/normal</code> из EVE и результат проверки SID <code>1000001</code>. Объясните, почему пустой результат поиска оповещения нельзя использовать как доказательство отсутствия запроса.</p>
+</div>
 
 ---
 
@@ -231,6 +246,7 @@ jq '
       src_port,
       dest_ip,
       dest_port,
+      action: .alert.action,
       signature: .alert.signature,
       sid: .alert.signature_id
     }
@@ -244,11 +260,14 @@ src_ip    = 10.13.37.10
 dest_ip   = 10.13.37.20
 dest_port = 8080
 sid       = 1000001
+action    = allowed
 ```
 
+Значение `action = allowed` в этом запуске согласуется с режимом IDS: сформировано оповещение, но данный эксперимент не демонстрирует блокирование запроса.
+
 <div class="lab-evidence">
-<strong>Контрольная точка 3</strong>
-<p>Сохраните JSON-фрагмент и укажите, какие поля связывают оповещение с вашим запросом.</p>
+<strong>Контрольная точка 4</strong>
+<p>Сохраните JSON-фрагмент и укажите, какие поля связывают оповещение с вашим запросом. Отдельно отметьте, что наличие оповещения не означает автоматического предотвращения.</p>
 </div>
 
 ---
@@ -267,7 +286,7 @@ sid       = 1000001
 
 ## 10. Что сдаётся
 
-Используйте шаблон `report/lab01-report.md` из пакета. Приложите минимальные подтверждения эксперимента: сетевой фрагмент `tcpdump`, запись SID `1000001` из `eve.json` и краткую интерпретацию того, что этот результат подтверждает и чего не подтверждает.
+Используйте шаблон `report/lab01-report.md` из пакета. Приложите минимальную цепочку доказательств: сетевой фрагмент `tcpdump`, HTTP-событие `/normal` из EVE для отрицательного контроля, запись SID `1000001` из EVE для положительного контроля и краткую интерпретацию того, что каждый артефакт подтверждает и чего не подтверждает.
 
 ## Если что-то не работает
 

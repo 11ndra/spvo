@@ -1,45 +1,9 @@
-# Системы обнаружения и предотвращения вторжений (IDPS)
+IDPS v2.34-draft2 — Lab 1 runtime QA fixes
 
-Публичный репозиторий университетского курса по дисциплине «Системы обнаружения и предотвращения вторжений».
+Contains:
+- updated docs/labs/lab01/index.md
+- idps-lab01-bundle-v0.6.zip
 
-Учебный портал: https://11ndra.github.io/spvo/
-
-## Что находится в репозитории
-
-- `docs/` — материалы курса и лабораторных работ, публикуемые через GitHub Pages;
-- `docs/assets/downloads/` — актуальные учебные пакеты для лабораторных работ;
-- `docs/assets/stylesheets/` и `docs/assets/javascripts/` — визуальный и интерактивный слой курса;
-- `mkdocs.yml` — навигация и конфигурация MkDocs;
-- `tools/` — автоматические проверки публичной сборки;
-- `.github/workflows/` — сборка и публикация GitHub Pages.
-
-В публичном репозитории намеренно отсутствуют преподавательские подсказки, внутренние QA-материалы, handoff-файлы, архив предыдущих редакций и рабочие материалы разработки.
-
-## Локальная проверка
-
-```bash
-python -m venv .venv
-source .venv/bin/activate
-pip install -r requirements.txt
-
-python tools/check_public_boundary.py
-python tools/check_source_consistency.py
-mkdocs build --strict
-python tools/check_site_links.py site
-```
-
-Для Windows PowerShell активация окружения:
-
-```powershell
-.\.venv\Scripts\Activate.ps1
-```
-
-Для локального просмотра:
-
-```bash
-mkdocs serve
-```
-
-## Текущий учебный маршрут
-
-На портале доступны главы 1–10 актуальной редакции, подготовка лабораторной среды, Практикум 0 и ЛР №1–5. Главы 1–8 образуют базовое инженерное ядро, а Главы 9–10 развивают его в сторону современных протоколов, наблюдаемости и эксплуатации IDPS.
+Runtime basis: Lab 1 v0.5 operational path was verified end-to-end on the live two-VM stand.
+v0.6 changes only README/report evidence requirements; operational scripts/rule/web service are unchanged from v0.5.
+Static QA: ZIP integrity and shell syntax checks passed.
