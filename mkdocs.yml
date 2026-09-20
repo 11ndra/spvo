@@ -75,6 +75,7 @@ nav:
       - Эксплуатация и современные IDPS:
           - "09 — Протоколы, приложения и зашифрованный трафик глазами IDPS": course/09-protocol-visibility.md
           - "10 — Как поддерживать возможности обнаружения в рабочем состоянии": course/10-operations-lifecycle.md
+          - "11 — Как сопоставлять несколько источников и контекст угроз": course/11-multi-source-correlation.md
   - Лабораторные работы:
       - "00 — Подготовка лабораторной среды": labs/environment/index.md
       - "Практикум 0 — Знакомство с рабочей IDPS": labs/orientation/index.md

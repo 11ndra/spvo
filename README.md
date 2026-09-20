@@ -1,9 +1,39 @@
-IDPS v2.34-draft2 — Lab 1 runtime QA fixes
+# Системы обнаружения и предотвращения вторжений (IDPS)
 
-Contains:
-- updated docs/labs/lab01/index.md
-- idps-lab01-bundle-v0.6.zip
+Репозиторий университетского курса по дисциплине «Системы обнаружения и предотвращения вторжений».
 
-Runtime basis: Lab 1 v0.5 operational path was verified end-to-end on the live two-VM stand.
-v0.6 changes only README/report evidence requirements; operational scripts/rule/web service are unchanged from v0.5.
-Static QA: ZIP integrity and shell syntax checks passed.
+Учебный портал: https://11ndra.github.io/spvo/
+
+## Структура репозитория
+
+- `docs/` — страницы курса и лабораторных работ;
+- `docs/assets/downloads/` — учебные пакеты для лабораторных работ;
+- `docs/assets/stylesheets/` и `docs/assets/javascripts/` — стили и интерактивные элементы;
+- `mkdocs.yml` — конфигурация и навигация MkDocs;
+- `tools/` — проверки исходных материалов и сборки;
+- `.github/workflows/` — автоматическая сборка и публикация GitHub Pages.
+
+## Локальная проверка
+
+```bash
+python -m venv .venv
+source .venv/bin/activate
+pip install -r requirements.txt
+
+python tools/check_public_boundary.py
+python tools/check_source_consistency.py
+mkdocs build --strict
+python tools/check_site_links.py site
+```
+
+Для Windows PowerShell:
+
+```powershell
+.\.venv\Scripts\Activate.ps1
+```
+
+Для локального просмотра:
+
+```bash
+mkdocs serve
+```

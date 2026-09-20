@@ -2719,7 +2719,7 @@
 
 
 /* =========================================================
-   Chapter 10: content-column responsive remediation.
+   Content-column responsive remediation.
    Material sidebars can narrow the article while the viewport
    itself remains wide, so these layouts respond to their
    actual teaching-column width rather than viewport width.
@@ -2779,6 +2779,46 @@
   .idps-axis-table th,
   .idps-axis-table td {
     box-sizing: border-box;
+  }
+}
+
+/* Claim matrices can also live in a Material content column that is
+   narrower than the browser viewport. In a responsive shell they
+   therefore switch to evidence cards by container width as well. */
+@container (max-width: 44rem) {
+  .idps-responsive-shell > .idps-claim-matrix {
+    border: 0;
+    overflow: visible;
+    background: transparent;
+    box-shadow: none;
+  }
+
+  .idps-responsive-shell > .idps-claim-matrix .idps-claim-matrix__head {
+    display: none;
+  }
+
+  .idps-responsive-shell > .idps-claim-matrix .idps-claim-matrix__row {
+    grid-template-columns: 1fr;
+    gap: 0;
+    margin-bottom: 0.7rem;
+    border: 1px solid var(--course-border);
+    border-radius: 0.66rem;
+    overflow: hidden;
+    background: var(--course-surface);
+    box-shadow: var(--course-shadow);
+  }
+
+  .idps-responsive-shell > .idps-claim-matrix .idps-claim-matrix__row > div {
+    border-top: 1px solid var(--course-border);
+  }
+
+  .idps-responsive-shell > .idps-claim-matrix .idps-claim-matrix__row > div:first-child {
+    border-top: 0;
+    border-left: 4px solid var(--idps-source);
+  }
+
+  .idps-responsive-shell > .idps-claim-matrix .idps-claim-matrix__mobile-label {
+    display: block;
   }
 }
 
