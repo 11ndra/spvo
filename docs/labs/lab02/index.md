@@ -238,14 +238,14 @@ sudo auditctl -l -k idps_lab_host
 ## Если результат отличается от ожидаемого
 
 ```mermaid
-flowchart LR
-    A["HTTP :8080 и Live Console :9090"] --> B["Suricata: Engine started"]
+flowchart TB
+    A["HTTP :8080<br/>Live Console :9090"] --> B["Suricata:<br/>Engine started"]
     B --> C["eve.json существует"]
-    C --> D["Linux Audit enabled=1"]
-    D --> E["правило idps_lab_host установлено"]
+    C --> D["Linux Audit<br/>enabled=1"]
+    D --> E["правило idps_lab_host<br/>установлено"]
     E --> F["создан один эпизод"]
-    F --> G["проверка EVE через jq"]
-    G --> H["проверка Audit через ausearch"]
+    F --> G["проверка EVE<br/>через jq"]
+    G --> H["проверка Audit<br/>через ausearch"]
 ```
 
 Если один из двух артефактов отсутствует, сначала диагностируйте именно соответствующий источник. Отсутствие поля у одного источника не доказывает отсутствие факта в реальности.

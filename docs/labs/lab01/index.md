@@ -296,17 +296,17 @@ HTTP event есть, SID 1000001 нет
 
 ## Если результат отличается от ожидаемого
 
-Диагностируйте цепочку слева направо:
+Диагностируйте цепочку сверху вниз:
 
 ```mermaid
-flowchart LR
+flowchart TB
     A["Адреса .10 и .20"] --> B["HTTP :8080"]
     B --> C["Live Console :9090"]
-    C --> D["enp0s8 / фактический LAB interface"]
+    C --> D["enp0s8<br/>фактический LAB interface"]
     D --> E["tcpdump видит запрос"]
     E --> F["suricata -T проходит"]
     F --> G["Engine started"]
     G --> H["eve.json создаётся"]
     H --> I["HTTP event"]
-    I --> J["только теперь анализ SID"]
+    I --> J["только теперь<br/>анализ SID"]
 ```
