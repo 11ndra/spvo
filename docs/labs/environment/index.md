@@ -112,6 +112,7 @@ Get-NetIPAddress -AddressFamily IPv4 |
 ```text
 Enable Network Adapter: да
 Attached to: NAT
+Adapter Type: Paravirtualized Network (virtio-net)
 Cable Connected: да
 ```
 
@@ -123,6 +124,7 @@ Cable Connected: да
 Enable Network Adapter: да
 Attached to: Host-Only Adapter / Host-Only Network
 Adapter/Network: тот же Host-Only-интерфейс с сетью 10.13.37.0/24
+Adapter Type: Paravirtualized Network (virtio-net)
 Cable Connected: да
 ```
 
@@ -130,7 +132,7 @@ Cable Connected: да
 
 <div class="lab-evidence">
 <strong>Контрольная точка</strong>
-<p>У каждой VM два адаптера: NAT и Host-Only. На основном ПК Host-Only имеет <code>10.13.37.1/24</code>, DHCP для учебной сети выключен.</p>
+<p>У каждой VM два адаптера: NAT и Host-Only; оба используют <code>Paravirtualized Network (virtio-net)</code>. На основном ПК Host-Only имеет <code>10.13.37.1/24</code>, DHCP для учебной сети выключен.</p>
 </div>
 
 ---
