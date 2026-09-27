@@ -1,0 +1,21 @@
+# Python / build artifacts
+__pycache__/
+*.py[cod]
+.venv/
+.pytest_cache/
+site/
+
+# OS/editor files
+.DS_Store
+Thumbs.db
+
+# Maintainer-only material must never be committed to the public repository
+PROJECT_HANDOFF*.md
+QA_RELEASE_GATE*.md
+TEACHER_*.md
+internal/
+legacy/
+archive/
+design/
+env-setup/
+labbox/
