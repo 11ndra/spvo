@@ -2871,11 +2871,7 @@
 }
 
 
-/* =========================================================
-   rc8.7 — content-column visual remediation for Chapter 9+
-   Fixes: cramped sequential models, wide SVG/Mermaid diagrams,
-   and semantic color loss in generic process/gate components.
-   ========================================================= */
+/* Responsive layout for wide diagrams and process components. */
 
 .teaching-figure,
 .idps-figure {
