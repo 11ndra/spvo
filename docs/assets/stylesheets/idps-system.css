@@ -442,6 +442,11 @@
 .idps-process__step--source { border-top-color: var(--idps-source); }
 .idps-process__step--sensor { border-top-color: var(--idps-sensor); }
 .idps-process__step--result { border-top-color: var(--idps-result); }
+.idps-process__step--observation { border-top-color: var(--idps-observation); }
+.idps-process__step--analysis { border-top-color: var(--idps-sensor); }
+.idps-process__step--interpretation { border-top-color: var(--idps-interpretation); }
+.idps-process__step--verification { border-top-color: var(--idps-source); }
+.idps-process__step--action { border-top-color: var(--idps-result); }
 
 .idps-process__step > span {
   display: grid;
@@ -1151,6 +1156,12 @@
   border-radius: 0.65rem;
   background: var(--course-surface);
 }
+
+.idps-gate--observation { border-top-color: var(--idps-observation); }
+.idps-gate--source { border-top-color: var(--idps-source); }
+.idps-gate--analysis { border-top-color: var(--idps-sensor); }
+.idps-gate--result { border-top-color: var(--idps-result); }
+.idps-gate--interpretation { border-top-color: var(--idps-interpretation); }
 
 .idps-gate:not(:last-child)::after {
   content: "→";
@@ -2857,4 +2868,83 @@
 
 .idps-gates--eight {
   grid-template-columns: repeat(4, minmax(0, 1fr));
+}
+
+
+/* =========================================================
+   rc8.7 — content-column visual remediation for Chapter 9+
+   Fixes: cramped sequential models, wide SVG/Mermaid diagrams,
+   and semantic color loss in generic process/gate components.
+   ========================================================= */
+
+.teaching-figure,
+.idps-figure {
+  container-type: inline-size;
+  min-width: 0;
+  max-width: 100%;
+}
+
+.teaching-figure .mermaid,
+.idps-figure .mermaid,
+.mermaid {
+  max-width: 100%;
+  overflow-x: auto;
+  overflow-y: hidden;
+}
+
+.teaching-figure .mermaid svg,
+.idps-figure .mermaid svg,
+.mermaid svg {
+  display: block;
+  width: 100% !important;
+  max-width: 100% !important;
+  height: auto !important;
+  margin-inline: auto;
+}
+
+.idps-process__step,
+.idps-gate,
+.idps-fanout__origin,
+.idps-fanout__target,
+.idps-source-hub__source,
+.idps-source-hub__core,
+.idps-source-hub__boundary {
+  overflow-wrap: anywhere;
+}
+
+@container (max-width: 52rem) {
+  .teaching-figure .idps-process,
+  .idps-figure .idps-process {
+    grid-template-columns: 1fr;
+  }
+
+  .teaching-figure .idps-process__arrow,
+  .idps-figure .idps-process__arrow {
+    min-height: 1.25rem;
+    transform: rotate(90deg);
+  }
+
+  .teaching-figure .idps-gates,
+  .idps-figure .idps-gates {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .teaching-figure .idps-gate:not(:last-child)::after,
+  .idps-figure .idps-gate:not(:last-child)::after {
+    display: none;
+  }
+
+  .teaching-figure .idps-source-hub__sources,
+  .idps-figure .idps-source-hub__sources,
+  .teaching-figure .idps-fanout__targets,
+  .idps-figure .idps-fanout__targets {
+    grid-template-columns: 1fr;
+  }
+}
+
+@container (max-width: 34rem) {
+  .teaching-figure .idps-gates,
+  .idps-figure .idps-gates {
+    grid-template-columns: 1fr;
+  }
 }
