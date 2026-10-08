@@ -10,11 +10,11 @@
       <select id="quiz-range">
         <option value="all">Все темы</option>
         <option value="1-15">1–15 · основы IDS/IPS</option>
-        <option value="16-30">16–30 · anomaly, DIDS, журналы</option>
-        <option value="31-45">31–45 · heuristics, DPI, TI, Zero-Day</option>
-        <option value="46-60">46–60 · IPS, SIEM, стандарты, политики</option>
-        <option value="61-75">61–75 · EDR, атаки, корреляция, архитектура</option>
-        <option value="76-90">76–90 · эффективность, ограничения, развитие</option>
+        <option value="16-30">16–30 · аномалии, DIDS и журналы</option>
+        <option value="31-45">31–45 · эвристика, DPI, threat intelligence, Zero-Day</option>
+        <option value="46-60">46–60 · IPS, SIEM, стандарты и политики</option>
+        <option value="61-75">61–75 · EDR, атаки, корреляция и архитектура</option>
+        <option value="76-90">76–90 · эффективность, ограничения и развитие</option>
       </select>
     </label>
     <label>Количество
