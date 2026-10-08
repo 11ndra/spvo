@@ -2944,3 +2944,147 @@
     grid-template-columns: 1fr;
   }
 }
+
+/* =========================================================
+   rc8.10 — Mermaid readability and semantic coloring.
+   Mermaid remains for compact conceptual diagrams; long
+   diagnostic trees are rendered with responsive HTML cards.
+   ========================================================= */
+
+/* Keep labels readable in both Material palettes. */
+.mermaid .nodeLabel,
+.mermaid .nodeLabel p,
+.mermaid .label text,
+.mermaid text {
+  color: var(--course-text) !important;
+  fill: var(--course-text) !important;
+  font-size: 14px !important;
+  line-height: 1.28 !important;
+}
+
+.mermaid .edgeLabel,
+.mermaid .edgeLabel p,
+.mermaid .labelBkg {
+  color: var(--course-text) !important;
+  fill: var(--course-surface) !important;
+  background: var(--course-surface) !important;
+}
+
+.mermaid .edgeLabel {
+  font-size: 12px !important;
+}
+
+.mermaid .flowchart-link {
+  stroke: var(--course-muted) !important;
+  stroke-width: 1.7px !important;
+}
+
+.mermaid marker path,
+.mermaid .marker {
+  fill: var(--course-muted) !important;
+  stroke: var(--course-muted) !important;
+}
+
+/* Neutral fallback for Mermaid nodes that do not yet carry a semantic class. */
+.mermaid .node rect,
+.mermaid .node polygon,
+.mermaid .node circle,
+.mermaid .node ellipse,
+.mermaid .node path {
+  fill: var(--course-surface-accent) !important;
+  stroke: color-mix(in srgb, var(--course-muted) 55%, var(--course-border)) !important;
+  stroke-width: 1.5px !important;
+}
+
+/* Semantic node classes used directly from Mermaid source. */
+.mermaid .node.mm-endpoint rect,
+.mermaid .node.mm-endpoint polygon,
+.mermaid .node.mm-endpoint circle,
+.mermaid .node.mm-endpoint ellipse,
+.mermaid .node.mm-endpoint path {
+  fill: color-mix(in srgb, var(--idps-endpoint) 13%, var(--course-surface)) !important;
+  stroke: var(--idps-endpoint) !important;
+}
+
+.mermaid .node.mm-observation rect,
+.mermaid .node.mm-observation polygon,
+.mermaid .node.mm-observation circle,
+.mermaid .node.mm-observation ellipse,
+.mermaid .node.mm-observation path {
+  fill: color-mix(in srgb, var(--idps-observation) 13%, var(--course-surface)) !important;
+  stroke: var(--idps-observation) !important;
+}
+
+.mermaid .node.mm-sensor rect,
+.mermaid .node.mm-sensor polygon,
+.mermaid .node.mm-sensor circle,
+.mermaid .node.mm-sensor ellipse,
+.mermaid .node.mm-sensor path,
+.mermaid .node.mm-analysis rect,
+.mermaid .node.mm-analysis polygon,
+.mermaid .node.mm-analysis circle,
+.mermaid .node.mm-analysis ellipse,
+.mermaid .node.mm-analysis path {
+  fill: color-mix(in srgb, var(--idps-sensor) 13%, var(--course-surface)) !important;
+  stroke: var(--idps-sensor) !important;
+}
+
+.mermaid .node.mm-source rect,
+.mermaid .node.mm-source polygon,
+.mermaid .node.mm-source circle,
+.mermaid .node.mm-source ellipse,
+.mermaid .node.mm-source path {
+  fill: color-mix(in srgb, var(--idps-source) 13%, var(--course-surface)) !important;
+  stroke: var(--idps-source) !important;
+}
+
+.mermaid .node.mm-result rect,
+.mermaid .node.mm-result polygon,
+.mermaid .node.mm-result circle,
+.mermaid .node.mm-result ellipse,
+.mermaid .node.mm-result path {
+  fill: color-mix(in srgb, var(--idps-result) 12%, var(--course-surface)) !important;
+  stroke: var(--idps-result) !important;
+}
+
+.mermaid .node.mm-control rect,
+.mermaid .node.mm-control polygon,
+.mermaid .node.mm-control circle,
+.mermaid .node.mm-control ellipse,
+.mermaid .node.mm-control path {
+  fill: color-mix(in srgb, var(--idps-endpoint) 9%, var(--course-surface)) !important;
+  stroke: color-mix(in srgb, var(--idps-endpoint) 75%, var(--idps-sensor)) !important;
+}
+
+.mermaid .node.mm-interpretation rect,
+.mermaid .node.mm-interpretation polygon,
+.mermaid .node.mm-interpretation circle,
+.mermaid .node.mm-interpretation ellipse,
+.mermaid .node.mm-interpretation path {
+  fill: color-mix(in srgb, var(--idps-interpretation) 10%, var(--course-surface)) !important;
+  stroke: var(--idps-interpretation) !important;
+}
+
+/* Mermaid should never create a second white canvas inside a dark page. */
+.mermaid,
+.mermaid svg {
+  background: transparent !important;
+}
+
+/* Give diagrams enough breathing room without forcing horizontal overflow. */
+.idps-figure .mermaid {
+  padding: clamp(0.55rem, 2vw, 1rem);
+}
+
+@media screen and (max-width: 760px) {
+  .mermaid .nodeLabel,
+  .mermaid .nodeLabel p,
+  .mermaid .label text,
+  .mermaid text {
+    font-size: 13px !important;
+  }
+
+  .mermaid .edgeLabel {
+    font-size: 11px !important;
+  }
+}

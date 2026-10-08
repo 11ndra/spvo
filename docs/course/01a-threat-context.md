@@ -124,13 +124,18 @@ IDPS не получает абстрактный объект «атака» в
 <div class="idps-figure__label">СХЕМА · ОТ ДЕЙСТВИЯ К ДАННЫМ ДЕТЕКТОРА</div>
 
 ```mermaid
-flowchart LR
+flowchart TB
     A["Действие"] --> T["След в системе"]
     T --> O["Точка наблюдения"]
     O --> D["Полученные данные"]
     D --> R["Представление"]
     R --> L["Логика обнаружения"]
     L --> X["Результат"]
+    class A,T mm-source
+    class O mm-observation
+    class D mm-source
+    class R,L mm-analysis
+    class X mm-result
 ```
 
 <div class="idps-figure__caption">Курс будет постоянно возвращаться к этой цепочке. Между реальным действием и результатом IDPS есть несколько этапов, на каждом из которых возможны ограничения и потери наблюдаемости.</div>

@@ -99,6 +99,10 @@ flowchart TD
     J --> H
     I -- Да --> K["Зафиксировать новую подтверждённую версию"]
     K --> A
+    class A,K mm-source
+    class B,C,D,G,H mm-analysis
+    class E,I mm-observation
+    class F,J mm-result
 ```
 
 Здесь принципиальны две разные проверки:
