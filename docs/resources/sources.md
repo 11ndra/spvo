@@ -362,6 +362,7 @@ Linux Audit в ЛР №2 используется только для демон
 - NIST SP 800-150, *Guide to Cyber Threat Information Sharing* — общая модель cyber threat information и обмена: https://csrc.nist.gov/pubs/sp/800/150/final
 - MISP Project Documentation — официальная документация открытой платформы обмена и управления threat intelligence: https://misp-project.org/documentation/
 - OpenCTI Documentation — официальная документация платформы управления knowledge/observables/threat intelligence: https://docs.opencti.io/latest/
-- PCI DSS v4.x, Requirement 11.5 — пример требований к intrusion-detection/intrusion-prevention techniques, мониторингу критических точек, alerting и актуальности engines/baselines/signatures: https://www.pcisecuritystandards.org/
+- PCI DSS v4.0.1, Requirement 11.5.1 — прямой пример требований к intrusion-detection/intrusion-prevention techniques, мониторингу периметра и критических точек CDE, alerting и актуальности engines/baselines/signatures: https://www.pcisecuritystandards.org/document_library/
+- NIST SP 800-53 Rev. 5, control SI-4 System Monitoring — системный мониторинг и control enhancements, включая intrusion detection, automated analysis, alerts, encrypted communications visibility, traffic anomalies и correlation: https://csrc.nist.gov/pubs/sp/800/53/r5/upd1/final
 
 Упоминание конкретных продуктов и платформ в Главе 8A приведено как иллюстрация роли и архитектуры. Оно не означает рейтинг, рекомендацию производителя или функциональную эквивалентность продуктов.
