@@ -503,58 +503,58 @@ Suricata используется здесь как конкретная реа�
 
 ## Проверка понимания
 
-<div class="quiz" data-question-id="chapter10-q1">
+<div class="quiz" data-question-id="chapter10-q1" data-explanation="Файловое состояние и активный набор правил — разные факты. Нужны отдельная проверка активации и контролируемый тест результата.">
   <p><strong>Файл набора правил успешно обновлён на диске. Что это доказывает?</strong></p>
-  <button data-choice="a" data-correct="true">A. Новая версия файлов получена; активность новой версии в рабочем движке и качество обнаружения требуют отдельных подтверждений</button>
-  <button data-choice="b">B. Все новые правила уже активны</button>
-  <button data-choice="c">C. Полнота обнаружения автоматически выросла</button>
-  <button data-choice="d">D. Все сенсоры используют эту версию</button>
-  <div class="quiz-feedback"></div>
+  <button data-choice="a" data-correct="true">A. Новые файлы получены, но их применение ещё не подтверждено.</button>
+  <button data-choice="b">B. Все правила сразу активны, поскольку файл уже обновлён.</button>
+  <button data-choice="c">C. Изменения автоматически применены ко всем подключённым сенсорам.</button>
+  <button data-choice="d">D. Качество обнаружения проверено самим фактом обновления файлов.</button>
+  <div class="quiz-feedback" aria-live="polite"></div>
 </div>
 
-<div class="quiz" data-question-id="chapter10-q2">
-  <p><strong>Почему положительный тест до развертывания не завершает проверку изменения?</strong></p>
-  <button data-choice="a">A. Потому что положительные тесты всегда недостоверны</button>
-  <button data-choice="b" data-correct="true">B. Он не подтверждает, что рабочая система активировала нужную версию, получает нужные данные и доставляет результат</button>
-  <button data-choice="c">C. Потому что после развертывания правило всегда меняется</button>
-  <button data-choice="d">D. Потому что в рабочей среде нельзя тестировать состояние системы</button>
-  <div class="quiz-feedback"></div>
+<div class="quiz" data-question-id="chapter10-q2" data-explanation="Проверка до применения относится к подготовленному состоянию. После применения отдельно подтверждают загрузку нужной версии, поступление данных и формирование результата.">
+  <p><strong>Почему положительный тест до развёртывания не завершает проверку изменения?</strong></p>
+  <button data-choice="a">A. Предварительный тест проверяет только синтаксис, но не содержание правила.</button>
+  <button data-choice="b">B. Любой тест, выполненный до развёртывания, обязательно теряет достоверность.</button>
+  <button data-choice="c" data-correct="true">C. Нужно проверить активное состояние и результат уже в рабочей среде.</button>
+  <button data-choice="d">D. Достаточно сверить версии файлов и перезапустить IDS.</button>
+  <div class="quiz-feedback" aria-live="polite"></div>
 </div>
 
-<div class="quiz" data-question-id="chapter10-q3">
-  <p><strong>Процесс IDS запущен, но ожидаемого оповещения нет. Какой следующий вывод корректен?</strong></p>
-  <button data-choice="a">A. События точно не было</button>
-  <button data-choice="b">B. Правило обязательно ошибочно</button>
-  <button data-choice="c" data-correct="true">C. Нужно проверить получение данных, представление, активную логику и путь результата; сам статус процесса этого не доказывает</button>
-  <button data-choice="d">D. Нужно сразу увеличить чувствительность всех правил</button>
-  <div class="quiz-feedback"></div>
+<div class="quiz" data-question-id="chapter10-q3" data-explanation="Статус процесса подтверждает только запуск. Причина отсутствия оповещения может находиться в точке захвата, представлении, логике обнаружения или доставке результата.">
+  <p><strong>Процесс IDS запущен, но ожидаемого оповещения нет. Какое действие обоснованно?</strong></p>
+  <button data-choice="a">A. Сразу изменить порог правила и проверить, появилось ли оповещение.</button>
+  <button data-choice="b" data-correct="true">B. Проверить путь от получения данных до правила и выхода результата.</button>
+  <button data-choice="c">C. Отключить протокольный анализатор, чтобы уменьшить стоимость обработки.</button>
+  <button data-choice="d">D. Считать отсутствие оповещения доказательством отсутствия события.</button>
+  <div class="quiz-feedback" aria-live="polite"></div>
 </div>
 
-<div class="quiz" data-question-id="chapter10-q4">
-  <p><strong>Что означает рост <code>capture.kernel_drops</code> в подходящем режиме захвата Suricata?</strong></p>
-  <button data-choice="a">A. Конкретная атака была пропущена</button>
-  <button data-choice="b" data-correct="true">B. На соответствующем этапе фиксируется отбрасывание пакетов; связь с конкретным FN нужно доказывать отдельно</button>
-  <button data-choice="c">C. Все правила перегружены</button>
-  <button data-choice="d">D. Протокольный анализатор отключён</button>
-  <div class="quiz-feedback"></div>
+<div class="quiz" data-question-id="chapter10-q4" data-explanation="Счётчик указывает на потери в определённом месте и режиме захвата. Для связи с конкретным пропущенным событием нужно исследовать соответствующий поток и другие свидетельства.">
+  <p><strong>Что означает рост capture.kernel_drops в соответствующем режиме захвата Suricata?</strong></p>
+  <button data-choice="a">A. При захвате потерян именно тот пакет, который содержал признак атаки.</button>
+  <button data-choice="b">B. Новая версия правил гарантированно перегрузила весь движок анализа.</button>
+  <button data-choice="c">C. Каждый TCP-поток теперь содержит разрывы восстановления данных.</button>
+  <button data-choice="d" data-correct="true">D. Часть пакетов отброшена; связь с конкретным пропуском не доказана.</button>
+  <div class="quiz-feedback" aria-live="polite"></div>
 </div>
 
-<div class="quiz" data-question-id="chapter10-q5">
-  <p><strong>Два сенсора наблюдают похожий трафик, но дают разные результаты. Что нужно проверить до вывода об ошибке?</strong></p>
-  <button data-choice="a">A. Только количество процессоров</button>
-  <button data-choice="b" data-correct="true">B. Точки наблюдения, версии движка и правил, конфигурацию, доступное представление и путь результата на каждом сенсоре</button>
-  <button data-choice="c">C. Только текст <code>msg</code></button>
-  <button data-choice="d">D. Ничего: одинаковый продукт обязан дать одинаковый результат</button>
-  <div class="quiz-feedback"></div>
+<div class="quiz" data-question-id="chapter10-q5" data-explanation="Сравнивают не только название продукта: существенны положение сенсора, наблюдаемое представление, конфигурация, активный набор правил и доставка результата.">
+  <p><strong>Два сенсора наблюдают похожий трафик, но дают разные результаты. Что проверить сначала?</strong></p>
+  <button data-choice="a" data-correct="true">A. Точки захвата, активные версии правил и путь формирования результатов.</button>
+  <button data-choice="b">B. Исключительно номер SID и одинаковость названий программных продуктов.</button>
+  <button data-choice="c">C. Только число ядер процессора и свободную память каждого сенсора.</button>
+  <button data-choice="d">D. Наличие одного и того же адреса сервера в справочнике обоих сенсоров.</button>
+  <div class="quiz-feedback" aria-live="polite"></div>
 </div>
 
-<div class="quiz" data-question-id="chapter10-q6">
-  <p><strong>Какой смысл у возврата к предыдущему состоянию?</strong></p>
-  <button data-choice="a">A. Просто восстановить любой старый файл</button>
-  <button data-choice="b">B. Скрыть неудачное изменение от журнала</button>
-  <button data-choice="c" data-correct="true">C. Вернуть известное состояние и отдельно подтвердить, что рабочая система действительно снова использует его и затронутая возможность восстановлена</button>
-  <button data-choice="d">D. Обязательно перезагрузить всю инфраструктуру</button>
-  <div class="quiz-feedback"></div>
+<div class="quiz" data-question-id="chapter10-q6" data-explanation="Откат включает не только восстановление файлов, но и подтверждение их применения. Рабочая возможность проверяется на контролируемом случае после возврата.">
+  <p><strong>Как проверить, что откат действительно восстановил прежнее рабочее состояние?</strong></p>
+  <button data-choice="a">A. Вернуть старый файл и считать работу восстановленной.</button>
+  <button data-choice="b" data-correct="true">B. Проверить активную версию и повторить контролируемый рабочий тест.</button>
+  <button data-choice="c">C. Перезапустить службу и считать сам факт запуска доказательством отката.</button>
+  <button data-choice="d">D. Заменить правила последним доступным выпуском без проверки результата.</button>
+  <div class="quiz-feedback" aria-live="polite"></div>
 </div>
 
 ---

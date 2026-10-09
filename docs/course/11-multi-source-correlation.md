@@ -617,58 +617,58 @@ SIEM ограничена источниками, доставкой, норма
 
 ## Проверка понимания
 
-<div class="quiz" data-question-id="chapter11-q1">
-  <p><strong>Suricata и Zeek видят похожее соединение. Можно ли сравнить <code>flow_id</code> Suricata и <code>uid</code> Zeek как один универсальный идентификатор?</strong></p>
-  <button data-choice="a">A. Да, оба поля всегда вычисляются одинаково</button>
-  <button data-choice="b" data-correct="true">B. Нет, это внутренние идентификаторы разных реализаций; для межсистемной связи нужен совместимый общий ключ или дополнительное сопоставление</button>
-  <button data-choice="c">C. Да, если порт назначения равен 443</button>
-  <button data-choice="d">D. Да, если события записаны в JSON</button>
-  <div class="quiz-feedback"></div>
+<div class="quiz" data-question-id="chapter11-q1" data-explanation="Suricata flow_id и Zeek uid имеют собственную семантику и область действия. Межсистемная связь строится по проверяемым признакам обмена и контексту, а не по равенству этих идентификаторов.">
+  <p><strong>Suricata и Zeek видят похожее соединение. Можно ли напрямую приравнять flow_id и uid?</strong></p>
+  <button data-choice="a">A. Да, если оба сенсора получили одинаковую временную метку события.</button>
+  <button data-choice="b">B. Да, если источник и назначение совпадают в сетевых записях.</button>
+  <button data-choice="c">C. Нет, данные Suricata и Zeek невозможно сопоставлять даже по сетевым признакам потока.</button>
+  <button data-choice="d" data-correct="true">D. Нет, эти ID локальны; нужна отдельная проверка соответствия записей.</button>
+  <div class="quiz-feedback" aria-live="polite"></div>
 </div>
 
-<div class="quiz" data-question-id="chapter11-q2">
-  <p><strong>Что доказывает совпадение IP-адреса с актуальной записью внешнего источника индикаторов?</strong></p>
-  <button data-choice="a">A. Система точно скомпрометирована</button>
-  <button data-choice="b">B. Текущий субъект атаки установлен</button>
-  <button data-choice="c" data-correct="true">C. Наблюдаемый адрес совпал с записью источника и получил дополнительный контекст; компрометация и атрибуция требуют других свидетельств</button>
-  <button data-choice="d">D. Все соединения с этим адресом вредоносны во все периоды времени</button>
-  <div class="quiz-feedback"></div>
+<div class="quiz" data-question-id="chapter11-q2" data-explanation="IOC — признак, релевантность которого зависит от происхождения, времени и контекста. Совпадение усиливает гипотезу, но не устанавливает ни факт компрометации, ни атрибуцию.">
+  <p><strong>Что доказывает совпадение наблюдаемого IP-адреса с записью источника IOC?</strong></p>
+  <button data-choice="a">A. Источник адреса точно известен и подтверждён всеми сетевыми журналами.</button>
+  <button data-choice="b">B. Совпадение достаточно для установления компрометации целевого узла.</button>
+  <button data-choice="c" data-correct="true">C. Совпадение добавляет контекст, но не доказывает компрометацию.</button>
+  <button data-choice="d">D. Совпадение устанавливает атакующего на момент события.</button>
+  <div class="quiz-feedback" aria-live="polite"></div>
 </div>
 
-<div class="quiz" data-question-id="chapter11-q3">
+<div class="quiz" data-question-id="chapter11-q3" data-explanation="STIX — язык и структура представления информации о киберугрозах. TAXII определяет способы обмена такой информацией через соответствующий интерфейс.">
   <p><strong>В чём различие между STIX и TAXII?</strong></p>
-  <button data-choice="a">A. STIX — IDS, TAXII — IPS</button>
-  <button data-choice="b" data-correct="true">B. STIX задаёт модель/структуру информации об угрозах, TAXII — прикладной протокол для её обмена</button>
-  <button data-choice="c">C. Это две версии формата EVE JSON</button>
-  <button data-choice="d">D. TAXII используется только для хэшей файлов</button>
-  <div class="quiz-feedback"></div>
+  <button data-choice="a">A. STIX задаёт протокол обмена коллекциями, TAXII — формат описания IOC.</button>
+  <button data-choice="b" data-correct="true">B. STIX описывает информацию об угрозах, TAXII организует её обмен.</button>
+  <button data-choice="c">C. STIX хранит журналы IDS, TAXII — события SIEM.</button>
+  <button data-choice="d">D. STIX определяет сетевые политики, TAXII — механизм блокировки адресов.</button>
+  <div class="quiz-feedback" aria-live="polite"></div>
 </div>
 
-<div class="quiz" data-question-id="chapter11-q4">
-  <p><strong>Два события произошли с разницей в одну секунду. Какой вывод допустим без дополнительных признаков?</strong></p>
-  <button data-choice="a">A. Первое событие вызвало второе</button>
-  <button data-choice="b" data-correct="true">B. Временная близость делает их кандидатами на связь, но причинность требует дополнительных свидетельств и понимания временной модели источников</button>
-  <button data-choice="c">C. Они обязательно относятся к одному пользователю</button>
-  <button data-choice="d">D. Они должны иметь один Community ID</button>
-  <div class="quiz-feedback"></div>
+<div class="quiz" data-question-id="chapter11-q4" data-explanation="Временная близость повышает вероятность связи, но требуется учитывать часы, задержки, ключи сопоставления и независимые свидетельства. Очерёдность записи не доказывает причинность.">
+  <p><strong>Два события произошли с разницей в одну секунду. Что уже допустимо утверждать?</strong></p>
+  <button data-choice="a" data-correct="true">A. Близость по времени — повод проверить связь, но не доказательство причинности.</button>
+  <button data-choice="b">B. Это одна сессия, если временные отметки различаются менее чем на секунду и совпадает протокол.</button>
+  <button data-choice="c">C. Первое событие стало причиной второго, поскольку зафиксировано раньше.</button>
+  <button data-choice="d">D. Общий пользователь подтверждён, если отметки времени достаточно близки.</button>
+  <div class="quiz-feedback" aria-live="polite"></div>
 </div>
 
-<div class="quiz" data-question-id="chapter11-q5">
-  <p><strong>Что означает отсутствие ожидаемой записи приложения при наличии сетевого наблюдения?</strong></p>
-  <button data-choice="a">A. Сетевое событие точно ложное</button>
-  <button data-choice="b">B. Приложение точно не получило данные</button>
-  <button data-choice="c" data-correct="true">C. Между источниками есть разрыв, который нужно локализовать: доставка, журналирование, маршрутизация, идентификация или другая граница наблюдаемости</button>
-  <button data-choice="d">D. Нужно удалить сетевой источник из корреляции</button>
-  <div class="quiz-feedback"></div>
+<div class="quiz" data-question-id="chapter11-q5" data-explanation="Разные источники обладают разными границами наблюдения. Отсутствие прикладной записи может объясняться маршрутом, обработкой, журналированием или доставкой; оно не отменяет сетевое наблюдение.">
+  <p><strong>Сетевое событие есть, а ожидаемой записи приложения нет. Какой вывод обоснован?</strong></p>
+  <button data-choice="a">A. Сетевая запись неверна, поскольку приложение обязано регистрировать запрос.</button>
+  <button data-choice="b">B. Приложение точно не получило пакет и не могло обработать запрос.</button>
+  <button data-choice="c">C. Корреляционное правило следует отключить, чтобы не создавать ложных событий.</button>
+  <button data-choice="d" data-correct="true">D. Нужно выяснить, где возник разрыв наблюдений и доставки записей.</button>
+  <div class="quiz-feedback" aria-live="polite"></div>
 </div>
 
-<div class="quiz" data-question-id="chapter11-q6">
-  <p><strong>Как следует относиться к коррелированному результату SIEM?</strong></p>
-  <button data-choice="a">A. Как к автоматически подтверждённому инциденту</button>
-  <button data-choice="b" data-correct="true">B. Как к результату формализованного условия над несколькими входами, который нужно интерпретировать с учётом происхождения и границ каждого источника</button>
-  <button data-choice="c">C. Как к замене первичных журналов</button>
-  <button data-choice="d">D. Как к доказательству атрибуции</button>
-  <div class="quiz-feedback"></div>
+<div class="quiz" data-question-id="chapter11-q6" data-explanation="Корреляция сообщает о выполнении сформулированного условия над поступившими записями. Обоснованность инцидента зависит от качества источников, ключей связывания, контекста и дополнительных проверок.">
+  <p><strong>Как правильно интерпретировать срабатывание корреляционного правила SIEM?</strong></p>
+  <button data-choice="a">A. Входящие записи больше не нужны, так как SIEM создала сводный результат.</button>
+  <button data-choice="b" data-correct="true">B. Это совпадение заданного условия; первичные данные ещё нужно оценить.</button>
+  <button data-choice="c">C. Вся причинная цепочка событий подтверждена фактом их сопоставления.</button>
+  <button data-choice="d">D. Такое совпадение автоматически устанавливает личность атакующего субъекта.</button>
+  <div class="quiz-feedback" aria-live="polite"></div>
 </div>
 
 ---
