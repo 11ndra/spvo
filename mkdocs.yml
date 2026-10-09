@@ -65,10 +65,29 @@ extra_javascript:
   - assets/javascripts/test-bank.js
 
 nav:
-  - Теория:
+  - Курс IDS/IPS:
       - Начало курса: index.md
-      - Темы дисциплины: syllabus/index.md
-      - "Модуль 1 — Основы и угрозы":
+      - Основы IDPS:
+          - "01 — Что такое IDS/IPS и зачем они нужны": course/01-intro.md
+          - "Контекст — Угрозы, уязвимости, риск и киберпреступность": course/01a-threat-context.md
+          - "02 — Какие виды IDS/IPS существуют": course/02-classification.md
+          - "03 — Из чего состоит IDS/IPS и как она работает": course/03-detection.md
+          - "04 — Где и как размещают IDS/IPS": course/04-detection-methods.md
+          - "05 — Как IDS/IPS обнаруживает подозрительную активность": course/05-firewall-vs-idps.md
+          - "06 — Что такое правила и как они устроены": course/06-rules.md
+          - "07 — Почему IDS/IPS ошибается и чего она не видит": course/07-limitations.md
+          - "08 — Как проверить и обосновать эффективность IDS/IPS": course/08-effectiveness.md
+          - "Контекст — Архитектура, интеграция и современный контекст": course/08a-integration-context.md
+      - Эксплуатация и современные IDPS:
+          - "09 — Протоколы, приложения и зашифрованный трафик глазами IDPS": course/09-protocol-visibility.md
+          - "Контекст — Прикладная и веб-безопасность глазами IDPS": course/09a-application-web-security.md
+          - "Контекст — Защита конечных систем: антивирус, HIDS/HIPS и EDR": course/09b-endpoint-protection.md
+          - "Контекст — Профессиональная практика специалиста": course/09c-professional-practice.md
+          - "10 — Как поддерживать возможности обнаружения": course/10-operations-lifecycle.md
+          - "11 — Как сопоставлять несколько источников и контекст угроз": course/11-multi-source-correlation.md
+  - Программа дисциплины:
+      - 15 тем силлабуса: syllabus/index.md
+      - Темы 01–08:
           - "01 — Введение в кибербезопасность": topics/01-cybersecurity-threats.md
           - "02 — Принципы работы IDS": topics/02-ids-principles.md
           - "03 — Сервисы кибербезопасности": topics/03-security-services.md
@@ -77,7 +96,7 @@ nav:
           - "06 — Аномальная активность и вредоносное ПО": topics/06-anomaly-malware.md
           - "07 — Формы интернет-преступности": topics/07-internet-crime.md
           - "08 — Принципы работы IPS": topics/08-ips-principles.md
-      - "Модуль 2 — Протоколы, приложения и защита":
+      - Темы 09–15:
           - "09 — Модель OSI": topics/09-osi.md
           - "10 — Шифрование данных": topics/10-crypto.md
           - "11 — Безопасность сетевых протоколов": topics/11-network-protocol-security.md
@@ -85,23 +104,6 @@ nav:
           - "13 — Безопасность веб-сервисов": topics/13-web-services-security.md
           - "14 — Антивирусная и проактивная защита": topics/14-antivirus-proactive.md
           - "15 — Подготовка специалиста": topics/15-professional-preparation.md
-      - Подробные материалы:
-          - "IDS/IPS: назначение, обнаружение и предотвращение": course/01-intro.md
-          - "Угрозы, уязвимости, риск и киберпреступность": course/01a-threat-context.md
-          - "Виды IDS/IPS и источники наблюдения": course/02-classification.md
-          - "Архитектура IDS/IPS: компоненты и путь данных": course/03-detection.md
-          - "Размещение IDS/IPS и точки наблюдения": course/04-detection-methods.md
-          - "Методы обнаружения подозрительной активности": course/05-firewall-vs-idps.md
-          - "Правила IDS/IPS и detection logic": course/06-rules.md
-          - "Ограничения IDS/IPS, слепые зоны и ошибки": course/07-limitations.md
-          - "Оценка эффективности IDS/IPS и предотвращения": course/08-effectiveness.md
-          - "Архитектура, интеграция и современный контекст": course/08a-integration-context.md
-          - "Протоколы и зашифрованный трафик": course/09-protocol-visibility.md
-          - "Безопасность приложений и веб-сервисов": course/09a-application-web-security.md
-          - "Антивирус, HIDS/HIPS и EDR": course/09b-endpoint-protection.md
-          - "Профессиональная практика специалиста": course/09c-professional-practice.md
-          - "Сопровождение возможностей обнаружения": course/10-operations-lifecycle.md
-          - "Корреляция нескольких источников": course/11-multi-source-correlation.md
   - Практика:
       - "00 — Подготовка лабораторной среды": labs/environment/index.md
       - "Практикум 0 — Знакомство с рабочей IDPS": labs/orientation/index.md

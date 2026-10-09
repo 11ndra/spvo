@@ -11,8 +11,8 @@
   </div>
 
   <div class="home-actions">
-    <a class="course-btn primary" href="topics/01-cybersecurity-threats/">Начать обучение</a>
-    <a class="course-btn" href="syllabus/">15 тем курса</a>
+    <a class="course-btn primary" href="course/01-intro/">Начать обучение с IDS/IPS</a>
+    <a class="course-btn" href="syllabus/">Темы силлабуса</a>
     <a class="course-btn" href="resources/test-bank/">Тестовый тренажёр</a>
     <a class="course-btn" href="labs/environment/">Лабораторные работы</a>
   </div>
@@ -40,30 +40,32 @@
   </article>
 </div>
 
-## Теория: 15 тем рабочей программы
+## Основной курс: системы обнаружения и предотвращения вторжений
 
-### Модуль 1. Основы и угрозы
+Теоретические главы изучаются последовательно: от назначения и устройства IDS/IPS до правил, оценки эффективности и эксплуатации. **Содержание главы, её схемы, примеры и интерактивная самопроверка находятся на одной странице.**
 
-1. [Введение в кибербезопасность. Типы угроз](topics/01-cybersecurity-threats.md)
-2. [Принципы работы IDS](topics/02-ids-principles.md)
-3. [Сервисы кибербезопасности и решения по вопросам безопасности](topics/03-security-services.md)
-4. [Уязвимости, риски и атаки](topics/04-vulnerabilities-risks-attacks.md)
-5. [Киберпреступность](topics/05-cybercrime.md)
-6. [Аномальная активность и вредоносное ПО](topics/06-anomaly-malware.md)
-7. [Основные формы интернет-преступности](topics/07-internet-crime.md)
-8. [Принципы работы IPS](topics/08-ips-principles.md)
+### Основы IDPS
 
-### Модуль 2. Протоколы, приложения и защита
+1. [Что такое IDS/IPS и зачем они нужны](course/01-intro.md)
+2. [Какие виды IDS/IPS существуют](course/02-classification.md)
+3. [Из чего состоит IDS/IPS и как она работает](course/03-detection.md)
+4. [Где и как размещают IDS/IPS](course/04-detection-methods.md)
+5. [Как IDS/IPS обнаруживает подозрительную активность](course/05-firewall-vs-idps.md)
+6. [Что такое правила и как они устроены](course/06-rules.md)
+7. [Почему IDS/IPS ошибается и чего она не видит](course/07-limitations.md)
+8. [Как проверить и обосновать эффективность IDS/IPS](course/08-effectiveness.md)
 
-9. [Модель OSI](topics/09-osi.md)
-10. [Симметричное и асимметричное шифрование](topics/10-crypto.md)
-11. [Безопасность сетевых протоколов](topics/11-network-protocol-security.md)
-12. [Безопасность приложений](topics/12-application-security.md)
-13. [Безопасность веб-сервисов](topics/13-web-services-security.md)
-14. [Антивирусная и проактивная защита](topics/14-antivirus-proactive.md)
-15. [Подготовка специалиста по кибербезопасности](topics/15-professional-preparation.md)
+Дополняют основы [контекст угроз и рисков](course/01a-threat-context.md) и [архитектура, интеграция и современный контекст](course/08a-integration-context.md).
 
-[Открыть программу дисциплины и полную навигацию →](syllabus/)
+### Эксплуатация и современные IDPS
+
+9. [Протоколы, приложения и зашифрованный трафик глазами IDPS](course/09-protocol-visibility.md)
+10. [Как поддерживать возможности обнаружения в рабочем состоянии](course/10-operations-lifecycle.md)
+11. [Как сопоставлять несколько источников и контекст угроз](course/11-multi-source-correlation.md)
+
+Дополнительные материалы: [веб-безопасность глазами IDPS](course/09a-application-web-security.md), [защита конечных систем](course/09b-endpoint-protection.md) и [профессиональная практика](course/09c-professional-practice.md).
+
+**Официальная рабочая программа** содержит [15 тем силлабуса](syllabus/). Они доступны отдельно для подготовки и проверки соответствия дисциплине; нумерация тем программы не заменяет учебную последовательность глав IDS/IPS.
 
 ## Практика
 
