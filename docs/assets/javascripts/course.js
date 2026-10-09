@@ -1,21 +1,28 @@
 function initializeQuizzes() {
   document.querySelectorAll(".quiz").forEach((quiz) => {
+    if (quiz.dataset.initialized === "true") return;
+    quiz.dataset.initialized = "true";
     const feedback = quiz.querySelector(".quiz-feedback");
-    const buttons = quiz.querySelectorAll("button");
+    const buttons = [...quiz.querySelectorAll("button[data-choice]")];
+    if (!feedback || buttons.length !== 4 || buttons.filter(b => b.dataset.correct === "true").length !== 1) return;
+    feedback.setAttribute("role", "status");
+    feedback.setAttribute("aria-live", "polite");
 
     buttons.forEach((button) => {
       button.addEventListener("click", () => {
-        buttons.forEach((b) => b.classList.remove("correct", "incorrect", "selected"));
-        button.classList.add("selected");
-
+        if (quiz.dataset.answered === "true") return;
         const ok = button.dataset.correct === "true";
         quiz.dataset.answered = "true";
         quiz.dataset.result = ok ? "correct" : "incorrect";
-        button.classList.add(ok ? "correct" : "incorrect");
-
-        feedback.textContent = ok
-          ? "Верно."
-          : "Неверно. Проверьте соответствующий теоретический раздел.";
+        buttons.forEach((b) => {
+          b.disabled = true;
+          b.classList.remove("incorrect", "selected");
+          if (b.dataset.correct === "true") b.classList.add("correct");
+        });
+        button.classList.add("selected");
+        if (!ok) button.classList.add("incorrect");
+        const reason = feedback.dataset.explanation || "Проверьте условия и вывод в тексте лекции.";
+        feedback.textContent = (ok ? "Верно. " : "Неверно. ") + reason;
       });
     });
   });
@@ -30,7 +37,7 @@ document.addEventListener("DOMContentLoaded", initializeQuizzes);
 
 
 function getChapterSlug(pathname = window.location.pathname) {
-  const match = pathname.match(/\/course\/([^/]+)\/?$/);
+  const match = pathname.match(/\/(?:course|topics)\/([^/]+)\/?$/);
   return match ? match[1] : null;
 }
 

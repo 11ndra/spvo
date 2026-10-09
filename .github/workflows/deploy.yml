@@ -30,8 +30,12 @@ jobs:
         run: python tools/check_public_boundary.py
       - name: Check source/static consistency
         run: python tools/check_source_consistency.py
+      - name: Check full lessons and inline quizzes
+        run: python tools/check_topic_learning_paths.py
       - name: Check Mermaid sources
         run: python tools/check_mermaid_sources.py
+      - name: Check answer-length bias in test bank
+        run: python tools/check_quiz_bias.py docs/assets/javascripts/test-bank.js
       - name: Build site
         run: mkdocs build --strict
       - name: Check generated site links
