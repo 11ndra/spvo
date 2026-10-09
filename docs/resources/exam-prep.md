@@ -64,14 +64,14 @@
 
 ## Вопросы 46–60: IPS, SIEM, стандарты, шифрование и политики
 
-46. **Уровни реагирования IPS.** Alert/log → ограниченное автоматическое действие → блокирование/разрыв/перенаправление → внешняя orchestration; конкретная шкала зависит от архитектуры. См. Главы 1, 3, 8A.
+46. **Уровни реагирования IPS.** Удобно объяснять как степень воздействия: регистрация → оповещение/передача контекста → ограниченное автоматическое действие → непосредственное enforcement. Это учебная модель, а не универсальная шкала производителя; чем сильнее воздействие, тем выше цена FP. См. 8A и Главу 8.
 47. **Автоматические действия IPS.** Drop/reject/reset, host-level block, quarantine/policy change через интеграцию. См. Главы 1, 6, 8A.
 48. **Плюсы/риски автоматического блокирования.** Скорость реакции против FP-driven outage и риска ошибочного enforcement. См. Главы 1, 8.
 49. **IDS/IPS + SIEM.** IDS генерирует специализированную телеметрию/alerts; SIEM собирает и коррелирует её с другими источниками. См. 3, 8A, 11.
 50. **Пример совместного использования.** Suricata alert + endpoint login + asset criticality → SIEM correlation. См. 8A/11.
 51. **Автоматизация IR через SIEM.** Correlation rule → case/notification/playbook → контролируемое действие/SOAR; нужна проверка и rollback. См. 8A/10/11.
 52. **IDS/IPS и стандарты, например PCI DSS.** IDS/IPS может быть требуемым/поддерживающим контролем; нужно доказать placement, monitoring, alerting и актуальность detection content. См. 8A.
-53. **Примеры стандартов.** PCI DSS; ISO/IEC 27001 как ISMS-контекст; NIST guidance как инженерный/методический контекст. См. 8A/09c.
+53. **Примеры стандартов/документов.** Прямой пример — PCI DSS v4.0.1 Requirement 11.5.1, где intrusion-detection/prevention techniques названы явно. NIST SP 800-53 SI-4 задаёт системный мониторинг и связанные control enhancements; NIST SP 800-94 — инженерное руководство по IDPS. ISO/IEC 27001 — риск-ориентированный ISMS-стандарт и не должен пересказываться как универсальное требование «обязательно установить IDS». См. 8A/09c.
 54. **IDS/IPS и персональные данные.** Помогает обнаруживать подозрительную активность и поддерживать monitoring, но не заменяет access control, legal basis, encryption, minimization и governance. См. 8A.
 55. **Роль криптографии в IDS.** Защищает каналы/данные, но меняет доступную сенсору видимость; ключи/termination point определяют observation. См. Главу 9.
 56. **Как IDS работает с шифрованным трафиком?** Видит доступные metadata/handshake/flow features либо получает decrypted representation на другой точке. См. 9.
@@ -93,7 +93,7 @@
 69. **Автоматизация корреляции.** SIEM correlation rules, pipelines, graph/sequence logic; результат всё равно требует validation. См. 11/8A.
 70. **Архитектура современной IDS.** Sensors/agents → processing/detection → management/storage → console/integration; может быть distributed/cloud. См. 3/8A.
 71. **Основные компоненты.** Сенсор/агент, management, event storage, console, detection logic, outputs/integrations. См. 3.
-72. **Открытые и коммерческие IDS.** Suricata/Snort/Zeek/Wazuh как открытые примеры разных функций; коммерческие возможности часто встроены в NGFW/NDR/XDR. См. 8A.
+72. **Открытые и коммерческие IDS.** Suricata и Snort — прямые примеры открытых сетевых IDS/IPS; Zeek и Wazuh полезны как соседние открытые технологии сетевой/хостовой телеметрии и не должны называться их полными аналогами. Коммерческие IDS/IPS-функции часто встроены в NGFW/NDR/XDR и специализированные платформы. См. 8A.
 73. **Интеграция с другими защитными системами.** Firewall, EDR, SIEM/SOAR, TI, IAM, ticketing. См. 8A/11.
 74. **Преимущества интеграции.** Context, correlation, automation, centralized visibility. См. 8A.
 75. **Проблемы совместимости.** Schemas, IDs, timestamps, APIs, severity/confidence semantics, duplicates, versions. См. 8A/11.
@@ -111,7 +111,7 @@
 84. **Как уменьшать FP.** Better scope/context, tuning, negative/boundary tests, independent ground truth, regression testing. См. 6/8/10.
 85. **Ограничения IDS.** Visibility, encryption, packet loss, ambiguous parsing, incomplete context, FP/FN, operational drift. См. 7.
 86. **Масштабируемость.** Throughput, telemetry volume, distributed sensors, configuration consistency, east-west/cloud traffic. См. 8A/10.
-87. **Эффективное внедрение IDS.** Requirements/risk → observation points → architecture → baseline/policies → staged deployment → testing → monitoring → lifecycle. См. 4/8/10.
+87. **Эффективное внедрение IDS.** Задача и риск → требуемая видимость → observation points → architecture/capacity → policy/detection content → staged deployment → positive/negative/boundary testing → monitoring → lifecycle. См. 4/8/8A/10.
 88. **Тенденции IDS/IPS.** Multi-source telemetry, cloud, endpoint/network correlation, TI, detection engineering, ML, SOAR/XDR. См. 8A/11.
 89. **Будущая роль IDS.** Переход от одиночного alert к проверяемой detection capability и multi-source evidence. См. 8A/10/11.
 90. **Облака и IoT.** Cloud-native telemetry/ephemeral workloads и IoT constraints/nonstandard protocols меняют observation points и deployment. См. 8A.
