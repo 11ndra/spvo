@@ -11,7 +11,7 @@
   </div>
 
   <div class="home-actions">
-    <a class="course-btn primary" href="course/01a-threat-context/">Начать обучение</a>
+    <a class="course-btn primary" href="topics/01-cybersecurity-threats/">Начать обучение</a>
     <a class="course-btn" href="syllabus/">15 тем курса</a>
     <a class="course-btn" href="resources/test-bank/">Тестовый тренажёр</a>
     <a class="course-btn" href="labs/environment/">Лабораторные работы</a>
@@ -36,7 +36,7 @@
   <article class="big-question">
     <div class="question-number">03</div>
     <h3>Закрепите практикой</h3>
-    <p>В лаборатории связывайте действие с raw evidence, результатом детектора и границами допустимого вывода.</p>
+    <p>В лаборатории связывайте действие с исходными данными (raw evidence), результатом детектора и границами допустимого вывода.</p>
   </article>
 </div>
 
@@ -44,24 +44,24 @@
 
 ### Модуль 1. Основы и угрозы
 
-1. [Введение в кибербезопасность. Типы угроз](course/01a-threat-context.md)
-2. [Принципы работы IDS](course/01-intro.md)
-3. [Сервисы кибербезопасности и решения по вопросам безопасности](course/02-classification.md)
-4. [Уязвимости, риски и атаки](course/01a-threat-context.md)
-5. [Киберпреступность](course/01a-threat-context.md)
-6. [Аномальная активность и вредоносное ПО](course/05-firewall-vs-idps.md)
-7. [Основные формы интернет-преступности](course/01a-threat-context.md)
-8. [Принципы работы IPS](course/08-effectiveness.md)
+1. [Введение в кибербезопасность. Типы угроз](topics/01-cybersecurity-threats.md)
+2. [Принципы работы IDS](topics/02-ids-principles.md)
+3. [Сервисы кибербезопасности и решения по вопросам безопасности](topics/03-security-services.md)
+4. [Уязвимости, риски и атаки](topics/04-vulnerabilities-risks-attacks.md)
+5. [Киберпреступность](topics/05-cybercrime.md)
+6. [Аномальная активность и вредоносное ПО](topics/06-anomaly-malware.md)
+7. [Основные формы интернет-преступности](topics/07-internet-crime.md)
+8. [Принципы работы IPS](topics/08-ips-principles.md)
 
 ### Модуль 2. Протоколы, приложения и защита
 
-9. [Модель OSI](course/09-protocol-visibility.md)
-10. [Симметричное и асимметричное шифрование](course/09-protocol-visibility.md)
-11. [Безопасность сетевых протоколов](course/09-protocol-visibility.md)
-12. [Безопасность приложений](course/09a-application-web-security.md)
-13. [Безопасность веб-сервисов](course/09a-application-web-security.md)
-14. [Антивирусная и проактивная защита](course/09b-endpoint-protection.md)
-15. [Подготовка специалиста по кибербезопасности](course/09c-professional-practice.md)
+9. [Модель OSI](topics/09-osi.md)
+10. [Симметричное и асимметричное шифрование](topics/10-crypto.md)
+11. [Безопасность сетевых протоколов](topics/11-network-protocol-security.md)
+12. [Безопасность приложений](topics/12-application-security.md)
+13. [Безопасность веб-сервисов](topics/13-web-services-security.md)
+14. [Антивирусная и проактивная защита](topics/14-antivirus-proactive.md)
+15. [Подготовка специалиста по кибербезопасности](topics/15-professional-preparation.md)
 
 [Открыть программу дисциплины и полную навигацию →](syllabus/)
 
