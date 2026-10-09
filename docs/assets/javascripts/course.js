@@ -13,9 +13,10 @@ function initializeQuizzes() {
         quiz.dataset.result = ok ? "correct" : "incorrect";
         button.classList.add(ok ? "correct" : "incorrect");
 
-        feedback.textContent = ok
-          ? "Верно."
-          : "Неверно. Проверьте соответствующий теоретический раздел.";
+        const explanation = quiz.dataset.explanation?.trim();
+        feedback.textContent = explanation
+          ? `${ok ? "Верно." : "Неверно."} ${explanation}`
+          : (ok ? "Верно." : "Неверно. Проверьте соответствующий теоретический раздел.");
       });
     });
   });

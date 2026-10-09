@@ -936,67 +936,69 @@ ECH и другие изменения протокола делают таку�
 
 ## Проверка понимания
 
-<div class="quiz" data-question-id="chapter9-q1">
+Выберите один вариант ответа. После выбора появится пояснение, почему именно такой вывод допустим в границах наблюдаемых данных.
+
+<div class="quiz" data-question-id="chapter9-q1" data-explanation="Номер порта — транспортный признак. Он помогает выбрать гипотезу, но не заменяет распознавание приложения по доступным данным.">
   <p><strong>Сенсор видит соединение на TCP/443. Какой вывод наиболее корректен?</strong></p>
-  <button data-choice="a">A. Это гарантированно HTTPS</button>
-  <button data-choice="b" data-correct="true">B. Порт является признаком; прикладной протокол нужно определять отдельно, если это требуется для вывода</button>
-  <button data-choice="c">C. Внутри обязательно HTTP/2</button>
-  <button data-choice="d">D. Содержимое прикладных данных доступно IDS</button>
-  <div class="quiz-feedback"></div>
+  <button data-choice="a">A. TCP/443 достаточно, чтобы считать прикладной протокол HTTPS установленным</button>
+  <button data-choice="b" data-correct="true">B. Порт задаёт гипотезу; прикладной протокол подтверждают анализом обмена</button>
+  <button data-choice="c">C. По TCP/443 можно установить версию TLS без наблюдения процедуры согласования</button>
+  <button data-choice="d">D. Соединение TCP/443 исключает использование нестандартного прикладного протокола</button>
+  <div class="quiz-feedback" aria-live="polite"></div>
 </div>
 
-<div class="quiz" data-question-id="chapter9-q2">
+<div class="quiz" data-question-id="chapter9-q2" data-explanation="TCP передаёт поток байтов, а не сообщения с границами IP-пакетов. Восстановление упорядочивает доступные сегменты, но не гарантирует полноту наблюдения и не расшифровывает TLS.">
   <p><strong>Зачем сетевой IDS восстановление TCP-потока?</strong></p>
-  <button data-choice="a">A. Чтобы изменить IP-адрес источника</button>
-  <button data-choice="b">B. Чтобы включить TLS</button>
-  <button data-choice="c" data-correct="true">C. Чтобы восстановить поток байтов, поскольку прикладное сообщение может быть разделено между несколькими сегментами</button>
-  <button data-choice="d">D. Только для подсчёта пакетов</button>
-  <div class="quiz-feedback"></div>
+  <button data-choice="a" data-correct="true">A. Чтобы собрать прикладные байты из нескольких TCP-сегментов в нужном порядке</button>
+  <button data-choice="b">B. Чтобы установить HTTP-протокол только по номеру сетевого порта</button>
+  <button data-choice="c">C. Чтобы гарантировать отсутствие потерь пакетов по всему сетевому маршруту</button>
+  <button data-choice="d">D. Чтобы расшифровать TLS-содержимое без доступа к ключам защищённого соединения</button>
+  <div class="quiz-feedback" aria-live="polite"></div>
 </div>
 
-<div class="quiz" data-question-id="chapter9-q3">
+<div class="quiz" data-question-id="chapter9-q3" data-explanation="Поле http.uri появляется после разбора доступного HTTP. Внешний сенсор без расшифрования TLS не получает открытое прикладное представление только благодаря знанию порта, SNI или сборке TCP.">
   <p><strong>Почему правило по HTTP URI нельзя автоматически считать применимым к тому же запросу внутри HTTPS?</strong></p>
-  <button data-choice="a">A. HTTPS использует другой IP-протокол</button>
-  <button data-choice="b" data-correct="true">B. URI относится к прикладному представлению, которое для внешнего сенсора без расшифрования защищено TLS</button>
-  <button data-choice="c">C. HTTPS не использует семантику HTTP</button>
-  <button data-choice="d">D. TLS удаляет URI на сервере</button>
-  <div class="quiz-feedback"></div>
+  <button data-choice="a">A. URI извлекается из TLS ClientHello, поэтому правило должно анализировать только SNI</button>
+  <button data-choice="b">B. После выбора TCP/443 HTTP-анализатор получает URI и без расшифрования трафика</button>
+  <button data-choice="c">C. Восстановление TCP-потока открывает HTTP URI независимо от наличия защиты TLS</button>
+  <button data-choice="d" data-correct="true">D. Внешнему сенсору без расшифрованного HTTP-представления URI обычно недоступен</button>
+  <div class="quiz-feedback" aria-live="polite"></div>
 </div>
 
-<div class="quiz" data-question-id="chapter9-q4">
+<div class="quiz" data-question-id="chapter9-q4" data-explanation="HTTP/3 сохраняет семантику HTTP, но использует QUIC вместо модели HTTP/1.x поверх TCP. Поэтому привычный анализ TCP-потока сам по себе не раскрывает запросы HTTP/3.">
   <p><strong>Что лучше всего описывает HTTP/3?</strong></p>
-  <button data-choice="a">A. Текстовый HTTP/1.1, переданный одним UDP-пакетом</button>
-  <button data-choice="b">B. HTTP без шифрования</button>
-  <button data-choice="c" data-correct="true">C. Отображение семантики HTTP на транспорт QUIC</button>
-  <button data-choice="d">D. Разновидность DNS</button>
-  <div class="quiz-feedback"></div>
+  <button data-choice="a">A. HTTP/2 поверх TCP с изменённым способом сериализации заголовков</button>
+  <button data-choice="b">B. Незашифрованный HTTP/1.1 поверх UDP с отдельными подтверждениями</button>
+  <button data-choice="c" data-correct="true">C. Семантика HTTP, передаваемая поверх транспорта QUIC на основе UDP</button>
+  <button data-choice="d">D. Вариант DNS через HTTPS, преобразующий имена узлов в HTTP URI</button>
+  <div class="quiz-feedback" aria-live="polite"></div>
 </div>
 
-<div class="quiz" data-question-id="chapter9-q5">
+<div class="quiz" data-question-id="chapter9-q5" data-explanation="Распознавание протокола относится к сетевым данным. Содержимое защищённой сессии, вход пользователя и действия на узле требуют других наблюдений и самостоятельных доказательств.">
   <p><strong>Сетевой сенсор распознал SSH. Что это само по себе доказывает?</strong></p>
-  <button data-choice="a">A. Он видит все команды оболочки пользователя</button>
-  <button data-choice="b">B. Пользователь выполнил вредоносную команду</button>
-  <button data-choice="c" data-correct="true">C. Доступное сетевое представление позволило распознать SSH; видимость содержимого защищённой сессии требует отдельного основания</button>
-  <button data-choice="d">D. На конечной системе включена служба аудита Linux (`auditd`)</button>
-  <div class="quiz-feedback"></div>
+  <button data-choice="a">A. Распознавание SSH подтверждает успешную аутентификацию удалённого пользователя</button>
+  <button data-choice="b" data-correct="true">B. Обмен распознан как SSH, но выполнение и содержание команд этим не подтверждены</button>
+  <button data-choice="c">C. После распознавания SSH команды удалённой оболочки становятся видны сенсору</button>
+  <button data-choice="d">D. Обнаружение SSH означает, что на конечной системе работает служба auditd</button>
+  <div class="quiz-feedback" aria-live="polite"></div>
 </div>
 
-<div class="quiz" data-question-id="chapter9-q6">
+<div class="quiz" data-question-id="chapter9-q6" data-explanation="Сетевая телеметрия и журнал приложения формируются в разных точках. Приложение может объяснить результат своей обработки, но его лог не доказывает полноту захвата сетевых пакетов.">
   <p><strong>Почему журнал приложения нельзя считать просто «более подробным сетевым журналом»?</strong></p>
-  <button data-choice="a">A. Потому что приложение не знает HTTP</button>
-  <button data-choice="b" data-correct="true">B. Он формируется другим источником и в другой точке обработки, поэтому имеет собственные наблюдения и собственные слепые зоны</button>
-  <button data-choice="c">C. Потому что журнал приложения всегда недостоверен</button>
-  <button data-choice="d">D. Потому что сетевой сенсор всегда видит больше</button>
-  <div class="quiz-feedback"></div>
+  <button data-choice="a">A. Журнал приложения сохраняет полную трассу пакетов для каждого HTTP-запроса</button>
+  <button data-choice="b">B. Приложение и сетевой сенсор всегда фиксируют событие в одной точке наблюдения</button>
+  <button data-choice="c">C. Поля журнала приложения доступны сетевой IDS даже при сквозном шифровании TLS</button>
+  <button data-choice="d" data-correct="true">D. Журнал отражает обработку приложением, но не полную картину сетевой передачи</button>
+  <div class="quiz-feedback" aria-live="polite"></div>
 </div>
 
-<div class="quiz" data-question-id="chapter9-q7">
-  <p><strong>Правило по <code>http.uri</code> не сформировало оповещение. Какой вывод допустим без дополнительных доказательств?</strong></p>
-  <button data-choice="a">A. HTTP-запроса точно не было</button>
-  <button data-choice="b">B. Пользователь не обращался к приложению</button>
-  <button data-choice="c" data-correct="true">C. Условие не дало положительного результата; отдельно нужно проверить источник, точку наблюдения, способ получения данных, распознанный протокол, доступное представление и применимость правила</button>
-  <button data-choice="d">D. TLS гарантированно был включён</button>
-  <div class="quiz-feedback"></div>
+<div class="quiz" data-question-id="chapter9-q7" data-explanation="Отсутствие оповещения не доказывает отсутствие обмена. Следует проверить конфигурацию, точку захвата, полноту данных, распознавание протокола, доступное поле и условие правила.">
+  <p><strong>Правило по http.uri не сформировало оповещение. Какой вывод допустим без дополнительных доказательств?</strong></p>
+  <button data-choice="a" data-correct="true">A. Совпадение не подтверждено; нужно проверить наблюдение, разбор и условие правила</button>
+  <button data-choice="b">B. Правило тем самым подтвердило полное отсутствие HTTP-запросов в анализируемой сети</button>
+  <button data-choice="c">C. Запрос был обязательно зашифрован TLS, поскольку совпадение не произошло</button>
+  <button data-choice="d">D. Приложение не получило запрос, иначе это правило обязательно сработало бы</button>
+  <div class="quiz-feedback" aria-live="polite"></div>
 </div>
 
 ---
