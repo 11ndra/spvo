@@ -8,7 +8,9 @@ OAuth 2.0 решает задачи делегированной авториз�
 
 ## Основной материал
 
-- [Прикладная и веб-безопасность](../course/09a-application-web-security.md)
+- [Безопасность веб-сервисов и API: токены и права доступа](../course/09a-application-web-security.md#8-api)
+- [Меры защиты приложений и веб-сервисов](../course/09a-application-web-security.md#9-)
+- [Какие источники подтверждают веб-событие](../course/09a-application-web-security.md#14)
 
 ## Проверьте себя
 

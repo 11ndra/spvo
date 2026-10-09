@@ -8,7 +8,9 @@ SAST, DAST, анализ зависимостей и penetration testing даю�
 
 ## Основной материал
 
-- [Безопасность приложений и веб-сервисов](../course/09a-application-web-security.md)
+- [Основы безопасности приложения и границы доверия](../course/09a-application-web-security.md#1-ids)
+- [SQL-инъекция, XSS и CSRF](../course/09a-application-web-security.md#2-sql-)
+- [Защита на протяжении жизненного цикла и способы проверки](../course/09a-application-web-security.md#10)
 
 ## Проверьте себя
 

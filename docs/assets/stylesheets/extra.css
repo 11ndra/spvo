@@ -4084,3 +4084,12 @@ body:has(.home-hero) .md-content__inner.md-typeset {
     padding: 0.9rem;
   }
 }
+
+/* На узких экранах блоки кода прокручиваются внутри себя, а не расширяют страницу. */
+@media screen and (max-width: 600px) {
+  .md-typeset .highlight {
+    max-width: 100%;
+    margin-inline: 0;
+    overflow-x: auto;
+  }
+}

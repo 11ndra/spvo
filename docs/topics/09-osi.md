@@ -8,7 +8,8 @@
 
 ## Основной материал
 
-- [OSI, протоколы и наблюдаемость](../course/09-protocol-visibility.md)
+- [Модель OSI и её роль в анализе сетевых событий](../course/09-protocol-visibility.md#osi)
+- [Как один обмен представляется на разных уровнях](../course/09-protocol-visibility.md#2)
 
 ## Проверьте себя
 
