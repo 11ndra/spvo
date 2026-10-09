@@ -1,5 +1,6 @@
-/* Render Mermaid fences produced by pymdownx.superfences.
-   Mermaid is pinned in mkdocs.yml so syntax/rendering does not drift silently. */
+/* Mermaid rendering for the course.
+   Source diagrams carry semantic classes; CSS owns theme-aware colors.
+   The configuration below keeps spacing and labels predictable. */
 (() => {
   "use strict";
 
@@ -12,7 +13,26 @@
     window.mermaid.initialize({
       startOnLoad: false,
       securityLevel: "strict",
-      theme: "default"
+      theme: "base",
+      themeVariables: {
+        background: "transparent",
+        primaryColor: "#eef3ff",
+        primaryTextColor: "#172033",
+        primaryBorderColor: "#64748b",
+        lineColor: "#64748b",
+        edgeLabelBackground: "#ffffff",
+        tertiaryColor: "#f5f7fb",
+        fontFamily: "inherit",
+        fontSize: "14px"
+      },
+      flowchart: {
+        htmlLabels: true,
+        useMaxWidth: true,
+        curve: "linear",
+        nodeSpacing: 28,
+        rankSpacing: 38,
+        padding: 10
+      }
     });
 
     try {
