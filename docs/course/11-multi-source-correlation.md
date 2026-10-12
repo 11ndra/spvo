@@ -38,8 +38,8 @@
 
 Эти понятия часто смешивают, хотя они отвечают на разные вопросы.
 
-<div class="idps-axis-table-wrap">
-<table class="idps-axis-table">
+<div class="idps-axis-table-wrap ch11-operations-wrap">
+<table class="idps-axis-table ch11-operations-table">
 <thead>
 <tr>
 <th>Операция</th>
@@ -141,16 +141,18 @@ Suricata и Zeek поддерживают поле **Community ID** — вычи
 
 Suricata указывает, что `community_id` может использоваться для сопоставления её EVE-записей с выводом других инструментов, включая Zeek. В Zeek поле `community_id` доступно при включении соответствующей политики.
 
-<div class="idps-responsive-shell">
-<div class="idps-process">
-  <div class="idps-process__step idps-process__step--source"><span>1</span><strong>Один наблюдаемый сетевой поток</strong><small>Совместимый набор сетевых атрибутов в пределах модели алгоритма.</small></div>
-  <div class="idps-process__arrow">→</div>
-  <div class="idps-process__step idps-process__step--sensor"><span>2</span><strong>Suricata</strong><small>Формирует собственные EVE-записи и, если функция включена, <code>community_id</code>.</small></div>
-  <div class="idps-process__arrow">↔</div>
-  <div class="idps-process__step idps-process__step--sensor"><span>3</span><strong>Zeek</strong><small>Формирует собственные журналы и может записывать тот же тип идентификатора.</small></div>
-  <div class="idps-process__arrow">→</div>
-  <div class="idps-process__step idps-process__step--result"><span>4</span><strong>Кандидат на межсистемную связь</strong><small>Совпадение поддерживает связь сетевых записей при совместимых условиях, но не отменяет проверку контекста.</small></div>
-</div>
+<figure class="ch11-flow" aria-labelledby="ch11-flow-title">
+  <figcaption id="ch11-flow-title"><strong>Общий сетевой поток — два независимых источника</strong><span>Не последовательная передача Suricata → Zeek, а параллельные наблюдения.</span></figcaption>
+  <div class="ch11-flow__source"><strong>Наблюдаемый сетевой поток</strong><small>Доступное сенсорам представление сетевых атрибутов</small></div>
+  <div class="ch11-flow__split" aria-hidden="true"><span>↙</span><span>↘</span></div>
+  <div class="ch11-flow__sensors">
+    <div class="ch11-flow__sensor"><strong>Suricata</strong><small>Собственные EVE-записи; <code>community_id</code> при включении</small></div>
+    <div class="ch11-flow__sensor"><strong>Zeek</strong><small>Собственные журналы; <code>community_id</code> при подключённой политике</small></div>
+  </div>
+  <div class="ch11-flow__merge" aria-hidden="true"><span>↘</span><span>↙</span></div>
+  <div class="ch11-flow__result"><strong>Кандидат на связь записей</strong><small>Сравниваем совместимые идентификаторы, время, точки наблюдения и преобразования сети</small></div>
+  <p class="ch11-flow__limit"><strong>Граница вывода:</strong> совпадение поддерживает связь сетевых наблюдений, но не доказывает причинность или компрометацию.</p>
+</figure>
 </div>
 
 Даже общий идентификатор потока не является «универсальным идентификатором события во всей инфраструктуре». NAT, прокси, балансировщики, туннели или наблюдение по разные стороны преобразования способны изменить сетевые атрибуты. Поэтому два сенсора могут видеть один прикладной эпизод в разных сетевых представлениях и получить разные идентификаторы.
@@ -265,54 +267,52 @@ flowchart TB
 
 Ниже один и тот же синтетический эпизод рассматривается на четырёх уровнях. Переключатель не показывает «рост уверенности в процентах» — у нас нет основания превращать разные свидетельства в искусственную числовую оценку. Он показывает, **какой новый факт становится доступен и какая граница остаётся**.
 
-<div class="idps-switcher idps-switcher--ops" data-idps-switcher>
+<div class="idps-switcher idps-switcher--ops ch11-switcher" data-idps-switcher>
   <div class="idps-switcher__header">
-    <strong>ИНТЕРАКТИВ · ОДИН ЭПИЗОД, РАЗНЫЙ ОБЪЁМ СВИДЕТЕЛЬСТВ</strong>
-    <p>Выберите набор доступных источников и сравните допустимый вывод.</p>
+    <strong>ИНТЕРАКТИВ · КАК ИЗМЕНЯЕТСЯ ДОПУСТИМЫЙ ВЫВОД</strong>
+    <p>Один эпизод. Каждый следующий этап добавляет источник, не отменяя предыдущие наблюдения.</p>
   </div>
-  <div class="idps-switcher__controls" aria-label="Выбор доступных источников">
-    <button id="chapter11-evidence-network-tab" class="idps-switcher__button" data-idps-switch="network" aria-controls="chapter11-evidence-network" aria-selected="true">Только сеть</button>
-    <button id="chapter11-evidence-dns-tab" class="idps-switcher__button" data-idps-switch="dns" aria-controls="chapter11-evidence-dns" aria-selected="false">+ DNS</button>
-    <button id="chapter11-evidence-host-tab" class="idps-switcher__button" data-idps-switch="host" aria-controls="chapter11-evidence-host" aria-selected="false">+ конечный узел</button>
-    <button id="chapter11-evidence-cti-tab" class="idps-switcher__button" data-idps-switch="cti" aria-controls="chapter11-evidence-cti" aria-selected="false">+ информация об угрозах</button>
+  <div class="ch11-baseline"><span>ИЗВЕСТНО ВСЕГДА · СЕТЬ</span><strong>10.13.37.10 → 203.0.113.50:443</strong> · сетевой детектор сформировал оповещение</div>
+  <div class="idps-switcher__controls" aria-label="Последовательно добавляем источники">
+    <button id="chapter11-evidence-network-tab" class="idps-switcher__button" data-idps-switch="network" aria-controls="chapter11-evidence-network" aria-selected="true">1 · Сеть</button>
+    <button id="chapter11-evidence-dns-tab" class="idps-switcher__button" data-idps-switch="dns" aria-controls="chapter11-evidence-dns" aria-selected="false">2 · + DNS</button>
+    <button id="chapter11-evidence-host-tab" class="idps-switcher__button" data-idps-switch="host" aria-controls="chapter11-evidence-host" aria-selected="false">3 · + Узел</button>
+    <button id="chapter11-evidence-cti-tab" class="idps-switcher__button" data-idps-switch="cti" aria-controls="chapter11-evidence-cti" aria-selected="false">4 · + CTI</button>
   </div>
   <div class="idps-switcher__panels">
     <section id="chapter11-evidence-network" class="idps-switcher__panel" data-idps-panel="network">
-      <h3 class="idps-switcher__panel-title">Доступен только сетевой результат</h3>
-      <div class="idps-question-model">
-        <div class="idps-question-model__cell"><span>Наблюдение</span><strong>Сетевой сенсор выделил соединение 10.13.37.10 → 203.0.113.50:443 и сформировал оповещение по конкретному условию.</strong></div>
-        <div class="idps-question-model__cell"><span>Допустимый вывод</span><strong>Условие сетевого детектора выполнилось на наблюдаемом представлении данного потока.</strong></div>
-        <div class="idps-question-model__cell"><span>Неизвестно</span><strong>Какой процесс создал соединение, какой пользователь стоял за действием и соответствует ли внешний адрес актуальной вредоносной инфраструктуре.</strong></div>
-        <div class="idps-question-model__boundary"><strong>Граница:</strong> оповещение не равно инциденту и не устанавливает локальную причину соединения.</div>
-      </div>
+      <h3 class="ch11-stage-title">Этап 1 · Только сетевой источник</h3>
+      <dl class="ch11-evidence-delta">
+        <div class="ch11-evidence-delta__new"><dt>Новый факт</dt><dd>Детектор обнаружил совпадение с условием на доступном представлении потока.</dd></div>
+        <div class="ch11-evidence-delta__yes"><dt>Допустимый вывод</dt><dd>Сработало конкретное сетевое правило.</dd></div>
+        <div class="ch11-evidence-delta__no"><dt>Пока неизвестно</dt><dd>Какой процесс создал соединение и кто инициировал действие.</dd></div>
+      </dl>
     </section>
     <section id="chapter11-evidence-dns" class="idps-switcher__panel" data-idps-panel="dns">
-      <h3 class="idps-switcher__panel-title">Добавлен DNS-источник</h3>
-      <div class="idps-question-model">
-        <div class="idps-question-model__cell"><span>Новое наблюдение</span><strong>В близком временном окне тот же внутренний узел запрашивал имя example-c2.invalid, которое разрешилось в 203.0.113.50.</strong></div>
-        <div class="idps-question-model__cell"><span>Совместный вывод</span><strong>DNS-наблюдение поддерживает связь имени с адресом для этого узла и времени при известных условиях журналирования.</strong></div>
-        <div class="idps-question-model__cell"><span>Неизвестно</span><strong>Доказывает ли DNS-запрос причинную связь с конкретным соединением и какой локальный процесс инициировал оба действия.</strong></div>
-        <div class="idps-question-model__boundary"><strong>Граница:</strong> временная близость и общий узел усиливают связь, но не заменяют идентификатор процесса или сеанса.</div>
-      </div>
+      <h3 class="ch11-stage-title">Этап 2 · Сеть + DNS</h3>
+      <dl class="ch11-evidence-delta">
+        <div class="ch11-evidence-delta__new"><dt>Добавили</dt><dd>Узел 10.13.37.10 запрашивал <code>example-c2.invalid</code>; DNS-ответ содержал 203.0.113.50.</dd></div>
+        <div class="ch11-evidence-delta__yes"><dt>Теперь допустимо</dt><dd>Связать имя и адрес для этого узла и временного окна при корректном сопоставлении записей.</dd></div>
+        <div class="ch11-evidence-delta__no"><dt>По-прежнему не доказано</dt><dd>Что DNS-запрос вызвал соединение и какой процесс его инициировал.</dd></div>
+      </dl>
     </section>
     <section id="chapter11-evidence-host" class="idps-switcher__panel" data-idps-panel="host">
-      <h3 class="idps-switcher__panel-title">Добавлена телеметрия конечного узла</h3>
-      <div class="idps-question-model">
-        <div class="idps-question-model__cell"><span>Новое наблюдение</span><strong>Хостовый источник связывает процесс <code>client-agent</code> с исходящим соединением к 203.0.113.50 в том же интервале.</strong></div>
-        <div class="idps-question-model__cell"><span>Совместный вывод</span><strong>Можно обосновать связь локального процесса с наблюдаемым сетевым соединением, если идентификаторы и временная модель источников совместимы.</strong></div>
-        <div class="idps-question-model__cell"><span>Неизвестно</span><strong>Является ли процесс вредоносным и означает ли соединение успешную компрометацию или выполнение команды атакующего.</strong></div>
-        <div class="idps-question-model__boundary"><strong>Граница:</strong> больше контекста делает вывод конкретнее, но не превращает наблюдение в доказательство мотивов или ущерба.</div>
-      </div>
+      <h3 class="ch11-stage-title">Этап 3 · Сеть + DNS + конечный узел</h3>
+      <dl class="ch11-evidence-delta">
+        <div class="ch11-evidence-delta__new"><dt>Добавили</dt><dd>Хостовая телеметрия связывает процесс <code>client-agent</code> с соединением к 203.0.113.50.</dd></div>
+        <div class="ch11-evidence-delta__yes"><dt>Теперь допустимо</dt><dd>Обосновать связь локального процесса с потоком, если идентификаторы и время согласованы.</dd></div>
+        <div class="ch11-evidence-delta__no"><dt>По-прежнему не доказано</dt><dd>Что процесс вредоносен или что соединение привело к компрометации.</dd></div>
+      </dl>
     </section>
     <section id="chapter11-evidence-cti" class="idps-switcher__panel" data-idps-panel="cti">
-      <h3 class="idps-switcher__panel-title">Добавлена внешняя информация об угрозах</h3>
-      <div class="idps-question-model">
-        <div class="idps-question-model__cell"><span>Новое наблюдение</span><strong>Внешний источник сообщает, что 203.0.113.50 использовался как индикатор инфраструктуры в известной вредоносной активности.</strong></div>
-        <div class="idps-question-model__cell"><span>Совместный вывод</span><strong>Наблюдаемое соединение получает дополнительный внешний контекст и может требовать более высокого приоритета проверки.</strong></div>
-        <div class="idps-question-model__cell"><span>Неизвестно</span><strong>Принадлежит ли адрес тому же субъекту сейчас, связан ли текущий эпизод с той же кампанией и произошла ли компрометация.</strong></div>
-        <div class="idps-question-model__boundary"><strong>Граница:</strong> совпадение индикатора добавляет контекст, но не является доказательством атрибуции или инцидента.</div>
-      </div>
+      <h3 class="ch11-stage-title">Этап 4 · Сеть + DNS + узел + информация об угрозах</h3>
+      <dl class="ch11-evidence-delta">
+        <div class="ch11-evidence-delta__new"><dt>Добавили</dt><dd>Внешний источник связывал адрес 203.0.113.50 с вредоносной инфраструктурой в прошлом.</dd></div>
+        <div class="ch11-evidence-delta__yes"><dt>Теперь допустимо</dt><dd>Уточнить приоритет проверки связанного эпизода с учётом актуальности и надёжности источника.</dd></div>
+        <div class="ch11-evidence-delta__no"><dt>По-прежнему не доказано</dt><dd>Нынешний контроль адреса тем же субъектом, атрибуция или факт компрометации.</dd></div>
+      </dl>
     </section>
+    <p class="ch11-switcher__limit"><strong>Неизменная граница:</strong> совпадение наблюдений и оповещение сами по себе не доказывают инцидент.</p>
   </div>
 </div>
 
@@ -350,28 +350,16 @@ NIST SP 800-150 использует широкое понятие **инфор�
 
 Совпадение индикатора означает только то, что локально наблюдаемый объект совпал с определённым внешним описанием по заданному правилу.
 
-<div class="idps-responsive-shell">
-<div class="idps-claim-matrix" role="table" aria-label="Границы вывода при совпадении индикатора">
-  <div class="idps-claim-matrix__head" role="row">
-    <div role="columnheader">Наблюдение</div>
-    <div role="columnheader">Поддерживает</div>
-    <div role="columnheader">Не доказывает</div>
-  </div>
-  <div class="idps-claim-matrix__row" role="row">
-    <div role="cell"><span class="idps-claim-matrix__mobile-label">НАБЛЮДЕНИЕ</span>Соединение к адресу из списка индикаторов</div>
-    <div role="cell"><span class="idps-claim-matrix__mobile-label">ПОДДЕРЖИВАЕТ</span>факт совпадения наблюдаемого адреса с текущей записью источника индикаторов</div>
-    <div role="cell"><span class="idps-claim-matrix__mobile-label">НЕ ДОКАЗЫВАЕТ</span>что удалённый адрес всё ещё контролируется тем же субъектом или что узел скомпрометирован</div>
-  </div>
-  <div class="idps-claim-matrix__row" role="row">
-    <div role="cell"><span class="idps-claim-matrix__mobile-label">НАБЛЮДЕНИЕ</span>Хэш файла совпал с известным образцом</div>
-    <div role="cell"><span class="idps-claim-matrix__mobile-label">ПОДДЕРЖИВАЕТ</span>байтовое совпадение файла с объектом, для которого рассчитан этот хэш, при корректном алгоритме и источнике значения</div>
-    <div role="cell"><span class="idps-claim-matrix__mobile-label">НЕ ДОКАЗЫВАЕТ</span>что файл был выполнен, что он причинил ущерб или что вся система скомпрометирована</div>
-  </div>
-  <div class="idps-claim-matrix__row" role="row">
-    <div role="cell"><span class="idps-claim-matrix__mobile-label">НАБЛЮДЕНИЕ</span>Домен упоминается в отчёте о кампании</div>
-    <div role="cell"><span class="idps-claim-matrix__mobile-label">ПОДДЕРЖИВАЕТ</span>наличие внешнего контекста, который стоит проверить на актуальность и релевантность</div>
-    <div role="cell"><span class="idps-claim-matrix__mobile-label">НЕ ДОКАЗЫВАЕТ</span>атрибуцию текущего локального события той же кампании</div>
-  </div>
+<div class="ch11-ioc-wrap">
+<table class="ch11-ioc-table">
+  <thead><tr><th scope="col">Наблюдение</th><th scope="col">Поддерживает</th><th scope="col">Не доказывает</th></tr></thead>
+  <tbody>
+    <tr><th scope="row">Соединение к IP из списка индикаторов</th><td>Совпадение адреса с записью источника индикаторов</td><td>Актуальный контроль адреса атакующим или компрометацию узла</td></tr>
+    <tr><th scope="row">Хэш файла совпал с известным образцом</th><td>Совпадение контрольных сумм с известным образцом при корректном алгоритме и источнике</td><td>Выполнение файла, причинённый ущерб или компрометацию всей системы</td></tr>
+    <tr><th scope="row">Домен упоминается в отчёте о кампании</th><td>Наличие внешнего контекста, который нужно проверить</td><td>Атрибуцию текущего локального события той же кампании</td></tr>
+  </tbody>
+</table>
+<p class="ch11-table-note">Совпадение индикатора — наблюдение. Сила вывода зависит от качества и актуальности источника.</p>
 </div>
 </div>
 
@@ -498,17 +486,16 @@ ATT&CK полезна для вопросов:
 
 Для курса используем следующую последовательность:
 
-<div class="idps-responsive-shell">
-<div class="idps-gates idps-gates--eight">
-  <div class="idps-gate"><span>1</span><strong>Определить вопрос</strong><small>Какой совместный факт требуется проверить?</small></div>
-  <div class="idps-gate"><span>2</span><strong>Выбрать источники</strong><small>Какие независимые следы способны поддержать этот вывод?</small></div>
-  <div class="idps-gate"><span>3</span><strong>Сохранить происхождение</strong><small>Источник, точка наблюдения, время, представление и версия.</small></div>
-  <div class="idps-gate"><span>4</span><strong>Определить ключ связи</strong><small>Идентификатор, атрибуты, время, последовательность или комбинация.</small></div>
-  <div class="idps-gate"><span>5</span><strong>Учесть преобразования</strong><small>NAT, прокси, смена идентичности, задержки, разные часы и границы источников.</small></div>
-  <div class="idps-gate"><span>6</span><strong>Сопоставить</strong><small>Применить формализованное условие связи.</small></div>
-  <div class="idps-gate"><span>7</span><strong>Проверить альтернативы</strong><small>Может ли набор наблюдений иметь другое объяснение?</small></div>
-  <div class="idps-gate"><span>8</span><strong>Сформулировать границу</strong><small>Что совместный набор поддерживает и чего не доказывает.</small></div>
-</div>
+<ol class="ch11-workflow" aria-label="Последовательность доказательной корреляции">
+  <li><strong>Поставить вопрос</strong><span>Какой факт требуется проверить?</span></li>
+  <li><strong>Выбрать источники</strong><span>Какие независимые следы нужны?</span></li>
+  <li><strong>Сохранить происхождение</strong><span>Источник, точка, время, версия.</span></li>
+  <li><strong>Выбрать ключ связи</strong><span>Идентификаторы, атрибуты, окно.</span></li>
+  <li><strong>Учесть преобразования</strong><span>NAT, прокси, часы, задержки.</span></li>
+  <li><strong>Сопоставить записи</strong><span>Проверить формальное условие.</span></li>
+  <li><strong>Проверить альтернативы</strong><span>Есть ли другое объяснение?</span></li>
+  <li><strong>Ограничить вывод</strong><span>Что подтверждено, а что нет?</span></li>
+</ol>
 </div>
 
 Эта последовательность не является обязательной архитектурой SIEM или IDPS. Это учебная модель рассуждения, которая помогает не потерять доказательность при объединении источников.
@@ -564,37 +551,17 @@ ATT&CK полезна для вопросов:
 
 ## 22. Типичные ошибки
 
-### Ошибка 1 — «два источника согласны, значит событие доказано полностью»
-
-Два источника могут наблюдать одну и ту же ограниченную часть эпизода. Независимость и дополнительность нужно показывать, а не предполагать.
-
-### Ошибка 2 — «совпадение IP связывает все события»
-
-NAT, прокси, повторное назначение адресов и облачная инфраструктура делают адрес контекстным идентификатором.
-
-### Ошибка 3 — «совпало по времени — значит одно вызвало другое»
-
-Временное окно создаёт кандидата на связь, но причинность требует дополнительных признаков.
-
-### Ошибка 4 — «совпадение IOC означает компрометацию»
-
-Совпадение индикатора является наблюдением. Компрометация — более сильный вывод, требующий дополнительных свидетельств.
-
-### Ошибка 5 — «метка ATT&CK в оповещении доказывает выполнение техники»
-
-Метка может отражать замысел автора аналитики. Реальный факт техники должен поддерживаться наблюдаемыми данными.
-
-### Ошибка 6 — «STIX и TAXII — две версии одного формата»
-
-STIX — модель представления информации, TAXII — протокол её обмена.
-
-### Ошибка 7 — «SIEM видит всё, что есть в инфраструктуре»
-
-SIEM ограничена источниками, доставкой, нормализацией, хранением и конфигурацией.
-
-### Ошибка 8 — «если один источник молчит, событие не произошло»
-
-Нужно проверить границы наблюдаемости и доставки конкретного источника.
+| Ошибочное утверждение | Почему неверно / что проверять |
+|---|---|
+| **«Два источника согласны — всё доказано»** | Они могут видеть одну ограниченную часть эпизода. Проверить независимость и дополнительность. |
+| **«Совпадает IP — значит один эпизод»** | NAT, прокси и повторное назначение адресов меняют контекст. Проверить сетевые ключи и время. |
+| **«Совпало по времени — одно вызвало другое»** | Временное окно не доказывает причинность. Нужны дополнительные признаки связи. |
+| **«Совпал IOC — узел скомпрометирован»** | Совпадение индикатора — лишь наблюдение. Подтвердить гипотезу локальными данными. |
+| **«Метка ATT&CK доказывает технику»** | Метка может отражать классификацию автора правила. Проверить фактически наблюдаемые действия. |
+| **«STIX и TAXII — варианты одного формата»** | STIX описывает данные об угрозах, TAXII задаёт механизм их обмена. |
+| **«SIEM видит все события сети»** | Видимость ограничена источниками, доставкой, нормализацией и хранением. |
+| **«Один источник молчит — события не было»** | Проверить его точку наблюдения, настройки, потери и доставку записей. |
+{: .ch11-errors-table }
 
 ---
 
