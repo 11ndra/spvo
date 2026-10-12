@@ -22,6 +22,22 @@
       cases.forEach(b => b.addEventListener('click',() => select(b)));
       if (cases.length) select(cases[0]);
     });
+    scope.querySelectorAll('[data-lesson-mechanism]').forEach(mech => {
+      if(mech.dataset.initialized) return;
+      mech.dataset.initialized='1';
+      const buttons=Array.from(mech.querySelectorAll('[data-mech-step]'));
+      const trace=mech.querySelector('[data-mech-trace]');
+      const reason=mech.querySelector('[data-mech-reason]');
+      const limit=mech.querySelector('[data-mech-limit]');
+      function choose(btn){
+        buttons.forEach(b => b.setAttribute('aria-pressed',String(b===btn)));
+        if(trace) trace.textContent=btn.dataset.trace||'';
+        if(reason) reason.textContent=btn.dataset.reason||'';
+        if(limit) limit.textContent=btn.dataset.limit||'';
+      }
+      buttons.forEach(btn=>btn.addEventListener('click',()=>choose(btn)));
+      if(buttons.length) choose(buttons[0]);
+    });
     scope.querySelectorAll('.lesson-quiz-list').forEach(group => {
       if(group.dataset.shuffled) return;
       group.dataset.shuffled = '1';
@@ -54,6 +70,7 @@
         if(response) {
           response.textContent=(correct ? 'Верно. ' : 'Неверно. ') + (q.dataset.explanation || '');
           response.dataset.result=correct?'correct':'incorrect';
+          q.dataset.lastCorrect=String(correct);
         }
       }));
     });

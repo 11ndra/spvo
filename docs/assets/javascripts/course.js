@@ -1,5 +1,5 @@
 function initializeQuizzes() {
-  document.querySelectorAll(".quiz").forEach((quiz) => {
+  document.querySelectorAll(".quiz:not(.lesson-check)").forEach((quiz) => {
     const feedback = quiz.querySelector(".quiz-feedback");
     const buttons = quiz.querySelectorAll("button");
 

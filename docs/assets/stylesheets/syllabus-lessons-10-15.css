@@ -24,3 +24,30 @@
 .syllabus-lesson .lesson-check [data-result='incorrect'] {border-left:3px solid #b67316}
 .syllabus-lesson table {display:block;max-width:100%;overflow-x:auto}
 @media(max-width:640px){.syllabus-lesson .lesson-evidence {grid-template-columns:1fr}.syllabus-lesson .lesson-evidence>div {padding:.5rem .65rem}}
+
+
+/* Learning mechanisms: factual cause-and-effect, not decorative alert cards. */
+.syllabus-lesson .lesson-mechanism {margin:1.5rem 0; padding:1rem 1.15rem; border:1px solid var(--md-default-fg-color--lightest); border-radius:.65rem; background:var(--md-default-bg-color);}
+.syllabus-lesson .lesson-mechanism h3 {margin:.3rem 0 .6rem; font-size:1.06rem;}
+.syllabus-lesson .lesson-mechanism__eyebrow {font-size:.7rem; font-weight:700; letter-spacing:.06em; text-transform:uppercase; color:var(--md-default-fg-color--light); margin:0;}
+.syllabus-lesson .lesson-mechanism__steps {display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,9rem),1fr));gap:.5rem;margin:.85rem 0;}
+.syllabus-lesson .lesson-mechanism__steps .lesson-mech-step {border:1px solid var(--md-default-fg-color--lightest);background:var(--md-code-bg-color);color:var(--md-default-fg-color);text-align:left;padding:.6rem .65rem;border-radius:.45rem;cursor:pointer;line-height:1.4;font-size:.82rem;}
+.syllabus-lesson .lesson-mech-step span {display:block;font-size:.7rem;color:var(--md-default-fg-color--light);margin-bottom:.1rem;}
+.syllabus-lesson .lesson-mech-step[aria-pressed="true"] {border:2px solid var(--md-primary-fg-color);padding:calc(.6rem - 1px) calc(.65rem - 1px); background:var(--md-code-bg-color);font-weight:700;}
+.syllabus-lesson .lesson-mech-step:focus-visible {outline:3px solid var(--md-accent-fg-color);outline-offset:2px;}
+.syllabus-lesson .lesson-mechanism__screen {display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:.75rem;margin:.8rem 0;}
+.syllabus-lesson .lesson-mechanism__screen>div {border:1px solid var(--md-default-fg-color--lightest);padding:.7rem;border-radius:.5rem;min-width:0;}
+.syllabus-lesson .lesson-mechanism__screen strong {display:block;font-size:.79rem;margin-bottom:.5rem;}
+.syllabus-lesson .lesson-mechanism__trace {white-space:pre-wrap;overflow-wrap:anywhere;font-size:.75rem;margin:0;min-height:4rem;line-height:1.5;background:var(--md-code-bg-color);padding:.6rem;border-radius:.35rem;}
+.syllabus-lesson .lesson-mechanism__interpretation p {font-size:.8rem;line-height:1.5;margin:.4rem 0 .65rem;}
+.syllabus-lesson .lesson-mechanism__note {font-size:.81rem;margin:.65rem 0 0;color:var(--md-default-fg-color--light);}
+/* New chapter quizzes have the same .quiz surface/button structure as original chapters. */
+.syllabus-lesson .lesson-quiz-list .quiz.lesson-check {background:var(--md-default-bg-color);border:1px solid var(--md-default-fg-color--lightest);padding:1rem;margin:1rem 0;}
+.syllabus-lesson .lesson-quiz-list .quiz.lesson-check>strong {display:block;margin-bottom:.8rem;line-height:1.55;}
+.syllabus-lesson .lesson-quiz-list .quiz.lesson-check .lesson-choicebar {display:grid;grid-template-columns:1fr;gap:.2rem;margin:0;}
+.syllabus-lesson .lesson-quiz-list .quiz.lesson-check .lesson-choicebar button {font-size:.87rem;line-height:1.45;display:block;width:100%;margin:.15rem 0;text-align:left;padding:.6rem .75rem;border:1px solid var(--md-default-fg-color--lightest);background:var(--md-default-bg-color);}
+.syllabus-lesson .lesson-quiz-list .quiz.lesson-check button.is-selected {border-color:var(--md-primary-fg-color);box-shadow:inset 3px 0 var(--md-primary-fg-color);}
+.syllabus-lesson .lesson-quiz-list .quiz.lesson-check[data-last-correct="true"] button.is-selected {background:var(--course-success-bg);border-color:var(--course-success-border);box-shadow:inset 3px 0 var(--course-success-border);}
+.syllabus-lesson .lesson-quiz-list .quiz.lesson-check[data-last-correct="false"] button.is-selected {background:var(--course-danger-bg);border-color:var(--course-danger-border);box-shadow:inset 3px 0 var(--course-danger-border);}
+.syllabus-lesson .lesson-quiz-list .quiz.lesson-check .quiz-feedback {font-weight:500;line-height:1.55;min-height:0;margin-top:.7rem;padding:0;}
+@media(max-width:700px){.syllabus-lesson .lesson-mechanism__screen {grid-template-columns:1fr}.syllabus-lesson .lesson-mechanism {padding:.85rem}}

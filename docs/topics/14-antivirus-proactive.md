@@ -65,6 +65,21 @@
 | Песочница | Действия в изолированном запуске | Дополнительные признаки без запуска в продакшене | Не вся логика активируется в модели |
 | Репутация | Внешняя оценка объекта/источника | Оперативное обогащение | Актуальность, полнота, доступность |
 
+
+<div class="lesson-mechanism" data-lesson-mechanism role="group" aria-label="Одна активность — разные источники обнаружения">
+  <p class="lesson-mechanism__eyebrow">Пошаговая интерактивная модель</p>
+  <h3>Одна активность — разные источники обнаружения</h3>
+  <p>Сравните, какие свидетельства доступны сетевому анализатору и конечному узлу в контролируемом синтетическом эпизоде.</p>
+  <div class="lesson-mechanism__steps" role="group" aria-label="Этапы примера"><button type="button" class="lesson-mech-step" data-mech-step="0" data-trace="Host log: new file sample.bin
+NIDS: HTTP/TLS transfer" data-reason="Наличие файла и сетевого обмена — наблюдаемые события. Для детектора важны источники и способность читать полезные данные." data-limit="Скачивание файла не доказывает, что он вредоносный." aria-pressed="true"><span>01</span>Файл получен</button><button type="button" class="lesson-mech-step" data-mech-step="1" data-trace="AV scan: known signature matched" data-reason="Сигнатура сообщает о совпадении с известным критерием в анализируемом объекте." data-limit="Даже точное совпадение не означает автоматически, что файл запущен." aria-pressed="false"><span>02</span>Сигнатура</button><button type="button" class="lesson-mech-step" data-mech-step="2" data-trace="EDR: process creates autorun entry
+EDR: process starts outbound connection" data-reason="Хостовый источник может связывать процесс, запись в системе и сетевое действие. Поведенческое решение зависит от контекста и условий." data-limit="Само сочетание признаков не всегда доказывает компрометацию." aria-pressed="false"><span>03</span>Поведение</button><button type="button" class="lesson-mech-step" data-mech-step="3" data-trace="Timeline: file -&gt; process -&gt; persistence -&gt; network" data-reason="Сопоставление событий расширяет картину и позволяет сформулировать гипотезу и необходимые проверки." data-limit="Временная последовательность сама по себе не гарантирует причинность." aria-pressed="false"><span>04</span>Сопоставление</button></div>
+  <div class="lesson-mechanism__screen" aria-live="polite">
+    <div><strong>Что произошло / какие данные доступны</strong><pre class="lesson-mechanism__trace" data-mech-trace></pre></div>
+    <div class="lesson-mechanism__interpretation"><strong>Как и почему</strong><p data-mech-reason></p><strong>Граница вывода</strong><p data-mech-limit></p></div>
+  </div>
+  <p class="lesson-mechanism__note">Хостовая защита и NIDS дают дополнительные друг другу наблюдения, а не взаимозаменяемые доказательства.</p>
+</div>
+
 ## 8. Как связать конечную систему и сетевую IDS
 
 Допустим, Suricata зарегистрировала исходящее соединение с доменом, который фигурирует в информации об угрозах. Это сетевое наблюдение. EDR на конечном узле дополнительно сообщает, что соединение создал процесс `sample.exe`. Сопоставление по времени, сетевым признакам и хосту позволяет укрепить вывод о происхождении соединения; при этом имя файла ещё не устанавливает факт компрометации.
@@ -123,80 +138,80 @@
 Ответ выбирается непосредственно на странице. Для каждого выбора показано объяснение, а не только отметка. Порядок вопросов и вариантов при загрузке перемешивается.
 
 <div class="lesson-quiz-list">
-<div class="lesson-check" data-answer="1" data-explanation="Факт совпадения хеша не является доказательством исполнения файла или результата его действий.">
+<div class="quiz lesson-check" data-answer="1" data-explanation="Факт совпадения хеша не является доказательством исполнения файла или результата его действий.">
 <strong>Что подтверждает совпадение хеша файла с известным образцом?</strong>
 <div class="lesson-choicebar"><button type="button" data-choice="0" aria-pressed="false">Известный хеш доказывает запуск файла</button>
 <button type="button" data-choice="1" aria-pressed="false">Совпадение контрольного значения с известным образцом при корректной проверке</button>
 <button type="button" data-choice="2" aria-pressed="false">Хеш автоматически доказывает заражение</button>
 <button type="button" data-choice="3" aria-pressed="false">По хешу известен сетевой процесс</button></div>
-<div data-feedback role="status" aria-live="polite"></div>
+<div class="quiz-feedback" data-feedback role="status" aria-live="polite"></div>
 </div>
-<div class="lesson-check" data-answer="1" data-explanation="EDR расширяет видимость конечного узла, но конкретные возможности зависят от реализации и политики.">
+<div class="quiz lesson-check" data-answer="1" data-explanation="EDR расширяет видимость конечного узла, но конкретные возможности зависят от реализации и политики.">
 <strong>Какое описание EDR наиболее корректно?</strong>
 <div class="lesson-choicebar"><button type="button" data-choice="0" aria-pressed="false">EDR в первую очередь проверяет все DNS-запросы и не получает данные локальных процессов</button>
 <button type="button" data-choice="1" aria-pressed="false">Сбор телеметрии конечной системы для обнаружения, расследования и реакции</button>
 <button type="button" data-choice="2" aria-pressed="false">EDR означает обязательное предотвращение каждого исполнения без анализа поведения</button>
 <button type="button" data-choice="3" aria-pressed="false">EDR и HIDS тождественны и всегда используют единственный набор файловых сигнатур</button></div>
-<div data-feedback role="status" aria-live="polite"></div>
+<div class="quiz-feedback" data-feedback role="status" aria-live="polite"></div>
 </div>
-<div class="lesson-check" data-answer="2" data-explanation="Поведение зависит от среды, условий активации и периода наблюдения.">
+<div class="quiz lesson-check" data-answer="2" data-explanation="Поведение зависит от среды, условий активации и периода наблюдения.">
 <strong>Почему отсутствие срабатывания песочницы не доказывает безопасность?</strong>
 <div class="lesson-choicebar"><button type="button" data-choice="0" aria-pressed="false">Файл определённо безопасен</button>
 <button type="button" data-choice="1" aria-pressed="false">Если действие не записано, это подтверждает отсутствие соответствующей логики в файле</button>
 <button type="button" data-choice="2" aria-pressed="false">Нужное поведение могло не проявиться в конкретной среде и за время наблюдения</button>
 <button type="button" data-choice="3" aria-pressed="false">Изоляция позволяет подтвердить безопасность всех будущих действий на других компьютерах</button></div>
-<div data-feedback role="status" aria-live="polite"></div>
+<div class="quiz-feedback" data-feedback role="status" aria-live="polite"></div>
 </div>
-<div class="lesson-check" data-answer="2" data-explanation="Сообщение о решении и результат воздействия — разные факты. Контроль должен подтвердить наблюдаемый эффект.">
+<div class="quiz lesson-check" data-answer="2" data-explanation="Сообщение о решении и результат воздействия — разные факты. Контроль должен подтвердить наблюдаемый эффект.">
 <strong>Что необходимо для подтверждения предотвращающего действия?</strong>
 <div class="lesson-choicebar"><button type="button" data-choice="0" aria-pressed="false">Статуса blocked достаточно</button>
 <button type="button" data-choice="1" aria-pressed="false">Достаточно совпадения имени исполняемого файла с указанным в защитной политике</button>
 <button type="button" data-choice="2" aria-pressed="false">Необходима проверка фактического результата и условий выполнения теста</button>
 <button type="button" data-choice="3" aria-pressed="false">Счётчик блокировок подтверждает остановку любой подозрительной операции без проверки</button></div>
-<div data-feedback role="status" aria-live="polite"></div>
+<div class="quiz-feedback" data-feedback role="status" aria-live="polite"></div>
 </div>
 
-<div class="lesson-check" data-answer="0" data-explanation="Монитор отвечает за наблюдение в режиме выполнения. Современные продукты совмещают эту функцию с другими подходами.">
+<div class="quiz lesson-check" data-answer="0" data-explanation="Монитор отвечает за наблюдение в режиме выполнения. Современные продукты совмещают эту функцию с другими подходами.">
 <strong>Что в исторической классификации антивирусов означает «монитор»?</strong>
 <div class="lesson-choicebar"><button type="button" data-choice="0" aria-pressed="false">Средство наблюдения за активностью в реальном времени</button>
 <button type="button" data-choice="1" aria-pressed="false">Инструмент, только подписывающий документы</button>
 <button type="button" data-choice="2" aria-pressed="false">Офлайновый отчёт, не анализирующий объекты</button>
 <button type="button" data-choice="3" aria-pressed="false">Программа, гарантирующая защиту от любой новой угрозы</button>
 </div>
-<div data-feedback role="status" aria-live="polite"></div>
+<div class="quiz-feedback" data-feedback role="status" aria-live="polite"></div>
 </div>
-<div class="lesson-check" data-answer="2" data-explanation="Это обозначение старой классификации средств предотвращения/фиксации изменений, а не доказательство отсутствия угроз.">
+<div class="quiz lesson-check" data-answer="2" data-explanation="Это обозначение старой классификации средств предотвращения/фиксации изменений, а не доказательство отсутствия угроз.">
 <strong>Почему термин «иммунная программа» нельзя трактовать как гарантию полной защиты?</strong>
 <div class="lesson-choicebar"><button type="button" data-choice="0" aria-pressed="false">Потому что шифрование всегда полностью заменяет антивирус</button>
 <button type="button" data-choice="1" aria-pressed="false">Потому что такая программа работает только в HTTP</button>
 <button type="button" data-choice="2" aria-pressed="false">Потому что это историческое название, а не гарантия неуязвимости</button>
 <button type="button" data-choice="3" aria-pressed="false">Потому что EDR не может использовать файловые контрольные суммы</button>
 </div>
-<div data-feedback role="status" aria-live="polite"></div>
+<div class="quiz-feedback" data-feedback role="status" aria-live="polite"></div>
 </div>
-<div class="lesson-check" data-answer="1" data-explanation="Поведенческий анализ использует последовательность фактических действий; сигнатурный и эвристический подходы отвечают на другие вопросы.">
+<div class="quiz lesson-check" data-answer="1" data-explanation="Поведенческий анализ использует последовательность фактических действий; сигнатурный и эвристический подходы отвечают на другие вопросы.">
 <strong>Какой механизм обычно оценивает наблюдаемую последовательность действий процесса?</strong>
 <div class="lesson-choicebar"><button type="button" data-choice="0" aria-pressed="false">Проверка подписи издателя без запуска объекта</button>
 <button type="button" data-choice="1" aria-pressed="false">Поведенческий анализ системных событий</button>
 <button type="button" data-choice="2" aria-pressed="false">Проверка числа файлов в директории раз в год</button>
 <button type="button" data-choice="3" aria-pressed="false">Определение версии Windows по сетевому заголовку</button>
 </div>
-<div data-feedback role="status" aria-live="polite"></div>
+<div class="quiz-feedback" data-feedback role="status" aria-live="polite"></div>
 </div>
-<div class="lesson-check" data-answer="3" data-explanation="Требуется фактическая проверка результата в оговорённых условиях, а не только лог о намерении блокировать.">
+<div class="quiz lesson-check" data-answer="3" data-explanation="Требуется фактическая проверка результата в оговорённых условиях, а не только лог о намерении блокировать.">
 <strong>Продукт сообщил о блокировании запуска. Что подтвердит защитный результат?</strong>
 <div class="lesson-choicebar"><button type="button" data-choice="0" aria-pressed="false">Любой счётчик ошибок в журнале работы продукта</button>
 <button type="button" data-choice="1" aria-pressed="false">Сам факт установленного антивирусного пакета</button>
 <button type="button" data-choice="2" aria-pressed="false">Совпадение имени файла с именем из правила</button>
 <button type="button" data-choice="3" aria-pressed="false">Тест с проверкой фактического предотвращения действия</button>
 </div>
-<div data-feedback role="status" aria-live="polite"></div>
+<div class="quiz-feedback" data-feedback role="status" aria-live="polite"></div>
 </div>
 </div>
 
-## Связь с другими материалами
+## Дополнительные инженерные кейсы (после освоения темы)
 
-Технические особенности HIDS/HIPS и EDR подробно описаны в [исходном материале о защите конечных систем](../course/09b-endpoint-protection.md). Связка сетевых и хостовых источников раскрывается в [главе о корреляции](../course/11-multi-source-correlation.md).
+Дополнительные сравнения конкретных реализаций HIDS/HIPS и EDR приведены в [исходном материале о защите конечных систем](../course/09b-endpoint-protection.md). Связка сетевых и хостовых источников раскрывается в [главе о корреляции](../course/11-multi-source-correlation.md).
 
 **Основание программы:** SOPV 4311, лекция №14 (стр. 42–43 PDF): антивирусы, сигнатуры, эвристика, поведение, песочницы, облачные механизмы и проактивная защита.
 

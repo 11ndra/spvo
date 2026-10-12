@@ -25,6 +25,21 @@ HTTP описывает методы, ресурсы, заголовки и от
 
 Это не означает, что HTTPS неизменен: HTTP/1.1, HTTP/2 и HTTP/3 имеют разные способы представления данных, а HTTP/3 использует QUIC. Номер порта не является достаточным доказательством прикладного протокола. Правило на конкретное содержимое URI должно быть основано на доступности **разобранного поля URI**, а не на том, что порт равен 80 или 443.
 
+
+<div class="lesson-mechanism" data-lesson-mechanism role="group" aria-label="От HTTP-запроса до события обнаружения">
+  <p class="lesson-mechanism__eyebrow">Пошаговая интерактивная модель</p>
+  <h3>От HTTP-запроса до события обнаружения</h3>
+  <p>Один учебный открытый запрос, правило по URI и независимый результат приложения. Разделите получение данных, обнаружение, запись и интерпретацию.</p>
+  <div class="lesson-mechanism__steps" role="group" aria-label="Этапы примера"><button type="button" class="lesson-mech-step" data-mech-step="0" data-trace="GET /api/orders/12 HTTP/1.1
+Host: service.test" data-reason="HTTP/1.1 передаёт метод, путь и заголовки в читаемом виде при отсутствии TLS. Перед успешным разбором TCP-сегменты могут требовать восстановления потока." data-limit="Один сетевой пакет не всегда содержит полный HTTP-запрос." aria-pressed="true"><span>01</span>Запрос</button><button type="button" class="lesson-mech-step" data-mech-step="1" data-trace="Suricata EVE: event_type=http; http.url=/api/orders/12" data-reason="Протокольный анализатор выделяет доступные поля. Конкретный формат зависит от версии, конфигурации и режима получения трафика." data-limit="Запись http не означает, что правило безопасности обязательно совпало." aria-pressed="false"><span>02</span>Протокольный разбор</button><button type="button" class="lesson-mech-step" data-mech-step="2" data-trace="rule: http.uri contains /api/orders/12
+alert: SID 1000xxx, action=allowed" data-reason="Если правило активно и выполнено условие на доступном URI, появляется соответствующее alert. Здесь действие allowed означает, что блокирование не доказано." data-limit="Alert подтверждает совпадение условия, не факт SQL-инъекции или обхода прав." aria-pressed="false"><span>03</span>Условие обнаружения</button><button type="button" class="lesson-mech-step" data-mech-step="3" data-trace="Application log: GET /api/orders/12 -&gt; 403" data-reason="Журнал приложения даёт другое представление эпизода: обработка и ответ. Сопоставляйте по времени и идентификаторам, учитывая возможность ошибок журналирования." data-limit="Ответ 403 по одному запросу не доказывает отсутствие уязвимости во всех эндпоинтах." aria-pressed="false"><span>04</span>Проверка результата</button></div>
+  <div class="lesson-mechanism__screen" aria-live="polite">
+    <div><strong>Что произошло / какие данные доступны</strong><pre class="lesson-mechanism__trace" data-mech-trace></pre></div>
+    <div class="lesson-mechanism__interpretation"><strong>Как и почему</strong><p data-mech-reason></p><strong>Граница вывода</strong><p data-mech-limit></p></div>
+  </div>
+  <p class="lesson-mechanism__note">Сравните события типа http и alert в EVE: первое — телеметрия протокола, второе — результат конкретного детектора.</p>
+</div>
+
 ## 4. Передача файлов: FTP, FTPS и SFTP
 
 Классический FTP передаёт команды и данные без современной криптографической защиты канала. **FTPS** — применение TLS к FTP, а **SFTP** — отдельный протокол передачи файлов поверх SSH. Поэтому SFTP нельзя описывать как «FTP с шифрованием»: это другая архитектура обмена и другой способ протокольного анализа.
@@ -142,78 +157,78 @@ IDS/IPS способен распознать часть наблюдаемых 
 Ответ выбирается непосредственно на странице. Для каждого выбора показано объяснение, а не только отметка. Порядок вопросов и вариантов при загрузке перемешивается.
 
 <div class="lesson-quiz-list">
-<div class="lesson-check" data-answer="2" data-explanation="TCP устанавливает транспортное соединение. Аутентификация пользователя, шифрование и права доступа относятся к другим механизмам.">
+<div class="quiz lesson-check" data-answer="2" data-explanation="TCP устанавливает транспортное соединение. Аутентификация пользователя, шифрование и права доступа относятся к другим механизмам.">
 <strong>Какое утверждение корректно для TCP?</strong>
 <div class="lesson-choicebar"><button type="button" data-choice="0" aria-pressed="false">TCP-сеанс подтверждает личность приложения</button>
 <button type="button" data-choice="1" aria-pressed="false">TCP аутентифицирует клиента без ключей</button>
 <button type="button" data-choice="2" aria-pressed="false">TCP передаёт упорядоченные байты, но не подтверждает подлинность приложения</button>
 <button type="button" data-choice="3" aria-pressed="false">TCP скрывает полезную нагрузку от сети</button></div>
-<div data-feedback role="status" aria-live="polite"></div>
+<div class="quiz-feedback" data-feedback role="status" aria-live="polite"></div>
 </div>
-<div class="lesson-check" data-answer="0" data-explanation="У SFTP и FTPS разная протокольная архитектура; это важно и для настройки защиты, и для парсинга трафика.">
+<div class="quiz lesson-check" data-answer="0" data-explanation="У SFTP и FTPS разная протокольная архитектура; это важно и для настройки защиты, и для парсинга трафика.">
 <strong>Чем SFTP отличается от FTPS?</strong>
 <div class="lesson-choicebar"><button type="button" data-choice="0" aria-pressed="false">SFTP — отдельный протокол поверх SSH; FTPS использует FTP с TLS</button>
 <button type="button" data-choice="1" aria-pressed="false">SFTP является вариантом обычного FTP, где меняется только схема назначения портов</button>
 <button type="button" data-choice="2" aria-pressed="false">Оба используют командный канал FTP, но SFTP применяет асимметричную подпись каждого файла</button>
 <button type="button" data-choice="3" aria-pressed="false">FTPS является передачей файлов поверх SSH, в то время как SFTP добавляет TLS к FTP</button></div>
-<div data-feedback role="status" aria-live="polite"></div>
+<div class="quiz-feedback" data-feedback role="status" aria-live="polite"></div>
 </div>
-<div class="lesson-check" data-answer="1" data-explanation="Защита доступности подтверждается измерениями в оговорённых условиях, а не наличием инструмента.">
+<div class="quiz lesson-check" data-answer="1" data-explanation="Защита доступности подтверждается измерениями в оговорённых условиях, а не наличием инструмента.">
 <strong>Что требует подтверждения при заявлении об устойчивости к DDoS?</strong>
 <div class="lesson-choicebar"><button type="button" data-choice="0" aria-pressed="false">Присутствие правил IPS, рассчитанных на объём трафика при типовой пиковой нагрузке</button>
 <button type="button" data-choice="1" aria-pressed="false">Измеренные параметры нагрузки, доступность и результат защиты в оговорённых условиях</button>
 <button type="button" data-choice="2" aria-pressed="false">Наличие распределённой инфраструктуры и сетевых фильтров, даже без нагрузки на приложение</button>
 <button type="button" data-choice="3" aria-pressed="false">Наблюдение оповещений о частых запросах без измерения задержек и доступности сервиса</button></div>
-<div data-feedback role="status" aria-live="polite"></div>
+<div class="quiz-feedback" data-feedback role="status" aria-live="polite"></div>
 </div>
-<div class="lesson-check" data-answer="2" data-explanation="Отсутствие поля может быть связано с TLS и точкой наблюдения; сетевой обмен может существовать.">
+<div class="quiz lesson-check" data-answer="2" data-explanation="Отсутствие поля может быть связано с TLS и точкой наблюдения; сетевой обмен может существовать.">
 <strong>Что можно заключить из отсутствия HTTP URI в зашифрованном потоке?</strong>
 <div class="lesson-choicebar"><button type="button" data-choice="0" aria-pressed="false">HTTP никогда не использовался</button>
 <button type="button" data-choice="1" aria-pressed="false">Это подтверждает, что TLS не применялся, иначе сенсор зарегистрировал бы HTTP/URI</button>
 <button type="button" data-choice="2" aria-pressed="false">Поле может быть недоступно в точке наблюдения или не сформировано анализатором</button>
 <button type="button" data-choice="3" aria-pressed="false">Сенсор обязан видеть все URI в TLS, а их отсутствие означает запрет обработки трафика</button></div>
-<div data-feedback role="status" aria-live="polite"></div>
+<div class="quiz-feedback" data-feedback role="status" aria-live="polite"></div>
 </div>
 
-<div class="lesson-check" data-answer="1" data-explanation="SFTP — файловая подсистема SSH; FTPS — FTP, защищённый TLS. Архитектура и видимость управляющих данных у них отличаются.">
+<div class="quiz lesson-check" data-answer="1" data-explanation="SFTP — файловая подсистема SSH; FTPS — FTP, защищённый TLS. Архитектура и видимость управляющих данных у них отличаются.">
 <strong>Как точнее различать SFTP и FTPS?</strong>
 <div class="lesson-choicebar"><button type="button" data-choice="0" aria-pressed="false">Оба используют одинаковый протокол FTP, отличаясь лишь портом</button>
 <button type="button" data-choice="1" aria-pressed="false">SFTP использует SSH, а FTPS — FTP с защитой TLS</button>
 <button type="button" data-choice="2" aria-pressed="false">SFTP — синоним TLS 1.3 поверх SMTP, FTPS — режим HTTPS</button>
 <button type="button" data-choice="3" aria-pressed="false">Оба шифруют файлы локально и не относятся к передаче</button>
 </div>
-<div data-feedback role="status" aria-live="polite"></div>
+<div class="quiz-feedback" data-feedback role="status" aria-live="polite"></div>
 </div>
-<div class="lesson-check" data-answer="2" data-explanation="TCP handshake не обеспечивает авторизацию и шифрование прикладных данных; дополнительные свойства проверяются отдельно.">
+<div class="quiz lesson-check" data-answer="2" data-explanation="TCP handshake не обеспечивает авторизацию и шифрование прикладных данных; дополнительные свойства проверяются отдельно.">
 <strong>Что подтверждает завершённое TCP-рукопожатие при анализе сетевого следа?</strong>
 <div class="lesson-choicebar"><button type="button" data-choice="0" aria-pressed="false">Корректную авторизацию пользователя в прикладном сервисе</button>
 <button type="button" data-choice="1" aria-pressed="false">Отсутствие MITM при передаче полезной нагрузки</button>
 <button type="button" data-choice="2" aria-pressed="false">Наблюдаемый факт установления транспортного соединения</button>
 <button type="button" data-choice="3" aria-pressed="false">Шифрование каждого байта данных прикладного уровня</button>
 </div>
-<div data-feedback role="status" aria-live="polite"></div>
+<div class="quiz-feedback" data-feedback role="status" aria-live="polite"></div>
 </div>
-<div class="lesson-check" data-answer="0" data-explanation="Поддержка STARTTLS не означает, что конкретный обмен был защищён и проверен в соответствии с политикой.">
+<div class="quiz lesson-check" data-answer="0" data-explanation="Поддержка STARTTLS не означает, что конкретный обмен был защищён и проверен в соответствии с политикой.">
 <strong>На каком основании можно считать SMTP-пересылку защищённой на конкретном участке?</strong>
 <div class="lesson-choicebar"><button type="button" data-choice="0" aria-pressed="false">По факту согласования и применения TLS для данного соединения</button>
 <button type="button" data-choice="1" aria-pressed="false">По самому наличию поддержки STARTTLS в настройках клиента</button>
 <button type="button" data-choice="2" aria-pressed="false">По наличию SPF-записи домена отправителя независимо от транспорта</button>
 <button type="button" data-choice="3" aria-pressed="false">По ответу сервера 250 без исследования фактического канала</button>
 </div>
-<div data-feedback role="status" aria-live="polite"></div>
+<div class="quiz-feedback" data-feedback role="status" aria-live="polite"></div>
 </div>
-<div class="lesson-check" data-answer="3" data-explanation="Защищённый канал может скрывать команду от пассивного сетевого сенсора; локальные журналы дают другой источник наблюдения.">
+<div class="quiz lesson-check" data-answer="3" data-explanation="Защищённый канал может скрывать команду от пассивного сетевого сенсора; локальные журналы дают другой источник наблюдения.">
 <strong>Сетевой сенсор видит SSH, но не удалённую команду. Какой следующий источник поможет её исследовать?</strong>
 <div class="lesson-choicebar"><button type="button" data-choice="0" aria-pressed="false">Произвольная DNS-запись из того же сегмента</button>
 <button type="button" data-choice="1" aria-pressed="false">Номер порта, на который установлено соединение</button>
 <button type="button" data-choice="2" aria-pressed="false">Факт наличия TLS-сертификата у веб-сервера</button>
 <button type="button" data-choice="3" aria-pressed="false">Журналы команд и процессов конечной системы</button>
 </div>
-<div data-feedback role="status" aria-live="polite"></div>
+<div class="quiz-feedback" data-feedback role="status" aria-live="polite"></div>
 </div>
 </div>
 
-## Связь с другими материалами
+## Дополнительные инженерные кейсы (после освоения темы)
 
 Для углубления разбора TCP, DNS, HTTP/2, HTTP/3, QUIC, SSH, SMB и ECH используйте [каноническую главу о протокольной наблюдаемости](../course/09-protocol-visibility.md). Криптографическая база раскрыта в [теме 10](../topics/10-crypto.md).
 

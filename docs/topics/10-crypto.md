@@ -54,6 +54,20 @@ RSA — семейство публично-ключевых механизмо�
 
 TLS защищает **канал между его конечными точками**. Если TLS завершается на обратном прокси, после этой точки данные могут оказаться доступны приложению, журналам или другому сенсору — это уже отдельная точка наблюдения. Внешний IDS не получает расшифрованный HTTP лишь потому, что соединение использует порт 443.
 
+
+<div class="lesson-mechanism" data-lesson-mechanism role="group" aria-label="Что меняется после включения TLS">
+  <p class="lesson-mechanism__eyebrow">Пошаговая интерактивная модель</p>
+  <h3>Что меняется после включения TLS</h3>
+  <p>Сравните один запрос GET /records/42 в двух точках сети и в журнале приложения. Это учебная модель HTTP/1.1 поверх TCP, не универсальная структура HTTP/3.</p>
+  <div class="lesson-mechanism__steps" role="group" aria-label="Этапы примера"><button type="button" class="lesson-mech-step" data-mech-step="0" data-trace="GET /records/42 HTTP/1.1
+Host: service.test" data-reason="Если сенсор находится на пути и способен разобрать открытый HTTP, он может проверить метод, путь и заголовки." data-limit="Наблюдаемый путь не доказывает успешный доступ или атаку." aria-pressed="true"><span>01</span>Открытый HTTP</button><button type="button" class="lesson-mech-step" data-mech-step="1" data-trace="TLS 1.3: ClientHello; key_share; ServerHello; ..." data-reason="Стороны согласуют параметры защищённого обмена и устанавливают ключи. В TLS 1.3 не следует считать, что весь handshake или имя сервера всегда видны: видимость зависит от этапа и ECH." data-limit="Handshake сам по себе не доказывает, что клиент корректно проверил сертификат и разрешил прикладное действие." aria-pressed="false"><span>02</span>Установление TLS</button><button type="button" class="lesson-mech-step" data-mech-step="2" data-trace="TCP 443: TLS application_data [ciphertext]" data-reason="Внешний сенсор без доступа к открытым данным видит доступные сетевые признаки и защищённые записи, но не исходный путь /records/42." data-limit="Порт 443, SNI или размер пакета не раскрывают содержимое HTTP-запроса." aria-pressed="false"><span>03</span>Зашифрованное HTTP-содержимое</button><button type="button" class="lesson-mech-step" data-mech-step="3" data-trace="Application log: GET /records/42 -&gt; HTTP 403" data-reason="Сервис или прокси после завершения TLS может записать метод, URI и результат своей обработки. Это отдельная точка наблюдения." data-limit="Запись 403 относится к конкретному запросу; без других доказательств она не подтверждает корректность всех проверок авторизации." aria-pressed="false"><span>04</span>После TLS-завершения</button></div>
+  <div class="lesson-mechanism__screen" aria-live="polite">
+    <div><strong>Что произошло / какие данные доступны</strong><pre class="lesson-mechanism__trace" data-mech-trace></pre></div>
+    <div class="lesson-mechanism__interpretation"><strong>Как и почему</strong><p data-mech-reason></p><strong>Граница вывода</strong><p data-mech-limit></p></div>
+  </div>
+  <p class="lesson-mechanism__note">Проверка понимания: где именно нужно разместить сенсор или собрать журнал, чтобы обоснованно проверять условие по http.uri?</p>
+</div>
+
 ## 5. Почему защищённый канал усложняет обнаружение вторжений
 
 Предположим, правило Suricata проверяет путь `/download/LAB4-KNOWN-BAD` в HTTP URI. Для открытого HTTP, который сенсор видит и корректно разбирает, такое условие может совпасть. Если URI передаётся внутри TLS и ключи у сенсора недоступны, то правило прикладного уровня по открытому URI не получает необходимое поле.
@@ -113,80 +127,80 @@ TLS защищает **канал между его конечными точк�
 Ответ выбирается непосредственно на странице. Для каждого выбора показано объяснение, а не только отметка. Порядок вопросов и вариантов при загрузке перемешивается.
 
 <div class="lesson-quiz-list">
-<div class="lesson-check" data-answer="1" data-explanation="TLS согласует и выводит ключевой материал, а затем защищает прикладной поток симметричными AEAD-шифрами.">
+<div class="quiz lesson-check" data-answer="1" data-explanation="TLS согласует и выводит ключевой материал, а затем защищает прикладной поток симметричными AEAD-шифрами.">
 <strong>Какой механизм обычно защищает основную массу данных в TLS 1.3?</strong>
 <div class="lesson-choicebar"><button type="button" data-choice="0" aria-pressed="false">Подпись каждого блока ключом сервера</button>
 <button type="button" data-choice="1" aria-pressed="false">Симметричное аутентифицированное шифрование полезных данных ключом сеанса</button>
 <button type="button" data-choice="2" aria-pressed="false">Шифрование трафика только публичным ключом</button>
 <button type="button" data-choice="3" aria-pressed="false">Контрольный хеш без защиты содержимого</button></div>
-<div data-feedback role="status" aria-live="polite"></div>
+<div class="quiz-feedback" data-feedback role="status" aria-live="polite"></div>
 </div>
-<div class="lesson-check" data-answer="0" data-explanation="Хеширование даёт контрольное значение, а не обратимое преобразование для конфиденциальности. Сам хеш не доказывает и подлинность.">
+<div class="quiz lesson-check" data-answer="0" data-explanation="Хеширование даёт контрольное значение, а не обратимое преобразование для конфиденциальности. Сам хеш не доказывает и подлинность.">
 <strong>Почему SHA-256 не является заменой шифрования?</strong>
 <div class="lesson-choicebar"><button type="button" data-choice="0" aria-pressed="false">Хеш вычисляет контрольное значение, а не скрывает исходные данные</button>
 <button type="button" data-choice="1" aria-pressed="false">Хеширование используется для сокрытия открытого текста, но только для небольших сообщений</button>
 <button type="button" data-choice="2" aria-pressed="false">SHA-256 сохраняет ключ дешифрования в заголовке и потому подходит только для архивации</button>
 <button type="button" data-choice="3" aria-pressed="false">Результат хеширования предназначен для восстановления текста при наличии сертификата</button></div>
-<div data-feedback role="status" aria-live="polite"></div>
+<div class="quiz-feedback" data-feedback role="status" aria-live="polite"></div>
 </div>
-<div class="lesson-check" data-answer="2" data-explanation="Наблюдаемость поля зависит от того, получает ли сенсор данные после TLS-завершения либо другое подходящее представление.">
+<div class="quiz lesson-check" data-answer="2" data-explanation="Наблюдаемость поля зависит от того, получает ли сенсор данные после TLS-завершения либо другое подходящее представление.">
 <strong>Что означает отсутствие HTTP URI в EVE при HTTPS без расшифрования?</strong>
 <div class="lesson-choicebar"><button type="button" data-choice="0" aria-pressed="false">HTTP-запрос на сервере не возник</button>
 <button type="button" data-choice="1" aria-pressed="false">Отсутствие URI показывает, что правило исключило этот поток как заведомо безопасный</button>
 <button type="button" data-choice="2" aria-pressed="false">Сенсору может быть недоступно прикладное представление</button>
 <button type="button" data-choice="3" aria-pressed="false">Значение URI передаётся в TLS-метаданных и должно быть видно при любом режиме TLS</button></div>
-<div data-feedback role="status" aria-live="polite"></div>
+<div class="quiz-feedback" data-feedback role="status" aria-live="polite"></div>
 </div>
-<div class="lesson-check" data-answer="1" data-explanation="Сам факт предъявления сертификата не подтверждает доверие: клиент должен провести предусмотренные проверки.">
+<div class="quiz lesson-check" data-answer="1" data-explanation="Сам факт предъявления сертификата не подтверждает доверие: клиент должен провести предусмотренные проверки.">
 <strong>Что необходимо проверить для доверия к TLS-сертификату сервера?</strong>
 <div class="lesson-choicebar"><button type="button" data-choice="0" aria-pressed="false">Достаточно предъявленного сертификата</button>
 <button type="button" data-choice="1" aria-pressed="false">Цепочку доверия, имя и параметры проверки сертификата</button>
 <button type="button" data-choice="2" aria-pressed="false">Достаточно сравнить IP-адрес удалённого сервера с адресом из сертификата без проверки цепочки</button>
 <button type="button" data-choice="3" aria-pressed="false">Достаточно проверить срок действия сертификата без привязки к имени и доверенному издателю</button></div>
-<div data-feedback role="status" aria-live="polite"></div>
+<div class="quiz-feedback" data-feedback role="status" aria-live="polite"></div>
 </div>
 
-<div class="lesson-check" data-answer="0" data-explanation="Для объёмного потока используют симметричный AEAD, а асимметричные механизмы решают согласование секрета и доверие.">
+<div class="quiz lesson-check" data-answer="0" data-explanation="Для объёмного потока используют симметричный AEAD, а асимметричные механизмы решают согласование секрета и доверие.">
 <strong>Для передачи большого объёма конфиденциальных данных после согласования ключей какой механизм уместнее?</strong>
 <div class="lesson-choicebar"><button type="button" data-choice="0" aria-pressed="false">Симметричное аутентифицированное шифрование с ключом сеанса</button>
 <button type="button" data-choice="1" aria-pressed="false">Хеширование каждой части файла без шифрования содержимого</button>
 <button type="button" data-choice="2" aria-pressed="false">Подпись каждого блока исключительно открытым ключом отправителя</button>
 <button type="button" data-choice="3" aria-pressed="false">Использование одного сертификата вместо защиты полезных данных</button>
 </div>
-<div data-feedback role="status" aria-live="polite"></div>
+<div class="quiz-feedback" data-feedback role="status" aria-live="polite"></div>
 </div>
-<div class="lesson-check" data-answer="2" data-explanation="Шифрование носителя полезно при утрате носителя, но не ограничивает уже авторизованный процесс, имеющий доступ к расшифрованным данным.">
+<div class="quiz lesson-check" data-answer="2" data-explanation="Шифрование носителя полезно при утрате носителя, но не ограничивает уже авторизованный процесс, имеющий доступ к расшифрованным данным.">
 <strong>База зашифрована на диске, но процесс приложения читает строки без ограничений. Что это показывает?</strong>
 <div class="lesson-choicebar"><button type="button" data-choice="0" aria-pressed="false">Дисковое шифрование заменяет авторизацию при работающей системе</button>
 <button type="button" data-choice="1" aria-pressed="false">Только резервная копия требует контроля ключей</button>
 <button type="button" data-choice="2" aria-pressed="false">Шифрование носителя не заменяет контроль доступа к данным работающего приложения</button>
 <button type="button" data-choice="3" aria-pressed="false">Шифрование автоматически предотвращает злоупотребление легитимной учётной записью</button>
 </div>
-<div data-feedback role="status" aria-live="polite"></div>
+<div class="quiz-feedback" data-feedback role="status" aria-live="polite"></div>
 </div>
-<div class="lesson-check" data-answer="1" data-explanation="Для достаточно мощных квантовых вычислений факторизация и дискретный логарифм перестают быть надёжной основой. Миграция требует анализа конкретных систем и сроков секретности.">
+<div class="quiz lesson-check" data-answer="1" data-explanation="Для достаточно мощных квантовых вычислений факторизация и дискретный логарифм перестают быть надёжной основой. Миграция требует анализа конкретных систем и сроков секретности.">
 <strong>Почему при обсуждении квантовых рисков важно инвентаризировать применение RSA и ECC?</strong>
 <div class="lesson-choicebar"><button type="button" data-choice="0" aria-pressed="false">Потому что симметричные алгоритмы немедленно перестают работать</button>
 <button type="button" data-choice="1" aria-pressed="false">Потому что квантовые вычисления могут нарушить основы стойкости RSA/ECC</button>
 <button type="button" data-choice="2" aria-pressed="false">Потому что любой протокол с TLS уже использует квантово-устойчивое шифрование</button>
 <button type="button" data-choice="3" aria-pressed="false">Потому что доступность сервера гарантируется заменой сертификата</button>
 </div>
-<div data-feedback role="status" aria-live="polite"></div>
+<div class="quiz-feedback" data-feedback role="status" aria-live="polite"></div>
 </div>
-<div class="lesson-check" data-answer="3" data-explanation="Нужен контроль доступа к ключу и архиву, а также способность восстановить данные. Один ярлык или флаг не является достаточным свидетельством.">
+<div class="quiz lesson-check" data-answer="3" data-explanation="Нужен контроль доступа к ключу и архиву, а также способность восстановить данные. Один ярлык или флаг не является достаточным свидетельством.">
 <strong>Что сильнее всего свидетельствует о защите конфиденциальности зашифрованной резервной копии?</strong>
 <div class="lesson-choicebar"><button type="button" data-choice="0" aria-pressed="false">Наличие расширения файла .enc в каталоге резервирования</button>
 <button type="button" data-choice="1" aria-pressed="false">Совпадение имени архива с именем базы</button>
 <button type="button" data-choice="2" aria-pressed="false">Наличие в отчёте галочки «шифрование включено»</button>
 <button type="button" data-choice="3" aria-pressed="false">Права на ключ и проверенное восстановление копии</button>
 </div>
-<div data-feedback role="status" aria-live="polite"></div>
+<div class="quiz-feedback" data-feedback role="status" aria-live="polite"></div>
 </div>
 </div>
 
-## Связь с другими материалами
+## Дополнительные инженерные кейсы (после освоения темы)
 
-Полноценный инженерный разбор границ наблюдаемости см. в [«Протоколы, приложения и зашифрованный трафик глазами IDPS»](../course/09-protocol-visibility.md). Следующая обязательная тема рассматривает безопасность протоколов: [тема 11](../topics/11-network-protocol-security.md).
+Дополнительные случаи с QUIC, SMB, ECH и особенностями сенсоров представлены в [«Протоколы, приложения и зашифрованный трафик глазами IDPS»](../course/09-protocol-visibility.md). Следующая обязательная тема рассматривает безопасность протоколов: [тема 11](../topics/11-network-protocol-security.md).
 
 **Основание программы:** SOPV 4311, лекция №10 (стр. 36–38 PDF). Вопросы для обсуждения: применение симметричного и асимметричного шифрования, защита ключей, влияние современных технологий. Дополнительная инженерная привязка — TLS и наблюдаемость IDPS.
 

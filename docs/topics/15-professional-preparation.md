@@ -37,6 +37,20 @@
 
 Студент должен понимать **scope** и **Rules of Engagement (RoE)**: целевые адреса, разрешённые действия, ограничения нагрузки, порядок уведомления, контакты эскалации и обращение с возможными персональными данными. Для социальной инженерии нужны дополнительные этические и организационные ограничения. Реальные чужие системы без разрешения не являются допустимой лабораторной площадкой.
 
+
+<div class="lesson-mechanism" data-lesson-mechanism role="group" aria-label="Из события в воспроизводимый вывод аналитика">
+  <p class="lesson-mechanism__eyebrow">Пошаговая интерактивная модель</p>
+  <h3>Из события в воспроизводимый вывод аналитика</h3>
+  <p>Отработайте один короткий рабочий цикл: от предположения до отчётного вывода.</p>
+  <div class="lesson-mechanism__steps" role="group" aria-label="Этапы примера"><button type="button" class="lesson-mech-step" data-mech-step="0" data-trace="Possible unauthorized API access" data-reason="Формулировка гипотезы должна быть проверяемой: какие факты при её подтверждении должны существовать?" data-limit="Гипотеза не является установленным инцидентом." aria-pressed="true"><span>01</span>Гипотеза</button><button type="button" class="lesson-mech-step" data-mech-step="1" data-trace="PCAP + EVE alert + application audit" data-reason="Зафиксируйте время, источник, полноту данных и способ получения каждого артефакта." data-limit="Один alert не заменяет независимую проверку результата." aria-pressed="false"><span>02</span>Сбор свидетельств</button><button type="button" class="lesson-mech-step" data-mech-step="2" data-trace="Compare request_id / time / auth decision" data-reason="Сопоставьте данные по надёжным идентификаторам, исследуйте альтернативные причины, проверяйте границы наблюдения." data-limit="Временная близость не доказывает причинную связь." aria-pressed="false"><span>03</span>Проверка</button><button type="button" class="lesson-mech-step" data-mech-step="3" data-trace="Observed request; app denied access
+No evidence of data change in available logs" data-reason="Отчёт отделяет подтверждённый факт, ограничения источников, степень уверенности и предлагаемое действие." data-limit="Отсутствие записи об изменении не гарантирует отсутствие действия, если аудит неполон." aria-pressed="false"><span>04</span>Заключение</button></div>
+  <div class="lesson-mechanism__screen" aria-live="polite">
+    <div><strong>Что произошло / какие данные доступны</strong><pre class="lesson-mechanism__trace" data-mech-trace></pre></div>
+    <div class="lesson-mechanism__interpretation"><strong>Как и почему</strong><p data-mech-reason></p><strong>Граница вывода</strong><p data-mech-limit></p></div>
+  </div>
+  <p class="lesson-mechanism__note">Итог: грамотный специалист способен воспроизвести проверку и обосновать вывод, а не просто назвать инструмент.</p>
+</div>
+
 ## 5. Реагирование и форензика: сохранение происхождения данных
 
 Инцидент-реагирование часто начинается с неполного сигнала. Необходимо определить гипотезу, сохранить исходные артефакты, указать время и источник, проверить полноту журналов, связать наблюдения и только после этого формулировать выводы и ответные меры.
@@ -131,78 +145,78 @@ ISO/IEC 27001 описывает требования к системе мене
 Ответ выбирается непосредственно на странице. Для каждого выбора показано объяснение, а не только отметка. Порядок вопросов и вариантов при загрузке перемешивается.
 
 <div class="lesson-quiz-list">
-<div class="lesson-check" data-answer="2" data-explanation="Качество вывода определяется происхождением доказательств, воспроизводимостью и признанием неопределённости.">
+<div class="quiz lesson-check" data-answer="2" data-explanation="Качество вывода определяется происхождением доказательств, воспроизводимостью и признанием неопределённости.">
 <strong>Что делает заключение по событию IDS профессионально обоснованным?</strong>
 <div class="lesson-choicebar"><button type="button" data-choice="0" aria-pressed="false">Оценка severity от продукта</button>
 <button type="button" data-choice="1" aria-pressed="false">Красивые графики и диаграммы</button>
 <button type="button" data-choice="2" aria-pressed="false">Сопоставление вывода с проверяемыми фактами, происхождением и границами источников</button>
 <button type="button" data-choice="3" aria-pressed="false">Высокая уверенность оценки ИИ</button></div>
-<div data-feedback role="status" aria-live="polite"></div>
+<div class="quiz-feedback" data-feedback role="status" aria-live="polite"></div>
 </div>
-<div class="lesson-check" data-answer="1" data-explanation="Техническая доступность не равна полномочию; scope и RoE задают допустимые границы работы.">
+<div class="quiz lesson-check" data-answer="1" data-explanation="Техническая доступность не равна полномочию; scope и RoE задают допустимые границы работы.">
 <strong>Что необходимо до проведения security testing на чужой инфраструктуре?</strong>
 <div class="lesson-choicebar"><button type="button" data-choice="0" aria-pressed="false">Открытый сетевой порт вместе с указанием владельца домена означает согласие на тест</button>
 <button type="button" data-choice="1" aria-pressed="false">Разрешение, область работ и согласованные условия проведения</button>
 <button type="button" data-choice="2" aria-pressed="false">Тестирование допускается после предварительного сканирования на малой скорости без уведомления</button>
 <button type="button" data-choice="3" aria-pressed="false">Можно полагаться на техническую доступность ресурса вместо формального задания границ</button></div>
-<div data-feedback role="status" aria-live="polite"></div>
+<div class="quiz-feedback" data-feedback role="status" aria-live="polite"></div>
 </div>
-<div class="lesson-check" data-answer="0" data-explanation="Контроль целостности копий важен, но происхождение и полноту доказательств нужно устанавливать отдельно.">
+<div class="quiz lesson-check" data-answer="0" data-explanation="Контроль целостности копий важен, но происхождение и полноту доказательств нужно устанавливать отдельно.">
 <strong>Какой вывод следует из совпадения хеша двух копий журнала?</strong>
 <div class="lesson-choicebar"><button type="button" data-choice="0" aria-pressed="false">Совпадает проверенное содержимое копий при корректном применении алгоритма</button>
 <button type="button" data-choice="1" aria-pressed="false">Хеш гарантирует происхождение записи</button>
 <button type="button" data-choice="2" aria-pressed="false">Авторство и время возникновения исходного события независимо доказаны одним совпадением хешей</button>
 <button type="button" data-choice="3" aria-pressed="false">Подписавшая копию сторона обязательно создала исходное событие в указанное время</button></div>
-<div data-feedback role="status" aria-live="polite"></div>
+<div class="quiz-feedback" data-feedback role="status" aria-live="polite"></div>
 </div>
-<div class="lesson-check" data-answer="1" data-explanation="Уверенно сформулированная оценка не заменяет фактические наблюдения.">
+<div class="quiz lesson-check" data-answer="1" data-explanation="Уверенно сформулированная оценка не заменяет фактические наблюдения.">
 <strong>Как следует использовать вывод системы ИИ о компрометации?</strong>
 <div class="lesson-choicebar"><button type="button" data-choice="0" aria-pressed="false">ИИ достаточно для вывода</button>
 <button type="button" data-choice="1" aria-pressed="false">Проверять результат по исходным данным и ограничивать силу вывода</button>
 <button type="button" data-choice="2" aria-pressed="false">Достаточно сопоставить решение ИИ с любым вторым автоматизированным скорингом без логов</button>
 <button type="button" data-choice="3" aria-pressed="false">Любое расхождение между моделью и журналами следует объяснять ошибкой журналирования</button></div>
-<div data-feedback role="status" aria-live="polite"></div>
+<div class="quiz-feedback" data-feedback role="status" aria-live="polite"></div>
 </div>
 
-<div class="lesson-check" data-answer="1" data-explanation="Проверяемая компетенция связана с воспроизводимыми тестами и интерпретацией фактических результатов.">
+<div class="quiz lesson-check" data-answer="1" data-explanation="Проверяемая компетенция связана с воспроизводимыми тестами и интерпретацией фактических результатов.">
 <strong>Какой артефакт сильнее всего подтверждает умение проверять правило IDS?</strong>
 <div class="lesson-choicebar"><button type="button" data-choice="0" aria-pressed="false">Описание интерфейса продукта без выполненных проверок</button>
 <button type="button" data-choice="1" aria-pressed="false">Протокол позитивных, негативных и граничных тестов</button>
 <button type="button" data-choice="2" aria-pressed="false">Список сертификатов разработчика IDS</button>
 <button type="button" data-choice="3" aria-pressed="false">Скриншот страницы с перечнем всех установленных правил</button>
 </div>
-<div data-feedback role="status" aria-live="polite"></div>
+<div class="quiz-feedback" data-feedback role="status" aria-live="polite"></div>
 </div>
-<div class="lesson-check" data-answer="0" data-explanation="Alert и HTTP 200 не заменяют доказательство эксплуатации: нужно исследовать приложение, состояние и другие источники.">
+<div class="quiz lesson-check" data-answer="0" data-explanation="Alert и HTTP 200 не заменяют доказательство эксплуатации: нужно исследовать приложение, состояние и другие источники.">
 <strong>Какой вывод допустим при alert и HTTP 200 без сведений о серверном состоянии?</strong>
 <div class="lesson-choicebar"><button type="button" data-choice="0" aria-pressed="false">Условие совпало; успех атаки не установлен</button>
 <button type="button" data-choice="1" aria-pressed="false">Сервер обязательно был успешно скомпрометирован</button>
 <button type="button" data-choice="2" aria-pressed="false">Запрос непременно обошёл все средства предотвращения</button>
 <button type="button" data-choice="3" aria-pressed="false">Пользователь системы получил права администратора</button>
 </div>
-<div data-feedback role="status" aria-live="polite"></div>
+<div class="quiz-feedback" data-feedback role="status" aria-live="polite"></div>
 </div>
-<div class="lesson-check" data-answer="2" data-explanation="Оба формата полезны по-разному: контролируемый эксперимент и реальные рабочие ограничения дают разные основания оценки.">
+<div class="quiz lesson-check" data-answer="2" data-explanation="Оба формата полезны по-разному: контролируемый эксперимент и реальные рабочие ограничения дают разные основания оценки.">
 <strong>В чём различие лабораторной работы и стажировки при оценке навыков?</strong>
 <div class="lesson-choicebar"><button type="button" data-choice="0" aria-pressed="false">Лаборатория исключает необходимость фиксировать источники данных</button>
 <button type="button" data-choice="1" aria-pressed="false">Стажировка всегда даёт стопроцентное подтверждение всех компетенций</button>
 <button type="button" data-choice="2" aria-pressed="false">В лаборатории условия контролируются, на стажировке они рабочие</button>
 <button type="button" data-choice="3" aria-pressed="false">Ни один формат не требует соблюдения правовых ограничений</button>
 </div>
-<div data-feedback role="status" aria-live="polite"></div>
+<div class="quiz-feedback" data-feedback role="status" aria-live="polite"></div>
 </div>
-<div class="lesson-check" data-answer="3" data-explanation="Профессиональная коммуникация требует ясного разграничения доказательств, рисков и дальнейших шагов.">
+<div class="quiz lesson-check" data-answer="3" data-explanation="Профессиональная коммуникация требует ясного разграничения доказательств, рисков и дальнейших шагов.">
 <strong>Как представить руководителю технический вывод об IDS-оповещении?</strong>
 <div class="lesson-choicebar"><button type="button" data-choice="0" aria-pressed="false">Только перечислить имена внутренних файлов и SID без контекста</button>
 <button type="button" data-choice="1" aria-pressed="false">Подтвердить ущерб, если в базе SIEM есть похожий индикатор</button>
 <button type="button" data-choice="2" aria-pressed="false">Заменить проверку перечнем используемых сертификатов</button>
 <button type="button" data-choice="3" aria-pressed="false">Разделить факт, риск, неопределённость и следующий шаг</button>
 </div>
-<div data-feedback role="status" aria-live="polite"></div>
+<div class="quiz-feedback" data-feedback role="status" aria-live="polite"></div>
 </div>
 </div>
 
-## Связь с другими материалами
+## Дополнительные инженерные кейсы (после освоения темы)
 
 Дополнительно: [профессиональная практика специалиста](../course/09c-professional-practice.md), [план СРО](../resources/sro-plan.md), [90 контрольных вопросов](../resources/exam-prep.md) и [итоговый проект](../resources/project-brief.md).
 

@@ -25,6 +25,24 @@ OAuth 2.0 — рамка **делегированной авторизации**
 
 Access Token предназначен для передачи ограниченных прав к ресурсу, ID Token несёт утверждения об аутентификации для подходящего клиента. Их нельзя бездумно взаимозаменять. При проверке токенов имеют значение подпись, издатель (`iss`), аудитория (`aud`), срок действия (`exp`), область прав и привязка к конкретному защищаемому ресурсу; набор проверок зависит от типа токена и профиля протокола.
 
+
+<div class="lesson-mechanism" data-lesson-mechanism role="group" aria-label="BOLA/IDOR: токен корректный, доступ неправильный">
+  <p class="lesson-mechanism__eyebrow">Пошаговая интерактивная модель</p>
+  <h3>BOLA/IDOR: токен корректный, доступ неправильный</h3>
+  <p>Один и тот же запрос к ресурсу другого пользователя. Поменяйте состояние серверной проверки и проследите причинную связь.</p>
+  <div class="lesson-mechanism__steps" role="group" aria-label="Этапы примера"><button type="button" class="lesson-mech-step" data-mech-step="0" data-trace="subject=user_A
+GET /api/orders/42
+order42.owner=user_B" data-reason="Аутентификация подтверждает личность user_A в принятой модели. Заказ 42 принадлежит другому субъекту." data-limit="Токен или MFA не подтверждают право user_A читать заказ 42." aria-pressed="true"><span>01</span>Клиент аутентифицирован</button><button type="button" class="lesson-mech-step" data-mech-step="1" data-trace="if (token.valid): return order42
+HTTP 200 + чужие данные" data-reason="Сервер проверил только факт входа и вернул чужой объект: это нарушение авторизации на уровне объекта при данных предпосылках." data-limit="Сетевая IDS без дополнительного контекста может не знать владельца объекта." aria-pressed="false"><span>02</span>Нет проверки владельца</button><button type="button" class="lesson-mech-step" data-mech-step="2" data-trace="if (order42.owner != subject): deny
+HTTP 403" data-reason="Сервер должен проверять доступ к конкретному объекту при каждом соответствующем действии." data-limit="Один 403 не подтверждает защиту иных методов и объектов." aria-pressed="false"><span>03</span>Проверка на сервере</button><button type="button" class="lesson-mech-step" data-mech-step="3" data-trace="A -&gt; own order: 200
+A -&gt; B order: 403" data-reason="Тестируют как допустимое, так и запрещённое действие и сохраняют прикладные свидетельства." data-limit="Необходимо проверить другие идентификаторы, операции и альтернативные маршруты API." aria-pressed="false"><span>04</span>Регрессионный тест</button></div>
+  <div class="lesson-mechanism__screen" aria-live="polite">
+    <div><strong>Что произошло / какие данные доступны</strong><pre class="lesson-mechanism__trace" data-mech-trace></pre></div>
+    <div class="lesson-mechanism__interpretation"><strong>Как и почему</strong><p data-mech-reason></p><strong>Граница вывода</strong><p data-mech-limit></p></div>
+  </div>
+  <p class="lesson-mechanism__note">Вывод: OAuth/OIDC помогают организовать доступ и идентичность, но объектную авторизацию реализует сервис.</p>
+</div>
+
 ## 4. Сессии, cookie, CSRF и управление состоянием
 
 Cookie с атрибутами `Secure` и `HttpOnly` снижает некоторые риски передачи и доступа из JavaScript; `SameSite` влияет на отправку cookie в межсайтовых контекстах. Эти атрибуты не заменяют правильный срок жизни, отзыв сессии, защиту от её фиксации и проверку авторизации.
@@ -109,80 +127,80 @@ TLS защищает обмен между своими конечными то�
 Ответ выбирается непосредственно на странице. Для каждого выбора показано объяснение, а не только отметка. Порядок вопросов и вариантов при загрузке перемешивается.
 
 <div class="lesson-quiz-list">
-<div class="lesson-check" data-answer="2" data-explanation="Аутентифицированный пользователь может не иметь доступа к конкретному заказу или ресурсу.">
+<div class="quiz lesson-check" data-answer="2" data-explanation="Аутентифицированный пользователь может не иметь доступа к конкретному заказу или ресурсу.">
 <strong>Что проверяется при авторизации на уровне объекта API?</strong>
 <div class="lesson-choicebar"><button type="button" data-choice="0" aria-pressed="false">Наличие роли user в JWT</button>
 <button type="button" data-choice="1" aria-pressed="false">Факт успешного HTTPS</button>
 <button type="button" data-choice="2" aria-pressed="false">Проверка права субъекта на конкретную операцию над запрошенным объектом</button>
 <button type="button" data-choice="3" aria-pressed="false">Подпись токена без проверки объекта</button></div>
-<div data-feedback role="status" aria-live="polite"></div>
+<div class="quiz-feedback" data-feedback role="status" aria-live="polite"></div>
 </div>
-<div class="lesson-check" data-answer="0" data-explanation="Для аутентификации используют соответствующий профиль OIDC; OAuth не следует отождествлять с установлением личности.">
+<div class="quiz lesson-check" data-answer="0" data-explanation="Для аутентификации используют соответствующий профиль OIDC; OAuth не следует отождествлять с установлением личности.">
 <strong>Как соотносятся OAuth 2.0 и OpenID Connect?</strong>
 <div class="lesson-choicebar"><button type="button" data-choice="0" aria-pressed="false">OAuth 2.0 задаёт делегированную авторизацию, OIDC добавляет слой идентичности</button>
 <button type="button" data-choice="1" aria-pressed="false">OAuth 2.0 подтверждает подлинность конечного пользователя, а OIDC предназначен для шифрования</button>
 <button type="button" data-choice="2" aria-pressed="false">OIDC регулирует исключительно права сервисов, тогда как OAuth 2.0 выдаёт сертификаты сервера</button>
 <button type="button" data-choice="3" aria-pressed="false">И OAuth 2.0, и OIDC одинаково проверяют доступ к объекту без серверной авторизации</button></div>
-<div data-feedback role="status" aria-live="polite"></div>
+<div class="quiz-feedback" data-feedback role="status" aria-live="polite"></div>
 </div>
-<div class="lesson-check" data-answer="1" data-explanation="Это подтверждает результат конкретной проверки, но не покрывает все маршруты и методы.">
+<div class="quiz lesson-check" data-answer="1" data-explanation="Это подтверждает результат конкретной проверки, но не покрывает все маршруты и методы.">
 <strong>Что подтверждает ответ 403 на запрос чужого ресурса?</strong>
 <div class="lesson-choicebar"><button type="button" data-choice="0" aria-pressed="false">Все маршруты API теперь защищены</button>
 <button type="button" data-choice="1" aria-pressed="false">Подтверждённый отказ на конкретный запрос при проверенной связи с журналом</button>
 <button type="button" data-choice="2" aria-pressed="false">Сервер доказал невозможность чтения объекта при использовании других способов обращения</button>
 <button type="button" data-choice="3" aria-pressed="false">Наличие ответа 403 автоматически означает, что объект и пользователь корректно сопоставлены</button></div>
-<div data-feedback role="status" aria-live="polite"></div>
+<div class="quiz-feedback" data-feedback role="status" aria-live="polite"></div>
 </div>
-<div class="lesson-check" data-answer="1" data-explanation="Авторизация — ответственность приложения/сервиса; сетевой мониторинг может лишь обнаружить часть признаков.">
+<div class="quiz lesson-check" data-answer="1" data-explanation="Авторизация — ответственность приложения/сервиса; сетевой мониторинг может лишь обнаружить часть признаков.">
 <strong>Почему WAF и IDS недостаточны для устранения BOLA?</strong>
 <div class="lesson-choicebar"><button type="button" data-choice="0" aria-pressed="false">WAF проверяет права на все объекты</button>
 <button type="button" data-choice="1" aria-pressed="false">Нужна серверная проверка прав; WAF и IDS не заменяют её</button>
 <button type="button" data-choice="2" aria-pressed="false">WAF выполняет авторизацию объекта при любой подписи токена даже без связи с приложением</button>
 <button type="button" data-choice="3" aria-pressed="false">IDS устраняет BOLA путём изменения HTTP-заголовка, не затрагивая серверную бизнес-логику</button></div>
-<div data-feedback role="status" aria-live="polite"></div>
+<div class="quiz-feedback" data-feedback role="status" aria-live="polite"></div>
 </div>
 
-<div class="lesson-check" data-answer="0" data-explanation="Готовность к восстановлению подтверждается реальным тестом и параметрами RPO/RTO, а не только наличием архива.">
+<div class="quiz lesson-check" data-answer="0" data-explanation="Готовность к восстановлению подтверждается реальным тестом и параметрами RPO/RTO, а не только наличием архива.">
 <strong>Что отличает испытанную резервную копию веб-сервиса от просто созданного архива?</strong>
 <div class="lesson-choicebar"><button type="button" data-choice="0" aria-pressed="false">Тест восстановления с фактической проверкой RTO и RPO</button>
 <button type="button" data-choice="1" aria-pressed="false">Наличие второй реплики работающей базы без теста восстановления</button>
 <button type="button" data-choice="2" aria-pressed="false">Запись о ежедневном запуске задачи копирования без результатов</button>
 <button type="button" data-choice="3" aria-pressed="false">Совпадение количества файлов в рабочей папке и архиве</button>
 </div>
-<div data-feedback role="status" aria-live="polite"></div>
+<div class="quiz-feedback" data-feedback role="status" aria-live="polite"></div>
 </div>
-<div class="lesson-check" data-answer="2" data-explanation="Аутентификация не равна объектной авторизации; проверка выполняется сервером в контексте ресурса и субъекта.">
+<div class="quiz lesson-check" data-answer="2" data-explanation="Аутентификация не равна объектной авторизации; проверка выполняется сервером в контексте ресурса и субъекта.">
 <strong>Какой вывод корректен, если у пользователя действительный токен, но нет права читать чужой заказ?</strong>
 <div class="lesson-choicebar"><button type="button" data-choice="0" aria-pressed="false">Любой HTTP-ответ допустим, потому что токен валиден</button>
 <button type="button" data-choice="1" aria-pressed="false">Запрос следует выполнить, если у объекта верный идентификатор</button>
 <button type="button" data-choice="2" aria-pressed="false">Сервер должен отдельно проверить право доступа к заказу</button>
 <button type="button" data-choice="3" aria-pressed="false">IDS должна заменить токен на другой и вернуть пользователю результат</button>
 </div>
-<div data-feedback role="status" aria-live="polite"></div>
+<div class="quiz-feedback" data-feedback role="status" aria-live="polite"></div>
 </div>
-<div class="lesson-check" data-answer="1" data-explanation="Правовые обязательства зависят от фактов обработки и применимости норм, а не автоматически от используемой технологии.">
+<div class="quiz lesson-check" data-answer="1" data-explanation="Правовые обязательства зависят от фактов обработки и применимости норм, а не автоматически от используемой технологии.">
 <strong>Как устанавливают применимость требований GDPR или CCPA к веб-сервису?</strong>
 <div class="lesson-choicebar"><button type="button" data-choice="0" aria-pressed="false">По факту применения TLS, OAuth и иной защиты, независимо от круга субъектов и данных</button>
 <button type="button" data-choice="1" aria-pressed="false">По характеру обрабатываемых данных и применимости правовых норм</button>
 <button type="button" data-choice="2" aria-pressed="false">По наличию SIEM и интернет-домена организации</button>
 <button type="button" data-choice="3" aria-pressed="false">По числу пользователей в тестовой лаборатории</button>
 </div>
-<div data-feedback role="status" aria-live="polite"></div>
+<div class="quiz-feedback" data-feedback role="status" aria-live="polite"></div>
 </div>
-<div class="lesson-check" data-answer="3" data-explanation="Тест восстановления должен проверять рабочую функциональность, целостность/согласованность данных и целевые параметры восстановления.">
+<div class="quiz lesson-check" data-answer="3" data-explanation="Тест восстановления должен проверять рабочую функциональность, целостность/согласованность данных и целевые параметры восстановления.">
 <strong>После восстановления базы из копии какой результат особенно важен?</strong>
 <div class="lesson-choicebar"><button type="button" data-choice="0" aria-pressed="false">Счётчик созданных файлов не изменился</button>
 <button type="button" data-choice="1" aria-pressed="false">Средняя длина HTTP-запроса не уменьшилась</button>
 <button type="button" data-choice="2" aria-pressed="false">IDS сформировала хотя бы одно оповещение</button>
 <button type="button" data-choice="3" aria-pressed="false">Работоспособность, согласованность данных и соблюдение RTO/RPO</button>
 </div>
-<div data-feedback role="status" aria-live="polite"></div>
+<div class="quiz-feedback" data-feedback role="status" aria-live="polite"></div>
 </div>
 </div>
 
-## Связь с другими материалами
+## Дополнительные инженерные кейсы (после освоения темы)
 
-Углублённые объяснения XSS, SQLi, CSRF и средств разработки см. в [подробной главе AppSec/Web](../course/09a-application-web-security.md). Базовые механизмы разработки рассматриваются в [теме 12](../topics/12-application-security.md).
+После основных объяснений XSS, SQLi, CSRF и авторизации дополнительные сетевые примеры можно найти в [подробной главе AppSec/Web](../course/09a-application-web-security.md). Базовые механизмы разработки рассматриваются в [теме 12](../topics/12-application-security.md).
 
 **Основание программы:** SOPV 4311, лекция №13 (стр. 40–42 PDF): уязвимости веб-сервисов, аутентификация, авторизация, SQLi/XSS/CSRF, DDoS, TLS, безопасные сессии и постоянный мониторинг.
 

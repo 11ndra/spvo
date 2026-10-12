@@ -32,11 +32,42 @@ cursor.execute("SELECT status FROM orders WHERE id = ?", (order_id,))
 
 В контексте IDS важно различать попытку включить опасную строку в запрос и подтверждение исполнения в браузере. Сетевой alert обычно свидетельствует только о выполнении условий детектора на доступных данных.
 
+
+<div class="lesson-mechanism" data-lesson-mechanism role="group" aria-label="XSS: когда строка перестаёт быть данными">
+  <p class="lesson-mechanism__eyebrow">Пошаговая интерактивная модель</p>
+  <h3>XSS: когда строка перестаёт быть данными</h3>
+  <p>В модели подозрительная строка безопасно отображается как текст; никакой реальный JavaScript здесь не выполняется.</p>
+  <div class="lesson-mechanism__steps" role="group" aria-label="Этапы примера"><button type="button" class="lesson-mech-step" data-mech-step="0" data-trace="search = &quot;&lt;img src=x onerror=...&gt;&quot;" data-reason="Пользователь или злоумышленник может контролировать значение параметра поиска. Наличие специальных символов само по себе не означает успешную атаку." data-limit="Нужна проверка того, как приложение обработает строку и попадёт ли она в исполняемый контекст." aria-pressed="true"><span>01</span>Ввод</button><button type="button" class="lesson-mech-step" data-mech-step="1" data-trace="results.innerHTML = &quot;Найдено: &quot; + search" data-reason="Присвоение недоверенной строки свойству innerHTML может интерпретировать её как HTML. В зависимости от контекста и содержимого это создаёт риск XSS." data-limit="Фактическое выполнение зависит от контекста браузера, политики CSP и конкретного содержимого." aria-pressed="false"><span>02</span>Опасный путь</button><button type="button" class="lesson-mech-step" data-mech-step="2" data-trace="results.textContent = &quot;Найдено: &quot; + search" data-reason="textContent отображает значение как текст, не разбирая его в HTML-элементы. Для иных контекстов вывода нужны соответствующие меры защиты." data-limit="Одна замена innerHTML не устраняет любые возможные XSS в приложении." aria-pressed="false"><span>03</span>Безопасный путь</button><button type="button" class="lesson-mech-step" data-mech-step="3" data-trace="Browser DOM: no injected element
+App test: output stays literal" data-reason="Тест должен подтвердить реальное поведение браузера и шаблона. Сетевой IDS видит лишь доступный запрос, не обязательное выполнение кода на конечной стороне." data-limit="Даже отсутствие сетевого alert не доказывает, что код безопасен." aria-pressed="false"><span>04</span>Проверка</button></div>
+  <div class="lesson-mechanism__screen" aria-live="polite">
+    <div><strong>Что произошло / какие данные доступны</strong><pre class="lesson-mechanism__trace" data-mech-trace></pre></div>
+    <div class="lesson-mechanism__interpretation"><strong>Как и почему</strong><p data-mech-reason></p><strong>Граница вывода</strong><p data-mech-limit></p></div>
+  </div>
+  <p class="lesson-mechanism__note">Задание: объясните разницу между обнаружением XSS-подобной строки в URI и подтверждением её исполнения в браузере.</p>
+</div>
+
 ## 4. CSRF: корректная сессия, нежелательная операция
 
 Межсайтовая подделка запроса (CSRF) эксплуатирует ситуацию, когда браузер автоматически прикладывает полномочия пользователя к запросу, инициированному из недоверенного контекста. Поэтому аутентификация пользователя сама по себе не гарантирует, что он намеренно вызвал действие.
 
 Защита включает корректную архитектуру состояния и запросов, CSRF-токены там, где они нужны, настройки SameSite для cookie и проверку происхождения запроса по применимости. Важно не давать универсального совета «всё исправляет один заголовок»: способ защиты зависит от механизма сессий и протокола приложения.
+
+
+<div class="lesson-mechanism" data-lesson-mechanism role="group" aria-label="CSRF: кто инициировал действие и почему браузер отправил cookie">
+  <p class="lesson-mechanism__eyebrow">Пошаговая интерактивная модель</p>
+  <h3>CSRF: кто инициировал действие и почему браузер отправил cookie</h3>
+  <p>Учебная модель предполагает cookie, который браузер действительно прикладывает при межсайтовом запросе, и изменение состояния без CSRF-защиты.</p>
+  <div class="lesson-mechanism__steps" role="group" aria-label="Этапы примера"><button type="button" class="lesson-mech-step" data-mech-step="0" data-trace="Site: https://shop.test
+Session cookie: Secure; SameSite=None" data-reason="У пользователя есть действующая сессия на shop.test. Атрибут SameSite=None при соблюдении остальных условий допускает межсайтовую отправку cookie." data-limit="Cookie HttpOnly защищает от чтения скриптами, но не всегда предотвращает CSRF." aria-pressed="true"><span>01</span>Открыта сессия</button><button type="button" class="lesson-mech-step" data-mech-step="1" data-trace="Origin: https://example-attacker.test
+POST https://shop.test/change-email" data-reason="Недоверенный сайт способен инициировать запрос браузера к другому домену, например через форму. В определённых условиях браузер приложит cookie целевого сайта." data-limit="SOP/CORS ограничивают чтение ответа, но сами по себе не делают невозможной отправку запроса." aria-pressed="false"><span>02</span>Сторонняя страница</button><button type="button" class="lesson-mech-step" data-mech-step="2" data-trace="Server: session valid; CSRF token missing
+Response: 200; email changed" data-reason="Если сервер проверяет только сессию, не проверяет происхождение/токен и выполняет действие, законный вход пользователя может использоваться без его намерения." data-limit="Для вывода об успешном CSRF нужен факт изменения состояния, а не просто сетевой POST." aria-pressed="false"><span>03</span>Уязвимое действие</button><button type="button" class="lesson-mech-step" data-mech-step="3" data-trace="CSRF token checked + Origin verified
+Response: 403; no change" data-reason="Выбирают меры с учётом механизма сессий: CSRF-токены, проверка происхождения запроса, обоснованная политика SameSite." data-limit="Наличие одного заголовка без серверной проверки не гарантирует защиты." aria-pressed="false"><span>04</span>Защита</button></div>
+  <div class="lesson-mechanism__screen" aria-live="polite">
+    <div><strong>Что произошло / какие данные доступны</strong><pre class="lesson-mechanism__trace" data-mech-trace></pre></div>
+    <div class="lesson-mechanism__interpretation"><strong>Как и почему</strong><p data-mech-reason></p><strong>Граница вывода</strong><p data-mech-limit></p></div>
+  </div>
+  <p class="lesson-mechanism__note">Задание: какие наблюдения нужны, чтобы отличить межсайтовый POST от подтверждённого изменения учётной записи?</p>
+</div>
 
 ## 5. Управление сессией и полномочиями
 
@@ -116,80 +147,80 @@ cursor.execute("SELECT status FROM orders WHERE id = ?", (order_id,))
 Ответ выбирается непосредственно на странице. Для каждого выбора показано объяснение, а не только отметка. Порядок вопросов и вариантов при загрузке перемешивается.
 
 <div class="lesson-quiz-list">
-<div class="lesson-check" data-answer="1" data-explanation="Параметризация разделяет SQL-инструкцию и данные. Фильтрация отдельных строк не является эквивалентом.">
+<div class="quiz lesson-check" data-answer="1" data-explanation="Параметризация разделяет SQL-инструкцию и данные. Фильтрация отдельных строк не является эквивалентом.">
 <strong>Какой механизм в первую очередь предотвращает подмену структуры SQL значением параметра?</strong>
 <div class="lesson-choicebar"><button type="button" data-choice="0" aria-pressed="false">Нормализация входного HTTP в IDS</button>
 <button type="button" data-choice="1" aria-pressed="false">Параметризованный SQL-запрос отделяет данные параметра от синтаксиса команды</button>
 <button type="button" data-choice="2" aria-pressed="false">Ограничение длины SQL-параметра</button>
 <button type="button" data-choice="3" aria-pressed="false">Сокрытие имён таблиц от клиента</button></div>
-<div data-feedback role="status" aria-live="polite"></div>
+<div class="quiz-feedback" data-feedback role="status" aria-live="polite"></div>
 </div>
-<div class="lesson-check" data-answer="0" data-explanation="Корректная личность не означает наличие права на любой объект или функцию.">
+<div class="quiz lesson-check" data-answer="0" data-explanation="Корректная личность не означает наличие права на любой объект или функцию.">
 <strong>Что обязательно проверить после успешной аутентификации в API?</strong>
 <div class="lesson-choicebar"><button type="button" data-choice="0" aria-pressed="false">Право пользователя на действие именно с запрошенным объектом</button>
 <button type="button" data-choice="1" aria-pressed="false">Факт установления зашифрованного канала и успешного прохождения аутентификации</button>
 <button type="button" data-choice="2" aria-pressed="false">Наличие подписи токена и принадлежность пользователя к общей роли «зарегистрирован»</button>
 <button type="button" data-choice="3" aria-pressed="false">Принадлежность пользователя к сети, в которой размещён API и сервер аутентификации</button></div>
-<div data-feedback role="status" aria-live="polite"></div>
+<div class="quiz-feedback" data-feedback role="status" aria-live="polite"></div>
 </div>
-<div class="lesson-check" data-answer="2" data-explanation="Для доказательства выполнения в браузере нужны дополнительные сведения о контексте обработки и реальном результате.">
+<div class="quiz lesson-check" data-answer="2" data-explanation="Для доказательства выполнения в браузере нужны дополнительные сведения о контексте обработки и реальном результате.">
 <strong>Что подтверждает сетевой alert с признаком XSS?</strong>
 <div class="lesson-choicebar"><button type="button" data-choice="0" aria-pressed="false">XSS точно выполнился в браузере</button>
 <button type="button" data-choice="1" aria-pressed="false">Все браузеры исполнили полученную строку, даже если защита экранирования включена</button>
 <button type="button" data-choice="2" aria-pressed="false">Условие сетевого детектора совпало с доступными ему данными</button>
 <button type="button" data-choice="3" aria-pressed="false">Зарегистрированный параметр гарантированно изменил контент страницы после обработки</button></div>
-<div data-feedback role="status" aria-live="polite"></div>
+<div class="quiz-feedback" data-feedback role="status" aria-live="polite"></div>
 </div>
-<div class="lesson-check" data-answer="1" data-explanation="Это разные виды анализа. Их результаты зависят от области, конфигурации и качества проверки.">
+<div class="quiz lesson-check" data-answer="1" data-explanation="Это разные виды анализа. Их результаты зависят от области, конфигурации и качества проверки.">
 <strong>Какой подход верно характеризует SAST и DAST?</strong>
 <div class="lesson-choicebar"><button type="button" data-choice="0" aria-pressed="false">SAST и DAST оба читают только код</button>
 <button type="button" data-choice="1" aria-pressed="false">SAST анализирует код, DAST — поведение работающего приложения</button>
 <button type="button" data-choice="2" aria-pressed="false">DAST рассматривает только зависимости, а SAST выполняет обязательную эксплуатацию уязвимости</button>
 <button type="button" data-choice="3" aria-pressed="false">SAST гарантирует отсутствие ошибок безопасности, а DAST подтверждает успешность каждой атаки</button></div>
-<div data-feedback role="status" aria-live="polite"></div>
+<div class="quiz-feedback" data-feedback role="status" aria-live="polite"></div>
 </div>
 
-<div class="lesson-check" data-answer="2" data-explanation="CSRF использует доверие браузера и автоматическую передачу учётных данных; защита должна учитывать тип операции и модель сессии.">
+<div class="quiz lesson-check" data-answer="2" data-explanation="CSRF использует доверие браузера и автоматическую передачу учётных данных; защита должна учитывать тип операции и модель сессии.">
 <strong>Почему при API с автоматически отправляемой браузером сессией важна защита от CSRF?</strong>
 <div class="lesson-choicebar"><button type="button" data-choice="0" aria-pressed="false">Чтобы браузер не мог выполнять ни одного GET-запроса</button>
 <button type="button" data-choice="1" aria-pressed="false">Чтобы обнаружить любой SQL-синтаксис в HTTP-полях</button>
 <button type="button" data-choice="2" aria-pressed="false">Чтобы исключить навязанное действие с браузерной сессией</button>
 <button type="button" data-choice="3" aria-pressed="false">Чтобы зашифровать IP-адрес посетителя от сетевого датчика</button>
 </div>
-<div data-feedback role="status" aria-live="polite"></div>
+<div class="quiz-feedback" data-feedback role="status" aria-live="polite"></div>
 </div>
-<div class="lesson-check" data-answer="0" data-explanation="Шифрование защищает канал и носитель в своей модели угроз; доступ к объекту проверяет серверная авторизация.">
+<div class="quiz lesson-check" data-answer="0" data-explanation="Шифрование защищает канал и носитель в своей модели угроз; доступ к объекту проверяет серверная авторизация.">
 <strong>Приложение использует HTTPS и шифрование диска. Что ещё необходимо для защиты записей другого клиента?</strong>
 <div class="lesson-choicebar"><button type="button" data-choice="0" aria-pressed="false">Серверная проверка прав на каждый запрошенный объект</button>
 <button type="button" data-choice="1" aria-pressed="false">Установка сертификата на компьютере владельца записи</button>
 <button type="button" data-choice="2" aria-pressed="false">Фиксация номера порта запросов в журнале NIDS</button>
 <button type="button" data-choice="3" aria-pressed="false">Замена HTTP-ответов на другой успешный статус</button>
 </div>
-<div data-feedback role="status" aria-live="polite"></div>
+<div class="quiz-feedback" data-feedback role="status" aria-live="polite"></div>
 </div>
-<div class="lesson-check" data-answer="3" data-explanation="Проверка границы доступа начинается с требований и продолжается реализацией, тестированием и сопровождением.">
+<div class="quiz lesson-check" data-answer="3" data-explanation="Проверка границы доступа начинается с требований и продолжается реализацией, тестированием и сопровождением.">
 <strong>На каком этапе безопасной разработки следует проверять, что пользователь А не читает заказ Б?</strong>
 <div class="lesson-choicebar"><button type="button" data-choice="0" aria-pressed="false">Только после реального инцидента на опубликованном сервисе</button>
 <button type="button" data-choice="1" aria-pressed="false">Только при очередной смене сетевого оборудования</button>
 <button type="button" data-choice="2" aria-pressed="false">Только при анализе внешнего TLS-сертификата</button>
 <button type="button" data-choice="3" aria-pressed="false">На этапах моделирования, реализации и тестирования</button>
 </div>
-<div data-feedback role="status" aria-live="polite"></div>
+<div class="quiz-feedback" data-feedback role="status" aria-live="polite"></div>
 </div>
-<div class="lesson-check" data-answer="1" data-explanation="SAST обнаруживает потенциальную проблему в коде; её эксплуатируемость и реальные последствия требуют соответствующей проверки.">
+<div class="quiz lesson-check" data-answer="1" data-explanation="SAST обнаруживает потенциальную проблему в коде; её эксплуатируемость и реальные последствия требуют соответствующей проверки.">
 <strong>Что показывает результат SAST о возможной SQL-инъекции?</strong>
 <div class="lesson-choicebar"><button type="button" data-choice="0" aria-pressed="false">Гарантированную компрометацию боевой базы данных</button>
 <button type="button" data-choice="1" aria-pressed="false">Возможный дефект, требующий анализа контекста и проверки</button>
 <button type="button" data-choice="2" aria-pressed="false">Доказательство, что все сетевые IDS настроены неверно</button>
 <button type="button" data-choice="3" aria-pressed="false">Факт успешной эксплуатации уязвимости каждым HTTP-клиентом</button>
 </div>
-<div data-feedback role="status" aria-live="polite"></div>
+<div class="quiz-feedback" data-feedback role="status" aria-live="polite"></div>
 </div>
 </div>
 
-## Связь с другими материалами
+## Дополнительные инженерные кейсы (после освоения темы)
 
-См. подробную главу [«Прикладная и веб-безопасность глазами IDPS»](../course/09a-application-web-security.md) и отдельную [тему 13 «Безопасность веб-сервисов»](../topics/13-web-services-security.md).
+Для дополнительных практических случаев можно открыть [«Прикладная и веб-безопасность глазами IDPS»](../course/09a-application-web-security.md) и отдельную [тему 13 «Безопасность веб-сервисов»](../topics/13-web-services-security.md).
 
 **Основание программы:** SOPV 4311, лекция №12 (стр. 39–40 PDF): SQLi, XSS, CSRF, аутентификация/авторизация, MFA/RBAC, SDLC, тестирование, журналирование и реагирование. Здесь эти положения объясняются через причины возникновения дефекта и проверяемые результаты, а не как перечень мер.
 

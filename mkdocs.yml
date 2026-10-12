@@ -71,7 +71,7 @@ extra_javascript:
 nav:
   - Курс IDS/IPS:
       - Начало курса: index.md
-      - Основы IDPS:
+      - Главы курса — 01–15:
           - "01 — Что такое IDS/IPS и зачем они нужны": course/01-intro.md
           - "Контекст — Угрозы, уязвимости, риск и киберпреступность": course/01a-threat-context.md
           - "02 — Какие виды IDS/IPS существуют": course/02-classification.md
@@ -82,7 +82,6 @@ nav:
           - "07 — Почему IDS/IPS ошибается и чего она не видит": course/07-limitations.md
           - "08 — Как проверить и обосновать эффективность IDS/IPS": course/08-effectiveness.md
           - "Контекст — Архитектура, интеграция и современный контекст": course/08a-integration-context.md
-      - Продолжение обучения — темы 09–15 силлабуса:
           - "09 — Модель OSI": topics/09-osi.md
           - "10 — Шифрование данных": topics/10-crypto.md
           - "11 — Безопасность сетевых протоколов": topics/11-network-protocol-security.md
@@ -90,7 +89,7 @@ nav:
           - "13 — Безопасность веб-сервисов": topics/13-web-services-security.md
           - "14 — Антивирусная и проактивная защита": topics/14-antivirus-proactive.md
           - "15 — Подготовка специалиста": topics/15-professional-preparation.md
-      - Дополнительное углубление IDPS:
+      - Инженерные кейсы и расширения (после основных глав):
           - "Протоколы и зашифрованный трафик глазами IDPS": course/09-protocol-visibility.md
           - "Прикладная и веб-безопасность глазами IDPS": course/09a-application-web-security.md
           - "Защита конечных систем: HIDS/HIPS и EDR": course/09b-endpoint-protection.md
