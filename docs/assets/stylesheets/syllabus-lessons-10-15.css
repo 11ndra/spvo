@@ -1,0 +1,26 @@
+
+/* Scoped strictly to official syllabus topics 10–15. Legacy course remains unchanged. */
+.syllabus-lesson { --lesson-border: var(--md-default-fg-color--lightest); }
+.syllabus-lesson .lesson-lead { font-size:1.04rem; line-height:1.65; }
+.syllabus-lesson .lesson-model, .syllabus-lesson .lesson-check {
+  border: 1px solid var(--lesson-border); border-radius: .65rem;
+  padding: .85rem 1rem; margin: 1.1rem 0; background:var(--md-code-bg-color);
+}
+.syllabus-lesson .lesson-choicebar { display:grid; grid-template-columns:repeat(auto-fit,minmax(min(100%,9rem),1fr)); gap:.4rem; margin:.75rem 0;}
+.syllabus-lesson .lesson-choicebar button { text-align:left; cursor:pointer; padding:.55rem .7rem; border-radius:.4rem; min-width:0; color:var(--md-default-fg-color); background:var(--md-default-bg-color); border:1px solid var(--lesson-border); font-size:.81rem; line-height:1.35;}
+.syllabus-lesson .lesson-choicebar button:hover { border-color:var(--md-accent-fg-color); }
+.syllabus-lesson .lesson-choicebar button:focus-visible {outline:2px solid var(--md-accent-fg-color);outline-offset:2px}
+.syllabus-lesson .lesson-choicebar button.is-active,.syllabus-lesson .lesson-choicebar button.is-selected {border-color:var(--md-primary-fg-color);box-shadow:inset 0 0 0 1px var(--md-primary-fg-color);font-weight:600}
+.syllabus-lesson .lesson-evidence {display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:.45rem}
+.syllabus-lesson .lesson-evidence>div { min-width:0; border:1px solid var(--lesson-border); border-radius:.4rem;padding:.65rem;}
+.syllabus-lesson .lesson-evidence strong {display:block;font-size:.72rem;letter-spacing:.025em; margin-bottom:.45rem;text-transform:uppercase;}
+.syllabus-lesson .lesson-evidence .lesson-fact {border-top:3px solid #2775b6}
+.syllabus-lesson .lesson-evidence .lesson-supported {border-top:3px solid #15876b}
+.syllabus-lesson .lesson-evidence .lesson-unknown {border-top:3px solid #b66b19}
+.syllabus-lesson [data-model-fact],.syllabus-lesson [data-model-conclusion],.syllabus-lesson [data-model-limit] {overflow-wrap:anywhere}
+.syllabus-lesson .lesson-evidence p {margin:0;font-size:.85rem;line-height:1.45}
+.syllabus-lesson .lesson-check [data-feedback] {min-height:1.2rem;margin-top:.5rem;padding:.5rem .65rem;border-radius:.4rem;line-height:1.5;font-size:.85rem}
+.syllabus-lesson .lesson-check [data-result='correct'] {border-left:3px solid #16846b}
+.syllabus-lesson .lesson-check [data-result='incorrect'] {border-left:3px solid #b67316}
+.syllabus-lesson table {display:block;max-width:100%;overflow-x:auto}
+@media(max-width:640px){.syllabus-lesson .lesson-evidence {grid-template-columns:1fr}.syllabus-lesson .lesson-evidence>div {padding:.5rem .65rem}}

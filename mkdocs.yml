@@ -57,6 +57,7 @@ extra_css:
   - assets/stylesheets/extra.css
   - assets/stylesheets/idps-system.css
   - assets/stylesheets/osi-topic09.css
+  - assets/stylesheets/syllabus-lessons-10-15.css
   - assets/stylesheets/quiz.css
 extra_javascript:
   - https://cdn.jsdelivr.net/npm/mermaid@11.17.2/dist/mermaid.min.js
@@ -65,6 +66,7 @@ extra_javascript:
   - assets/javascripts/idps-system.js
   - assets/javascripts/test-bank.js
   - assets/javascripts/osi-topic09.js
+  - assets/javascripts/syllabus-lessons-10-15.js
 
 nav:
   - Курс IDS/IPS:
@@ -80,13 +82,21 @@ nav:
           - "07 — Почему IDS/IPS ошибается и чего она не видит": course/07-limitations.md
           - "08 — Как проверить и обосновать эффективность IDS/IPS": course/08-effectiveness.md
           - "Контекст — Архитектура, интеграция и современный контекст": course/08a-integration-context.md
-      - Эксплуатация и современные IDPS:
-          - "09 — Протоколы, приложения и зашифрованный трафик глазами IDPS": course/09-protocol-visibility.md
-          - "Контекст — Прикладная и веб-безопасность глазами IDPS": course/09a-application-web-security.md
-          - "Контекст — Защита конечных систем: антивирус, HIDS/HIPS и EDR": course/09b-endpoint-protection.md
-          - "Контекст — Профессиональная практика специалиста": course/09c-professional-practice.md
-          - "10 — Как поддерживать возможности обнаружения": course/10-operations-lifecycle.md
-          - "11 — Как сопоставлять несколько источников и контекст угроз": course/11-multi-source-correlation.md
+      - Продолжение обучения — темы 09–15 силлабуса:
+          - "09 — Модель OSI": topics/09-osi.md
+          - "10 — Шифрование данных": topics/10-crypto.md
+          - "11 — Безопасность сетевых протоколов": topics/11-network-protocol-security.md
+          - "12 — Безопасность приложений": topics/12-application-security.md
+          - "13 — Безопасность веб-сервисов": topics/13-web-services-security.md
+          - "14 — Антивирусная и проактивная защита": topics/14-antivirus-proactive.md
+          - "15 — Подготовка специалиста": topics/15-professional-preparation.md
+      - Дополнительное углубление IDPS:
+          - "Протоколы и зашифрованный трафик глазами IDPS": course/09-protocol-visibility.md
+          - "Прикладная и веб-безопасность глазами IDPS": course/09a-application-web-security.md
+          - "Защита конечных систем: HIDS/HIPS и EDR": course/09b-endpoint-protection.md
+          - "Профессиональная практика": course/09c-professional-practice.md
+          - "Сопровождение возможностей обнаружения": course/10-operations-lifecycle.md
+          - "Корреляция нескольких источников": course/11-multi-source-correlation.md
   - Программа дисциплины:
       - 15 тем силлабуса: syllabus/index.md
       - Темы 01–08:
@@ -98,14 +108,6 @@ nav:
           - "06 — Аномальная активность и вредоносное ПО": topics/06-anomaly-malware.md
           - "07 — Формы интернет-преступности": topics/07-internet-crime.md
           - "08 — Принципы работы IPS": topics/08-ips-principles.md
-      - Темы 09–15:
-          - "09 — Модель OSI": topics/09-osi.md
-          - "10 — Шифрование данных": topics/10-crypto.md
-          - "11 — Безопасность сетевых протоколов": topics/11-network-protocol-security.md
-          - "12 — Безопасность приложений": topics/12-application-security.md
-          - "13 — Безопасность веб-сервисов": topics/13-web-services-security.md
-          - "14 — Антивирусная и проактивная защита": topics/14-antivirus-proactive.md
-          - "15 — Подготовка специалиста": topics/15-professional-preparation.md
   - Практика:
       - "00 — Подготовка лабораторной среды": labs/environment/index.md
       - "Практикум 0 — Знакомство с рабочей IDPS": labs/orientation/index.md
