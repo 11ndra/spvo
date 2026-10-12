@@ -1,0 +1,28 @@
+/* Syllabus topic 09 only. Do not change existing course diagram or lab styles. */
+.osi9-layer-table { max-width: 100%; overflow-x: auto; border: 1px solid var(--md-default-fg-color--lightest); border-radius: .55rem; margin: 1rem 0; }
+.md-typeset .osi9-layer-table table { width: 100%; min-width: 520px; margin: 0; border: 0; font-size: .77rem; }
+.md-typeset .osi9-layer-table th,.md-typeset .osi9-layer-table td { padding: .43rem .65rem; vertical-align: top; }
+.md-typeset .osi9-layer-table td:first-child { width: 21%; white-space: nowrap; }
+.osi9-explorer { border: 1px solid var(--md-default-fg-color--lightest); background: var(--md-code-bg-color); border-radius: .68rem; padding: .85rem 1rem; margin: 1.15rem 0; max-width: 100%; min-width: 0; }
+.md-typeset .osi9-explorer p { margin: .4rem 0 .8rem; }
+.md-typeset .osi9-kicker { font-weight: 700; font-size: .7rem; color: var(--md-accent-fg-color); text-transform: uppercase; letter-spacing: .035em; }
+.md-typeset .osi9-instruction { font-size: .85rem; }
+.osi9-options { display: flex; flex-wrap: wrap; gap: .35rem; margin: .75rem 0; }
+.md-typeset .osi9-options button { font: inherit; font-size: .78rem; font-weight: 650; padding: .36rem .63rem; border: 1px solid var(--md-default-fg-color--lightest); border-radius: .4rem; color: var(--md-default-fg-color); background: var(--md-default-bg-color); cursor: pointer; flex: 1 1 7rem; }
+.md-typeset .osi9-options button[aria-pressed="true"] { background: var(--md-primary-fg-color); border-color: var(--md-primary-fg-color); color: var(--md-primary-bg-color); }
+.md-typeset .osi9-options button:focus-visible { outline: 3px solid var(--md-accent-fg-color); outline-offset: 2px; }
+.osi9-payload { display: flex; flex-wrap: wrap; border: 1px dashed var(--md-default-fg-color--light); border-radius: .4rem; padding: .45rem; gap: .25rem; min-height: 4.2rem; align-items: stretch; background: var(--md-default-bg-color); }
+.osi9-chunk { display: flex; flex-direction: column; flex: 1 1 8rem; min-width: 0; border-inline-start: .22rem solid var(--md-primary-fg-color); padding: .35rem .5rem; background: var(--md-code-bg-color); }
+.osi9-chunk--tcp { border-color: #008f84; }.osi9-chunk--ip { border-color: #8b6bc7; }.osi9-chunk--ethernet { border-color: #b47616; }
+.osi9-chunk-label { font-size: .72rem; }.osi9-chunk-value { font: 500 .72rem/1.5 var(--md-code-font-family); overflow-wrap: anywhere; }
+.osi9-readout { margin-top: .6rem; border-inline-start: .22rem solid var(--md-primary-fg-color); padding: .24rem .75rem; }
+.osi9-readout strong { font-size: .86rem; }.md-typeset .osi9-readout p { font-size: .82rem; margin: .25rem 0; }
+.osi9-trace { border: 1px solid var(--md-default-fg-color--lightest); border-radius: .35rem; padding: .56rem .7rem; background: var(--md-default-bg-color); min-width: 0; }
+.osi9-trace-label { display: block; color: var(--md-default-fg-color--light); font-size: .69rem; font-weight: 700; margin-bottom: .3rem; }
+.osi9-trace-value { font-size: .76rem; white-space: normal; overflow-wrap: anywhere; }
+.osi9-evidence-grid { display: grid; grid-template-columns: minmax(0,1fr) minmax(0,1fr); gap: .6rem; margin-top: .6rem; }
+.osi9-evidence { border: 1px solid var(--md-default-fg-color--lightest); border-inline-start: .25rem solid; padding: .5rem .65rem; border-radius: .3rem; min-width: 0; }
+.osi9-evidence--supported { border-inline-start-color: #11836a; }.osi9-evidence--limit { border-inline-start-color: #bd7e14; }
+.osi9-evidence strong { font-size: .77rem; }.md-typeset .osi9-evidence p { font-size: .79rem; line-height: 1.55; margin: .35rem 0 0; }
+@media (max-width: 540px) { .osi9-explorer { padding: .65rem .6rem; }.osi9-evidence-grid { grid-template-columns: 1fr; }.md-typeset .osi9-options button { flex: 1 1 calc(50% - .35rem); } }
+@media (prefers-reduced-motion: reduce) { .osi9-explorer * { scroll-behavior: auto !important; transition: none !important; } }

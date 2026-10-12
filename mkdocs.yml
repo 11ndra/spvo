@@ -56,6 +56,7 @@ markdown_extensions:
 extra_css:
   - assets/stylesheets/extra.css
   - assets/stylesheets/idps-system.css
+  - assets/stylesheets/osi-topic09.css
   - assets/stylesheets/quiz.css
 extra_javascript:
   - https://cdn.jsdelivr.net/npm/mermaid@11.17.2/dist/mermaid.min.js
@@ -63,6 +64,7 @@ extra_javascript:
   - assets/javascripts/course.js
   - assets/javascripts/idps-system.js
   - assets/javascripts/test-bank.js
+  - assets/javascripts/osi-topic09.js
 
 nav:
   - Курс IDS/IPS:
