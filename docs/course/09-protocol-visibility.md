@@ -75,7 +75,7 @@ UDP/53  = DNS
 
 Suricata, например, имеет отдельный механизм определения прикладного протокола и позволяет различать неопределённое (`unknown`), неуспешное (`failed`), исходное (`original`) и итоговое (`final`) состояния распознавания там, где это применимо. Это хороший пример общей инженерной идеи: **идентификация прикладного протокола — отдельная функция анализа, а не синоним номера порта**.
 
-<div class="teaching-figure">
+<div class="teaching-figure ch09-visual-process">
 <div class="figure-label">ВИЗУАЛЬНАЯ МОДЕЛЬ 1 · ПОРТ — ПРИЗНАК, НО НЕ ДОКАЗАТЕЛЬСТВО ПРОТОКОЛА</div>
 <div class="idps-responsive-shell">
 <div class="idps-process">
@@ -128,7 +128,7 @@ TCP-сегмент
 
 Каждый переход может создать новое представление и новые предпосылки для последующей логики. Но это **не универсальная цепочка обработки IDS/IPS**. Условие по пакету или сетевому потоку может применяться до разбора прикладного протокола; DNS и QUIC используют другие модели транспорта и состояния; источники на конечном узле и в приложении вообще не обязаны проходить через такую сетевую цепочку.
 
-<div class="idps-responsive-shell">
+<div class="idps-responsive-shell ch09-evidence-stages">
 <div class="idps-gates idps-gates--six">
   <div class="idps-gate idps-gate--observation"><span>1 · ПАКЕТ</span><strong>Отдельный сетевой фрагмент</strong><small>Может содержать только часть прикладного сообщения.</small></div>
   <div class="idps-gate idps-gate--observation"><span>2 · ПОТОК</span><strong>Контекст обмена</strong><small>Направление, участники, состояние и связность пакетов.</small></div>
@@ -468,7 +468,7 @@ HTTP/3 поверх QUIC/UDP
 состояние соединения QUIC → защищённые потоки QUIC → представление HTTP/3
 ```
 
-<div class="teaching-figure">
+<div class="teaching-figure ch09-visual-process">
 <div class="figure-label">ВИЗУАЛЬНАЯ МОДЕЛЬ 4 · HTTP/3 НЕ ЯВЛЯЕТСЯ «HTTP В ОБЫЧНОЙ ПОЛЕЗНОЙ НАГРУЗКЕ UDP»</div>
 <div class="idps-process">
   <div class="idps-process__step idps-process__step--source"><span>1</span><strong>UDP-дейтаграммы</strong><small>внешний транспортный слой для QUIC</small></div>
@@ -702,7 +702,7 @@ SMB 2/3 — прикладной протокол с состоянием для
   <div class="idps-source-hub__boundary"><strong>Граница:</strong><small>совпадение времени, адреса или идентификатора запроса может поддерживать связь событий; само по себе оно не отменяет ограничения каждого отдельного источника.</small></div>
 </div>
 
-<div class="idps-switcher" data-idps-switcher>
+<div class="idps-switcher ch09-visibility-switcher" data-idps-switcher>
   <div class="idps-switcher__header">
     <strong>ИНТЕРАКТИВ · ОДИН HTTPS-ЗАПРОС — РАЗНЫЕ ИСТОЧНИКИ И ТОЧКИ ФОРМИРОВАНИЯ</strong>
     <p>Переключайте контекст и следите не за «истиной вообще», а за тем, какое представление реально доступно выбранному источнику.</p>
@@ -713,6 +713,7 @@ SMB 2/3 — прикладной протокол с состоянием для
     <button id="chapter9-visibility-app-tab" class="idps-switcher__button" data-idps-switch="application" aria-controls="chapter9-visibility-app" aria-selected="false">Телеметрия приложения</button>
     <button id="chapter9-visibility-host-tab" class="idps-switcher__button" data-idps-switch="host" aria-controls="chapter9-visibility-host" aria-selected="false">Телеметрия конечного узла</button>
   </div>
+  <p class="idps-chapter-baseline"><strong>Общий эпизод:</strong> один HTTPS-запрос; меняется источник наблюдения, а не сам запрос.</p>
   <div class="idps-switcher__panels">
     <section id="chapter9-visibility-network" class="idps-switcher__panel" data-idps-panel="network">
       <h3 class="idps-switcher__panel-title">Сеть до точки завершения TLS</h3>

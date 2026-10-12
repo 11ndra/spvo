@@ -118,7 +118,7 @@ flowchart TD
 
 Рассмотрим набор правил.
 
-<div class="teaching-figure idps-responsive-shell">
+<div class="teaching-figure idps-responsive-shell ch10-visual-process">
 <div class="figure-label">ВИЗУАЛЬНАЯ МОДЕЛЬ 1 · ЧЕТЫРЕ РАЗНЫХ ФАКТА ОБ ОБНОВЛЕНИИ</div>
 <div class="idps-process">
   <div class="idps-process__step idps-process__step--source"><span>1</span><strong>Новая версия получена</strong><small>Файлы или источник правил изменились на диске.</small></div>
@@ -230,7 +230,7 @@ Suricata используется здесь как конкретная реа�
 
 Фраза «Suricata работает» может означать только то, что процесс существует. Но нас интересует рабочая возможность обнаружения.
 
-<div class="teaching-figure idps-responsive-shell">
+<div class="teaching-figure idps-responsive-shell ch10-stages-compact">
 <div class="figure-label">ВИЗУАЛЬНАЯ МОДЕЛЬ 2 · ЛЕСТНИЦА РАБОТОСПОСОБНОСТИ</div>
 <div class="idps-gates idps-gates--six">
   <div class="idps-gate"><span>1 · ПРОЦЕСС</span><strong>Движок запущен</strong><small>Это ещё ничего не говорит о нужном интерфейсе и данных.</small></div>
@@ -284,7 +284,7 @@ Suricata используется здесь как конкретная реа�
 
 Поэтому нужно различать:
 
-<div class="teaching-figure idps-responsive-shell">
+<div class="teaching-figure idps-responsive-shell ch10-stages-compact">
 <div class="figure-label">ВИЗУАЛЬНАЯ МОДЕЛЬ 3 · ПУТЬ РЕЗУЛЬТАТА ДО ПОТРЕБИТЕЛЯ</div>
 <div class="idps-gates idps-gates--five">
   <div class="idps-gate"><span>1 · УСЛОВИЕ</span><strong>Условие детектора выполнилось</strong><small>Логика обнаружения получила данные в подходящем представлении и сформировала решение.</small></div>
@@ -348,7 +348,7 @@ Suricata используется здесь как конкретная реа�
 
 Ниже один и тот же вопрос рассматривается для разных классов изменений. Переключайте изменение и сравнивайте, **что именно надо перепроверить**, а не просто «перезапустить IDS».
 
-<div class="idps-switcher idps-switcher--ops" data-idps-switcher>
+<div class="idps-switcher idps-switcher--ops ch10-change-switcher" data-idps-switcher>
   <div class="idps-switcher__header">
     <strong>ИНТЕРАКТИВ · ЧТО ПЕРЕПРОВЕРЯТЬ ПОСЛЕ ИЗМЕНЕНИЯ</strong>
     <p>Каждая панель показывает возможный разрыв причинной цепочки и минимальное свидетельство рабочего состояния.</p>
@@ -360,6 +360,7 @@ Suricata используется здесь как конкретная реа�
     <button id="chapter10-change-placement-tab" class="idps-switcher__button" data-idps-switch="placement" aria-controls="chapter10-change-placement" aria-selected="false">Топология</button>
     <button id="chapter10-change-load-tab" class="idps-switcher__button" data-idps-switch="load" aria-controls="chapter10-change-load" aria-selected="false">Нагрузка / вывод</button>
   </div>
+  <p class="idps-chapter-baseline"><strong>Общий критерий:</strong> после изменения нужно подтвердить рабочее состояние, доступность нужных данных и ожидаемый результат.</p>
   <div class="idps-switcher__panels">
     <section id="chapter10-change-rules" class="idps-switcher__panel" data-idps-panel="rules">
       <h3 class="idps-switcher__panel-title">Изменился набор правил</h3>
@@ -433,7 +434,7 @@ Suricata используется здесь как конкретная реа�
 
 Поэтому полезный автоматизированный процесс должен по возможности связывать:
 
-<div class="idps-responsive-shell">
+<div class="idps-responsive-shell ch10-stages-compact">
 <div class="idps-gates idps-gates--eight">
   <div class="idps-gate"><span>1</span><strong>Получить изменение</strong><small>Однозначно определить новую версию или набор файлов.</small></div>
   <div class="idps-gate"><span>2</span><strong>Проверить структуру</strong><small>Отдельно подтвердить синтаксическую и структурную корректность.</small></div>

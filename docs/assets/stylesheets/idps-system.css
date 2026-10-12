@@ -3189,3 +3189,132 @@
 .md-typeset .ch11-errors-table { width:100%; font-size:.82rem; }
 .md-typeset .ch11-errors-table td:first-child { border-left:3px solid var(--idps-observation); background:color-mix(in srgb,var(--idps-observation) 6%,var(--course-surface)); font-weight:650; }
 .md-typeset .ch11-errors-table td:last-child { border-left:3px solid var(--idps-source); background:color-mix(in srgb,var(--idps-source) 5%,var(--course-surface)); }
+
+
+/* =========================================================
+   Scoped learning UX refinement: Chapter 09 and Chapter 10.
+   No global changes to Chapters 01–08, Chapter 11 or labs.
+   ========================================================= */
+
+/* Four-stage diagrams: two concise rows preserve ordered steps without
+   forcing a multi-screen vertical corridor in Material's reading column. */
+.ch09-visual-process .idps-process,
+.ch10-visual-process .idps-process {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: .58rem;
+  margin: .85rem 0;
+}
+.ch09-visual-process .idps-process__arrow,
+.ch10-visual-process .idps-process__arrow { display: none; }
+.ch09-visual-process .idps-process__step,
+.ch10-visual-process .idps-process__step {
+  min-height: 0;
+  padding: .7rem .8rem;
+  box-shadow: none;
+  display: grid;
+  grid-template-columns: 1.7rem minmax(0,1fr);
+  grid-template-rows: auto auto;
+  column-gap: .6rem;
+  align-content: start;
+  background: var(--course-surface-soft);
+}
+.ch09-visual-process .idps-process__step > span,
+.ch10-visual-process .idps-process__step > span {
+  grid-row: 1 / 3;
+  width: 1.55rem; height: 1.55rem;
+  margin: 0;
+}
+.ch09-visual-process .idps-process__step > strong,
+.ch10-visual-process .idps-process__step > strong { align-self: end; line-height:1.35; }
+.ch09-visual-process .idps-process__step > small,
+.ch10-visual-process .idps-process__step > small { margin:.12rem 0 0; line-height:1.36; }
+
+/* Six/eight-stage ladders are a compact progression, not one huge card per row. */
+.ch09-evidence-stages .idps-gates,
+.ch10-stages-compact .idps-gates {
+  display: grid; grid-template-columns: repeat(2, minmax(0,1fr));
+  gap: .5rem;
+}
+.ch09-evidence-stages .idps-gate,
+.ch10-stages-compact .idps-gate { min-height: 0; padding: .7rem .8rem; }
+.ch09-evidence-stages .idps-gate::after,
+.ch10-stages-compact .idps-gate::after { display:none !important; }
+
+/* Interactive comparisons: the underlying controls and content remain the same. */
+.ch09-visibility-switcher,
+.ch10-change-switcher { container-type: inline-size; }
+.ch09-visibility-switcher.is-enhanced .idps-switcher__controls,
+.ch10-change-switcher.is-enhanced .idps-switcher__controls {
+  display:grid; grid-template-columns:repeat(2,minmax(0,1fr));
+  gap:.42rem; padding:.65rem .8rem;
+}
+.ch09-visibility-switcher .idps-switcher__button,
+.ch10-change-switcher .idps-switcher__button {
+  min-width:0; padding:.48rem .57rem;
+  font-size:.83rem; line-height:1.35; text-align:center;
+}
+.ch09-visibility-switcher .idps-switcher__panels,
+.ch10-change-switcher .idps-switcher__panels { padding:.65rem .75rem .8rem; }
+.ch09-visibility-switcher .idps-question-model,
+.ch10-change-switcher .idps-question-model {
+  grid-template-columns:repeat(2,minmax(0,1fr));
+  gap:.46rem;
+}
+.ch09-visibility-switcher .idps-question-model__cell,
+.ch10-change-switcher .idps-question-model__cell {
+  min-width:0; padding:.65rem .72rem;
+  border-left:3px solid var(--idps-sensor);
+}
+.ch09-visibility-switcher .idps-question-model__cell:nth-child(3),
+.ch10-change-switcher .idps-question-model__cell:nth-child(3) {
+  grid-column:1/-1; border-left-color:var(--idps-interpretation);
+}
+.ch09-visibility-switcher .idps-question-model__cell > strong,
+.ch10-change-switcher .idps-question-model__cell > strong {
+  font-weight:500; font-size:.9rem; line-height:1.42;
+}
+.ch09-visibility-switcher .idps-question-model__boundary,
+.ch10-change-switcher .idps-question-model__boundary {
+  padding:.55rem .72rem; border-left:4px solid var(--idps-observation);
+  font-size:.88rem; line-height:1.45;
+}
+.idps-chapter-baseline {
+  margin:0; padding:.58rem .8rem;
+  border-bottom:1px solid var(--course-border);
+  background:var(--course-surface-soft);
+  font-size:.84rem; line-height:1.45;
+}
+
+@container (max-width: 37rem) {
+  .ch09-visibility-switcher .idps-question-model,
+  .ch10-change-switcher .idps-question-model { grid-template-columns:1fr; }
+  .ch09-visibility-switcher .idps-question-model__cell:nth-child(3),
+  .ch10-change-switcher .idps-question-model__cell:nth-child(3) { grid-column:auto; }
+}
+@media (max-width: 600px) {
+  .ch09-visual-process .idps-process,
+  .ch10-visual-process .idps-process,
+  .ch09-evidence-stages .idps-gates,
+  .ch10-stages-compact .idps-gates { grid-template-columns:1fr; }
+}
+
+/* Progress should not cover chapter headings or anchor targets. */
+.md-content__inner:has(.ch09-visual-process) > .chapter-progress,
+.md-content__inner:has(.ch10-visual-process) > .chapter-progress {
+  position:relative; top:auto; z-index:1;
+}
+
+/* At desktop reading-column width, five change classes and three checkpoints
+   fit without creating unnecessary extra rows. */
+@container (min-width: 42rem) {
+  .ch10-change-switcher.is-enhanced .idps-switcher__controls {
+    grid-template-columns:repeat(3,minmax(0,1fr));
+  }
+  .ch10-change-switcher .idps-question-model {
+    grid-template-columns:repeat(3,minmax(0,1fr));
+  }
+  .ch10-change-switcher .idps-question-model__cell:nth-child(3) {
+    grid-column:auto;
+  }
+}
