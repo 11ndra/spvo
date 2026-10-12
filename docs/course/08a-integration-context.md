@@ -333,3 +333,14 @@ IDS/IPS может быть частью выполнения требовани
 <div class="idps-next-step">
 <strong>Дальше:</strong> переходите к <a href="../09-protocol-visibility/">Главе 9 — «Протоколы, приложения и зашифрованный трафик глазами IDPS»</a>.
 </div>
+
+
+## Первоисточники для проверки расширенного материала
+
+- **Фундамент IDS/IPS и его исторические границы:** [NIST SP 800-94 (2007)](https://csrc.nist.gov/pubs/sp/800/94/final). Для современных режимов работы сверяйтесь с документацией конкретной версии сенсора.
+- **Zero-Day-атака:** [терминологическое определение NIST](https://csrc.nist.gov/glossary/term/zero_day_attack); отсутствие отдельной сигнатуры недостаточно для такой квалификации.
+- **Обмен данными об угрозах:** [NIST SP 800-150](https://csrc.nist.gov/pubs/sp/800/150/final), [OASIS STIX 2.1](https://docs.oasis-open.org/cti/stix/v2.1/stix-v2.1.html) и [TAXII 2.1](https://docs.oasis-open.org/cti/taxii/v2.1/taxii-v2.1.html).
+- **Структура событий конкретной реализации:** [Suricata EVE JSON Format](https://docs.suricata.io/en/suricata-8.0.7/output/eve/eve-json-format.html).
+- **Реагирование:** [NIST SP 800-61 Rev.3 (2025)](https://csrc.nist.gov/pubs/sp/800/61/r3/final).
+
+Этот набор ссылок подтверждает термины и механизмы в пределах описанной области; он не доказывает автоматически успешное обнаружение конкретного инцидента или соответствие всем требованиям какого-либо стандарта.

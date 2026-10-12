@@ -119,6 +119,7 @@ nav:
       - "ЛР №5 — Изменяем условие правила": labs/lab05/index.md
   - Самопроверка:
       - "90 контрольных вопросов": resources/exam-prep.md
+      - "Опорные ответы на 90 вопросов": resources/exam-answers.md
       - "Тестовый тренажёр": resources/test-bank.md
   - СРО:
       - "Самостоятельная работа": resources/sro-plan.md
