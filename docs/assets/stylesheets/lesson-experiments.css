@@ -1,0 +1,42 @@
+
+/* Interactive causal experiments for syllabus chapters 10–13. Scoped; no overrides to frozen lectures. */
+.syllabus-lesson .idps-causal-lab{border:1px solid var(--md-default-fg-color--lightest,#bbb);border-radius:.65rem;padding:1rem 1.1rem;margin:1.3rem 0 1.6rem;background:var(--md-default-bg-color,#fff);color:var(--md-default-fg-color,#222)}
+.syllabus-lesson .idps-causal-lab h3{font-size:1.08rem;margin:.15rem 0 .4rem}
+.syllabus-lesson .idps-causal-lab>p{font-size:.87rem;line-height:1.55;margin:.5rem 0}
+.syllabus-lesson .idps-causal-lab .idps-lab-kicker{font-size:.72rem;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--md-default-fg-color--light,#667)}
+.syllabus-lesson .idps-lab-controls{display:flex;flex-wrap:wrap;gap:.7rem;padding:.7rem 0;align-items:end}
+.syllabus-lesson .idps-lab-controls label{display:flex;flex-direction:column;gap:.3rem;font-size:.82rem;font-weight:600;min-width:10rem;flex:1 1 10rem}
+.syllabus-lesson .idps-lab-controls select{font:inherit;font-size:.82rem;color:var(--md-default-fg-color,#222);background:var(--md-code-bg-color,#f6f7f8);border:1px solid var(--md-default-fg-color--lightest,#bbb);border-radius:.35rem;padding:.4rem .55rem;width:100%;min-height:2.25rem}
+.syllabus-lesson .idps-lab-controls select:focus-visible,.syllabus-lesson .idps-lab-challenge button:focus-visible{outline:3px solid var(--md-accent-fg-color,#3479a2);outline-offset:2px}
+.syllabus-lesson .idps-lab-flow{list-style:none!important;display:grid;grid-template-columns:repeat(4,minmax(0,1fr));padding:0!important;margin:.65rem 0 .9rem!important;gap:.42rem}
+.syllabus-lesson .idps-lab-flow li{position:relative;min-width:0;margin:0!important;list-style:none!important;border:1px solid var(--md-default-fg-color--lightest,#ccc);border-top:3px solid #627d98;border-radius:.38rem;padding:.56rem .45rem;min-height:5.35rem;background:var(--md-code-bg-color,#f6f6f6)}
+.syllabus-lesson .idps-lab-flow li[data-state="ok"]{border-top-color:#18856e}
+.syllabus-lesson .idps-lab-flow li[data-state="warn"]{border-top-color:#bb7822}
+.syllabus-lesson .idps-lab-flow li[data-state="blocked"]{border-top-color:#a74646}
+.syllabus-lesson .idps-lab-flow li strong{display:block;font-size:.75rem;line-height:1.3;margin:0 0 .45rem}
+.syllabus-lesson .idps-lab-flow li [data-node-detail]{display:block;font-size:.76rem;line-height:1.4;overflow-wrap:anywhere}
+.syllabus-lesson .idps-lab-explanation{border-left:3px solid var(--md-primary-fg-color,#526cb0);padding:.5rem .7rem;margin:.65rem 0;background:var(--md-code-bg-color,#f8f9fa);font-size:.83rem;line-height:1.55}
+.syllabus-lesson .idps-lab-observable{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:.65rem;margin:.85rem 0}
+.syllabus-lesson .idps-lab-observable>div{border:1px solid var(--md-default-fg-color--lightest,#ccc);border-radius:.4rem;padding:.62rem;min-width:0}
+.syllabus-lesson .idps-lab-observable strong{font-size:.77rem;display:block;margin-bottom:.4rem}
+.syllabus-lesson .idps-lab-observable pre{margin:0;white-space:pre-wrap;overflow-wrap:anywhere;font-size:.75rem;line-height:1.5;padding:.5rem;color:var(--md-code-fg-color,var(--md-default-fg-color,#333));background:var(--md-code-bg-color,#f8f8f8);border-radius:.3rem}
+.syllabus-lesson .idps-lab-observable p{font-size:.81rem;line-height:1.5;margin:0}
+.syllabus-lesson .idps-lab-challenge{border-top:1px solid var(--md-default-fg-color--lightest,#ddd);padding-top:.65rem;margin-top:.9rem}
+.syllabus-lesson .idps-lab-challenge>strong{display:block;font-size:.85rem;margin-bottom:.35rem}
+.syllabus-lesson .idps-lab-answers{display:flex;gap:.5rem;flex-wrap:wrap}
+.syllabus-lesson .idps-lab-answers button{font:inherit;font-size:.82rem;border:1px solid var(--md-default-fg-color--lightest,#aaa);border-radius:.4rem;padding:.48rem .75rem;background:var(--md-code-bg-color,#f8f8f8);color:var(--md-default-fg-color,#222);cursor:pointer}
+.syllabus-lesson .idps-lab-answers button[aria-pressed="true"]{border-color:var(--md-primary-fg-color,#457);box-shadow:inset 3px 0 var(--md-primary-fg-color,#457)}
+.syllabus-lesson .idps-lab-feedback{font-size:.82rem;line-height:1.55;min-height:1.4rem;margin:.48rem 0 0!important}
+.syllabus-lesson .idps-lab-feedback[data-result="right"]{border-left:3px solid #16846b;padding-left:.5rem}
+.syllabus-lesson .idps-lab-feedback[data-result="wrong"]{border-left:3px solid #b67416;padding-left:.5rem}
+.syllabus-lesson .idps-lab-caption{font-size:.75rem;color:var(--md-default-fg-color--light,#667);margin-top:.5rem!important}
+@media (max-width:900px){.syllabus-lesson .idps-lab-flow{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media (max-width:560px){.syllabus-lesson .idps-causal-lab{padding:.75rem}.syllabus-lesson .idps-lab-controls{gap:.45rem}.syllabus-lesson .idps-lab-flow li{padding:.45rem .4rem}.syllabus-lesson .idps-lab-observable{grid-template-columns:minmax(0,1fr)}}
+
+/* Compact, numbered causal pipeline. Arrows denote reasoning order, not physical packet directions in every experiment. */
+.syllabus-lesson .idps-lab-flow{counter-reset:idps-causal-step}
+.syllabus-lesson .idps-lab-flow li{counter-increment:idps-causal-step}
+.syllabus-lesson .idps-lab-flow li::before{content:counter(idps-causal-step, decimal-leading-zero);position:absolute;right:.43rem;top:.27rem;color:var(--md-default-fg-color--light,#667);font-size:.62rem;line-height:1;font-weight:700}
+.syllabus-lesson .idps-lab-flow li strong{padding-right:1rem}
+@media(min-width:901px){.syllabus-lesson .idps-lab-flow li:not(:last-child)::after{content:"→";display:grid;place-items:center;position:absolute;right:-.47rem;top:38%;width:.8rem;height:1.5rem;z-index:1;font-size:1rem;font-weight:800;color:var(--md-primary-fg-color,#457);background:var(--md-default-bg-color,#fff);border-radius:.3rem}}
+@media(min-width:380px) and (max-width:900px){.syllabus-lesson .idps-lab-flow li:nth-child(odd)::after{content:"→";display:grid;place-items:center;position:absolute;right:-.5rem;top:38%;width:.85rem;height:1.4rem;z-index:1;font-size:1rem;font-weight:800;color:var(--md-primary-fg-color,#457);background:var(--md-default-bg-color,#fff)}}

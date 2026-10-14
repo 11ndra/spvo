@@ -40,6 +40,19 @@ alert: SID 1000xxx, action=allowed" data-reason="Если правило акт�
   <p class="lesson-mechanism__note">Сравните события типа http и alert в EVE: первое — телеметрия протокола, второе — результат конкретного детектора.</p>
 </div>
 
+<div class="idps-causal-lab" data-idps-experiment="http" role="group" aria-label="Путь от пакетов к оповещению">
+  <p class="idps-lab-kicker">Исследовательский эксперимент · измените исходные условия</p>
+  <h3>Путь от пакетов к оповещению</h3>
+  <p>Модель открытого HTTP/1.1. Поочерёдно исключайте получение трафика, успешный протокольный разбор и активное совпадающее правило. Все прочие условия считаются выполненными.</p>
+  <div class="idps-lab-controls"><label>Трафик доходит до сенсора<select data-field="visible" aria-label="Трафик доходит до сенсора"><option value="yes" selected>Да</option><option value="no">Нет</option></select></label><label>HTTP разобран<select data-field="parser" aria-label="HTTP разобран"><option value="yes" selected>Да</option><option value="no">Нет</option></select></label><label>Правило активно и совпадает<select data-field="rule" aria-label="Правило активно и совпадает"><option value="yes" selected>Да</option><option value="no">Нет</option></select></label></div>
+  <ol class="idps-lab-flow" aria-label="Причинно-следственная цепочка"><li><strong>Запрос</strong><span data-node-detail>Модель загружается…</span></li><li><strong>Захват</strong><span data-node-detail>Модель загружается…</span></li><li><strong>Разбор</strong><span data-node-detail>Модель загружается…</span></li><li><strong>Правило</strong><span data-node-detail>Модель загружается…</span></li></ol>
+  <div class="idps-lab-observable"><div><strong>Наблюдаемое представление / результат</strong><pre data-observed aria-live="polite">Модель загружается…</pre></div><div><strong>Объяснение результата</strong><p data-why aria-live="polite"></p></div></div>
+  <div class="idps-lab-explanation"><strong>Что нельзя заключить:</strong> <span data-limit></span></div>
+  <div class="idps-lab-challenge"><strong>Ожидается ли alert именно от этого правила?</strong><div class="idps-lab-answers"><button type="button" data-guess="yes" aria-pressed="false">Да</button><button type="button" data-guess="no" aria-pressed="false">Нет</button></div><p class="idps-lab-feedback" data-experiment-feedback role="status" aria-live="polite">Выберите ответ и проверьте вывод.</p></div>
+  <p class="idps-lab-caption">Наличие HTTP event и наличие alert — разные утверждения. Все адреса, события и ответы синтетические; пример не выполняет запросов и не запускает вредоносный код.</p>
+  <p class="idps-lab-caption"><strong>Первоисточник:</strong> <a href="https://docs.suricata.io/en/suricata-8.0.7/rules/http-keywords.html">OISF — HTTP keywords Suricata 8.0.7</a>.</p>
+</div>
+
 ## 4. Передача файлов: FTP, FTPS и SFTP
 
 Классический FTP передаёт команды и данные без современной криптографической защиты канала. **FTPS** — применение TLS к FTP, а **SFTP** — отдельный протокол передачи файлов поверх SSH. Поэтому SFTP нельзя описывать как «FTP с шифрованием»: это другая архитектура обмена и другой способ протокольного анализа.

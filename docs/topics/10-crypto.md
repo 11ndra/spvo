@@ -68,6 +68,19 @@ Host: service.test" data-reason="Если сенсор находится на �
   <p class="lesson-mechanism__note">Проверка понимания: где именно нужно разместить сенсор или собрать журнал, чтобы обоснованно проверять условие по http.uri?</p>
 </div>
 
+<div class="idps-causal-lab" data-idps-experiment="tls" role="group" aria-label="Измените точку наблюдения">
+  <p class="idps-lab-kicker">Исследовательский эксперимент · измените исходные условия</p>
+  <h3>Измените точку наблюдения</h3>
+  <p>Один запрос GET /records/42 при открытом HTTP и HTTPS. Выберите точку наблюдения: на линии до TLS-завершения или за ним. Модель предполагает, что средство получает поток и способно разобрать HTTP.</p>
+  <div class="idps-lab-controls"><label>Передача<select data-field="transport" aria-label="Передача"><option value="http">Открытый HTTP</option><option value="tls" selected>HTTPS / TLS 1.3</option></select></label><label>Точка наблюдения<select data-field="tap" aria-label="Точка наблюдения"><option value="wire" selected>Внешний сетевой сенсор</option><option value="proxy">Внутри прокси (HTTP)</option></select></label></div>
+  <ol class="idps-lab-flow" aria-label="Причинно-следственная цепочка"><li><strong>Клиент</strong><span data-node-detail>Модель загружается…</span></li><li><strong>Сенсор</strong><span data-node-detail>Модель загружается…</span></li><li><strong>Прокси</strong><span data-node-detail>Модель загружается…</span></li><li><strong>Приложение</strong><span data-node-detail>Модель загружается…</span></li></ol>
+  <div class="idps-lab-observable"><div><strong>Наблюдаемое представление / результат</strong><pre data-observed aria-live="polite">Модель загружается…</pre></div><div><strong>Объяснение результата</strong><p data-why aria-live="polite"></p></div></div>
+  <div class="idps-lab-explanation"><strong>Что нельзя заключить:</strong> <span data-limit></span></div>
+  <div class="idps-lab-challenge"><strong>Можно ли технически проверить правило по конкретному http.uri в выбранной точке?</strong><div class="idps-lab-answers"><button type="button" data-guess="yes" aria-pressed="false">Да</button><button type="button" data-guess="no" aria-pressed="false">Нет</button></div><p class="idps-lab-feedback" data-experiment-feedback role="status" aria-live="polite">Выберите ответ и проверьте вывод.</p></div>
+  <p class="idps-lab-caption">Наблюдаемость HTTP ≠ успешная атака; TLS ≠ полная невидимость. Все адреса, события и ответы синтетические; пример не выполняет запросов и не запускает вредоносный код.</p>
+  <p class="idps-lab-caption"><strong>Первоисточник:</strong> <a href="https://www.rfc-editor.org/rfc/rfc9846.html">RFC 9846 — TLS 1.3</a>.</p>
+</div>
+
 ## 5. Почему защищённый канал усложняет обнаружение вторжений
 
 Предположим, правило Suricata проверяет путь `/download/LAB4-KNOWN-BAD` в HTTP URI. Для открытого HTTP, который сенсор видит и корректно разбирает, такое условие может совпасть. Если URI передаётся внутри TLS и ключи у сенсора недоступны, то правило прикладного уровня по открытому URI не получает необходимое поле.

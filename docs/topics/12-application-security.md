@@ -46,6 +46,19 @@ App test: output stays literal" data-reason="Тест должен подтве�
   <p class="lesson-mechanism__note">Задание: объясните разницу между обнаружением XSS-подобной строки в URI и подтверждением её исполнения в браузере.</p>
 </div>
 
+<div class="idps-causal-lab" data-idps-experiment="xss" role="group" aria-label="От строки к DOM: выполнит ли браузер разметку?">
+  <p class="idps-lab-kicker">Исследовательский эксперимент · измените исходные условия</p>
+  <h3>От строки к DOM: выполнит ли браузер разметку?</h3>
+  <p>Меняйте строку и способ вставки в DOM. Экран имитирует результат как ТЕКСТ: HTML с обработчиками событий здесь никогда не исполняется.</p>
+  <div class="idps-lab-controls"><label>Строка от пользователя<select data-field="input" aria-label="Строка от пользователя"><option value="markup" selected>HTML-подобная строка</option><option value="plain">Обычный текст</option></select></label><label>Способ вывода<select data-field="sink" aria-label="Способ вывода"><option value="html" selected>innerHTML</option><option value="text">textContent</option></select></label></div>
+  <ol class="idps-lab-flow" aria-label="Причинно-следственная цепочка"><li><strong>Ввод</strong><span data-node-detail>Модель загружается…</span></li><li><strong>Sink</strong><span data-node-detail>Модель загружается…</span></li><li><strong>DOM</strong><span data-node-detail>Модель загружается…</span></li><li><strong>Результат</strong><span data-node-detail>Модель загружается…</span></li></ol>
+  <div class="idps-lab-observable"><div><strong>Наблюдаемое представление / результат</strong><pre data-observed aria-live="polite">Модель загружается…</pre></div><div><strong>Объяснение результата</strong><p data-why aria-live="polite"></p></div></div>
+  <div class="idps-lab-explanation"><strong>Что нельзя заключить:</strong> <span data-limit></span></div>
+  <div class="idps-lab-challenge"><strong>Будет ли эта строка интерпретирована как HTML-элемент?</strong><div class="idps-lab-answers"><button type="button" data-guess="yes" aria-pressed="false">Да</button><button type="button" data-guess="no" aria-pressed="false">Нет</button></div><p class="idps-lab-feedback" data-experiment-feedback role="status" aria-live="polite">Выберите ответ и проверьте вывод.</p></div>
+  <p class="idps-lab-caption">Разбор HTML и фактическое выполнение XSS — не одно и то же. Все адреса, события и ответы синтетические; пример не выполняет запросов и не запускает вредоносный код.</p>
+  <p class="idps-lab-caption"><strong>Первоисточник:</strong> <a href="https://cheatsheetseries.owasp.org/cheatsheets/Cross_Site_Scripting_Prevention_Cheat_Sheet">OWASP — XSS Prevention</a>.</p>
+</div>
+
 ## 4. CSRF: корректная сессия, нежелательная операция
 
 Межсайтовая подделка запроса (CSRF) эксплуатирует ситуацию, когда браузер автоматически прикладывает полномочия пользователя к запросу, инициированному из недоверенного контекста. Поэтому аутентификация пользователя сама по себе не гарантирует, что он намеренно вызвал действие.
@@ -67,6 +80,19 @@ Response: 403; no change" data-reason="Выбирают меры с учётом
     <div class="lesson-mechanism__interpretation"><strong>Как и почему</strong><p data-mech-reason></p><strong>Граница вывода</strong><p data-mech-limit></p></div>
   </div>
   <p class="lesson-mechanism__note">Задание: какие наблюдения нужны, чтобы отличить межсайтовый POST от подтверждённого изменения учётной записи?</p>
+</div>
+
+<div class="idps-causal-lab" data-idps-experiment="csrf" role="group" aria-label="CSRF: что произойдёт после межсайтового POST?">
+  <p class="idps-lab-kicker">Исследовательский эксперимент · измените исходные условия</p>
+  <h3>CSRF: что произойдёт после межсайтового POST?</h3>
+  <p>В модели пользователь уже вошёл в shop.test, а сторонняя страница отправляет HTML-форму POST /change-email. Предполагаются HTTPS и разрешённые браузером сторонние cookie.</p>
+  <div class="idps-lab-controls"><label>Политика сессионной cookie<select data-field="cookie" aria-label="Политика сессионной cookie"><option value="none" selected>SameSite=None; Secure</option><option value="strict">SameSite=Strict</option></select></label><label>Сервер проверяет CSRF-токен<select data-field="csrf" aria-label="Сервер проверяет CSRF-токен"><option value="off" selected>Нет</option><option value="on">Да</option></select></label></div>
+  <ol class="idps-lab-flow" aria-label="Причинно-следственная цепочка"><li><strong>Форма</strong><span data-node-detail>Модель загружается…</span></li><li><strong>Cookie</strong><span data-node-detail>Модель загружается…</span></li><li><strong>Проверка</strong><span data-node-detail>Модель загружается…</span></li><li><strong>Изменение</strong><span data-node-detail>Модель загружается…</span></li></ol>
+  <div class="idps-lab-observable"><div><strong>Наблюдаемое представление / результат</strong><pre data-observed aria-live="polite">Модель загружается…</pre></div><div><strong>Объяснение результата</strong><p data-why aria-live="polite"></p></div></div>
+  <div class="idps-lab-explanation"><strong>Что нельзя заключить:</strong> <span data-limit></span></div>
+  <div class="idps-lab-challenge"><strong>Изменит ли сервис адрес электронной почты?</strong><div class="idps-lab-answers"><button type="button" data-guess="yes" aria-pressed="false">Да</button><button type="button" data-guess="no" aria-pressed="false">Нет</button></div><p class="idps-lab-feedback" data-experiment-feedback role="status" aria-live="polite">Выберите ответ и проверьте вывод.</p></div>
+  <p class="idps-lab-caption">POST и даже cookie в запросе не равны подтверждённому изменению состояния. Все адреса, события и ответы синтетические; пример не выполняет запросов и не запускает вредоносный код.</p>
+  <p class="idps-lab-caption"><strong>Первоисточник:</strong> <a href="https://cheatsheetseries.owasp.org/cheatsheets/Cross-Site_Request_Forgery_Prevention_Cheat_Sheet.html">OWASP — CSRF Prevention</a>.</p>
 </div>
 
 ## 5. Управление сессией и полномочиями

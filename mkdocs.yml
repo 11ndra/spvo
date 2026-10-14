@@ -58,6 +58,7 @@ extra_css:
   - assets/stylesheets/idps-system.css
   - assets/stylesheets/osi-topic09.css
   - assets/stylesheets/syllabus-lessons-10-15.css
+  - assets/stylesheets/lesson-experiments.css
   - assets/stylesheets/quiz.css
 extra_javascript:
   - https://cdn.jsdelivr.net/npm/mermaid@11.17.2/dist/mermaid.min.js
@@ -67,6 +68,7 @@ extra_javascript:
   - assets/javascripts/test-bank.js
   - assets/javascripts/osi-topic09.js
   - assets/javascripts/syllabus-lessons-10-15.js
+  - assets/javascripts/lesson-experiments.js
 
 nav:
   - Курс IDS/IPS:

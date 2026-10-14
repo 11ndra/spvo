@@ -19,6 +19,19 @@
 
 Роли могут использоваться, но проверка роли «user» слишком общая, когда право зависит от принадлежности конкретной записи. Проверять нужно условие права на объект и функцию.
 
+<div class="idps-causal-lab" data-idps-experiment="bola" role="group" aria-label="Авторизация API: кому принадлежит заказ №42?">
+  <p class="idps-lab-kicker">Исследовательский эксперимент · измените исходные условия</p>
+  <h3>Авторизация API: кому принадлежит заказ №42?</h3>
+  <p>Проверяйте подлинность токена отдельно от права на конкретный объект. В ветке уязвимости модель фиксирует и успешный ответ, и раскрытие данных чужого заказа.</p>
+  <div class="idps-lab-controls"><label>JWT<select data-field="token" aria-label="JWT"><option value="valid" selected>Подлинный user-A</option><option value="invalid">Недействительный</option></select></label><label>Владелец заказа 42<select data-field="owner" aria-label="Владелец заказа 42"><option value="own">user-A</option><option value="other" selected>user-B</option></select></label><label>Проверка владельца на сервере<select data-field="access" aria-label="Проверка владельца на сервере"><option value="on" selected>Включена</option><option value="off">Пропущена</option></select></label></div>
+  <ol class="idps-lab-flow" aria-label="Причинно-следственная цепочка"><li><strong>Клиент</strong><span data-node-detail>Модель загружается…</span></li><li><strong>Токен</strong><span data-node-detail>Модель загружается…</span></li><li><strong>Права</strong><span data-node-detail>Модель загружается…</span></li><li><strong>Ответ</strong><span data-node-detail>Модель загружается…</span></li></ol>
+  <div class="idps-lab-observable"><div><strong>Наблюдаемое представление / результат</strong><pre data-observed aria-live="polite">Модель загружается…</pre></div><div><strong>Объяснение результата</strong><p data-why aria-live="polite"></p></div></div>
+  <div class="idps-lab-explanation"><strong>Что нельзя заключить:</strong> <span data-limit></span></div>
+  <div class="idps-lab-challenge"><strong>Получит ли user-A чужие данные из заказа 42?</strong><div class="idps-lab-answers"><button type="button" data-guess="yes" aria-pressed="false">Да</button><button type="button" data-guess="no" aria-pressed="false">Нет</button></div><p class="idps-lab-feedback" data-experiment-feedback role="status" aria-live="polite">Выберите ответ и проверьте вывод.</p></div>
+  <p class="idps-lab-caption">Авторизация объекта проверяется на сервере; корректный JWT не даёт права на любой заказ. Все адреса, события и ответы синтетические; пример не выполняет запросов и не запускает вредоносный код.</p>
+  <p class="idps-lab-caption"><strong>Первоисточник:</strong> <a href="https://api-security.owasp.org/editions/2023/en/0x11-t10/">OWASP API1:2023 — BOLA</a>.</p>
+</div>
+
 ## 3. OAuth 2.0 и OpenID Connect — разные назначения
 
 OAuth 2.0 — рамка **делегированной авторизации** для предоставления ограниченного доступа; сам по себе протокол OAuth 2.0 не является универсальным стандартом аутентификации конечного пользователя. **OpenID Connect (OIDC)** добавляет идентификационный слой поверх OAuth 2.0 и стандартизует, среди прочего, ID Token.
