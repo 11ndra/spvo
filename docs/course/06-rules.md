@@ -453,12 +453,17 @@ MSG = доказательство инцидента
 </div>
 
 <div class="idps-rule-two-layer">
-  <article><span>СЛОЙ 1 · ЛОГИКА СОВПАДЕНИЯ</span><strong>Какие наблюдения считаются совпадением?</strong><p>Например: URI содержит заданный маркер.</p><small>Если условие слишком широкое, проблема находится здесь.</small></article>
+  <article><span>СЛОЙ 1 · УСЛОВИЕ ОБНАРУЖЕНИЯ</span><strong>Какие наблюдения удовлетворяют правилу?</strong><p>Например: URI содержит заданный маркер; при <code>detection_filter</code> дополнительно проверяется количество совпадений за интервал.</p><small>Порог по серии событий не меняет исходное условие поиска строки.</small></article>
   <div class="idps-rule-two-layer__arrow" aria-hidden="true">↓</div>
-  <article><span>СЛОЙ 2 · ВЫВОД / ЧАСТОТА</span><strong>Когда и сколько результатов выводить?</strong><p><code>threshold</code>, <code>detection_filter</code>, <code>suppress</code> и другие механизмы управления результатами.</p><small>Изменение этого слоя не делает исходный признак более специфичным.</small></article>
+  <article><span>СЛОЙ 2 · ВЫВОД И ПОДАВЛЕНИЕ</span><strong>Сколько оповещений показывать?</strong><p>Режимы <code>threshold</code> и конфигурация <code>suppress</code> управляют выдачей оповещений.</p><small>Сокрытие повтора в журнале не означает, что сетевое действие не выполнялось.</small></article>
 </div>
 
-Есть и дополнительная тонкость: официальная документация Suricata предупреждает, что для `drop`/`reject` в IPS-режиме управление частотой оповещений не означает, что предотвращающее действие применяется только к тем пакетам, для которых выведено оповещение. Поэтому нельзя считать число оповещений прямым эквивалентом числа воздействий IPS.
+Важно различать два случая в **Suricata 8**:
+
+- `threshold: type limit` ограничивает частоту оповещений по уже найденным совпадениям. Для такого правила с действием `drop` отсутствие очередного alert **не** означает, что соответствующий пакет пропущен: IPS-действие может сохраняться при подавленной записи. **Не переносите** эту интерпретацию без проверки на другие режимы `threshold` (`threshold`, `both`, `backoff`): у них отличаются пороговая семантика и моменты применения действия.
+- `detection_filter: track by_src, count 2, seconds 60;` вводит порог по серии совпадений. В модульном тесте Suricata 8.0.7 для правила `drop` первые **два** совпадения не создают `alert` и не получают `ACTION_DROP`; начиная с третьего проверяется действие. Это принципиально отличается от обычного ограничения частоты журнала.
+
+Официальное описание thresholding и проверяемая реализация могут расходиться в формулировках для `detection_filter`; при настройке производственной IPS отдельно проверяйте конкретную версию, режим работы и фактическое прохождение тестового трафика. **Не делайте вывод о числе заблокированных пакетов по числу alert.** См. [документацию Suricata 8](https://docs.suricata.io/en/suricata-8.0.7/rules/thresholding.html) и [модульные тесты реализации](https://github.com/OISF/suricata/blob/suricata-8.0.7/src/detect-detection-filter.c).
 
 ---
 
@@ -543,45 +548,45 @@ MSG = доказательство инцидента
 
 <div class="quiz" data-question-id="chapter6-v1-q1">
   <p><strong>Что лучше всего описывает роль заголовка правила Suricata?</strong></p>
-  <button data-choice="a">A. Он доказывает, что произошла атака</button>
+  <button data-choice="a">A. Заголовок определяет семантическую вредоносность потока и потому заменяет анализ условий.</button>
   <button data-choice="b" data-correct="true">B. Он задаёт область трафика, к которой относится дальнейшая проверка правила</button>
-  <button data-choice="c">C. Он определяет номер инцидента</button>
-  <button data-choice="d">D. Он заменяет все параметры внутри скобок</button>
+  <button data-choice="c">C. Заголовок присваивает событию номер расследования, по которому затем ищут связь с хостом.</button>
+  <button data-choice="d">D. Заголовок указывает, какой HTTP-буфер будет проверяться, вместо параметров внутри скобок.</button>
   <div class="quiz-feedback"></div>
 </div>
 
 <div class="quiz" data-question-id="chapter6-v1-q2">
   <p><strong>Что означает связка <code>http.uri; content:"ATTACK-LAB";</code> в учебном правиле?</strong></p>
-  <button data-choice="a">A. Ищется строка во всех байтах любого сетевого пакета</button>
-  <button data-choice="b">B. Строка ищется только в тексте оповещения</button>
+  <button data-choice="a">A. Строка ищется в каждой сетевой полезной нагрузке без привязки к разбору протокола.</button>
+  <button data-choice="b">B. Строка ищется в HTTP-заголовках независимо от конкретного URI, если порт равен 8080.</button>
   <button data-choice="c" data-correct="true">C. Условие content применяется к выбранному представлению HTTP URI</button>
-  <button data-choice="d">D. Наличие ATTACK-LAB автоматически означает компрометацию</button>
+  <button data-choice="d">D. Условие автоматически проверяет результат обработки запроса приложением на сервере.</button>
   <div class="quiz-feedback"></div>
 </div>
 
 <div class="quiz" data-question-id="chapter6-v1-q3">
   <p><strong>Какую роль играет <code>sid:1000001</code>?</strong></p>
   <button data-choice="a" data-correct="true">A. Идентифицирует конкретную сигнатуру/правило</button>
-  <button data-choice="b">B. Определяет количество необходимых совпадений</button>
-  <button data-choice="c">C. Указывает IP-адрес источника</button>
-  <button data-choice="d">D. Доказывает высокий уровень критичности события</button>
+  <button data-choice="b">B. SID задаёт максимальное количество оповещений от одного источника за интервал.</button>
+  <button data-choice="c">C. SID указывает постоянный IP-адрес узла, от которого ожидается подозрительный трафик.</button>
+  <button data-choice="d">D. SID служит меткой приоритета обнаружения и определяет тяжесть каждого события.</button>
   <div class="quiz-feedback"></div>
 </div>
 
 <div class="quiz" data-question-id="chapter6-v1-q4">
   <p><strong>Правило содержит действие <code>drop</code>. Что ещё необходимо знать, прежде чем утверждать, что совпавший сетевой пакет действительно будет заблокирован?</strong></p>
-  <button data-choice="a">A. Только значение SID</button>
-  <button data-choice="b">B. Только текст msg</button>
+  <button data-choice="a">A. Достаточно SID: идентификатор правила означает, что действие уже применяется к пакету.</button>
+  <button data-choice="b">B. Достаточно сообщения msg: если в нём указано drop, пакет блокируется независимо от режима.</button>
   <button data-choice="c" data-correct="true">C. Режим работы и способ включения Suricata в сетевой путь</button>
-  <button data-choice="d">D. Только номер редакции rev</button>
+  <button data-choice="d">D. Достаточно rev: повышение версии правила означает включение блокирования.</button>
   <div class="quiz-feedback"></div>
 </div>
 
 <div class="quiz" data-question-id="chapter6-v1-q5">
   <p><strong>Что происходит с логикой слишком широкого условия, если ограничить частоту одинаковых оповещений с помощью механизма `threshold`?</strong></p>
-  <button data-choice="a">A. Условие автоматически становится более точным</button>
-  <button data-choice="b">B. Все ложные совпадения превращаются в истинные отрицательные результаты</button>
-  <button data-choice="c">C. Правило автоматически переходит на аномальное обнаружение</button>
+  <button data-choice="a">A. Сигнатура перестаёт совпадать с легитимными событиями, если ограничить частоту alert.</button>
+  <button data-choice="b">B. Ложные совпадения исчезают из подсчётов оценки, поскольку они не попали в журнал.</button>
+  <button data-choice="c">C. Ограничение частоты превращает проверку URI в аномальный детектор с обучаемым baseline.</button>
   <button data-choice="d" data-correct="true">D. Частота выводимых результатов может измениться, но исходная логика условия сама по себе не исправляется</button>
   <div class="quiz-feedback"></div>
 </div>

@@ -526,55 +526,55 @@ t_result — момент доступности результата детек
 
 <div class="quiz" data-question-id="chapter8-q1">
   <p><strong>Правило обнаружило все 20 положительных случаев тестового набора. Что можно утверждать?</strong></p>
-  <button data-choice="a">A. Оно обнаруживает все атаки этого класса во всей инфраструктуре</button>
+  <button data-choice="a">A. Отсутствие FN в тесте означает, что на других данных у правила будет та же полнота.</button>
   <button data-choice="b" data-correct="true">B. На данном наборе и в зафиксированных условиях не было FN среди этих 20 положительных случаев</button>
-  <button data-choice="c">C. У него автоматически 100% подтверждённости положительных решений</button>
-  <button data-choice="d">D. IPS гарантированно блокирует все такие события</button>
+  <button data-choice="c">C. Обнаружение всех положительных случаев гарантирует отсутствие FP на отрицательной части.</button>
+  <button data-choice="d">D. Высокий Recall одновременно подтверждает предотвращение всех событий в inline-режиме.</button>
   <div class="quiz-feedback"></div>
 </div>
 
 <div class="quiz" data-question-id="chapter8-q2">
   <p><strong>Для чего нужен независимый эталон истинного состояния?</strong></p>
-  <button data-choice="a">A. Чтобы увеличить число оповещений</button>
-  <button data-choice="b">B. Чтобы заменить правила IDS</button>
+  <button data-choice="a">A. Эталон позволяет считать любое оповещение истинным, если сигнатура уже опубликована.</button>
+  <button data-choice="b">B. Независимая разметка заменяет тестирование правила, поскольку вердикт известен заранее.</button>
   <button data-choice="c" data-correct="true">C. Чтобы знать истинное состояние единицы оценки независимо от решения детектора</button>
-  <button data-choice="d">D. Только для измерения загрузки процессора</button>
+  <button data-choice="d">D. Эталон нужен только для общего объёма пакетов, а не для классификации TP/FP/FN/TN.</button>
   <div class="quiz-feedback"></div>
 </div>
 
 <div class="quiz" data-question-id="chapter8-q3">
   <p><strong>Полнота высокая, но подтверждённость положительных решений низкая. Что это означает?</strong></p>
   <button data-choice="a" data-correct="true">A. Большая доля положительных случаев обнаруживается, но среди положительных решений детектора много FP</button>
-  <button data-choice="b">B. Детектор почти не видит положительные случаи</button>
-  <button data-choice="c">C. Нет потерь пакетов</button>
-  <button data-choice="d">D. Все оповещения подтверждают компрометацию</button>
+  <button data-choice="b">B. Низкий Precision означает, что большинство положительных случаев оказалось в FN, а FP почти нет.</button>
+  <button data-choice="c">C. Низкий Precision показывает сетевые потери ещё до формирования alert, даже если реальных счётчиков захвата нет; FP при этом учитывать не нужно.</button>
+  <button data-choice="d">D. Высокий Recall означает отсутствие FP, поэтому низкий Precision здесь невозможен.</button>
   <div class="quiz-feedback"></div>
 </div>
 
 <div class="quiz" data-question-id="chapter8-q4">
   <p><strong>Почему 0 <code>kernel_drops</code> недостаточно для вывода «IDS ничего не потеряла»?</strong></p>
-  <button data-choice="a">A. Потому что этот счётчик всегда равен нулю</button>
+  <button data-choice="a">A. Нулевой kernel_drops отражает отсутствие потерь на зеркальном порту и при сборке потока, поэтому дополнительных счётчиков приложения, очередей и SPAN проверять не требуется.</button>
   <button data-choice="b" data-correct="true">B. Он относится только к конкретному месту учёта потерь; другие ограничения обработки и вывода требуют отдельных доказательств</button>
-  <button data-choice="c">C. Потому что ядро системы не участвует в захвате данных</button>
-  <button data-choice="d">D. Потому что потери пакетов измеряются только подтверждённостью положительных решений</button>
+  <button data-choice="c">C. Этот счётчик описывает только дисковую подсистему и не относится к получению пакетов.</button>
+  <button data-choice="d">D. Точность решения детектора позволяет заменить проверку потерь на всех этапах обработки.</button>
   <div class="quiz-feedback"></div>
 </div>
 
 <div class="quiz" data-question-id="chapter8-q5">
   <p><strong>Что является наиболее зрелым итогом оценки?</strong></p>
-  <button data-choice="a">A. «IDS эффективна»</button>
-  <button data-choice="b">B. «Получили много оповещений»</button>
-  <button data-choice="c">C. «Загрузка процессора была ниже 50%»</button>
+  <button data-choice="a">A. Эффективность можно признать по одной сумме сработок, если чисел достаточно много.</button>
+  <button data-choice="b">B. Большое число alert достаточно для вывода, даже если исходный трафик не размечен.</button>
+  <button data-choice="c">C. Низкая загрузка процессора позволяет считать детектор пригодным без проверки FN и FP.</button>
   <button data-choice="d" data-correct="true">D. Вывод с указанными областью, методикой, свидетельствами, метриками и границами применимости</button>
   <div class="quiz-feedback"></div>
 </div>
 
 <div class="quiz" data-question-id="chapter8-q6">
   <p><strong>IPS создала alert с действием drop. Какое дополнительное доказательство нужно для вывода о предотвращении?</strong></p>
-  <button data-choice="a">A. Только число строк в журнале</button>
-  <button data-choice="b">B. Только факт, что система была подключена в разрыв</button>
+  <button data-choice="a">A. Количество alert с drop достаточно, если оно совпадает с числом тестовых запросов.</button>
+  <button data-choice="b">B. Наличие inline-режима исключает обход правил, поэтому проверка ответа сервера не нужна.</button>
   <button data-choice="c" data-correct="true">C. Независимая проверка фактического результата обмена и отсутствия нежелательного нарушения разрешённого трафика</button>
-  <button data-choice="d">D. Название продукта, в котором есть слово IPS</button>
+  <button data-choice="d">D. Маркировка правила как drop в интерфейсе продукта доказывает блокирование сетевого потока.</button>
   <div class="quiz-feedback"></div>
 </div>
 

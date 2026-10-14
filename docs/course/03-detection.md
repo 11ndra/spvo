@@ -509,28 +509,28 @@ Suricata в нашем курсе — не определение IDS, а удо
 
 <div class="quiz" data-question-id="chapter3-v220-q1">
   <p><strong>Suricata успешно получает HTTP-трафик с интерфейса, но нужное правило не загружено. Какой вывод корректен?</strong></p>
-  <button data-choice="a">A. Получение трафика автоматически означает, что атака будет обнаружена</button>
+  <button data-choice="a">A. Сбор данных показывает, что Suricata уже применяет к этим потокам полный набор детекторов.</button>
   <button data-choice="b" data-correct="true">B. Сбор данных работает, но требуемая логика обнаружения отсутствует</button>
-  <button data-choice="c">C. Нужно обязательно менять точку наблюдения</button>
-  <button data-choice="d">D. Это доказывает неисправность сетевого интерфейса</button>
+  <button data-choice="c">C. Отсутствие сигнатуры означает ошибку точки наблюдения, даже если HTTP-события видны.</button>
+  <button data-choice="d">D. Нужно считать отсутствующие alert подтверждением нормального трафика без проверки ruleset.</button>
   <div class="quiz-feedback"></div>
 </div>
 
 <div class="quiz" data-question-id="chapter3-v220-q2">
   <p><strong>Почему схема «пакет → TCP-поток → HTTP → обнаружение» не является универсальным устройством любой NIDS?</strong></p>
-  <button data-choice="a">A. TCP не используется в сетях</button>
-  <button data-choice="b">B. HTTP всегда анализируется до IP</button>
+  <button data-choice="a">A. Такая схема применима только к TCP; поэтому любой UDP-трафик проходит вне правил IDS.</button>
+  <button data-choice="b">B. Прикладной анализатор сначала определяет HTTP по порту, а затем строит TCP-соединение.</button>
   <button data-choice="c" data-correct="true">C. Разные детекторы могут работать на разных представлениях данных</button>
-  <button data-choice="d">D. IDS анализирует только файлы журналов</button>
+  <button data-choice="d">D. Любой NIDS должен сначала собрать весь TCP-поток, даже если условие работает на ICMP.</button>
   <div class="quiz-feedback"></div>
 </div>
 
 <div class="quiz" data-question-id="chapter3-v220-q3">
   <p><strong>Какую функцию выполняет файл eve.json в нашей лаборатории Suricata?</strong></p>
-  <button data-choice="a">A. Он является точкой захвата сетевого трафика</button>
-  <button data-choice="b">B. Он заменяет правило обнаружения</button>
+  <button data-choice="a">A. EVE JSON является копией сырых пакетов и заменяет файл захвата PCAP при проверке потока.</button>
+  <button data-choice="b">B. Записи EVE сами определяют правила, по которым Suricata будет анализировать новые пакеты.</button>
   <button data-choice="c" data-correct="true">C. Он является одним из каналов записи структурированных результатов работы системы</button>
-  <button data-choice="d">D. Он автоматически подтверждает успешную компрометацию</button>
+  <button data-choice="d">D. Наличие записи alert в EVE означает, что событие прошло независимую проверку аналитиком.</button>
   <div class="quiz-feedback"></div>
 </div>
 

@@ -461,28 +461,28 @@ flowchart TB
 
 <div class="quiz" data-question-id="chapter2-v3-q1">
   <p><strong>NIDS зафиксировала соединение 10.0.10.15 → 203.0.113.50:443. Можно ли только по этому событию утверждать, что его создал процесс powershell.exe?</strong></p>
-  <button data-choice="a">A. Да, NIDS автоматически получает контекст процессов узла</button>
+  <button data-choice="a">A. Да: из сетевого потока определяется исполняемый файл по номеру порта и TLS-метаданным.</button>
   <button data-choice="b" data-correct="true">B. Нет, для этого нужен соответствующий хостовый источник данных</button>
-  <button data-choice="c">C. Да, если соединение использует TCP</button>
-  <button data-choice="d">D. Да, если порт назначения равен 443</button>
+  <button data-choice="c">C. Да: любой TCP-поток предоставляет NIDS имя процесса, создавшего клиентский сокет.</button>
+  <button data-choice="d">D. Да: использование 443 позволяет однозначно привязать соединение к процессу PowerShell.</button>
   <div class="quiz-feedback"></div>
 </div>
 
 <div class="quiz" data-question-id="chapter2-v3-q2">
   <p><strong>В чём ошибка фразы «поведенческая IDS — четвёртый тип наряду с сетевой, хостовой и беспроводной»?</strong></p>
-  <button data-choice="a">A. Поведенческого обнаружения не существует</button>
+  <button data-choice="a">A. Смешиваются уровень модели OSI и организационная принадлежность сенсора, но не метод.</button>
   <button data-choice="b" data-correct="true">B. Смешиваются источник наблюдения и метод анализа</button>
-  <button data-choice="c">C. Хостовая IDS всегда использует только поведенческий анализ</button>
-  <button data-choice="d">D. Беспроводная IDS относится только к межсетевым экранам</button>
+  <button data-choice="c">C. Поведенческая IDS может применяться только на конечной станции и потому исключает NIDS.</button>
+  <button data-choice="d">D. Виды IDS следует разделять только по признаку сигнатурного и аномального обнаружения.</button>
   <div class="quiz-feedback"></div>
 </div>
 
 <div class="quiz" data-question-id="chapter2-v3-q3">
   <p><strong>Нужно обнаруживать неизвестные точки Wi‑Fi рядом с офисом. Достаточно ли NIDS на интернет-шлюзе?</strong></p>
-  <button data-choice="a">A. Да, если добавить больше HTTP-правил</button>
-  <button data-choice="b">B. Да, если увеличить объём хранилища журналов</button>
+  <button data-choice="a">A. Да: достаточно анализировать HTTP-запросы через интернет-шлюз и искать имена SSID.</button>
+  <button data-choice="b">B. Да: расширение хранилища NIDS обеспечит сбор радиосигналов из ближайших сетей.</button>
   <button data-choice="c" data-correct="true">C. Нет, нужен источник данных из беспроводной среды</button>
-  <button data-choice="d">D. Да, если отключить TLS</button>
+  <button data-choice="d">D. Да: отключение TLS на шлюзе делает доступными кадры управления беспроводной сети.</button>
   <div class="quiz-feedback"></div>
 </div>
 

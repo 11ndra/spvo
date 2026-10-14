@@ -481,46 +481,46 @@ NIDS на сервере
 
 <div class="quiz" data-question-id="chapter4-v224-q1">
   <p><strong>Внешний NIDS установлен перед межсетевым экраном. Можно ли из этого сделать вывод, что он наблюдает взаимодействие «веб-сегмент → приложение» внутри сети?</strong></p>
-  <button data-choice="a">A. Да, любой NIDS видит все сегменты организации</button>
+  <button data-choice="a">A. Да: размещение перед экраном предоставляет сенсору доступ ко всем внутренним VLAN.</button>
   <button data-choice="b" data-correct="true">B. Нет, сначала нужно установить, проходит ли поток «веб-сегмент → приложение» через его точку наблюдения</button>
-  <button data-choice="c">C. Да, если у NIDS достаточно сигнатур</button>
-  <button data-choice="d">D. Нет, потому что сетевой IDS не умеет анализировать внутренний трафик</button>
+  <button data-choice="c">C. Да: даже без копии внутреннего потока сигнатуры позволяют обнаружить его сетевые пакеты.</button>
+  <button data-choice="d">D. Нет: внешний NIDS наблюдает только трафик из Интернета, даже если зеркало включает внутренние сети.</button>
   <div class="quiz-feedback"></div>
 </div>
 
 <div class="quiz" data-question-id="chapter4-v224-q2">
   <p><strong>Что корректнее всего описывает SPAN?</strong></p>
-  <button data-choice="a">A. Метод определения вредоносности HTTP-запроса</button>
-  <button data-choice="b">B. Обязательное место установки IPS</button>
+  <button data-choice="a">A. SPAN изменяет порядок обработки сетевых пакетов, чтобы удалить вредоносные запросы.</button>
+  <button data-choice="b">B. SPAN переводит сенсор в разрыв между двумя портами и позволяет блокировать трафик.</button>
   <button data-choice="c" data-correct="true">C. Способ предоставить пассивному сенсору копию выбранного сетевого трафика</button>
-  <button data-choice="d">D. Механизм подтверждения успешной компрометации</button>
+  <button data-choice="d">D. SPAN обеспечивает сенсору полную реконструкцию потока даже при переполнении зеркального порта.</button>
   <div class="quiz-feedback"></div>
 </div>
 
 <div class="quiz" data-question-id="chapter4-v224-q3">
   <p><strong>Запрос подтверждён журналом веб-сервера, но на одном интерфейсе tcpdump его не показывает. Какой вывод допустим?</strong></p>
-  <button data-choice="a">A. Запроса не существовало</button>
-  <button data-choice="b">B. Сервер обязательно скомпрометирован</button>
+  <button data-choice="a">A. Серверный журнал недостаточен: раз tcpdump на выбранном интерфейсе молчит, нужно считать запись веб-сервера ошибочной и исключить сам факт HTTP-обращения, даже если ответ приложения сохранён.</button>
+  <button data-choice="b">B. Отсутствие пакетов доказывает, что запрос был обработан вне TCP и не нуждается в анализе.</button>
   <button data-choice="c" data-correct="true">C. В условиях теста этот запрос не наблюдался на выбранном интерфейсе данным способом захвата; нужно сопоставить результат с маршрутом</button>
-  <button data-choice="d">D. Любая IDS на этом сервере неисправна</button>
+  <button data-choice="d">D. Следует считать неисправной всю NIDS, не проверяя интерфейс, маршрут и условия фильтра.</button>
   <div class="quiz-feedback"></div>
 </div>
 
 <div class="quiz" data-question-id="chapter4-v224-q4">
   <p><strong>Почему точка наблюдения после межсетевого экрана не является автоматически «лучше» точки до него?</strong></p>
-  <button data-choice="a">A. Потому что после межсетевого экрана сетевого трафика не бывает</button>
+  <button data-choice="a">A. После экрана всегда виден весь разрешённый трафик, поэтому другие точки не имеют смысла.</button>
   <button data-choice="b" data-correct="true">B. Эти точки предоставляют разные наборы наблюдений, и выбор зависит от задачи обнаружения</button>
-  <button data-choice="c">C. Потому что NIDS может работать только перед межсетевым экраном</button>
-  <button data-choice="d">D. Потому что после межсетевого экрана всегда используется только HIDS</button>
+  <button data-choice="c">C. Перед экраном возможен только сигнатурный анализ, а после него только анализ аномалий.</button>
+  <button data-choice="d">D. Выбор точки определяется исключительно удобством подключения, а не видом нужных потоков.</button>
   <div class="quiz-feedback"></div>
 </div>
 
 <div class="quiz" data-question-id="chapter4-v225-q5">
   <p><strong>Сервер принимает внутренний HTTP через LAB_IFACE и отправляет другой поток через NAT_IFACE. Какой вывод корректен?</strong></p>
-  <button data-choice="a">A. LAB_IFACE является лучшей точкой наблюдения для сервера вообще</button>
-  <button data-choice="b">B. NAT_IFACE является слепой зоной IDS</button>
+  <button data-choice="a">A. LAB_IFACE показывает полную активность сервера, потому что через него идут входящие запросы.</button>
+  <button data-choice="b">B. NAT_IFACE не может быть источником полезных наблюдений, если есть отдельный Host-Only интерфейс.</button>
   <button data-choice="c" data-correct="true">C. Пригодность точки определяется отдельно для каждого интересующего сетевого пути</button>
-  <button data-choice="d">D. Оба интерфейса обязаны видеть каждый пакет сервера</button>
+  <button data-choice="d">D. Любой сетевой пакет сервера обязательно появляется в обеих точках, независимо от маршрута.</button>
   <div class="quiz-feedback"></div>
 </div>
 

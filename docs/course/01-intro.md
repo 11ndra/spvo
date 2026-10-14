@@ -464,55 +464,55 @@ flowchart TB
 
 <div class="quiz" data-question-id="chapter1-v3-q1">
   <p><strong>Публичный веб-сервис разрешён политикой межсетевого экрана. Какой вывод корректен?</strong></p>
-  <button data-choice="a">A. Любая активность внутри разрешённого соединения считается безопасной</button>
+  <button data-choice="a">A. Разрешение соединения означает, что политика уже проверила содержание каждого HTTP-запроса.</button>
   <button data-choice="b" data-correct="true">B. Политика допустила взаимодействие, но безопасность конкретной активности требует отдельного анализа</button>
-  <button data-choice="c">C. Любой запрос к разрешённому порту автоматически является доверенным</button>
-  <button data-choice="d">D. Наличие межсетевого экрана с контролем состояния исключает необходимость обнаружения</button>
+  <button data-choice="c">C. После разрешения порта анализ приложений нужен только при наличии подтверждённого инцидента.</button>
+  <button data-choice="d">D. Достаточно знать, что пакет прошёл stateful-проверку, чтобы исключить нарушение на уровне HTTP.</button>
   <div class="quiz-feedback"></div>
 </div>
 
 <div class="quiz" data-question-id="chapter1-v3-q2">
   <p><strong>Сетевая IDS сформировала оповещение по условию детектора. Что подтверждено этим фактом?</strong></p>
-  <button data-choice="a">A. Сервер успешно скомпрометирован</button>
-  <button data-choice="b">B. Уязвимость на сервере существует</button>
+  <button data-choice="a">A. Подтверждён факт успешного доступа к ресурсу, потому что правило IDS выполнилось.</button>
+  <button data-choice="b">B. Подтверждено наличие уязвимости сервера, описанной сигнатурой, даже без проверки ответа.</button>
   <button data-choice="c" data-correct="true">C. Наблюдаемая активность удовлетворила заданному условию обнаружения</button>
-  <button data-choice="d">D. Инцидент полностью расследован</button>
+  <button data-choice="d">D. Подтверждено, что эпизод относится к инциденту, поскольку сетевой детектор сформировал запись.</button>
   <div class="quiz-feedback"></div>
 </div>
 
 <div class="quiz" data-question-id="chapter1-v3-q3">
   <p><strong>На сервере открыт ненужный внешний SSH. Какой защитный контроль непосредственно устраняет этот ненужный сетевой путь?</strong></p>
-  <button data-choice="a">A. Добавить больше сигнатур IDS</button>
+  <button data-choice="a">A. Добавить отдельную сигнатуру на каждую попытку SSH, чтобы устранить сам открытый путь.</button>
   <button data-choice="b" data-correct="true">B. Ограничить ненужный путь политикой доступа</button>
-  <button data-choice="c">C. Оставить IPS только в режиме оповещения</button>
-  <button data-choice="d">D. Перенести сетевую IDS ближе к серверу</button>
+  <button data-choice="c">C. Перевести IPS в режим пассивного мониторинга, чтобы закрыть ненужную точку входа.</button>
+  <button data-choice="d">D. Перенести сетевой сенсор на тот же сегмент, поскольку это отменяет разрешение SSH.</button>
   <div class="quiz-feedback"></div>
 </div>
 
 <div class="quiz" data-question-id="chapter1-v3-q4">
   <p><strong>NGFW содержит функцию межсетевого экрана и механизм IPS. Что это означает?</strong></p>
-  <button data-choice="a">A. Межсетевой экран и IPS стали одной и той же функцией</button>
+  <button data-choice="a">A. Функции объединяются логически: разрешение межсетевого экрана становится решением IPS.</button>
   <button data-choice="b" data-correct="true">B. Одна физическая платформа реализует несколько различных защитных функций</button>
-  <button data-choice="c">C. IPS больше не относится к IDPS</button>
-  <button data-choice="d">D. Любой разрешённый трафик автоматически проходит IPS без анализа</button>
+  <button data-choice="c">C. При наличии NGFW сетевое обнаружение выполняется только подсистемой фильтрации портов.</button>
+  <button data-choice="d">D. Интеграция исключает отдельную конфигурацию IPS, так как её функции задаются правилами NAT.</button>
   <div class="quiz-feedback"></div>
 </div>
 
 <div class="quiz" data-question-id="chapter1-v3-q5">
   <p><strong>Система, включённая в разрыв, настроена только на оповещение и ничего не блокирует. Какой вывод корректен?</strong></p>
-  <button data-choice="a">A. Само размещение в разрыве автоматически превращает любое оповещение в блокирование</button>
-  <button data-choice="b">B. Такая система не может выполнять обнаружение</button>
+  <button data-choice="a">A. Расположение в разрыве само по себе означает, что каждое оповещение изменяет поток пакетов.</button>
+  <button data-choice="b">B. Если нет действий drop или reject, система не может распознавать сигнатуры приложений.</button>
   <button data-choice="c" data-correct="true">C. Способ размещения и функция предотвращения — разные характеристики</button>
-  <button data-choice="d">D. Система в разрыве обязательно является межсетевым экраном</button>
+  <button data-choice="d">D. При inline-размещении любое средство должно блокировать соединения, независимо от политики.</button>
   <div class="quiz-feedback"></div>
 </div>
 
 <div class="quiz" data-question-id="chapter1-v3-q6">
   <p><strong>WAF защищает публичное веб-приложение. Что из этого НЕ следует?</strong></p>
-  <button data-choice="a">A. WAF может анализировать доступные ему веб-транзакции</button>
-  <button data-choice="b">B. Его возможности могут пересекаться с сетевой IDS при анализе HTTP</button>
+  <button data-choice="a">A. WAF может проверять HTTP-поля, если доступно прикладное представление запроса.</button>
+  <button data-choice="b">B. WAF может пересекаться с NIDS в проверке HTTP, когда видит те же сообщения приложения.</button>
   <button data-choice="c" data-correct="true">C. WAF обеспечивает полную наблюдаемость всей сетевой и хостовой инфраструктуры</button>
-  <button data-choice="d">D. WAF специализирован на веб-приложениях</button>
+  <button data-choice="d">D. WAF ориентирован на операции веб-приложения, а не на произвольный трафик всех протоколов.</button>
   <div class="quiz-feedback"></div>
 </div>
 
