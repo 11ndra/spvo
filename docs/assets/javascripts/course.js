@@ -31,8 +31,12 @@ document.addEventListener("DOMContentLoaded", initializeQuizzes);
 
 
 function getChapterSlug(pathname = window.location.pathname) {
-  const match = pathname.match(/\/course\/([^/]+)\/?$/);
-  return match ? match[1] : null;
+  // Core course chapters 01–08 use /course/; chapters 09–15 use /topics/.
+  // Syllabus summaries 01–08 remain separate from the core learning route.
+  const core = pathname.match(/\/course\/([^/]+)\/?$/);
+  if (core) return core[1];
+  const continuation = pathname.match(/\/topics\/((?:09|1[0-5])-[^/]+)\/?$/);
+  return continuation ? continuation[1] : null;
 }
 
 function chapterProgressKey(slug) {
