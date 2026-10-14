@@ -35,7 +35,7 @@
     if(answered) return; answered=true; const q=session[index]; const buttons=[...qOptions.querySelectorAll('.quiz-option')];
     buttons.forEach((b,j)=>{ b.disabled=true; if(shownOptions[j].correct)b.classList.add('is-correct'); });
     if(shownOptions[i].correct) score++; else buttons[i].classList.add('is-wrong');
-    scoreEl.textContent=`Баллы: ${score}`; feedback.textContent=q.explanation; feedback.hidden=false; next.hidden=false; bar.style.width=`${((index+1)/session.length)*100}%`;
+    scoreEl.textContent=`Баллы: ${score}`; feedback.textContent=(shownOptions[i].correct?'Верно. ':'Неверно. ')+q.explanation; feedback.hidden=false; next.hidden=false; bar.style.width=`${((index+1)/session.length)*100}%`;
     next.textContent=index===session.length-1?'Показать результат':'Следующий вопрос';
   }
   function advance() {

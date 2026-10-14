@@ -38,7 +38,7 @@
       <div class="quiz-number" id="quiz-number"></div>
       <h2 id="quiz-question"></h2>
       <div class="quiz-options" id="quiz-options"></div>
-      <div class="quiz-feedback" id="quiz-feedback" hidden></div>
+      <div class="quiz-feedback" id="quiz-feedback" role="status" aria-live="polite" hidden></div>
       <div class="quiz-actions">
         <button class="quiz-btn quiz-btn--primary" id="quiz-next" type="button" hidden>Следующий вопрос</button>
       </div>
